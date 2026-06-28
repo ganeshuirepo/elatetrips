@@ -15,7 +15,7 @@ export const swaggerSpec = swaggerJsdoc({
       title: 'ElateTrips API',
       version: '1.0.0',
       description:
-        'REST API for the ElateTrips celebration trip planner — catalog, mock OTP auth, profiles, pricing and orders.',
+        'REST API for the ElateTrips celebration trip planner — catalog, mock OTP auth, profiles, pricing, orders and hotelier partner sign-ups.',
     },
     servers: [{ url: `http://localhost:${env.port}`, description: 'Local' }],
     components: {
@@ -23,7 +23,10 @@ export const swaggerSpec = swaggerJsdoc({
         bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
       },
     },
-    tags: [{ name: 'System', description: 'Health & diagnostics' }],
+    tags: [
+      { name: 'System', description: 'Health & diagnostics' },
+      { name: 'Partners', description: 'Public hotelier "Expression of Interest" submissions.' },
+    ],
   },
   // Scan compiled-or-source route files for annotations.
   apis: ['src/**/*.routes.ts', 'src/routes/*.ts', 'dist/**/*.routes.js', 'dist/routes/*.js'],

@@ -33,6 +33,10 @@ import { AuthController } from './modules/auth/auth.controller';
 import { PricingService } from './modules/pricing/pricing.service';
 import { PricingController } from './modules/pricing/pricing.controller';
 
+import { PartnerRepository } from './modules/partner/partner.repository';
+import { PartnerService } from './modules/partner/partner.service';
+import { PartnerController } from './modules/partner/partner.controller';
+
 import { buildAuthGuard } from './common/middleware/authGuard';
 
 /**
@@ -49,6 +53,7 @@ export interface Container {
     users: UserController;
     orders: OrderController;
     pricing: PricingController;
+    partners: PartnerController;
   };
 }
 
@@ -66,6 +71,7 @@ export function createContainer(): Container {
   const hotelsRepo = new HotelRepository();
   const usersRepo = new UserRepository();
   const ordersRepo = new OrderRepository();
+  const partnersRepo = new PartnerRepository();
 
   // Cross-cutting auth primitives
   const tokenService = new JwtTokenService();
@@ -89,6 +95,7 @@ export function createContainer(): Container {
   const orderService = new OrderService(ordersRepo);
   const authService = new AuthService(otpStore, tokenService, passwordHasher, usersRepo);
   const pricingService = new PricingService(vehiclesRepo, destinationsRepo);
+  const partnerService = new PartnerService(partnersRepo);
 
   return {
     authGuard: buildAuthGuard(tokenService),
@@ -98,6 +105,7 @@ export function createContainer(): Container {
       users: new UserController(userService),
       orders: new OrderController(orderService),
       pricing: new PricingController(pricingService),
+      partners: new PartnerController(partnerService),
     },
   };
 }

@@ -42,9 +42,13 @@ export default function Header() {
           >
             Medical Kits
           </button>
-          <a href="#" className="text-inherit no-underline">
+          <button
+            type="button"
+            onClick={() => dispatch(setView('partner'))}
+            className={navLink(view === 'partner')}
+          >
             Partner with us
-          </a>
+          </button>
         </nav>
         <CartPill />
         <UserProfile />

@@ -1,8 +1,8 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { DEFAULT_THEME, type ThemeId } from '@/theme/palettes';
 
-/** Top-level view: the planner wizard, or one of the two shop catalogues. */
-export type AppView = 'planner' | 'gifts' | 'medical';
+/** Top-level view: the planner wizard, the two shop catalogues, or partner EOI. */
+export type AppView = 'planner' | 'gifts' | 'medical' | 'partner';
 
 /** Wizard steps within the planner view. */
 export type WizardStep = 'plan' | 'cab' | 'stay' | 'shop' | 'review';
