@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ElateTrips — React + Next.js
 
-## Getting Started
+Celebration-first travel planning for India, re-platformed from the original standalone
+HTML/JS app onto a modern, type-safe React stack.
 
-First, run the development server:
+## Stack
+
+| Concern | Choice |
+| --- | --- |
+| Framework | **Next.js 16** (App Router) + React 19 |
+| Language | **TypeScript** (strict) |
+| Styling — layout | **Tailwind CSS v4** (utilities, intrinsic responsiveness) |
+| Styling — components | **Material UI v9** (buttons, inputs, fields) |
+| State | **Redux Toolkit** (feature slices + memoized selectors + listener middleware) |
+| Async data | **RTK Query** (Photon geocoding) |
+| Forms | **React Hook Form + Zod** (contact / billing) |
+| Icons / fonts | Tabler webfont · `next/font` (Playfair Display + Lato) |
+| Tests | **Vitest + RTL** (unit) · **Playwright** (e2e) |
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Script | Purpose |
+| --- | --- |
+| `npm run dev` | Dev server (Turbopack) |
+| `npm run build` / `npm start` | Production build / serve |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm run lint` | ESLint (next/core-web-vitals) |
+| `npm test` | Vitest unit suite (domain rules, pricing, formatters) |
+| `npm run test:e2e` | Playwright happy-path suite |
+| `npm run format` | Prettier (+ Tailwind class sort) |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Architecture
 
-## Learn More
+```
+src/
+├─ app/                 # App Router entry (layout, page, globals.css)
+├─ components/
+│  ├─ layout/           # Header, ThemeSwitcher, CartPill, StepIndicator
+│  ├─ planner/          # Wizard steps: plan · cab · hotels · shop · review
+│  ├─ shop/             # Gifts / Medical catalogues
+│  └─ ui/               # MUI-wrapped primitives (Icon, Card, Chip, Stepper)
+├─ domain/              # Framework-free logic: rules, pricing, calendar, format, photon
+├─ data/                # Typed mock catalogues (hotels, packages, vehicles, shop…)
+├─ store/               # Redux Toolkit store, slices, selectors, RTK Query, listeners
+├─ hooks/               # useOutsideClick, useDebounce, useGeolocation
+└─ theme/               # Palettes → CSS variables + MUI theme bridge
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Key design decisions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Single source of design tokens** — one palette object drives both the CSS custom
+  properties (Tailwind / inline) and the MUI theme, so the 5 celebration themes
+  (Lagoon, Sunset, Classic, Rose Soirée, Emerald Fête) swap at runtime with no drift.
+- **Pure domain layer** — celebration combination rules, vehicle-by-pax filtering,
+  age-gated package filtering, fare estimation and the calendar grid are framework-free
+  and unit-tested for parity with the original.
+- **MUI for controls, Tailwind for layout** — the two never style the same element.
+- **No media queries** — responsiveness comes from CSS Grid `auto-fit` + `minmax()`,
+  flexbox `flex-wrap`, and `clamp()`. Tailwind breakpoint prefixes are intentionally avoided.
+- **Single-route client wizard** — `plan → cab → hotels → shop → review` is driven by
+  Redux state under `/`; the cab step only appears when a cab is chosen.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Functional scope
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Mirrors `ElateTrips Functionality.md` from the source project: destination search, tour
+date range, travellers, celebration selection (with combination + age rules), transport
+(own / cab · local / complete trip with OpenStreetMap pickup search + geolocation),
+hotels (filters, detail, rooms), celebration packages, wedding form, activity/experience
+vouchers, shared gifts/medical cart, and OTP review + checkout. All data is mock.

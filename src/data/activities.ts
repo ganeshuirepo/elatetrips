@@ -1,0 +1,130 @@
+import type { Voucher } from '@/domain/types';
+
+/** Adventure vouchers (per-person priced, dated). */
+export const ADVENTURES: Voucher[] = [
+  {
+    id: 'trek',
+    category: 'Land',
+    name: 'Trekking',
+    sub: 'Guided hill trails',
+    icon: 'ti-mountain',
+    price: 1200,
+    inc: ['Certified trail guide', 'Safety gear provided', '2–3 hour guided hike'],
+  },
+  {
+    id: 'raft',
+    category: 'Water',
+    name: 'River rafting',
+    sub: 'Grade I–III rapids',
+    icon: 'ti-ripple',
+    price: 1800,
+    inc: ['Grade I–III rapids run', 'Life jackets & helmets', 'Trained river guide'],
+  },
+  {
+    id: 'zip',
+    category: 'Aerial',
+    name: 'Ziplining',
+    sub: 'Valley crossing',
+    icon: 'ti-zeppelin',
+    price: 1500,
+    inc: ['Valley-crossing zipline', 'Full safety harness', 'Instructor briefing'],
+  },
+  {
+    id: 'atv',
+    category: 'Land',
+    name: 'ATV ride',
+    sub: 'Off-road trails',
+    icon: 'ti-car',
+    price: 2000,
+    inc: ['Off-road trail ride', 'Protective gear', 'Guided circuit'],
+  },
+  {
+    id: 'para',
+    category: 'Aerial',
+    name: 'Paragliding',
+    sub: 'Tandem flights',
+    icon: 'ti-parachute',
+    price: 3500,
+    inc: ['Tandem flight with pilot', 'All safety equipment', 'Aerial photos optional'],
+  },
+  {
+    id: 'camp',
+    category: 'Nature',
+    name: 'Camping',
+    sub: 'Bonfire & tents',
+    icon: 'ti-tent',
+    price: 2500,
+    inc: ['Tents & sleeping setup', 'Bonfire & evening snacks', 'Camp host on site'],
+  },
+];
+
+/** Local experience vouchers (per-person priced, dated). */
+export const EXPERIENCES: Voucher[] = [
+  {
+    id: 'sight',
+    category: 'Tours',
+    name: 'Sightseeing',
+    sub: 'Curated city tour',
+    icon: 'ti-binoculars',
+    price: 800,
+    inc: ['Curated city tour', 'Local guide', 'Entry coordination'],
+  },
+  {
+    id: 'food',
+    category: 'Food',
+    name: 'Food tour',
+    sub: 'Local cuisine trail',
+    icon: 'ti-tools-kitchen-2',
+    price: 1200,
+    inc: ['Local cuisine trail', 'Multiple tasting stops', 'Guide-led walk'],
+  },
+  {
+    id: 'workshop',
+    category: 'Arts',
+    name: 'Workshops',
+    sub: 'Craft & art classes',
+    icon: 'ti-brush',
+    price: 1000,
+    inc: ['Craft & art class', 'Materials included', 'Hands-on session'],
+  },
+  {
+    id: 'culture',
+    category: 'Culture',
+    name: 'Cultural events',
+    sub: 'Music & dance',
+    icon: 'ti-masks-theater',
+    price: 900,
+    inc: ['Music & dance show', 'Reserved seating', 'Local performers'],
+  },
+  {
+    id: 'dining',
+    category: 'Food',
+    name: 'Dining add-ons',
+    sub: 'Special meals',
+    icon: 'ti-glass-full',
+    price: 1500,
+    inc: ['Special curated meal', 'Reserved table', 'Customisable menu'],
+  },
+  {
+    id: 'kids',
+    category: 'Family',
+    name: 'Kid-friendly',
+    sub: 'Family activities',
+    icon: 'ti-mood-kid',
+    price: 700,
+    inc: ['Supervised family activities', 'Age-appropriate fun', 'Activity host'],
+  },
+];
+
+/** Distinct activity categories, in display order (used by the activity filters). */
+export const ACTIVITY_CATEGORIES = [
+  'Land',
+  'Water',
+  'Aerial',
+  'Nature',
+  'Tours',
+  'Food',
+  'Arts',
+  'Culture',
+  'Family',
+] as const;

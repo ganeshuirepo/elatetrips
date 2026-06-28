@@ -1,26 +1,92 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@import '@tabler/icons-webfont/dist/tabler-icons.min.css';
 
+/*
+ * Theme tokens live as CSS custom properties so Tailwind utilities, inline
+ * styles and MUI all read the same values. ThemeRegistry overrides these on a
+ * wrapper element at runtime when the palette changes; the values below are the
+ * 'lagoon' default and the SSR fallback.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary: #0f7c8b;
+  --accent: #ff7a55;
+  --accent-ink: #c9492a;
+  --sand: #e3f1f0;
+  --line: #d1e5e3;
+  --ink: #16242a;
+  --muted: #51666b;
+  --bg1: #f1faf9;
+  --bg2: #e1f0ee;
 }
 
+/* Expose tokens to Tailwind v4 utilities (e.g. text-primary, bg-sand). */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-sand: var(--sand);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-bg1: var(--bg1);
+  --color-bg2: var(--bg2);
+  --font-sans: var(--font-lato), system-ui, sans-serif;
+  --font-serif: var(--font-playfair), Georgia, serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--ink);
+  font-family: var(--font-lato), system-ui, sans-serif;
+}
+
+/* App background — celebration gradient, ported from the original shell. */
+.et-theme-root {
+  min-height: 100vh;
+  padding-bottom: 44px;
+  color: var(--ink);
+  background:
+    radial-gradient(
+      1100px 460px at 100% -6%,
+      color-mix(in srgb, var(--accent) 16%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      1000px 520px at -8% 8%,
+      color-mix(in srgb, var(--primary) 13%, transparent),
+      transparent 56%
+    ),
+    radial-gradient(
+      900px 700px at 50% 120%,
+      color-mix(in srgb, var(--accent) 9%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(168deg, var(--bg1) 0%, var(--bg2) 72%);
+  background-attachment: fixed;
+}
+
+/*
+ * Intrinsic-responsive helpers — no media queries.
+ * Card grids reflow purely by available width via auto-fit + minmax.
+ */
+.et-auto-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--et-col, 16rem)), 1fr));
+}
+
+@keyframes elspin {
+  to {
+    transform: rotate(360deg);
+  }
 }

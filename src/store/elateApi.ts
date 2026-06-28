@@ -1,0 +1,136 @@
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import type { RootState } from './store';
+import type { AccountUser, Gender, Session } from './slices/accountSlice';
+
+/** Base URL of the ElateTrips backend (override via NEXT_PUBLIC_API_BASE). */
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? 'http://localhost:4000/api/v1';
+
+/** Unwraps the backend success envelope `{ success, data }` into just `data`. */
+const pick =
+  <T>() =>
+  (res: unknown): T =>
+    (res as { data: T }).data;
+
+export interface OtpResult {
+  identifier: string;
+  channel: 'email' | 'mobile';
+  sent: true;
+  devOtp?: string;
+}
+
+export interface SignupBody {
+  name: string;
+  email: string;
+  phone: string;
+  gender: Gender;
+  age: number;
+  password: string;
+  verifyVia: 'email' | 'mobile';
+}
+
+export interface OrderSummary {
+  destination: string;
+  dates: string;
+  travellers: string;
+  transportLabel: string;
+  hotelLabel: string;
+  packages: { celeb: string; names: string[] }[];
+  adventures: string[];
+  experiences: string[];
+}
+
+export interface Order {
+  tripId: string;
+  phone: string;
+  status: string;
+  total: number;
+  contactName: string;
+  contactPhone: string;
+  contactEmail: string;
+  summary: OrderSummary;
+  createdAt: string;
+}
+
+export interface CreateOrderBody {
+  total: number;
+  contactName: string;
+  contactPhone: string;
+  contactEmail: string;
+  summary: OrderSummary;
+}
+
+/**
+ * RTK Query client for the ElateTrips backend. The JWT is attached from the
+ * account slice, and the success envelope is unwrapped so components receive the
+ * payload directly. Errors surface as `error.data.error.message`.
+ */
+export const elateApi = createApi({
+  reducerPath: 'elateApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl: API_BASE,
+    prepareHeaders: (headers, { getState }) => {
+      const token = (getState() as RootState).account.token;
+      if (token) headers.set('authorization', `Bearer ${token}`);
+      return headers;
+    },
+  }),
+  tagTypes: ['Orders', 'Profile'],
+  endpoints: (build) => ({
+    signup: build.mutation<OtpResult, SignupBody>({
+      query: (body) => ({ url: '/auth/signup', method: 'POST', body }),
+      transformResponse: pick<OtpResult>(),
+    }),
+    verifyAccount: build.mutation<Session, { identifier: string; otp: string }>({
+      query: (body) => ({ url: '/auth/verify-account', method: 'POST', body }),
+      transformResponse: pick<Session>(),
+    }),
+    login: build.mutation<Session, { identifier: string; password: string }>({
+      query: (body) => ({ url: '/auth/login', method: 'POST', body }),
+      transformResponse: pick<Session>(),
+    }),
+    forgotPassword: build.mutation<OtpResult, { identifier: string }>({
+      query: (body) => ({ url: '/auth/forgot-password', method: 'POST', body }),
+      transformResponse: pick<OtpResult>(),
+    }),
+    resetPassword: build.mutation<Session, { identifier: string; otp: string; password: string }>({
+      query: (body) => ({ url: '/auth/reset-password', method: 'POST', body }),
+      transformResponse: pick<Session>(),
+    }),
+    requestOtp: build.mutation<OtpResult, { phone: string }>({
+      query: (body) => ({ url: '/auth/request-otp', method: 'POST', body }),
+      transformResponse: pick<OtpResult>(),
+    }),
+    verifyOtp: build.mutation<Session, { phone: string; otp: string }>({
+      query: (body) => ({ url: '/auth/verify-otp', method: 'POST', body }),
+      transformResponse: pick<Session>(),
+    }),
+    getProfile: build.query<AccountUser, void>({
+      query: () => '/users/me',
+      transformResponse: pick<AccountUser>(),
+      providesTags: ['Profile'],
+    }),
+    getOrders: build.query<Order[], void>({
+      query: () => '/orders',
+      transformResponse: pick<Order[]>(),
+      providesTags: ['Orders'],
+    }),
+    createOrder: build.mutation<Order, CreateOrderBody>({
+      query: (body) => ({ url: '/orders', method: 'POST', body }),
+      transformResponse: pick<Order>(),
+      invalidatesTags: ['Orders'],
+    }),
+  }),
+});
+
+export const {
+  useSignupMutation,
+  useVerifyAccountMutation,
+  useLoginMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
+  useRequestOtpMutation,
+  useVerifyOtpMutation,
+  useGetProfileQuery,
+  useGetOrdersQuery,
+  useCreateOrderMutation,
+} = elateApi;
