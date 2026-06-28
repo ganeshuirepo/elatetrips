@@ -1,19 +1,20 @@
 /** Pure business rules. Framework-free and exhaustively unit-tested. */
 
-import { CELEB_GROUPS } from '@/data/celebrations';
+import { CELEB_GROUPS, CELEB_EXCLUSIVE } from '@/data/celebrations';
 import { VEHICLES } from '@/data/vehicles';
 import { PKGS, PKG_AGE } from '@/data/packages';
 import type { AgeRange } from '@/domain/types';
 
 /**
- * Whether a set of celebration ids may be booked together.
+ * Whether a set of occasion ids may be booked together.
  * - 1 or fewer → always valid.
- * - 'teamouting' (Proposal) is exclusive → any combination with it is invalid.
- * - otherwise all ids must fit inside a single combination group.
+ * - An exclusive occasion (Wedding, Proposal) cannot be combined with anything.
+ * - otherwise all ids must fit inside a single combination group, so Escapes
+ *   never mix with Celebration items.
  */
 export function celebComboValid(ids: string[]): boolean {
   if (ids.length <= 1) return true;
-  if (ids.includes('teamouting')) return false;
+  if (ids.some((i) => CELEB_EXCLUSIVE.includes(i))) return false;
   return CELEB_GROUPS.some((g) => ids.every((i) => g.includes(i)));
 }
 

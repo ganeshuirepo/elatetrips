@@ -81,11 +81,17 @@ export const CELEBRATIONS: Celebration[] = [
 ];
 
 /**
- * Which celebrations may be combined. 'family' (Wellness) is in both groups so
- * it bridges either set. 'teamouting' (Proposal) is exclusive — it cannot be
- * combined with anything.
+ * Which occasions may be booked together. A valid selection must sit entirely
+ * within ONE group:
+ *  - Celebration items combine among themselves.
+ *  - Escapes (the four 'rejuvenate' occasions) combine only with each other and
+ *    never with a Celebration item.
+ * Items in CELEB_EXCLUSIVE cannot be combined with anything else.
  */
 export const CELEB_GROUPS: string[][] = [
-  ['birthday', 'anniversary', 'adventure', 'family', 'leisure', 'nature'],
-  ['wedding', 'honeymoon', 'family', 'bachelor', 'leisure', 'nature'],
+  ['birthday', 'anniversary', 'honeymoon', 'bachelor'], // Celebration (excl. exclusives)
+  ['family', 'adventure', 'leisure', 'nature'], // Escapes — self-contained
 ];
+
+/** Occasions that must be booked on their own: Wedding and Proposal. */
+export const CELEB_EXCLUSIVE: string[] = ['wedding', 'teamouting'];

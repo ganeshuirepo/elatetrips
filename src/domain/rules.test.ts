@@ -2,26 +2,33 @@ import { describe, it, expect } from 'vitest';
 import { celebComboValid, validVehicleIds, pkgFitsAge, packagesForCeleb } from './rules';
 
 describe('celebComboValid', () => {
-  it('allows zero or one celebration', () => {
+  it('allows zero or one occasion', () => {
     expect(celebComboValid([])).toBe(true);
     expect(celebComboValid(['birthday'])).toBe(true);
+    expect(celebComboValid(['wedding'])).toBe(true);
     expect(celebComboValid(['teamouting'])).toBe(true);
   });
 
-  it('allows combinations within Group A', () => {
+  it('allows combinations within the Celebration group', () => {
     expect(celebComboValid(['birthday', 'anniversary'])).toBe(true);
-    expect(celebComboValid(['birthday', 'anniversary', 'adventure', 'family'])).toBe(true);
+    expect(celebComboValid(['birthday', 'anniversary', 'honeymoon', 'bachelor'])).toBe(true);
   });
 
-  it('allows combinations within Group B', () => {
-    expect(celebComboValid(['wedding', 'honeymoon'])).toBe(true);
-    expect(celebComboValid(['wedding', 'honeymoon', 'family', 'bachelor'])).toBe(true);
+  it('allows combinations within the Escapes group', () => {
+    expect(celebComboValid(['family', 'adventure'])).toBe(true);
+    expect(celebComboValid(['family', 'adventure', 'leisure', 'nature'])).toBe(true);
   });
 
-  it('lets Wellness (family) bridge either group but not across groups', () => {
-    expect(celebComboValid(['birthday', 'family'])).toBe(true);
-    expect(celebComboValid(['wedding', 'family'])).toBe(true);
-    expect(celebComboValid(['birthday', 'wedding'])).toBe(false);
+  it('never combines Escapes with Celebration items', () => {
+    expect(celebComboValid(['birthday', 'adventure'])).toBe(false);
+    expect(celebComboValid(['anniversary', 'family'])).toBe(false);
+    expect(celebComboValid(['honeymoon', 'nature'])).toBe(false);
+  });
+
+  it('treats Wedding as exclusive', () => {
+    expect(celebComboValid(['wedding', 'honeymoon'])).toBe(false);
+    expect(celebComboValid(['wedding', 'anniversary'])).toBe(false);
+    expect(celebComboValid(['wedding', 'family'])).toBe(false);
   });
 
   it('treats Proposal (teamouting) as exclusive', () => {
