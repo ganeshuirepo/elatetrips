@@ -19,6 +19,8 @@ export interface Palette {
   muted: string;
   bg1: string;
   bg2: string;
+  /** Travel photo shown faintly behind the theme gradient (under /public). */
+  bgImage: string;
 }
 
 export const PALETTES: Record<ThemeId, Palette> = {
@@ -33,6 +35,7 @@ export const PALETTES: Record<ThemeId, Palette> = {
     muted: '#51666B',
     bg1: '#F1FAF9',
     bg2: '#E1F0EE',
+    bgImage: '/assets/bg-lagoon.jpg',
   },
   sunset: {
     label: 'Sunset',
@@ -45,6 +48,7 @@ export const PALETTES: Record<ThemeId, Palette> = {
     muted: '#6B5860',
     bg1: '#FFF4EC',
     bg2: '#FCE5D8',
+    bgImage: '/assets/bg-sunset.jpg',
   },
   classic: {
     label: 'Classic',
@@ -57,6 +61,7 @@ export const PALETTES: Record<ThemeId, Palette> = {
     muted: '#5B6678',
     bg1: '#FCF6EC',
     bg2: '#F5EDDF',
+    bgImage: '/assets/bg-classic.jpg',
   },
   rose: {
     label: 'Rose Soirée',
@@ -69,6 +74,7 @@ export const PALETTES: Record<ThemeId, Palette> = {
     muted: '#6B5A62',
     bg1: '#FCF2F5',
     bg2: '#F7E9EE',
+    bgImage: '/assets/bg-rose.jpg',
   },
   emerald: {
     label: 'Emerald Fête',
@@ -81,11 +87,12 @@ export const PALETTES: Record<ThemeId, Palette> = {
     muted: '#566159',
     bg1: '#F6F9F2',
     bg2: '#EDF3E8',
+    bgImage: '/assets/bg-emerald.jpg',
   },
 };
 
 export const THEME_IDS = Object.keys(PALETTES) as ThemeId[];
-export const DEFAULT_THEME: ThemeId = 'lagoon';
+export const DEFAULT_THEME: ThemeId = 'classic';
 
 /** Map a palette to the CSS custom properties used across the app. */
 export function paletteToCssVars(p: Palette): Record<string, string> {
@@ -99,5 +106,6 @@ export function paletteToCssVars(p: Palette): Record<string, string> {
     '--muted': p.muted,
     '--bg1': p.bg1,
     '--bg2': p.bg2,
+    '--bg-image': `url(${p.bgImage})`,
   };
 }
