@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ElateTrips — React + Next.js
 
 Celebration-first travel planning for India, re-platformed from the original standalone
@@ -74,3 +75,17 @@ date range, travellers, celebration selection (with combination + age rules), tr
 (own / cab · local / complete trip with OpenStreetMap pickup search + geolocation),
 hotels (filters, detail, rooms), celebration packages, wedding form, activity/experience
 vouchers, shared gifts/medical cart, and OTP review + checkout. All data is mock.
+
+## Legacy standalone prototype
+
+The original single-file HTML/JS prototype this app was re-platformed from is still kept
+in the repo root for reference:
+
+| File | Purpose |
+| --- | --- |
+| `ElateTrips First Page (Standalone).html` | Self-contained build — open directly in any browser. |
+| `ElateTrips First Page.dc.html` | Design Component variant; loads `support.js` + `image-slot.js` from the same directory. |
+| `ElateTrips Standalone Src.dc.html` | Source variant used to generate the standalone build. |
+| `support.js` | Runtime for the `.dc.html` component. |
+| `image-slot.js` | Drag-and-drop image placeholder web component. |
+| `ElateTrips Functionality.md` | Functional spec / feature notes (the new app mirrors this). |

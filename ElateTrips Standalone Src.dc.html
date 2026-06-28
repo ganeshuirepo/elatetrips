@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<meta name="ext-resource-dependency" content="https://loremflickr.com/400/260/birthday,decoration?lock=5" data-resource-id="celeb_birthday" />
+<meta name="ext-resource-dependency" content="https://loremflickr.com/400/260/anniversary,decoration?lock=7" data-resource-id="celeb_anniversary" />
+<meta name="ext-resource-dependency" content="https://loremflickr.com/400/260/romantic,candles,room?lock=2" data-resource-id="celeb_honeymoon" />
+<meta name="ext-resource-dependency" content="https://loremflickr.com/400/260/marriage,proposal,flowers?lock=1" data-resource-id="celeb_proposal" />
+<meta name="ext-resource-dependency" content="https://loremflickr.com/400/260/party,decoration?lock=12" data-resource-id="celeb_bachelor" />
+<meta name="ext-resource-dependency" content="https://loremflickr.com/400/260/studio,backdrop?lock=2" data-resource-id="celeb_photoshoot" />
+<meta name="ext-resource-dependency" content="https://loremflickr.com/400/260/family,three,generations?lock=1" data-resource-id="celeb_family" />
+<meta name="ext-resource-dependency" content="https://loremflickr.com/400/260/campfire,people,sitting?lock=1" data-resource-id="celeb_teamouting" />
+<template id="__bundler_thumbnail" data-bg-color="#FBF4E8">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#FBF4E8"/>
+    <circle cx="600" cy="312" r="118" fill="#18336E"/>
+    <circle cx="690" cy="232" r="30" fill="#E27A33"/>
+    <text x="600" y="560" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="96" fill="#18336E">Elate<tspan fill="#E27A33">Trips</tspan></text>
+    <text x="600" y="628" text-anchor="middle" font-family="Georgia, serif" font-size="34" fill="#5C6577">Celebration-first travel</text>
+  </svg>
+</template>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.24.0/dist/tabler-icons.min.css">
+<script src="./image-slot.js"></script>
+<style>
+  /* Default theme — 'Festive'. All brand colour lives in these tokens; swap them to retheme. */
+  :root{
+    --primary:#18336E; --accent:#E27A33; --accent-ink:#B05A18;
+    --sand:#F3EAD8; --line:#E6DFD1; --ink:#20242E; --muted:#5C6577;
+    --bg1:#FBF4E8; --bg2:#F4EAD8;
+  }
+  body{margin:0;overflow-x:hidden}
+  *{box-sizing:border-box}
+  input[type=date]::-webkit-calendar-picker-indicator{cursor:pointer;opacity:.55}
+  select{appearance:none;-webkit-appearance:none}
+  /* Responsive: stack steps on tablet/mobile, collapse the date row + calendar on small screens */
+  @media (max-width: 780px){
+    .et-cols2{ grid-template-columns:1fr !important; gap:22px !important; }
+  }
+  @media (max-width: 560px){
+    .et-container{ padding-left:14px !important; padding-right:14px !important; }
+    .et-card{ padding:16px !important; }
+    .et-cal-months{ grid-template-columns:1fr !important; }
+    .et-whowhen{ flex-direction:column !important; }
+    .et-whowhen > div:nth-child(2), .et-whowhen > div:nth-child(4){ display:none !important; }
+    .et-whowhen > div:nth-child(1), .et-whowhen > div:nth-child(3), .et-whowhen > div:nth-child(5){ width:100% !important; border-bottom:1px solid var(--line,#E4E0D7) !important; }
+    .et-whowhen > div:nth-child(5){ border-bottom:none !important; }
+    .et-whowhen > div:nth-child(1){ border-radius:14px 14px 0 0 !important; }
+  }
+</style>
+</helmet>
+<div style="{{ themeStyle }}">
+<div style="font-family:'Lato',system-ui,sans-serif;color:var(--ink,#1F2433);background:linear-gradient(180deg,var(--bg1,#FCF6EC) 0%,var(--bg2,#F5EDDF) 100%);min-height:100vh;padding-bottom:44px;overflow-x:hidden">
+
+  <header style="max-width:1060px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:18px 24px">
+    <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:23px;color:var(--primary,#1C3C8F);letter-spacing:-.01em">Elate<span style="color:var(--accent,#E07B2D)">Trips</span></div>
+    <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+      <nav style="display:flex;gap:26px;font-size:13.5px;font-weight:700;color:var(--muted,#5B6678)">
+        <a href="#" style="color:inherit;text-decoration:none">Destinations</a>
+        <a href="#" style="color:inherit;text-decoration:none">Celebrations</a>
+        <a href="#" style="color:inherit;text-decoration:none">Partner with us</a>
+      </nav>
+      <div data-theme-sw="1" style="display:flex;align-items:center;gap:9px;padding-left:16px;border-left:1px solid var(--line,#E6DFD1)">
+        <span style="font-size:10.5px;font-weight:900;letter-spacing:.05em;text-transform:uppercase;color:var(--muted,#5B6678)">Theme</span>
+        <div style="display:flex;align-items:center;gap:7px">
+          <sc-for list="{{ themeOptions }}" as="t" hint-placeholder-count="5">
+            <button type="button" title="{{ t.label }}" aria-label="{{ t.label }}" onclick="{{ t.onClick }}" style="{{ t.swatchStyle }}"></button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ COMPACT — BOTH STEPS, ONE SCREEN ============ -->
+  <sc-if value="{{ heroShown }}" hint-placeholder-val="{{ true }}">
+    <section style="max-width:1080px;margin:0 auto;padding:2px 24px 8px;display:flex;align-items:center;gap:13px;flex-wrap:wrap">
+      <span style="display:inline-block;background:color-mix(in srgb, var(--accent,#E07B2D) 12%, transparent);color:var(--accent-ink,#B96212);font-weight:900;font-size:11px;letter-spacing:.05em;text-transform:uppercase;border-radius:99px;padding:4px 11px">Celebration-first travel</span>
+      <h1 style="font-family:'Playfair Display',serif;font-weight:700;color:var(--primary,#1C3C8F);font-size:24px;line-height:1.1;margin:0;letter-spacing:-.01em">Plan your perfect celebration trip</h1>
+      <span style="color:var(--muted,#5B6678);font-size:13px">Where, when, who and what — booked together in one go.</span>
+    </section>
+  </sc-if>
+
+  <div class="et-container" style="max-width:1080px;margin:0 auto;padding:8px 24px 0">
+    <div class="et-card" style="background:#fff;border:1px solid #ECE7DC;border-radius:20px;padding:22px;box-shadow:0 20px 50px -26px rgba(28,60,143,.35)">
+      <div class="et-cols2" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:26px;align-items:start">
+
+        <!-- LEFT · Step 1 -->
+        <div>
+          <span style="display:inline-block;font-size:11px;font-weight:900;color:var(--accent-ink,#B96212);letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px">Where &amp; when</span>
+
+          <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:12px">
+            <span style="font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:var(--primary,#1C3C8F)">Where to?</span>
+            <span style="font-size:12.5px;color:var(--muted,#5B6678)">Ooty is live — more soon</span>
+          </div>
+
+        <div data-dest="1" style="position:relative">
+          <div style="position:relative">
+            <span style="position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--muted,#5B6678);font-size:19px;pointer-events:none"><i class="ti ti-map-pin"></i></span>
+            <input type="text" value="{{ destQuery }}" oninput="{{ onDestInput }}" onfocus="{{ onDestFocus }}" placeholder="Search a destination — try “Ooty”" style="{{ destInputStyle }}">
+            <sc-if value="{{ destHasValue }}" hint-placeholder-val="{{ false }}">
+              <button type="button" onclick="{{ clearDest }}" aria-label="Clear" style="position:absolute;right:11px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;border:none;background:var(--sand,#F4ECDD);color:var(--muted,#5B6678);font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer"><i class="ti ti-x"></i></button>
+            </sc-if>
+          </div>
+          <sc-if value="{{ destOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:50;background:#fff;border:1.5px solid var(--line,#E4E0D7);border-radius:14px;box-shadow:0 22px 46px -18px rgba(28,60,143,.4);padding:6px;max-height:288px;overflow-y:auto">
+              <sc-for list="{{ destResults }}" as="d" hint-placeholder-count="4">
+                <button type="button" disabled="{{ d.disabled }}" onclick="{{ d.onClick }}" style="{{ d.rowStyle }}">
+                  <span style="{{ d.iconStyle }}"><i class="{{ d.icon }}"></i></span>
+                  <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px">
+                    <span style="font-weight:700;font-size:14.5px;color:var(--ink,#1F2433)">{{ d.name }}</span>
+                    <span style="font-size:12.5px;color:var(--muted,#5B6678)">{{ d.tag }}</span>
+                  </span>
+                  <sc-if value="{{ d.comingSoon }}" hint-placeholder-val="{{ false }}">
+                    <span style="flex:0 0 auto;background:color-mix(in srgb, var(--accent,#E07B2D) 13%, transparent);color:var(--accent-ink,#B96212);font-weight:900;font-size:10px;letter-spacing:.04em;text-transform:uppercase;border-radius:99px;padding:4px 9px;white-space:nowrap">Soon</span>
+                  </sc-if>
+                  <sc-if value="{{ d.selected }}" hint-placeholder-val="{{ false }}">
+                    <span style="flex:0 0 auto;color:var(--primary,#1C3C8F);font-size:17px"><i class="ti ti-check"></i></span>
+                  </sc-if>
+                </button>
+              </sc-for>
+              <sc-if value="{{ destNoResults }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:14px 13px;font-size:13.5px;color:var(--muted,#5B6678)">No destinations match “{{ destQuery }}”. More are coming soon.</div>
+              </sc-if>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="margin-top:22px">
+          <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:var(--primary,#1C3C8F);margin-bottom:12px">When &amp; who?</div>
+          <div class="et-whowhen" style="display:flex;align-items:stretch;border:1.5px solid var(--line,#E4E0D7);border-radius:14px;background:#fff;position:relative">
+            <div data-cal="1" onclick="{{ openStart }}" style="{{ startCellStyle }}">
+              <span style="display:block;font-size:10.5px;color:var(--muted,#5B6678);font-weight:900;text-transform:uppercase;letter-spacing:.05em">Tour start</span>
+              <span style="display:block;font-weight:700;font-size:16px;color:var(--ink,#1F2433);margin-top:3px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ startBig }}</span>
+              <span style="display:block;font-size:12px;color:var(--muted,#5B6678);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ startSub }}</span>
+            </div>
+            <div style="width:1px;background:#ECE7DC;margin:9px 0"></div>
+            <div data-cal="1" onclick="{{ openEnd }}" style="{{ endCellStyle }}">
+              <span style="display:block;font-size:10.5px;color:var(--muted,#5B6678);font-weight:900;text-transform:uppercase;letter-spacing:.05em">Tour end</span>
+              <span style="display:block;font-weight:700;font-size:16px;color:var(--ink,#1F2433);margin-top:3px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ endBig }}</span>
+              <span style="display:block;font-size:12px;color:var(--muted,#5B6678);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ endSub }}</span>
+            </div>
+            <div style="width:1px;background:#ECE7DC;margin:9px 0"></div>
+            <div data-trav="1" onclick="{{ toggleTrav }}" style="flex:1;min-width:0;position:relative;padding:11px 32px 11px 16px;cursor:pointer">
+              <span style="display:block;font-size:10.5px;color:var(--muted,#5B6678);font-weight:900;text-transform:uppercase;letter-spacing:.05em">Travellers</span>
+              <span style="display:block;font-weight:700;font-size:16px;color:var(--ink,#1F2433);margin-top:3px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ travBig }}</span>
+              <span style="display:block;font-size:12px;color:var(--muted,#5B6678);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ travSub }}</span>
+              <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted,#5B6678);font-size:16px"><i class="{{ travChevron }}"></i></span>
+              <sc-if value="{{ travOpen }}" hint-placeholder-val="{{ false }}">
+                <div data-trav="1" onclick="{{ stop }}" style="position:absolute;top:calc(100% + 9px);right:0;z-index:30;width:252px;background:#fff;border:1.5px solid var(--line,#E4E0D7);border-radius:14px;box-shadow:0 22px 44px -18px rgba(28,60,143,.4);padding:4px 16px;cursor:default">
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0">
+                    <span><span style="display:block;font-weight:700;font-size:14px;color:var(--ink,#1F2433)">Adults</span><span style="font-size:12px;color:var(--muted,#5B6678)">Age 12+</span></span>
+                    <span style="display:flex;align-items:center;gap:12px">
+                      <button type="button" disabled="{{ adultsMinusOff }}" onclick="{{ adultsMinus }}" style="{{ stepBtnStyle }}"><i class="ti ti-minus"></i></button>
+                      <span style="width:22px;text-align:center;font-weight:700;font-size:17px">{{ adults }}</span>
+                      <button type="button" onclick="{{ adultsPlus }}" style="{{ stepBtnStyle }}"><i class="ti ti-plus"></i></button>
+                    </span>
+                  </div>
+                  <div style="border-top:1px solid #EFEBE1"></div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0">
+                    <span><span style="display:block;font-weight:700;font-size:14px;color:var(--ink,#1F2433)">Children</span><span style="font-size:12px;color:var(--muted,#5B6678)">Age 2–11</span></span>
+                    <span style="display:flex;align-items:center;gap:12px">
+                      <button type="button" disabled="{{ childrenMinusOff }}" onclick="{{ childrenMinus }}" style="{{ stepBtnStyle }}"><i class="ti ti-minus"></i></button>
+                      <span style="width:22px;text-align:center;font-weight:700;font-size:17px">{{ children }}</span>
+                      <button type="button" onclick="{{ childrenPlus }}" style="{{ stepBtnStyle }}"><i class="ti ti-plus"></i></button>
+                    </span>
+                  </div>
+                  <button type="button" onclick="{{ closeTrav }}" style="width:100%;border:none;background:color-mix(in srgb, var(--primary,#1C3C8F) 7%, transparent);color:var(--primary,#1C3C8F);font:inherit;font-weight:700;font-size:13.5px;border-radius:10px;padding:9px;margin:6px 0 12px;cursor:pointer">Done</button>
+                </div>
+              </sc-if>
+            </div>
+
+            <sc-if value="{{ calOpen }}" hint-placeholder-val="{{ false }}">
+              <div data-cal="1" onclick="{{ stop }}" style="position:absolute;top:calc(100% + 10px);left:0;right:0;z-index:40;background:#fff;border:1.5px solid var(--line,#E4E0D7);border-radius:16px;box-shadow:0 26px 54px -18px rgba(28,60,143,.42);padding:16px 18px;cursor:default">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                  <button type="button" disabled="{{ prevOff }}" onclick="{{ prevMonth }}" style="{{ navBtnStyle }}"><i class="ti ti-chevron-left"></i></button>
+                  <span style="font-weight:700;font-size:13px;color:var(--primary,#1C3C8F)">{{ calPrompt }}</span>
+                  <button type="button" onclick="{{ nextMonth }}" style="{{ navBtnStyleOn }}"><i class="ti ti-chevron-right"></i></button>
+                </div>
+                <div class="et-cal-months" style="display:grid;grid-template-columns:1fr 1fr;gap:22px">
+                  <sc-for list="{{ months }}" as="m" hint-placeholder-count="2">
+                    <div>
+                      <div style="text-align:center;font-family:'Playfair Display',serif;font-weight:700;font-size:14.5px;color:var(--ink,#1F2433);margin-bottom:8px">{{ m.label }}</div>
+                      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px">
+                        <sc-for list="{{ weekdays }}" as="w" hint-placeholder-count="7">
+                          <div style="text-align:center;font-size:10.5px;font-weight:900;color:#A7A293;text-transform:uppercase;height:20px;line-height:20px">{{ w }}</div>
+                        </sc-for>
+                      </div>
+                      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px">
+                        <sc-for list="{{ m.cells }}" as="c" hint-placeholder-count="35">
+                          <button type="button" disabled="{{ c.disabled }}" onclick="{{ c.onClick }}" style="{{ c.style }}">{{ c.day }}</button>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;padding-top:13px;border-top:1px solid #EFEBE1">
+                  <span style="font-size:13px;color:var(--muted,#5B6678);font-weight:600">{{ rangeLabel }}</span>
+                  <span style="display:flex;gap:8px">
+                    <button type="button" onclick="{{ clearDates }}" style="border:1.5px solid #DAD6CC;background:#fff;color:var(--muted,#5B6678);font:inherit;font-weight:700;font-size:13px;border-radius:10px;padding:8px 14px;cursor:pointer">Clear</button>
+                    <button type="button" onclick="{{ closeCal }}" style="border:none;background:var(--primary,#1C3C8F);color:#fff;font:inherit;font-weight:700;font-size:13px;border-radius:10px;padding:8px 18px;cursor:pointer">Done</button>
+                  </span>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+
+        </div>
+
+        <!-- RIGHT · Step 2 -->
+        <div style="position:relative">
+          <span style="display:inline-block;font-size:11px;font-weight:900;color:var(--accent-ink,#B96212);letter-spacing:.06em;text-transform:uppercase">Celebrations</span>
+          <p style="font-size:12.5px;color:var(--muted,#5B6678);margin:9px 0 12px">{{ celebHint }}</p>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:10px">
+          <sc-for list="{{ celebs }}" as="c" hint-placeholder-count="8">
+            <div style="{{ c.tileStyle }}">
+              <div style="position:relative">
+                <image-slot id="{{ c.slotId }}" shape="rounded" radius="10" fit="cover" src="{{ c.img }}" placeholder="{{ c.name }}" style="width:100%;height:58px;display:block"></image-slot>
+                <sc-if value="{{ c.selected }}" hint-placeholder-val="{{ false }}">
+                  <span style="position:absolute;top:7px;right:7px;width:23px;height:23px;border-radius:50%;background:var(--accent,#E27A33);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.2)"><i class="ti ti-check"></i></span>
+                </sc-if>
+              </div>
+              <button type="button" disabled="{{ c.disabled }}" onclick="{{ c.onClick }}" style="{{ c.selectStyle }}">{{ c.name }}</button>
+            </div>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ showDayBox }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:16px;border:1px solid #E8E3D8;background:rgba(244,236,221,.5);border-radius:13px;padding:13px 15px">
+            <p style="font-weight:700;color:var(--primary,#1C3C8F);font-size:13px;margin:0 0 9px">Pick a day for each celebration</p>
+            <sc-if value="{{ dayBoxHasDays }}" hint-placeholder-val="{{ false }}">
+              <sc-for list="{{ celebRows }}" as="row" hint-placeholder-count="1">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:5px 0">
+                  <span style="display:flex;align-items:center;gap:9px;font-weight:600;color:var(--ink,#1F2433);font-size:14px">
+                    <span style="width:29px;height:29px;border-radius:9px;background:#fff;color:var(--accent-ink,#B96212);display:flex;align-items:center;justify-content:center;font-size:15px"><i class="{{ row.icon }}"></i></span>
+                    {{ row.name }}
+                  </span>
+                  <select value="{{ row.value }}" onchange="{{ row.onChange }}" style="border:1.5px solid #DAD6CC;border-radius:10px;background:#fff;padding:7px 26px 7px 11px;font:inherit;font-size:13.5px;color:var(--ink,#1F2433);font-weight:600;outline:none;cursor:pointer;background-image:url('data:image/svg+xml;utf8,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%235B6678%22 stroke-width=%223%22&gt;&lt;path d=%22M6 9l6 6 6-6%22/&gt;&lt;/svg&gt;');background-repeat:no-repeat;background-position:right 9px center">
+                    <option value="">Pick a day</option>
+                    <sc-for list="{{ row.options }}" as="opt" hint-placeholder-count="0">
+                      <option value="{{ opt.value }}">{{ opt.label }}</option>
+                    </sc-for>
+                  </select>
+                </div>
+              </sc-for>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        </div>
+      </div>
+
+      <!-- ACTION BAR · complete both steps to search -->
+      <div style="margin-top:18px;padding-top:18px;border-top:1px solid #EFEBE1;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <span style="font-size:13px;color:var(--muted,#5B6678);font-weight:600">{{ readyHelp }}</span>
+        <button type="button" style="{{ actionBtnStyle }}" disabled="{{ searchOff }}" onclick="{{ doSearch }}">
+          <i class="ti ti-search"></i> Search celebrations
+        </button>
+      </div>
+
+        <sc-if value="{{ searched }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:16px;background:#fff;border:1.5px solid #E8E3D8;border-radius:13px;padding:4px 16px">
+            <div style="display:flex;gap:12px;padding:9px 0;border-bottom:1px solid #EFEBE1;font-size:13.5px"><b style="color:var(--primary,#1C3C8F);font-weight:700;min-width:108px">Destination</b><span>{{ sumDest }}</span></div>
+            <div style="display:flex;gap:12px;padding:9px 0;border-bottom:1px solid #EFEBE1;font-size:13.5px"><b style="color:var(--primary,#1C3C8F);font-weight:700;min-width:108px">Tour dates</b><span>{{ sumDates }}</span></div>
+            <div style="display:flex;gap:12px;padding:9px 0;border-bottom:1px solid #EFEBE1;font-size:13.5px"><b style="color:var(--primary,#1C3C8F);font-weight:700;min-width:108px">Travellers</b><span>{{ sumGuests }}</span></div>
+            <div style="display:flex;gap:12px;padding:9px 0;font-size:13.5px"><b style="color:var(--primary,#1C3C8F);font-weight:700;min-width:108px">Celebrations</b>
+              <span><sc-for list="{{ sumCelebs }}" as="s" hint-placeholder-count="1"><span style="display:block">{{ s.name }} — {{ s.day }}</span></sc-for></span>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1000,&quot;height&quot;:900},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;festive&quot;,&quot;options&quot;:[&quot;festive&quot;,&quot;classic&quot;,&quot;rose&quot;,&quot;emerald&quot;,&quot;gala&quot;],&quot;tsType&quot;:&quot;string&quot;},&quot;showHero&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;maxCelebrations&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:4,&quot;min&quot;:1,&quot;max&quot;:8,&quot;tsType&quot;:&quot;number&quot;}}">
+class Component extends DCLogic {
+  DESTS = [
+    { id: 'ooty', name: 'Ooty', tag: 'Queen of the Nilgiris', icon: 'ti-mountain', on: true },
+    { id: 'coorg', name: 'Coorg', tag: 'Scotland of India', icon: 'ti-trees', on: false },
+    { id: 'munnar', name: 'Munnar', tag: 'Tea-garden hills', icon: 'ti-leaf', on: false },
+    { id: 'goa', name: 'Goa', tag: 'Beaches & sunsets', icon: 'ti-beach', on: false },
+  ];
+  // Default imagery per celebration (keyword-matched stock). Users can drop their own onto any slot.
+  CELEBS = [
+    { id: 'birthday', name: 'Birthday', icon: 'ti-cake', img: 'https://loremflickr.com/400/260/birthday,decoration?lock=5' },
+    { id: 'anniversary', name: 'Anniversary', icon: 'ti-heart', img: 'https://loremflickr.com/400/260/anniversary,decoration?lock=7' },
+    { id: 'honeymoon', name: 'Honeymoon', icon: 'ti-flower', img: 'https://loremflickr.com/400/260/romantic,candles,room?lock=2' },
+    { id: 'proposal', name: 'Proposal', icon: 'ti-diamond', img: 'https://loremflickr.com/400/260/marriage,proposal,flowers?lock=1' },
+    { id: 'bachelor', name: 'Bachelor Party', icon: 'ti-confetti', img: 'https://loremflickr.com/400/260/party,decoration?lock=12' },
+    { id: 'photoshoot', name: 'Photoshoot', icon: 'ti-camera', img: 'https://loremflickr.com/400/260/studio,backdrop?lock=2' },
+    { id: 'family', name: 'Family Trip', icon: 'ti-users', img: 'https://loremflickr.com/400/260/family,three,generations?lock=1' },
+    { id: 'teamouting', name: 'Team Outing', icon: 'ti-campfire', img: 'https://loremflickr.com/400/260/campfire,people,sitting?lock=1' },
+  ];
+  // Celebration-focused palettes. 'classic' preserves the original ElateTrips styling.
+  THEMES = {
+    festive: { label: 'Festive',       primary: '#18336E', accent: '#E27A33', accentInk: '#B05A18', sand: '#F3EAD8', line: '#E6DFD1', ink: '#20242E', muted: '#5C6577', bg1: '#FBF4E8', bg2: '#F4EAD8' },
+    classic: { label: 'Classic',       primary: '#1C3C8F', accent: '#E07B2D', accentInk: '#B96212', sand: '#F4ECDD', line: '#E4E0D7', ink: '#1F2433', muted: '#5B6678', bg1: '#FCF6EC', bg2: '#F5EDDF' },
+    rose:    { label: 'Rose Soirée',   primary: '#8E2F57', accent: '#E08AA6', accentInk: '#B05576', sand: '#F6E7EC', line: '#ECDDE2', ink: '#2A1F26', muted: '#6B5A62', bg1: '#FCF2F5', bg2: '#F7E9EE' },
+    emerald: { label: 'Emerald Fête',  primary: '#1E6B54', accent: '#CDA24A', accentInk: '#8F6E1E', sand: '#E9EFE6', line: '#DCE6D8', ink: '#1E261F', muted: '#566159', bg1: '#F6F9F2', bg2: '#EDF3E8' },
+    gala:    { label: 'Midnight Gala', primary: '#3B2E73', accent: '#E0A53D', accentInk: '#A9761E', sand: '#ECE7F1', line: '#E0DAE8', ink: '#221E2E', muted: '#615C70', bg1: '#F8F5FC', bg2: '#F0ECF7' },
+  };
+  state = { page: 'search', dest: [], destQuery: '', destOpen: false, start: '', end: '', adults: 2, children: 0, celebs: [], celebDays: {}, searched: false, travOpen: false, calOpen: false, viewMonth: '', themeId: null };
+
+  componentDidMount() {
+    this._onDoc = (e) => {
+      const t = e.target;
+      const inTrav = t.closest && t.closest('[data-trav]');
+      const inCal = t.closest && t.closest('[data-cal]');
+      const inDest = t.closest && t.closest('[data-dest]');
+      const upd = {};
+      if (this.state.travOpen && !inTrav) upd.travOpen = false;
+      if (this.state.calOpen && !inCal) upd.calOpen = false;
+      if (this.state.destOpen && !inDest) upd.destOpen = false;
+      if (Object.keys(upd).length) this.setState(upd);
+    };
+    document.addEventListener('mousedown', this._onDoc);
+  }
+  componentWillUnmount() { document.removeEventListener('mousedown', this._onDoc); }
+  toggleTrav = () => this.setState(s => ({ travOpen: !s.travOpen, calOpen: false, destOpen: false }));
+  closeTrav = () => this.setState({ travOpen: false });
+  stop = (e) => e.stopPropagation();
+
+  // ---- destination autosearch ----
+  onDestFocus = () => this.setState({ destOpen: true, travOpen: false, calOpen: false });
+  onDestInput = (e) => this.setState({ destQuery: e.target.value, destOpen: true, dest: [], searched: false });
+  selectDest = (id) => { const d = this.DESTS.find(x => x.id === id); this.setState({ dest: [id], destQuery: d.name, destOpen: false, searched: false }); };
+  clearDest = () => this.setState({ dest: [], destQuery: '', destOpen: true, searched: false });
+  setTheme = (id) => this.setState({ themeId: id });
+
+  firstISO(iso) { const d = new Date((iso || this.today()) + 'T00:00'); return this.localISO(new Date(d.getFullYear(), d.getMonth(), 1)); }
+  openCal = () => this.setState(s => ({ calOpen: true, travOpen: false, destOpen: false, viewMonth: this.firstISO(s.start) }));
+  openStart = () => this.openCal();
+  openEnd = () => this.openCal();
+  closeCal = () => this.setState({ calOpen: false });
+  shiftMonth = (n) => this.setState(s => { const d = new Date((s.viewMonth || this.firstISO(s.start)) + 'T00:00'); d.setMonth(d.getMonth() + n); return { viewMonth: this.localISO(new Date(d.getFullYear(), d.getMonth(), 1)) }; });
+  prevMonth = () => this.shiftMonth(-1);
+  nextMonth = () => this.shiftMonth(1);
+  clearDates = () => this.setState({ start: '', end: '', searched: false });
+  pickDay = (iso) => this.setState(s => {
+    if (!s.start || (s.start && s.end)) return { start: iso, end: '', searched: false };
+    if (iso < s.start) return { start: iso, end: '', searched: false };
+    return { end: iso, calOpen: false, searched: false };
+  });
+
+  goCeleb = () => { this.setState({ page: 'celebration', travOpen: false, destOpen: false, searched: false }); if (typeof window !== 'undefined') window.scrollTo({ top: 0 }); };
+  goBack = () => { this.setState({ page: 'search', searched: false }); if (typeof window !== 'undefined') window.scrollTo({ top: 0 }); };
+
+  toggleCeleb = (id) => this.setState(s => {
+    if (s.celebs.includes(id)) {
+      const cd = { ...s.celebDays }; delete cd[id];
+      return { celebs: s.celebs.filter(x => x !== id), celebDays: cd, searched: false };
+    }
+    if (s.celebs.length >= (this.props.maxCelebrations ?? 4)) return null;
+    return { celebs: [...s.celebs, id], searched: false };
+  });
+  step = (key, delta) => this.setState(s => {
+    const min = key === 'adults' ? 1 : 0;
+    return { [key]: Math.max(min, Math.min(20, s[key] + delta)), searched: false };
+  });
+  setDay = (id, v) => this.setState(s => ({ celebDays: { ...s.celebDays, [id]: v }, searched: false }));
+  doSearch = () => this.setState({ searched: true });
+
+  localISO(d) { const p = n => String(n).padStart(2, '0'); return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); }
+  today() { return this.localISO(new Date()); }
+  dayList() {
+    const { start, end } = this.state;
+    if (!start || !end) return [];
+    const out = []; let d = new Date(start + 'T00:00'); const e = new Date(end + 'T00:00');
+    if (e < d) return [];
+    let i = 0;
+    while (d <= e && i < 60) { out.push(this.localISO(d)); d.setDate(d.getDate() + 1); i++; }
+    return out;
+  }
+  fmtDay(v) { return new Date(v + 'T00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' }); }
+  fmtBig(v) { const d = new Date(v + 'T00:00'); return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) + " '" + String(d.getFullYear()).slice(2); }
+  fmtSub(v) { return new Date(v + 'T00:00').toLocaleDateString('en-GB', { weekday: 'long' }); }
+
+  calendarVals() {
+    const s = this.state;
+    const navy = 'var(--primary,#1C3C8F)';
+    const today = this.today();
+    const base = new Date((s.viewMonth || this.firstISO(s.start)) + 'T00:00');
+    const prevOff = this.localISO(new Date(base.getFullYear(), base.getMonth(), 1)) <= this.firstISO(today);
+    const months = [0, 1].map(off => {
+      const m = new Date(base.getFullYear(), base.getMonth() + off, 1);
+      const y = m.getFullYear(), mo = m.getMonth();
+      const gridStart = new Date(y, mo, 1 - new Date(y, mo, 1).getDay());
+      const cells = [];
+      for (let i = 0; i < 42; i++) {
+        const d = new Date(gridStart); d.setDate(gridStart.getDate() + i);
+        const iso = this.localISO(d);
+        const inMonth = d.getMonth() === mo;
+        const past = iso < today;
+        const isStart = !!s.start && iso === s.start;
+        const isEnd = !!s.end && iso === s.end;
+        const between = !!s.start && !!s.end && iso > s.start && iso < s.end;
+        const cell = 'height:33px;width:100%;border:none;font:inherit;font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center;border-radius:9px;transition:background .12s;';
+        let style;
+        if (!inMonth) style = cell + 'background:transparent;color:transparent;pointer-events:none;cursor:default;';
+        else if (past) style = cell + 'background:transparent;color:#D3CFC5;cursor:not-allowed;';
+        else if (isStart || isEnd) style = cell + `background:${navy};color:#fff;cursor:pointer;`;
+        else if (between) style = cell + 'background:color-mix(in srgb, var(--primary,#1C3C8F) 11%, transparent);color:var(--primary,#1C3C8F);cursor:pointer;';
+        else style = cell + 'background:transparent;color:var(--ink,#1F2433);cursor:pointer;';
+        cells.push({
+          day: inMonth ? d.getDate() : '',
+          disabled: !inMonth || past,
+          onClick: (!inMonth || past) ? undefined : () => this.pickDay(iso),
+          style,
+        });
+      }
+      return { label: m.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }), cells };
+    });
+    const navBtn = 'width:32px;height:32px;border-radius:50%;border:1.5px solid #DAD6CC;background:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;color:var(--primary,#1C3C8F);';
+    let rangeLabel = 'Select your tour start date';
+    if (s.start && !s.end) rangeLabel = 'Now select your end date';
+    else if (s.start && s.end) rangeLabel = `${this.fmtDay(s.start)} → ${this.fmtDay(s.end)}`;
+    return {
+      weekdays: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+      months, prevOff,
+      navBtnStyle: navBtn + (prevOff ? 'opacity:.4;cursor:not-allowed;' : 'cursor:pointer;'),
+      navBtnStyleOn: navBtn + 'cursor:pointer;',
+      calPrompt: !s.start ? 'Pick tour start' : (!s.end ? 'Pick tour end' : 'Tour dates'),
+      rangeLabel,
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const max = this.props.maxCelebrations ?? 4;
+    const navy = 'var(--primary,#1C3C8F)', orange = 'var(--accent,#E07B2D)', orangeD = 'var(--accent-ink,#B96212)', sand = 'var(--sand,#F4ECDD)', line = 'var(--line,#E4E0D7)', slate = 'var(--muted,#5B6678)';
+
+    const icB = 'flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;';
+
+    // ---- theme ----
+    const tid = s.themeId ?? (this.props.theme ?? 'festive');
+    const th = this.THEMES[tid] || this.THEMES.festive;
+    const themeVars = { '--primary': th.primary, '--accent': th.accent, '--accent-ink': th.accentInk, '--sand': th.sand, '--line': th.line, '--ink': th.ink, '--muted': th.muted, '--bg1': th.bg1, '--bg2': th.bg2 };
+    const themeOptions = Object.keys(this.THEMES).map(id => {
+      const x = this.THEMES[id], active = id === tid;
+      return {
+        label: x.label, onClick: () => this.setTheme(id),
+        swatchStyle: 'width:22px;height:22px;border-radius:50%;cursor:pointer;padding:0;background:linear-gradient(135deg,' + x.primary + ' 0 50%,' + x.accent + ' 50% 100%);'
+          + (active ? 'border:2px solid #fff;box-shadow:0 0 0 2px ' + x.primary + ';'
+                    : 'border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.12);'),
+      };
+    });
+
+    // ---- destination autosearch results ----
+    const q = s.destQuery.trim().toLowerCase();
+    const matches = this.DESTS.filter(d => !q || d.name.toLowerCase().includes(q) || d.tag.toLowerCase().includes(q));
+    const rowBase = 'display:flex;align-items:center;gap:11px;width:100%;text-align:left;font:inherit;color:inherit;border:none;background:transparent;border-radius:11px;padding:10px 12px;transition:background .12s;';
+    const destResults = matches.map(d => {
+      const selected = s.dest.includes(d.id), disabled = !d.on;
+      return {
+        name: d.name, tag: d.tag, icon: 'ti ' + d.icon, comingSoon: !d.on, selected, disabled,
+        onClick: d.on ? () => this.selectDest(d.id) : undefined,
+        rowStyle: rowBase + (disabled ? 'opacity:.6;cursor:not-allowed;'
+          : selected ? 'background:color-mix(in srgb, var(--primary,#1C3C8F) 6%, transparent);cursor:pointer;'
+          : 'cursor:pointer;'),
+        iconStyle: icB + (disabled ? `background:#EFEADF;color:${slate};`
+          : selected ? `background:${navy};color:#fff;` : `background:${sand};color:${navy};`),
+      };
+    });
+    const hasDest = s.dest.length > 0;
+    const destInputStyle = 'width:100%;font:inherit;font-size:15px;font-weight:600;color:var(--ink,#1F2433);border:1.5px solid '
+      + (hasDest ? navy : line) + ';border-radius:14px;background:#fff;padding:14px 42px 14px 44px;outline:none;'
+      + (s.destOpen ? 'box-shadow:0 0 0 3px color-mix(in srgb, var(--primary,#1C3C8F) 10%, transparent);' : '');
+
+    const atMax = s.celebs.length >= max;
+    const tileBase = 'display:flex;flex-direction:column;gap:8px;width:100%;border-radius:14px;padding:8px;transition:border-color .15s,background .15s;font:inherit;color:inherit;';
+    const selBase = 'display:flex;align-items:center;justify-content:center;gap:6px;width:100%;border:none;background:transparent;font:inherit;font-weight:700;font-size:13px;padding:3px 2px 4px;';
+    const celebs = this.CELEBS.map(c => {
+      const selected = s.celebs.includes(c.id), disabled = !selected && atMax;
+      return {
+        name: c.name, slotId: 'celeb-img-' + c.id, img: ((typeof window !== 'undefined' && window.__resources && window.__resources['celeb_' + c.id]) || c.img), selected, disabled,
+        onClick: disabled ? undefined : () => this.toggleCeleb(c.id),
+        tileStyle: tileBase + (selected ? `border:1.5px solid ${orange};background:color-mix(in srgb, var(--accent,#E07B2D) 8%, #fff);`
+          : disabled ? `border:1.5px solid ${line};background:#fff;opacity:.5;`
+          : `border:1.5px solid ${line};background:#fff;`),
+        selectStyle: selBase + (selected ? `color:${orangeD};` : `color:var(--ink,#1F2433);`) + (disabled ? 'cursor:not-allowed;' : 'cursor:pointer;'),
+      };
+    });
+
+    const days = this.dayList(), hasDays = days.length > 0;
+    const celebRows = s.celebs.map(id => {
+      const c = this.CELEBS.find(x => x.id === id);
+      return {
+        name: c.name, icon: 'ti ' + c.icon, value: s.celebDays[id] || '',
+        onChange: (e) => this.setDay(id, e.target.value),
+        options: days.map(v => ({ value: v, label: this.fmtDay(v) })),
+      };
+    });
+    const allDays = s.celebs.every(id => !!s.celebDays[id]);
+
+    // page 1 readiness
+    const page1Ready = s.dest.length > 0 && !!s.start && !!s.end;
+    let continueHelp = '';
+    if (s.dest.length === 0) continueHelp = 'Search and pick a destination to continue.';
+    else if (!s.start || !s.end) continueHelp = 'Choose your tour start and end dates.';
+
+    // page 2 readiness
+    const page2Ready = s.celebs.length > 0 && allDays;
+    let help = '';
+    if (s.celebs.length === 0) help = 'Pick at least one celebration to search.';
+    else if (!allDays) help = 'Choose a day for each celebration you selected.';
+
+    const stepBtn = 'width:34px;height:34px;border-radius:50%;border:1.5px solid #D5D2C8;background:#fff;color:var(--primary,#1C3C8F);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;';
+    const btnBase = 'margin-top:20px;width:100%;border:none;border-radius:13px;color:#fff;font:inherit;font-weight:700;font-size:16px;padding:15px;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s;';
+
+    // combined readiness for the single-screen flow
+    const allReady = page1Ready && page2Ready;
+    const readyHelp = continueHelp || help || 'Everything looks good — search your celebration stays and add-ons.';
+    const actionBtn = 'border:none;border-radius:12px;color:#fff;font:inherit;font-weight:700;font-size:15px;padding:13px 28px;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;transition:background .15s;';
+
+    const sumDest = s.dest.map(id => this.DESTS.find(d => d.id === id).name).join(', ') || '—';
+    const sumDates = (s.start && s.end) ? `${this.fmtDay(s.start)} → ${this.fmtDay(s.end)}` : '—';
+    const sumGuests = `${s.adults} adult${s.adults > 1 ? 's' : ''}, ${s.children} ${s.children === 1 ? 'child' : 'children'}`;
+
+    return {
+      pageSearch: s.page === 'search',
+      pageCeleb: s.page === 'celebration',
+      heroShown: (this.props.showHero ?? true),
+      // theming
+      themeStyle: themeVars, themeOptions,
+      // destination autosearch
+      destQuery: s.destQuery, destOpen: s.destOpen, destResults,
+      destNoResults: matches.length === 0, destHasValue: s.destQuery.length > 0,
+      onDestFocus: this.onDestFocus, onDestInput: this.onDestInput, clearDest: this.clearDest,
+      destInputStyle,
+      // dates strip
+      start: s.start, end: s.end, today: this.today(), endMin: s.start || this.today(),
+      openStart: this.openStart, openEnd: this.openEnd,
+      startCellStyle: 'flex:1;min-width:0;position:relative;padding:11px 16px;cursor:pointer;border-radius:14px 0 0 14px;' + (s.calOpen && !s.start ? 'background:color-mix(in srgb, var(--primary,#1C3C8F) 5%, transparent);' : ''),
+      endCellStyle: 'flex:1;min-width:0;position:relative;padding:11px 16px;cursor:pointer;' + (s.calOpen && s.start && !s.end ? 'background:color-mix(in srgb, var(--primary,#1C3C8F) 5%, transparent);' : ''),
+      startBig: s.start ? this.fmtBig(s.start) : 'Select date', startSub: s.start ? this.fmtSub(s.start) : 'Day of week',
+      endBig: s.end ? this.fmtBig(s.end) : 'Select date', endSub: s.end ? this.fmtSub(s.end) : 'Day of week',
+      calOpen: s.calOpen, closeCal: this.closeCal, clearDates: this.clearDates,
+      prevMonth: this.prevMonth, nextMonth: this.nextMonth,
+      ...this.calendarVals(),
+      travOpen: s.travOpen, toggleTrav: this.toggleTrav, closeTrav: this.closeTrav, stop: this.stop,
+      travChevron: s.travOpen ? 'ti ti-chevron-up' : 'ti ti-chevron-down',
+      travBig: `${s.adults + s.children} Traveller${(s.adults + s.children) > 1 ? 's' : ''}`,
+      travSub: `${s.adults} Adult${s.adults > 1 ? 's' : ''}, ${s.children} ${s.children === 1 ? 'Child' : 'Children'}`,
+      adults: s.adults, children: s.children,
+      adultsMinus: () => this.step('adults', -1), adultsPlus: () => this.step('adults', 1),
+      childrenMinus: () => this.step('children', -1), childrenPlus: () => this.step('children', 1),
+      adultsMinusOff: s.adults <= 1, childrenMinusOff: s.children <= 0,
+      stepBtnStyle: stepBtn,
+      // page 1 continue
+      goCeleb: this.goCeleb, continueOff: !page1Ready,
+      continueStyle: btnBase + (page1Ready ? `background:${navy};cursor:pointer;` : `background:#A9AFBD;cursor:not-allowed;`),
+      continueHelp, showContinueHelp: !!continueHelp,
+      // page 2
+      goBack: this.goBack,
+      recapChips: [
+        { icon: 'ti ti-map-pin', text: sumDest },
+        { icon: 'ti ti-calendar-event', text: sumDates },
+        { icon: 'ti ti-users', text: `${s.adults + s.children} traveller${(s.adults + s.children) > 1 ? 's' : ''}` },
+      ],
+      celebs,
+      celebHint: `Select up to ${max} — choose a day for each within your tour.`,
+      showDayBox: s.celebs.length > 0,
+      dayBoxHasDays: s.celebs.length > 0 && hasDays,
+      celebRows,
+      doSearch: this.doSearch, searchOff: !allReady,
+      btnStyle: btnBase + (page2Ready ? `background:${navy};cursor:pointer;` : `background:#A9AFBD;cursor:not-allowed;`),
+      actionBtnStyle: actionBtn + (allReady ? `background:${navy};cursor:pointer;` : `background:#A9AFBD;cursor:not-allowed;`),
+      readyHelp,
+      help, showHelp: !!help,
+      searched: s.searched,
+      sumDest, sumDates, sumGuests,
+      sumCelebs: s.celebs.map(id => ({ name: this.CELEBS.find(x => x.id === id).name, day: s.celebDays[id] ? this.fmtDay(s.celebDays[id]) : '—' })),
+    };
+  }
+}
+</script>
+</body>
+</html>
