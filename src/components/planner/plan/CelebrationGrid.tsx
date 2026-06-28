@@ -50,24 +50,17 @@ export default function CelebrationGrid() {
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-baseline justify-between gap-2">
-        <span className="text-accent-ink text-[11px] font-black tracking-[0.06em] uppercase">
-          Occasions
-        </span>
-        <span className="text-muted text-[12.5px]">
-          Select up to {maxCelebrations} — pick a day for each.
-        </span>
-      </div>
-
+    <div className="flex flex-col gap-5">
       {CELEB_CATEGORY_META.map((cat) => {
         const items = CELEBRATIONS.filter((c) => c.category === cat.id);
         if (items.length === 0) return null;
         return (
-          <div key={cat.id} className="flex flex-col gap-2">
-            <div className="flex items-baseline gap-2">
-              <span className="text-ink text-[12.5px] font-extrabold">{cat.label}</span>
-              <span className="text-muted text-[11.5px]">· {cat.sub}</span>
+          <div key={cat.id} className="flex flex-col gap-3">
+            <div className="flex items-baseline justify-between gap-2">
+              <span className="text-accent-ink text-[11px] font-black tracking-[0.06em] uppercase">
+                {cat.label}
+              </span>
+              <span className="text-muted text-[12.5px]">{cat.sub}</span>
             </div>
             <div
               className="grid gap-2"
