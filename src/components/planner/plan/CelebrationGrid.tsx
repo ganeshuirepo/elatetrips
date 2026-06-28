@@ -7,7 +7,8 @@ import { celebComboValid } from '@/domain/rules';
 import Icon from '@/components/ui/Icon';
 import type { Celebration } from '@/domain/types';
 
-type CategoryMeta = (typeof CELEB_CATEGORY_META)[number];
+/** Uniform resting fill for every occasion tile's icon swatch (both groups). */
+const TILE_ICON_FILL = 'color-mix(in srgb, var(--accent) 32%, #fff)';
 
 /** Occasion picker — icon tiles grouped by category. Incompatible tiles dim. */
 export default function CelebrationGrid() {
@@ -15,7 +16,7 @@ export default function CelebrationGrid() {
   const { celebs, maxCelebrations } = useAppSelector((s) => s.plan);
   const atMax = celebs.length >= maxCelebrations;
 
-  const tile = (c: Celebration, cat: CategoryMeta) => {
+  const tile = (c: Celebration) => {
     const selected = celebs.includes(c.id);
     const disabled = !selected && (atMax || !celebComboValid([...celebs, c.id]));
     return (
@@ -23,20 +24,17 @@ export default function CelebrationGrid() {
         key={c.id}
         type="button"
         aria-pressed={selected}
+        aria-label={c.name}
         disabled={disabled}
         onClick={() => dispatch(toggleCeleb(c.id))}
-        className="flex flex-col items-center gap-1.5 rounded-[12px] border-[1.5px] p-2 transition-colors disabled:cursor-not-allowed"
-        style={{
-          borderColor: selected ? 'var(--accent)' : 'var(--line)',
-          background: selected ? 'color-mix(in srgb, var(--accent) 8%, #fff)' : '#fff',
-          opacity: disabled ? 0.45 : 1,
-        }}
+        className="flex flex-col items-center gap-1.5 transition-colors disabled:cursor-not-allowed"
+        style={{ opacity: disabled ? 0.45 : 1 }}
       >
         <span
-          className="flex h-10 w-10 items-center justify-center rounded-[10px] text-[20px]"
+          className="flex h-[72px] w-[72px] items-center justify-center rounded-full text-[34px]"
           style={{
-            background: selected ? cat.iconBgActive : cat.iconBg,
-            color: selected ? '#fff' : cat.iconInk,
+            background: selected ? 'var(--accent)' : TILE_ICON_FILL,
+            color: selected ? '#fff' : 'var(--primary)',
           }}
         >
           <Icon name={c.icon} />
@@ -75,7 +73,7 @@ export default function CelebrationGrid() {
               className="grid gap-2"
               style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 6.5rem), 1fr))' }}
             >
-              {items.map((c) => tile(c, cat))}
+              {items.map(tile)}
             </div>
           </div>
         );
