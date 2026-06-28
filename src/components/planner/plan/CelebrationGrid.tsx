@@ -7,13 +7,15 @@ import { celebComboValid } from '@/domain/rules';
 import Icon from '@/components/ui/Icon';
 import type { Celebration } from '@/domain/types';
 
+type CategoryMeta = (typeof CELEB_CATEGORY_META)[number];
+
 /** Occasion picker — icon tiles grouped by category. Incompatible tiles dim. */
 export default function CelebrationGrid() {
   const dispatch = useAppDispatch();
   const { celebs, maxCelebrations } = useAppSelector((s) => s.plan);
   const atMax = celebs.length >= maxCelebrations;
 
-  const tile = (c: Celebration) => {
+  const tile = (c: Celebration, cat: CategoryMeta) => {
     const selected = celebs.includes(c.id);
     const disabled = !selected && (atMax || !celebComboValid([...celebs, c.id]));
     return (
@@ -33,8 +35,8 @@ export default function CelebrationGrid() {
         <span
           className="flex h-10 w-10 items-center justify-center rounded-[10px] text-[20px]"
           style={{
-            background: selected ? 'var(--accent)' : 'var(--sand)',
-            color: selected ? '#fff' : 'var(--primary)',
+            background: selected ? cat.iconBgActive : cat.iconBg,
+            color: selected ? '#fff' : cat.iconInk,
           }}
         >
           <Icon name={c.icon} />
@@ -73,7 +75,7 @@ export default function CelebrationGrid() {
               className="grid gap-2"
               style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 6.5rem), 1fr))' }}
             >
-              {items.map(tile)}
+              {items.map((c) => tile(c, cat))}
             </div>
           </div>
         );
