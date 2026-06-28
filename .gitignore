@@ -32,8 +32,10 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files — real secrets stay local and are never committed.
 .env*
+# …but the placeholder template IS shared with the team.
+!.env.example
 
 # vercel
 .vercel
