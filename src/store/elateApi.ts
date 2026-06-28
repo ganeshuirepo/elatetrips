@@ -59,6 +59,46 @@ export interface CreateOrderBody {
   summary: OrderSummary;
 }
 
+/** Hotelier "Expression of Interest" submission (Partner with us). */
+export interface PartnerEoiBody {
+  property: {
+    hotelName: string;
+    city: string;
+    category: string;
+    totalRooms: string;
+    contactName: string;
+    role: string;
+    email: string;
+    phone: string;
+  };
+  services: {
+    service: string;
+    packages?: string[];
+    fulfilment: string;
+    leadTime: string;
+    priceRange: string;
+    capacityPerDay: string;
+    notes: string;
+  }[];
+  surprise: { capable: string; setupWindow: string; photoProof: string };
+  inventory: {
+    updateMethod: string;
+    channelManagerOrPMS: string;
+    updateFrequency: string;
+    liveAvailability: string;
+    roomsAllocated: string;
+    rateModel: string;
+    confirmationSLA: string;
+  };
+  notes: string;
+  consent: true;
+}
+
+export interface PartnerEoi extends PartnerEoiBody {
+  referenceId: string;
+  createdAt: string;
+}
+
 /**
  * RTK Query client for the ElateTrips backend. The JWT is attached from the
  * account slice, and the success envelope is unwrapped so components receive the
@@ -119,6 +159,10 @@ export const elateApi = createApi({
       transformResponse: pick<Order>(),
       invalidatesTags: ['Orders'],
     }),
+    submitPartnerEoi: build.mutation<PartnerEoi, PartnerEoiBody>({
+      query: (body) => ({ url: '/partners/eoi', method: 'POST', body }),
+      transformResponse: pick<PartnerEoi>(),
+    }),
   }),
 });
 
@@ -133,4 +177,5 @@ export const {
   useGetProfileQuery,
   useGetOrdersQuery,
   useCreateOrderMutation,
+  useSubmitPartnerEoiMutation,
 } = elateApi;
