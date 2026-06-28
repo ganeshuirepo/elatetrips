@@ -5,7 +5,12 @@ import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setStep } from '@/store/slices/uiSlice';
 import { useSubmitWeddingEnquiryMutation } from '@/store/elateApi';
-import { WEDDING_GUEST_RANGES, WEDDING_SERVICES } from '@/data/wedding';
+import {
+  WEDDING_GUEST_RANGES,
+  WEDDING_SERVICES,
+  PRE_CEREMONIES,
+  POST_CEREMONIES,
+} from '@/data/wedding';
 import { LabeledInput, LabeledSelect, LabeledTextarea } from '@/components/partner/fields';
 import Chip from '@/components/ui/Chip';
 import Icon from '@/components/ui/Icon';
@@ -16,18 +21,64 @@ interface Form {
   name: string;
   phone: string;
   email: string;
-  preWeddingGuests: string;
-  postWeddingGuests: string;
+  weddingGuests: string;
   weddingDate: string;
   preferredHotels: string;
   services: string[];
   notes: string;
+  /** ceremony type → date. Presence of the key means the ceremony is selected. */
+  pre: Record<string, string>;
+  post: Record<string, string>;
 }
 
-type ReqKey = 'name' | 'phone' | 'weddingDate' | 'preWeddingGuests' | 'postWeddingGuests';
+type ReqKey = 'name' | 'phone' | 'weddingDate' | 'weddingGuests';
 
 const toggle = (arr: string[], v: string) =>
   arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v];
+
+const SECTION = 'text-accent-ink text-[11px] font-black tracking-[0.06em] uppercase';
+
+/** A ceremony group: pick types, then give each a date. */
+function CeremonyPicker({
+  title,
+  options,
+  value,
+  onToggle,
+  onDate,
+}: {
+  title: string;
+  options: string[];
+  value: Record<string, string>;
+  onToggle: (type: string) => void;
+  onDate: (type: string, date: string) => void;
+}) {
+  const selected = Object.keys(value);
+  return (
+    <div className="flex flex-col gap-2">
+      <span className={SECTION}>{title}</span>
+      <div className="flex flex-wrap gap-2">
+        {options.map((o) => (
+          <Chip key={o} active={o in value} onClick={() => onToggle(o)} rounded="99px">
+            {o}
+          </Chip>
+        ))}
+      </div>
+      {selected.length > 0 && (
+        <div className="grid gap-3 pt-1" style={gridStyle}>
+          {selected.map((type) => (
+            <LabeledInput
+              key={type}
+              label={`${type} — date`}
+              type="date"
+              value={value[type]}
+              onChange={(v) => onDate(type, v)}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 /**
  * Wedding enquiry — the planner diverts here when "Wedding" is chosen. Captures
@@ -41,12 +92,13 @@ export default function WeddingEnquiry() {
     name: '',
     phone: '',
     email: '',
-    preWeddingGuests: '',
-    postWeddingGuests: '',
+    weddingGuests: '',
     weddingDate: celebDays['wedding'] || '',
     preferredHotels: '',
     services: [],
     notes: '',
+    pre: {},
+    post: {},
   });
   const [showErrors, setShowErrors] = useState(false);
   const [done, setDone] = useState<string | null>(null);
@@ -54,13 +106,22 @@ export default function WeddingEnquiry() {
 
   const set = (k: keyof Form, v: string) => setF((s) => ({ ...s, [k]: v }));
 
+  const toggleCeremony = (group: 'pre' | 'post', type: string) =>
+    setF((s) => {
+      const next = { ...s[group] };
+      if (type in next) delete next[type];
+      else next[type] = '';
+      return { ...s, [group]: next };
+    });
+  const setCeremonyDate = (group: 'pre' | 'post', type: string, date: string) =>
+    setF((s) => ({ ...s, [group]: { ...s[group], [type]: date } }));
+
   const missing = useMemo(() => {
     const m = new Set<ReqKey>();
     if (!f.name.trim()) m.add('name');
     if (!f.phone.trim()) m.add('phone');
     if (!f.weddingDate.trim()) m.add('weddingDate');
-    if (!f.preWeddingGuests) m.add('preWeddingGuests');
-    if (!f.postWeddingGuests) m.add('postWeddingGuests');
+    if (!f.weddingGuests) m.add('weddingGuests');
     return m;
   }, [f]);
 
@@ -69,11 +130,14 @@ export default function WeddingEnquiry() {
   const onSubmit = async () => {
     setShowErrors(true);
     if (missing.size > 0) return;
+    const toList = (m: Record<string, string>) =>
+      Object.entries(m).map(([type, date]) => ({ type, date }));
     try {
       const res = await submitEnquiry({
         contact: { name: f.name.trim(), phone: f.phone.trim(), email: f.email.trim() },
-        preWeddingGuests: f.preWeddingGuests,
-        postWeddingGuests: f.postWeddingGuests,
+        weddingGuests: f.weddingGuests,
+        preCeremonies: toList(f.pre),
+        postCeremonies: toList(f.post),
         services: f.services,
         weddingDate: f.weddingDate,
         preferredHotels: f.preferredHotels.trim(),
@@ -96,9 +160,7 @@ export default function WeddingEnquiry() {
         >
           <Icon name="ti-heart" />
         </span>
-        <h2 className="text-primary m-0 font-serif text-2xl font-bold">
-          Thanks for your time
-        </h2>
+        <h2 className="text-primary m-0 font-serif text-2xl font-bold">Thanks for your time</h2>
         <p className="text-muted m-0 max-w-[44ch] text-[14.5px]">
           Our engagement manager will contact you soon.
         </p>
@@ -134,36 +196,48 @@ export default function WeddingEnquiry() {
         </p>
       </div>
 
-      {/* Guests */}
+      {/* Wedding — date + guest count (guests required only for the wedding) */}
       <div className="flex flex-col gap-2">
-        <span className="text-accent-ink text-[11px] font-black tracking-[0.06em] uppercase">
-          Guests
-        </span>
+        <span className={SECTION}>The wedding</span>
         <div className="grid gap-3" style={gridStyle}>
-          <LabeledSelect
-            label="Pre-wedding ceremonies (guests)"
+          <LabeledInput
+            label="Wedding date"
+            type="date"
             required
-            value={f.preWeddingGuests}
-            onChange={(v) => set('preWeddingGuests', v)}
-            options={WEDDING_GUEST_RANGES}
-            error={err('preWeddingGuests', 'Select a range')}
+            value={f.weddingDate}
+            onChange={(v) => set('weddingDate', v)}
+            error={err('weddingDate')}
           />
           <LabeledSelect
-            label="Post-wedding ceremonies (guests)"
+            label="Number of guests (wedding)"
             required
-            value={f.postWeddingGuests}
-            onChange={(v) => set('postWeddingGuests', v)}
+            value={f.weddingGuests}
+            onChange={(v) => set('weddingGuests', v)}
             options={WEDDING_GUEST_RANGES}
-            error={err('postWeddingGuests', 'Select a range')}
+            error={err('weddingGuests', 'Select a range')}
           />
         </div>
       </div>
 
+      {/* Pre / post ceremonies — type + date */}
+      <CeremonyPicker
+        title="Pre-wedding ceremonies"
+        options={PRE_CEREMONIES}
+        value={f.pre}
+        onToggle={(t) => toggleCeremony('pre', t)}
+        onDate={(t, d) => setCeremonyDate('pre', t, d)}
+      />
+      <CeremonyPicker
+        title="Post-wedding ceremonies"
+        options={POST_CEREMONIES}
+        value={f.post}
+        onToggle={(t) => toggleCeremony('post', t)}
+        onDate={(t, d) => setCeremonyDate('post', t, d)}
+      />
+
       {/* Services */}
       <div className="flex flex-col gap-2">
-        <span className="text-accent-ink text-[11px] font-black tracking-[0.06em] uppercase">
-          Services you&apos;re looking for
-        </span>
+        <span className={SECTION}>Services you&apos;re looking for</span>
         <div className="flex flex-wrap gap-2">
           {WEDDING_SERVICES.map((s) => (
             <Chip
@@ -178,20 +252,10 @@ export default function WeddingEnquiry() {
         </div>
       </div>
 
-      {/* Date, hotels & contact */}
+      {/* Hotels & contact */}
       <div className="flex flex-col gap-2">
-        <span className="text-accent-ink text-[11px] font-black tracking-[0.06em] uppercase">
-          Date, hotels &amp; contact
-        </span>
+        <span className={SECTION}>Preferred hotels &amp; contact</span>
         <div className="grid gap-3" style={gridStyle}>
-          <LabeledInput
-            label="Wedding date"
-            type="date"
-            required
-            value={f.weddingDate}
-            onChange={(v) => set('weddingDate', v)}
-            error={err('weddingDate')}
-          />
           <LabeledInput
             label="Preferred hotels"
             value={f.preferredHotels}

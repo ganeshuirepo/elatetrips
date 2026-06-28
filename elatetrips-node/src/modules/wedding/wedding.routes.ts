@@ -25,7 +25,7 @@ export function buildWeddingRouter(controller: WeddingController): Router {
    *         application/json:
    *           schema:
    *             type: object
-   *             required: [contact, preWeddingGuests, postWeddingGuests, weddingDate]
+   *             required: [contact, weddingGuests, weddingDate]
    *             properties:
    *               contact:
    *                 type: object
@@ -34,8 +34,17 @@ export function buildWeddingRouter(controller: WeddingController): Router {
    *                   name: { type: string }
    *                   phone: { type: string }
    *                   email: { type: string }
-   *               preWeddingGuests: { type: string }
-   *               postWeddingGuests: { type: string }
+   *               weddingGuests: { type: string }
+   *               preCeremonies:
+   *                 type: array
+   *                 items:
+   *                   type: object
+   *                   properties: { type: { type: string }, date: { type: string } }
+   *               postCeremonies:
+   *                 type: array
+   *                 items:
+   *                   type: object
+   *                   properties: { type: { type: string }, date: { type: string } }
    *               services: { type: array, items: { type: string } }
    *               weddingDate: { type: string }
    *               preferredHotels: { type: string }

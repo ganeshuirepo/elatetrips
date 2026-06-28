@@ -99,11 +99,18 @@ export interface PartnerEoi extends PartnerEoiBody {
   createdAt: string;
 }
 
+/** A wedding-related ceremony: its type and the date it falls on. */
+export interface WeddingCeremony {
+  type: string;
+  date: string;
+}
+
 /** Wedding enquiry submitted when the planner diverts on a Wedding selection. */
 export interface WeddingEnquiryBody {
   contact: { name: string; phone: string; email: string };
-  preWeddingGuests: string;
-  postWeddingGuests: string;
+  weddingGuests: string;
+  preCeremonies: WeddingCeremony[];
+  postCeremonies: WeddingCeremony[];
   services: string[];
   weddingDate: string;
   preferredHotels: string;

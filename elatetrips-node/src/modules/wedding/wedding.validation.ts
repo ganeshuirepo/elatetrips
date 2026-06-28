@@ -6,10 +6,16 @@ const contactSchema = z.object({
   email: z.string().trim().email('Enter a valid email').max(160).or(z.literal('')).default(''),
 });
 
+const ceremonySchema = z.object({
+  type: z.string().trim().min(1).max(60),
+  date: z.string().max(40).default(''),
+});
+
 export const createWeddingEnquirySchema = z.object({
   contact: contactSchema,
-  preWeddingGuests: z.string().trim().min(1, 'Select pre-wedding guest count').max(40),
-  postWeddingGuests: z.string().trim().min(1, 'Select post-wedding guest count').max(40),
+  weddingGuests: z.string().trim().min(1, 'Select wedding guest count').max(40),
+  preCeremonies: z.array(ceremonySchema).max(20).default([]),
+  postCeremonies: z.array(ceremonySchema).max(20).default([]),
   services: z.array(z.string().max(60)).max(30).default([]),
   weddingDate: z.string().trim().min(1, 'Wedding date is required').max(40),
   preferredHotels: z.string().max(500).default(''),

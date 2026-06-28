@@ -11,13 +11,21 @@ export interface WeddingContact {
   email: string;
 }
 
+/** A ceremony the couple is planning: its type and the date it falls on. */
+export interface WeddingCeremony {
+  type: string;
+  date: string;
+}
+
 export interface WeddingEnquiry {
   referenceId: string;
   contact: WeddingContact;
-  /** Guest-count band for pre-wedding ceremonies (LOV value). */
-  preWeddingGuests: string;
-  /** Guest-count band for post-wedding ceremonies (LOV value). */
-  postWeddingGuests: string;
+  /** Guest-count band for the wedding itself (LOV value). */
+  weddingGuests: string;
+  /** Pre-wedding ceremonies (type + date), e.g. Mehendi, Sangeet. */
+  preCeremonies: WeddingCeremony[];
+  /** Post-wedding ceremonies (type + date), e.g. Reception. */
+  postCeremonies: WeddingCeremony[];
   /** Services of interest: photoshoot, makeup, decor, catering, travel, … */
   services: string[];
   /** Preferred wedding date (ISO yyyy-mm-dd or free text). */

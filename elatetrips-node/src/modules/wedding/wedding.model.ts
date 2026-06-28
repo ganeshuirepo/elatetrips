@@ -10,12 +10,21 @@ const contactSchema = new Schema(
   { _id: false },
 );
 
+const ceremonySchema = new Schema(
+  {
+    type: { type: String, required: true },
+    date: { type: String, default: '' },
+  },
+  { _id: false },
+);
+
 const weddingEnquirySchema = new Schema<WeddingEnquiry>(
   {
     referenceId: { type: String, required: true, unique: true, index: true },
     contact: { type: contactSchema, required: true },
-    preWeddingGuests: { type: String, default: '' },
-    postWeddingGuests: { type: String, default: '' },
+    weddingGuests: { type: String, default: '' },
+    preCeremonies: { type: [ceremonySchema], default: [] },
+    postCeremonies: { type: [ceremonySchema], default: [] },
     services: { type: [String], default: [] },
     weddingDate: { type: String, default: '' },
     preferredHotels: { type: String, default: '' },
