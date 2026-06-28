@@ -50,12 +50,25 @@ body {
   font-family: var(--font-lato), system-ui, sans-serif;
 }
 
-/* App background — celebration gradient, ported from the original shell. */
+/*
+ * App background — a per-theme travel photo (var(--bg-image)) sits at the
+ * bottom of the layer stack, veiled by a translucent theme-tinted wash so it
+ * reads as subtle atmosphere rather than competing with the UI. The accent /
+ * primary radial glows from the original shell ride on top.
+ */
 .et-theme-root {
   min-height: 100vh;
   padding-bottom: 44px;
   color: var(--ink);
   background:
+    /* Top shade — strengthens the theme wash behind the header + title so the
+       dark brand / nav text stays legible over busy areas of the photo. */
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--bg2) 94%, transparent) 0%,
+      color-mix(in srgb, var(--bg2) 62%, transparent) 96px,
+      transparent 340px
+    ),
     radial-gradient(
       1100px 460px at 100% -6%,
       color-mix(in srgb, var(--accent) 16%, transparent),
@@ -71,7 +84,12 @@ body {
       color-mix(in srgb, var(--accent) 9%, transparent),
       transparent 60%
     ),
-    linear-gradient(168deg, var(--bg1) 0%, var(--bg2) 72%);
+    linear-gradient(
+      168deg,
+      color-mix(in srgb, var(--bg1) 82%, transparent) 0%,
+      color-mix(in srgb, var(--bg2) 86%, transparent) 72%
+    ),
+    var(--bg-image) center / cover no-repeat;
   background-attachment: fixed;
 }
 
