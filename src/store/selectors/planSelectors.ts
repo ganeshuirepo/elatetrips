@@ -56,6 +56,9 @@ export const selectPlanReady = createSelector(
 
 export const selectShowCab = createSelector(selectTransport, (t) => t.tMode === 'cab');
 
+/** Wedding occasion chosen — the journey diverts to the enquiry form. */
+export const selectIsWedding = createSelector(selectPlan, (p) => p.celebs.includes('wedding'));
+
 /** Contextual helper text shown beneath the primary action. */
 export const selectPlanHelp = createSelector(
   selectPlan,

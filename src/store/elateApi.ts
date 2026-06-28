@@ -99,6 +99,23 @@ export interface PartnerEoi extends PartnerEoiBody {
   createdAt: string;
 }
 
+/** Wedding enquiry submitted when the planner diverts on a Wedding selection. */
+export interface WeddingEnquiryBody {
+  contact: { name: string; phone: string; email: string };
+  preWeddingGuests: string;
+  postWeddingGuests: string;
+  services: string[];
+  weddingDate: string;
+  preferredHotels: string;
+  destination: string;
+  notes: string;
+}
+
+export interface WeddingEnquiry extends WeddingEnquiryBody {
+  referenceId: string;
+  createdAt: string;
+}
+
 /**
  * RTK Query client for the ElateTrips backend. The JWT is attached from the
  * account slice, and the success envelope is unwrapped so components receive the
@@ -163,6 +180,10 @@ export const elateApi = createApi({
       query: (body) => ({ url: '/partners/eoi', method: 'POST', body }),
       transformResponse: pick<PartnerEoi>(),
     }),
+    submitWeddingEnquiry: build.mutation<WeddingEnquiry, WeddingEnquiryBody>({
+      query: (body) => ({ url: '/weddings/enquiry', method: 'POST', body }),
+      transformResponse: pick<WeddingEnquiry>(),
+    }),
   }),
 });
 
@@ -178,4 +199,5 @@ export const {
   useGetOrdersQuery,
   useCreateOrderMutation,
   useSubmitPartnerEoiMutation,
+  useSubmitWeddingEnquiryMutation,
 } = elateApi;
