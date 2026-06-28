@@ -32,7 +32,7 @@ export const CELEBRATIONS: Celebration[] = [
   {
     id: 'wedding',
     name: 'Wedding',
-    icon: 'ti-glass-full',
+    icon: 'ti-rings',
     img: '/assets/celeb-wedding.png',
     category: 'celebration',
   },
