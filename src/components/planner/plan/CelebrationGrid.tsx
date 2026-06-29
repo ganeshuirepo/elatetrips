@@ -67,7 +67,7 @@ export default function CelebrationGrid({ onPick }: { onPick?: (id: Celebration[
               </span>
               <span className="text-[12.5px] text-white/55">{cat.sub}</span>
             </div>
-            <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(4, minmax(0, 1fr))' }}>
+            <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(6, minmax(0, 1fr))' }}>
               {items.map(tile)}
             </div>
           </div>

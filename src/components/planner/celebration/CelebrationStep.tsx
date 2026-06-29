@@ -9,7 +9,7 @@ export default function CelebrationStep() {
   const dispatch = useAppDispatch();
 
   return (
-    <div className="mx-auto flex max-w-[532px] flex-col gap-5">
+    <div className="mx-auto flex max-w-[804px] flex-col gap-5">
       <div className="flex flex-col gap-1">
         <span
           className="text-[11px] font-black tracking-[0.06em] uppercase"
