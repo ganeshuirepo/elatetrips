@@ -37,13 +37,6 @@ export default function Header() {
           </button>
           <button
             type="button"
-            onClick={() => dispatch(setView('medical'))}
-            className={navLink(view === 'medical')}
-          >
-            Medical Kits
-          </button>
-          <button
-            type="button"
             onClick={() => dispatch(setView('partner'))}
             className={navLink(view === 'partner')}
           >

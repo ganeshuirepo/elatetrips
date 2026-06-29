@@ -19,7 +19,6 @@ export default function AppShell() {
       <Header />
       {view === 'planner' && <PlannerView />}
       {view === 'gifts' && <ShopView shop="gifts" />}
-      {view === 'medical' && <ShopView shop="medical" />}
       {view === 'partner' && <PartnerView />}
       <AuthDialog />
     </>
