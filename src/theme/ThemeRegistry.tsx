@@ -18,6 +18,7 @@ function ThemedShell({ children }: { children: ReactNode }) {
   const themeId = useAppSelector((s) => s.ui.themeId);
   const view = useAppSelector((s) => s.ui.view);
   const step = useAppSelector((s) => s.ui.step);
+  const hotelDetailOpen = useAppSelector((s) => !!s.hotel.hOpen);
   const palette = PALETTES[themeId];
   const theme = useMemo(() => buildMuiTheme(palette), [palette]);
 
@@ -26,8 +27,12 @@ function ThemedShell({ children }: { children: ReactNode }) {
     if (view === 'gifts') return '/assets/bg-gifts.png';
     if (view === 'partner') return '/assets/bg-partner.png';
     if (view === 'planner' && step === 'wedding') return '/assets/bg-wedding.png';
+    if (view === 'planner' && step === 'stay') {
+      // Hotel detail → wedding-celebration scene; listing → grand resort.
+      return hotelDetailOpen ? '/assets/bg-wedding.png' : '/assets/bg-stay.png';
+    }
     return '/assets/bg-home.png';
-  }, [view, step]);
+  }, [view, step, hotelDetailOpen]);
 
   const cssVars = useMemo(
     () => ({ ...paletteToCssVars(palette), '--page-bg': `url(${pageBg})` }),
