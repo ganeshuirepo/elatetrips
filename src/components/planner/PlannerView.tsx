@@ -1,12 +1,12 @@
 'use client';
 
 import { useAppSelector } from '@/store/hooks';
-import { selectPlanReady, selectTransportFullReady } from '@/store/selectors/planSelectors';
+import { selectPlanReady, selectCelebReady } from '@/store/selectors/planSelectors';
 import Hero from '@/components/layout/Hero';
 import Card from '@/components/ui/Card';
 import WizardSteps from './WizardSteps';
+import CelebrationStep from './celebration/CelebrationStep';
 import PlanStep from './plan/PlanStep';
-import CabStep from './cab/CabStep';
 import HotelsStep from './hotels/HotelsStep';
 import ShopStep from './shop/ShopStep';
 import ReviewStep from './review/ReviewStep';
@@ -15,23 +15,24 @@ import ReviewStep from './review/ReviewStep';
 export default function PlannerView() {
   const step = useAppSelector((s) => s.ui.step);
   const planReady = useAppSelector(selectPlanReady);
-  const transportFullReady = useAppSelector(selectTransportFullReady);
+  const celebReady = useAppSelector(selectCelebReady);
 
   return (
     <>
       <Hero />
       <div className="mx-auto max-w-[1080px] px-6 pt-2">
         {/* Stepper sits on the canvas; each step then owns its card surface(s). */}
-        <WizardSteps planReady={planReady} transportFullReady={transportFullReady} />
-        {step === 'plan' ? (
-          // The Plan screen is split into its own cards (see PlanStep).
+        <WizardSteps celebReady={celebReady} planReady={planReady} />
+        {step === 'celebration' ? (
+          <CelebrationStep />
+        ) : step === 'plan' ? (
+          // The Plan screen carries everything (where, when, transport) in one card.
           <PlanStep />
         ) : step === 'stay' ? (
           // Hotels owns its surfaces too — filters + listing as separate cards.
           <HotelsStep />
         ) : (
           <Card>
-            {step === 'cab' && <CabStep />}
             {step === 'shop' && <ShopStep />}
             {step === 'review' && <ReviewStep />}
           </Card>

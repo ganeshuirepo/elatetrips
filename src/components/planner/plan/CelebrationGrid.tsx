@@ -11,7 +11,7 @@ import type { Celebration } from '@/domain/types';
 const TILE_ICON_FILL = 'color-mix(in srgb, var(--accent) 32%, #fff)';
 
 /** Occasion picker — icon tiles grouped by category. Incompatible tiles dim. */
-export default function CelebrationGrid() {
+export default function CelebrationGrid({ onPick }: { onPick?: (id: Celebration['id']) => void }) {
   const dispatch = useAppDispatch();
   const { celebs, maxCelebrations } = useAppSelector((s) => s.plan);
   const atMax = celebs.length >= maxCelebrations;
@@ -26,7 +26,10 @@ export default function CelebrationGrid() {
         aria-pressed={selected}
         aria-label={c.name}
         disabled={disabled}
-        onClick={() => dispatch(toggleCeleb(c.id))}
+        onClick={() => {
+          dispatch(toggleCeleb(c.id));
+          onPick?.(c.id);
+        }}
         className="flex flex-col items-center gap-1.5 transition-colors disabled:cursor-not-allowed"
         style={{ opacity: disabled ? 0.45 : 1 }}
       >

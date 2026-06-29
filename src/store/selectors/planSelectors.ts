@@ -10,28 +10,14 @@ export const selectPax = createSelector(selectPlan, (p) => p.adults + p.children
 /** Inclusive ISO date list across the chosen tour range. */
 export const selectDays = createSelector(selectPlan, (p) => dayList(p.start, p.end));
 
-/**
- * Every selected celebration has a day chosen. Wedding is exempt — its date is
- * captured later in the enquiry form, so it needs no day on the Plan step.
- */
-export const selectAllCelebDays = createSelector(selectPlan, (p) =>
-  p.celebs.filter((id) => id !== 'wedding').every((id) => !!p.celebDays[id]),
-);
+/** At least one occasion is chosen (gates the opening Celebration step). */
+export const selectCelebReady = createSelector(selectPlan, (p) => p.celebs.length > 0);
 
-/** Destination + dates are set (page-1 block of the Plan step). */
+/** Destination + dates are set. */
 export const selectPage1Ready = createSelector(
   selectPlan,
   (p) => p.dest.length > 0 && !!p.start && !!p.end,
 );
-
-/** At least one celebration with every day chosen (page-2 block). */
-export const selectPage2Ready = createSelector(
-  selectPlan,
-  selectAllCelebDays,
-  (p, allDays) => p.celebs.length > 0 && allDays,
-);
-
-export const selectAllReady = createSelector(selectPage1Ready, selectPage2Ready, (a, b) => a && b);
 
 /** Pickup city + address both present (required for a complete trip). */
 export const selectPickupOk = createSelector(
@@ -49,16 +35,24 @@ export const selectTransportFullReady = createSelector(
 );
 
 /**
- * Plan step complete enough to advance (destination, dates, celebrations).
- * Transport now lives entirely on the Cab step, so it no longer gates Plan.
+ * Plan step complete enough to advance to hotels. The Plan step now also carries
+ * the transport question, so a full transport choice is required here.
  */
-export const selectPlanReady = createSelector(selectAllReady, (allReady) => allReady);
+export const selectPlanReady = createSelector(
+  selectPage1Ready,
+  selectCelebReady,
+  selectTransportFullReady,
+  (page1, celeb, transport) => page1 && celeb && transport,
+);
 
-/** Contextual helper text shown beneath the primary action. */
-export const selectPlanHelp = createSelector(selectPlan, selectAllCelebDays, (p, allDays) => {
+/** Contextual helper text shown beneath the primary action on the Plan step. */
+export const selectPlanHelp = createSelector(selectPlan, selectTransport, (p, t) => {
   if (p.dest.length === 0) return 'Search and pick a destination to continue.';
   if (!p.start || !p.end) return 'Choose your tour start and end dates.';
-  if (p.celebs.length === 0) return 'Pick at least one celebration to search.';
-  if (!allDays) return 'Choose a day for each celebration you selected.';
-  return 'Everything looks good — choose your transport next.';
+  if (!t.tMode) return "Tell us how you'll get around.";
+  if (t.tMode === 'cab' && !t.tTrip) return 'Choose a trip type for your cab.';
+  if (t.tMode === 'cab' && !t.tVehicle) return 'Pick a vehicle type for your cab.';
+  if (t.tMode === 'cab' && t.tTrip === 'endtoend' && !(t.pickupCity.trim() && t.pickupAddr.trim()))
+    return 'Search or share your pickup location.';
+  return 'Everything looks good — continue to hotels.';
 });

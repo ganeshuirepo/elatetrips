@@ -7,8 +7,11 @@ import { DEFAULT_THEME, type ThemeId } from '@/theme/palettes';
  */
 export type AppView = 'planner' | 'gifts' | 'medical' | 'partner' | 'wedding';
 
-/** Wizard steps within the planner view. */
-export type WizardStep = 'plan' | 'cab' | 'stay' | 'shop' | 'review';
+/**
+ * Wizard steps within the planner view. 'celebration' is the opening step (pick
+ * an occasion); 'plan' now also carries the transport/cab questions.
+ */
+export type WizardStep = 'celebration' | 'plan' | 'stay' | 'shop' | 'review';
 
 /** Which form the global auth dialog opens to. */
 export type AuthMode = 'login' | 'signup' | 'forgot';
@@ -31,7 +34,7 @@ export interface UiState {
 const initialState: UiState = {
   themeId: DEFAULT_THEME,
   view: 'planner',
-  step: 'plan',
+  step: 'celebration',
   heroShown: true,
   destOpen: false,
   calOpen: false,

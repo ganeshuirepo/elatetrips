@@ -20,7 +20,7 @@ export default function HotelsStep() {
     return (
       <Card className="flex flex-col gap-6">
         <HotelDetail />
-        <ContinueBar back={() => dispatch(setStep('cab'))} />
+        <ContinueBar back={() => dispatch(setStep('plan'))} />
       </Card>
     );
   }
@@ -41,7 +41,7 @@ export default function HotelsStep() {
       <Card className="flex flex-col gap-5">
         <LocalGuideNote />
         <CostSummary />
-        <ContinueBar back={() => dispatch(setStep('cab'))} />
+        <ContinueBar back={() => dispatch(setStep('plan'))} />
       </Card>
     </div>
   );
