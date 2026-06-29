@@ -37,6 +37,10 @@ import { PartnerRepository } from './modules/partner/partner.repository';
 import { PartnerService } from './modules/partner/partner.service';
 import { PartnerController } from './modules/partner/partner.controller';
 
+import { WeddingRepository } from './modules/wedding/wedding.repository';
+import { WeddingService } from './modules/wedding/wedding.service';
+import { WeddingController } from './modules/wedding/wedding.controller';
+
 import { buildAuthGuard } from './common/middleware/authGuard';
 
 /**
@@ -54,6 +58,7 @@ export interface Container {
     orders: OrderController;
     pricing: PricingController;
     partners: PartnerController;
+    weddings: WeddingController;
   };
 }
 
@@ -72,6 +77,7 @@ export function createContainer(): Container {
   const usersRepo = new UserRepository();
   const ordersRepo = new OrderRepository();
   const partnersRepo = new PartnerRepository();
+  const weddingsRepo = new WeddingRepository();
 
   // Cross-cutting auth primitives
   const tokenService = new JwtTokenService();
@@ -96,6 +102,7 @@ export function createContainer(): Container {
   const authService = new AuthService(otpStore, tokenService, passwordHasher, usersRepo);
   const pricingService = new PricingService(vehiclesRepo, destinationsRepo);
   const partnerService = new PartnerService(partnersRepo);
+  const weddingService = new WeddingService(weddingsRepo);
 
   return {
     authGuard: buildAuthGuard(tokenService),
@@ -106,6 +113,7 @@ export function createContainer(): Container {
       orders: new OrderController(orderService),
       pricing: new PricingController(pricingService),
       partners: new PartnerController(partnerService),
+      weddings: new WeddingController(weddingService),
     },
   };
 }

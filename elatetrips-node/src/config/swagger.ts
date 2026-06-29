@@ -26,6 +26,7 @@ export const swaggerSpec = swaggerJsdoc({
     tags: [
       { name: 'System', description: 'Health & diagnostics' },
       { name: 'Partners', description: 'Public hotelier "Expression of Interest" submissions.' },
+      { name: 'Weddings', description: 'Public wedding-enquiry leads from the planner.' },
     ],
   },
   // Scan compiled-or-source route files for annotations.

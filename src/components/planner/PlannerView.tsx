@@ -5,6 +5,7 @@ import {
   selectPlanReady,
   selectShowCab,
   selectTransportFullReady,
+  selectIsWedding,
 } from '@/store/selectors/planSelectors';
 import Hero from '@/components/layout/Hero';
 import Card from '@/components/ui/Card';
@@ -14,6 +15,7 @@ import CabStep from './cab/CabStep';
 import HotelsStep from './hotels/HotelsStep';
 import ShopStep from './shop/ShopStep';
 import ReviewStep from './review/ReviewStep';
+import WeddingEnquiry from './wedding/WeddingEnquiry';
 
 /** Planner wizard: step breadcrumb + the active step panel. */
 export default function PlannerView() {
@@ -21,6 +23,7 @@ export default function PlannerView() {
   const showCab = useAppSelector(selectShowCab);
   const planReady = useAppSelector(selectPlanReady);
   const transportFullReady = useAppSelector(selectTransportFullReady);
+  const isWedding = useAppSelector(selectIsWedding);
 
   return (
     <>
@@ -31,12 +34,14 @@ export default function PlannerView() {
             showCab={showCab}
             planReady={planReady}
             transportFullReady={transportFullReady}
+            isWedding={isWedding}
           />
           {step === 'plan' && <PlanStep />}
           {step === 'cab' && <CabStep />}
           {step === 'stay' && <HotelsStep />}
           {step === 'shop' && <ShopStep />}
           {step === 'review' && <ReviewStep />}
+          {step === 'wedding' && <WeddingEnquiry />}
         </Card>
       </div>
     </>

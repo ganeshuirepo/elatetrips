@@ -3,7 +3,12 @@
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setStep } from '@/store/slices/uiSlice';
-import { selectPlanReady, selectShowCab, selectPlanHelp } from '@/store/selectors/planSelectors';
+import {
+  selectPlanReady,
+  selectShowCab,
+  selectPlanHelp,
+  selectIsWedding,
+} from '@/store/selectors/planSelectors';
 import DestinationSearch from './DestinationSearch';
 import WhenWho from './WhenWho';
 import CelebrationGrid from './CelebrationGrid';
@@ -17,8 +22,11 @@ export default function PlanStep() {
   const planReady = useAppSelector(selectPlanReady);
   const showCab = useAppSelector(selectShowCab);
   const help = useAppSelector(selectPlanHelp);
+  const isWedding = useAppSelector(selectIsWedding);
 
-  const onContinue = () => dispatch(setStep(showCab ? 'cab' : 'stay'));
+  // A Wedding selection diverts the journey straight to the enquiry form.
+  const onContinue = () =>
+    dispatch(setStep(isWedding ? 'wedding' : showCab ? 'cab' : 'stay'));
 
   return (
     <div className="flex flex-col gap-6">
@@ -41,10 +49,10 @@ export default function PlanStep() {
           <TransportPicker />
         </div>
 
-        {/* Right — celebrations */}
+        {/* Right — celebrations. Wedding picks its date later, in the enquiry form. */}
         <div className="flex flex-col gap-5">
           <CelebrationGrid />
-          <CelebrationDays />
+          {!isWedding && <CelebrationDays />}
         </div>
       </div>
 
@@ -61,7 +69,7 @@ export default function PlanStep() {
           onClick={onContinue}
           endIcon={<Icon name="arrow-right" size={18} />}
         >
-          Continue to hotels
+          {isWedding ? 'Continue to wedding details' : 'Continue to hotels'}
         </Button>
       </div>
     </div>
