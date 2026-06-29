@@ -21,21 +21,29 @@ export default function WizardSteps({
   showCab = false,
   planReady = false,
   transportFullReady = false,
+  isWedding = false,
 }: {
   showCab?: boolean;
   planReady?: boolean;
   transportFullReady?: boolean;
+  isWedding?: boolean;
 }) {
   const dispatch = useAppDispatch();
   const step = useAppSelector((s) => s.ui.step);
 
-  const defs: StepDef[] = [
-    { id: 'plan', label: 'Plan' },
-    ...(showCab ? [{ id: 'cab' as const, label: 'Cab' }] : []),
-    { id: 'stay', label: 'Hotels' },
-    { id: 'shop', label: 'Shopping' },
-    { id: 'review', label: 'Review' },
-  ];
+  // A Wedding selection collapses the usual flow into a two-step enquiry journey.
+  const defs: StepDef[] = isWedding
+    ? [
+        { id: 'plan', label: 'Plan' },
+        { id: 'wedding', label: 'Wedding details' },
+      ]
+    : [
+        { id: 'plan', label: 'Plan' },
+        ...(showCab ? [{ id: 'cab' as const, label: 'Cab' }] : []),
+        { id: 'stay', label: 'Hotels' },
+        { id: 'shop', label: 'Shopping' },
+        { id: 'review', label: 'Review' },
+      ];
 
   const reach: Record<WizardStep, boolean> = {
     plan: true,
@@ -43,6 +51,7 @@ export default function WizardSteps({
     stay: planReady && transportFullReady,
     shop: planReady && transportFullReady,
     review: planReady && transportFullReady,
+    wedding: planReady,
   };
 
   const curIdx = defs.findIndex((d) => d.id === step);

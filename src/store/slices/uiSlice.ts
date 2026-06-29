@@ -4,8 +4,11 @@ import { DEFAULT_THEME, type ThemeId } from '@/theme/palettes';
 /** Top-level view: the planner wizard, the two shop catalogues, or partner EOI. */
 export type AppView = 'planner' | 'gifts' | 'medical' | 'partner';
 
-/** Wizard steps within the planner view. */
-export type WizardStep = 'plan' | 'cab' | 'stay' | 'shop' | 'review';
+/**
+ * Wizard steps within the planner view. 'wedding' is a terminal divert — picking
+ * the Wedding occasion routes the journey to the enquiry form instead of hotels.
+ */
+export type WizardStep = 'plan' | 'cab' | 'stay' | 'shop' | 'review' | 'wedding';
 
 /** Which form the global auth dialog opens to. */
 export type AuthMode = 'login' | 'signup' | 'forgot';
