@@ -89,9 +89,9 @@ html {
     /* dark wash that veils the photo so cards + text stay legible */
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--bg2) 84%, transparent) 0%,
-      color-mix(in srgb, var(--bg1) 70%, transparent) 46%,
-      color-mix(in srgb, var(--bg2) 88%, transparent) 100%
+      color-mix(in srgb, var(--bg2) 62%, transparent) 0%,
+      color-mix(in srgb, var(--bg1) 46%, transparent) 48%,
+      color-mix(in srgb, var(--bg2) 68%, transparent) 100%
     ),
     /* per-page Canva atmosphere */
     var(--page-bg, none) center top / cover no-repeat,
