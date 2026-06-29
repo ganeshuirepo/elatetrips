@@ -26,10 +26,12 @@ export default function PlannerView() {
         {step === 'plan' ? (
           // The Plan screen is split into its own cards (see PlanStep).
           <PlanStep />
+        ) : step === 'stay' ? (
+          // Hotels owns its surfaces too — filters + listing as separate cards.
+          <HotelsStep />
         ) : (
           <Card>
             {step === 'cab' && <CabStep />}
-            {step === 'stay' && <HotelsStep />}
             {step === 'shop' && <ShopStep />}
             {step === 'review' && <ReviewStep />}
           </Card>
