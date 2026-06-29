@@ -14,6 +14,7 @@ import WhenWho from './WhenWho';
 import CelebrationGrid from './CelebrationGrid';
 import CelebrationDays from './CelebrationDays';
 import TransportPicker from './TransportPicker';
+import Card from '@/components/ui/Card';
 import Icon from '@/components/ui/Icon';
 
 /** Step 1 — the full planning screen (where, when, who, what, transport). */
@@ -31,11 +32,11 @@ export default function PlanStep() {
   return (
     <div className="flex flex-col gap-6">
       <div
-        className="grid items-start gap-7"
+        className="grid items-start gap-6"
         style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 22rem), 1fr))' }}
       >
-        {/* Left — where, when & who, transport */}
-        <div className="flex flex-col gap-5">
+        {/* Left card — where, when & who, transport */}
+        <Card className="flex flex-col gap-5">
           <div className="flex flex-col gap-3">
             <div className="flex items-baseline justify-between gap-2">
               <span className="text-accent-ink text-[11px] font-black tracking-[0.06em] uppercase">
@@ -47,31 +48,33 @@ export default function PlanStep() {
           </div>
           <WhenWho />
           <TransportPicker />
-        </div>
+        </Card>
 
-        {/* Right — celebrations. Wedding picks its date later, in the enquiry form. */}
-        <div className="flex flex-col gap-5">
+        {/* Right card — celebrations. Wedding picks its date later, in the enquiry form. */}
+        <Card className="flex flex-col gap-5">
           <CelebrationGrid />
           {!isWedding && <CelebrationDays />}
-        </div>
+        </Card>
       </div>
 
-      {/* Action bar */}
-      <div className="border-line flex flex-wrap items-center justify-between gap-3 border-t pt-4">
-        <span className="text-muted flex items-center gap-2 text-[13px]">
-          <Icon name="info-circle" size={16} /> {help}
-        </span>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          disabled={!planReady}
-          onClick={onContinue}
-          endIcon={<Icon name="arrow-right" size={18} />}
-        >
-          {isWedding ? 'Continue to wedding details' : 'Continue to hotels'}
-        </Button>
-      </div>
+      {/* Action bar — its own slim card so the CTA stays grounded below the split. */}
+      <Card>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <span className="text-muted flex items-center gap-2 text-[13px]">
+            <Icon name="info-circle" size={16} /> {help}
+          </span>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            disabled={!planReady}
+            onClick={onContinue}
+            endIcon={<Icon name="arrow-right" size={18} />}
+          >
+            {isWedding ? 'Continue to wedding details' : 'Continue to hotels'}
+          </Button>
+        </div>
+      </Card>
     </div>
   );
 }

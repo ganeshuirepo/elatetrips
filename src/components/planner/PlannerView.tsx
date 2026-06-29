@@ -29,20 +29,25 @@ export default function PlannerView() {
     <>
       <Hero />
       <div className="mx-auto max-w-[1080px] px-6 pt-2">
-        <Card>
-          <WizardSteps
-            showCab={showCab}
-            planReady={planReady}
-            transportFullReady={transportFullReady}
-            isWedding={isWedding}
-          />
-          {step === 'plan' && <PlanStep />}
-          {step === 'cab' && <CabStep />}
-          {step === 'stay' && <HotelsStep />}
-          {step === 'shop' && <ShopStep />}
-          {step === 'review' && <ReviewStep />}
-          {step === 'wedding' && <WeddingEnquiry />}
-        </Card>
+        {/* Stepper sits on the canvas; each step then owns its card surface(s). */}
+        <WizardSteps
+          showCab={showCab}
+          planReady={planReady}
+          transportFullReady={transportFullReady}
+          isWedding={isWedding}
+        />
+        {step === 'plan' ? (
+          // The Plan screen is split into its own cards (see PlanStep).
+          <PlanStep />
+        ) : (
+          <Card>
+            {step === 'cab' && <CabStep />}
+            {step === 'stay' && <HotelsStep />}
+            {step === 'shop' && <ShopStep />}
+            {step === 'review' && <ReviewStep />}
+            {step === 'wedding' && <WeddingEnquiry />}
+          </Card>
+        )}
       </div>
     </>
   );

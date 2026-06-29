@@ -17,43 +17,46 @@ export interface StepIndicatorProps {
   onNavigate: (id: WizardStep) => void;
 }
 
-/** Numbered breadcrumb of wizard steps with reachability-aware navigation. */
+/**
+ * Numbered breadcrumb of wizard steps with reachability-aware navigation.
+ * Rendered directly on the dark luxury canvas, so colours are light/gold.
+ */
 export default function StepIndicator({ steps, onNavigate }: StepIndicatorProps) {
   return (
-    <div className="mb-5 flex flex-wrap items-center gap-[6px]">
+    <div className="mb-5 flex flex-wrap items-center gap-x-1 gap-y-2">
       {steps.map((st, i) => {
         const clickable = st.state === 'reachable' || st.state === 'done';
         const labelColor =
           st.state === 'active'
-            ? 'text-primary'
+            ? 'text-white'
             : clickable
-              ? 'cursor-pointer text-muted'
-              : 'text-[#B8B4A8]';
-        const numClass =
+              ? 'cursor-pointer text-white/60 hover:text-white/90'
+              : 'text-white/30';
+        const badge =
           st.state === 'active'
-            ? 'bg-primary text-white'
+            ? 'bg-[var(--accent)] text-[#08201F] shadow-[0_0_0_4px_color-mix(in_srgb,var(--accent)_22%,transparent)]'
             : st.state === 'done'
-              ? 'bg-accent text-white'
+              ? 'bg-[color-mix(in_srgb,var(--accent)_80%,#fff)] text-[#08201F]'
               : clickable
-                ? 'bg-sand text-primary'
-                : 'bg-[#EFEBE1] text-[#B8B4A8]';
+                ? 'border border-white/30 bg-white/5 text-white/75'
+                : 'border border-white/12 bg-white/5 text-white/30';
         return (
           <Fragment key={st.id}>
             <button
               type="button"
               disabled={!clickable && st.state !== 'active'}
               onClick={clickable ? () => onNavigate(st.id) : undefined}
-              className={`inline-flex items-center gap-[7px] border-none bg-transparent px-1 py-[6px] text-[12.5px] font-extrabold ${labelColor}`}
+              className={`inline-flex items-center gap-[8px] border-none bg-transparent px-1.5 py-[6px] text-[12.5px] font-extrabold tracking-wide transition-colors ${labelColor}`}
             >
               <span
-                className={`flex h-[22px] w-[22px] flex-none items-center justify-center rounded-full text-[11px] font-black ${numClass}`}
+                className={`flex h-[24px] w-[24px] flex-none items-center justify-center rounded-full text-[11px] font-black transition-all ${badge}`}
               >
-                {i + 1}
+                {st.state === 'done' ? <Icon name="check" size={13} /> : i + 1}
               </span>
               {st.label}
             </button>
             {i < steps.length - 1 && (
-              <Icon name="chevron-right" size={14} style={{ color: '#C9C4B7' }} />
+              <Icon name="chevron-right" size={14} style={{ color: 'rgba(255,255,255,.28)' }} />
             )}
           </Fragment>
         );
