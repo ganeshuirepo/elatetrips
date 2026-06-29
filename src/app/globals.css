@@ -42,7 +42,9 @@ html,
 body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  /* `clip` (not `hidden`) avoids creating a scroll container, so the sticky
+     header keeps working while horizontal overflow is still prevented. */
+  overflow-x: clip;
 }
 
 body {

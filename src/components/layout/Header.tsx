@@ -1,14 +1,24 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setView } from '@/store/slices/uiSlice';
 import CartPill from './CartPill';
 import UserProfile from './UserProfile';
 
-/** Top bar: brand + shop navigation, on the dark luxury canvas. */
+/** Top bar: brand + shop navigation. Sticky, with a blurred bar once scrolled. */
 export default function Header() {
   const dispatch = useAppDispatch();
   const view = useAppSelector((s) => s.ui.view);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Fade in the translucent bar only after the page has scrolled a little.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const navLink = (active: boolean) =>
     `cursor-pointer border-none bg-transparent p-0 text-[13.5px] font-medium tracking-wide transition-colors ${
@@ -16,7 +26,21 @@ export default function Header() {
     }`;
 
   return (
-    <header className="mx-auto flex max-w-[1080px] flex-wrap items-center justify-between gap-3 px-6 py-[22px]">
+    <header
+      className={`sticky top-0 z-40 transition-[background,box-shadow,border-color] duration-300 ${
+        scrolled ? 'backdrop-blur-md' : ''
+      }`}
+      style={
+        scrolled
+          ? {
+              background: 'color-mix(in srgb, var(--bg2) 86%, transparent)',
+              borderBottom: '1px solid color-mix(in srgb, #ffffff 9%, transparent)',
+              boxShadow: '0 12px 34px -22px rgba(0,0,0,.85)',
+            }
+          : { borderBottom: '1px solid transparent' }
+      }
+    >
+      <div className="mx-auto flex max-w-[1080px] flex-wrap items-center justify-between gap-3 px-6 py-[18px]">
       <button
         type="button"
         onClick={() => dispatch(setView('planner'))}
@@ -57,6 +81,7 @@ export default function Header() {
         </nav>
         <CartPill />
         <UserProfile />
+      </div>
       </div>
     </header>
   );
