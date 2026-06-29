@@ -7,10 +7,7 @@ import { celebComboValid } from '@/domain/rules';
 import Icon from '@/components/ui/Icon';
 import type { Celebration } from '@/domain/types';
 
-/** Uniform resting fill for every occasion tile's icon swatch (both groups). */
-const TILE_ICON_FILL = 'color-mix(in srgb, var(--accent) 32%, #fff)';
-
-/** Occasion picker — icon tiles grouped by category. Incompatible tiles dim. */
+/** Occasion picker — square tiles grouped by category. Incompatible tiles dim. */
 export default function CelebrationGrid({ onPick }: { onPick?: (id: Celebration['id']) => void }) {
   const dispatch = useAppDispatch();
   const { celebs, maxCelebrations } = useAppSelector((s) => s.plan);
@@ -30,21 +27,23 @@ export default function CelebrationGrid({ onPick }: { onPick?: (id: Celebration[
           dispatch(toggleCeleb(c.id));
           onPick?.(c.id);
         }}
-        className="flex flex-col items-center gap-1.5 transition-colors disabled:cursor-not-allowed"
-        style={{ opacity: disabled ? 0.45 : 1 }}
+        className="flex aspect-square flex-col items-center justify-center gap-2.5 rounded-[18px] border-[1.5px] p-3 transition-colors disabled:cursor-not-allowed"
+        style={{
+          opacity: disabled ? 0.4 : 1,
+          background: selected ? 'var(--accent)' : '#FAF7F2',
+          borderColor: selected ? 'var(--accent)' : '#EBE1CF',
+          boxShadow: '0 24px 44px -34px rgba(3,18,19,.55)',
+        }}
       >
         <span
-          className="flex h-[64px] w-[64px] items-center justify-center rounded-full text-[30px]"
-          style={{
-            background: selected ? 'var(--accent)' : TILE_ICON_FILL,
-            color: selected ? '#fff' : 'var(--primary)',
-          }}
+          className="flex items-center justify-center text-[38px]"
+          style={{ color: selected ? '#08201F' : 'var(--primary)' }}
         >
           <Icon name={c.icon} />
         </span>
         <span
-          className="text-center text-[12px] leading-tight font-bold"
-          style={{ color: selected ? 'var(--accent-ink)' : 'var(--ink)' }}
+          className="text-center text-[13px] leading-tight font-bold"
+          style={{ color: selected ? '#08201F' : 'var(--ink)' }}
         >
           {c.name}
         </span>
@@ -60,15 +59,15 @@ export default function CelebrationGrid({ onPick }: { onPick?: (id: Celebration[
         return (
           <div key={cat.id} className="flex flex-col gap-3">
             <div className="flex items-baseline justify-between gap-2">
-              <span className="text-accent-ink text-[11px] font-black tracking-[0.06em] uppercase">
+              <span
+                className="text-[11px] font-black tracking-[0.06em] uppercase"
+                style={{ color: 'var(--accent)' }}
+              >
                 {cat.label}
               </span>
-              <span className="text-muted text-[12.5px]">{cat.sub}</span>
+              <span className="text-[12.5px] text-white/55">{cat.sub}</span>
             </div>
-            <div
-              className="grid gap-2"
-              style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 6.5rem), 1fr))' }}
-            >
+            <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(4, minmax(0, 1fr))' }}>
               {items.map(tile)}
             </div>
           </div>
