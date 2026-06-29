@@ -3,8 +3,9 @@
 import { useMemo, useState } from 'react';
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setStep } from '@/store/slices/uiSlice';
+import { setView } from '@/store/slices/uiSlice';
 import { useSubmitWeddingEnquiryMutation } from '@/store/elateApi';
+import Card from '@/components/ui/Card';
 import {
   WEDDING_GUEST_RANGES,
   WEDDING_SERVICES,
@@ -153,7 +154,9 @@ export default function WeddingEnquiry() {
   /* ---------- thank-you (flow ends here) ---------- */
   if (done) {
     return (
-      <div className="flex flex-col items-center gap-3 py-10 text-center">
+      <div className="mx-auto max-w-[920px] px-6 pt-2 pb-16">
+        <Card>
+          <div className="flex flex-col items-center gap-3 py-10 text-center">
         <span
           className="flex h-16 w-16 items-center justify-center rounded-full text-[32px] text-white"
           style={{ background: 'var(--accent)' }}
@@ -164,26 +167,33 @@ export default function WeddingEnquiry() {
         <p className="text-muted m-0 max-w-[44ch] text-[14.5px]">
           Our engagement manager will contact you soon.
         </p>
-        <span
-          className="rounded-full px-4 py-1.5 text-[13px] font-bold"
-          style={{ background: 'color-mix(in srgb, var(--accent) 12%, #fff)', color: 'var(--accent-ink)' }}
-        >
-          Reference: {done}
-        </span>
+          <span
+            className="rounded-full px-4 py-1.5 text-[13px] font-bold"
+            style={{
+              background: 'color-mix(in srgb, var(--accent) 12%, #fff)',
+              color: 'var(--accent-ink)',
+            }}
+          >
+            Reference: {done}
+          </span>
+          </div>
+        </Card>
       </div>
     );
   }
 
   /* ---------- enquiry form ---------- */
   return (
-    <div className="flex flex-col gap-5">
-      <button
-        type="button"
-        onClick={() => dispatch(setStep('plan'))}
-        className="text-primary flex w-fit items-center gap-1.5 border-none bg-transparent p-0 text-[13px] font-bold"
-      >
-        <Icon name="arrow-left" size={16} /> Back to plan
-      </button>
+    <div className="mx-auto max-w-[920px] px-6 pt-2 pb-16">
+      <Card>
+        <div className="flex flex-col gap-5">
+          <button
+            type="button"
+            onClick={() => dispatch(setView('planner'))}
+            className="text-primary flex w-fit items-center gap-1.5 border-none bg-transparent p-0 text-[13px] font-bold"
+          >
+            <Icon name="arrow-left" size={16} /> Back to planner
+          </button>
 
       <div className="flex flex-col gap-1">
         <h1 className="text-primary m-0 flex items-center gap-2 font-serif text-2xl font-bold">
@@ -314,7 +324,9 @@ export default function WeddingEnquiry() {
             Couldn&apos;t reach the server. Please ensure the backend is running and try again.
           </span>
         )}
-      </div>
+          </div>
+        </div>
+      </Card>
     </div>
   );
 }

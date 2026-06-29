@@ -26,7 +26,7 @@ function ThemedShell({ children }: { children: ReactNode }) {
   const pageBg = useMemo(() => {
     if (view === 'gifts') return '/assets/bg-gifts.png';
     if (view === 'partner') return '/assets/bg-partner.png';
-    if (view === 'planner' && step === 'wedding') return '/assets/bg-wedding.png';
+    if (view === 'wedding') return '/assets/bg-wedding.png';
     if (view === 'planner' && step === 'stay') {
       // Hotel detail → wedding-celebration scene; listing → grand resort.
       return hotelDetailOpen ? '/assets/bg-wedding.png' : '/assets/bg-stay.png';

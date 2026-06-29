@@ -54,15 +54,11 @@ export const selectTransportFullReady = createSelector(
  */
 export const selectPlanReady = createSelector(selectAllReady, (allReady) => allReady);
 
-/** Wedding occasion chosen — the journey diverts to the enquiry form. */
-export const selectIsWedding = createSelector(selectPlan, (p) => p.celebs.includes('wedding'));
-
 /** Contextual helper text shown beneath the primary action. */
 export const selectPlanHelp = createSelector(selectPlan, selectAllCelebDays, (p, allDays) => {
   if (p.dest.length === 0) return 'Search and pick a destination to continue.';
   if (!p.start || !p.end) return 'Choose your tour start and end dates.';
   if (p.celebs.length === 0) return 'Pick at least one celebration to search.';
   if (!allDays) return 'Choose a day for each celebration you selected.';
-  if (p.celebs.includes('wedding')) return 'Everything looks good — continue to wedding details.';
   return 'Everything looks good — choose your transport next.';
 });

@@ -30,13 +30,6 @@ export const CELEBRATIONS: Celebration[] = [
     category: 'celebration',
   },
   {
-    id: 'wedding',
-    name: 'Wedding',
-    icon: 'ti-rings',
-    img: '/assets/celeb-wedding.png',
-    category: 'celebration',
-  },
-  {
     id: 'bachelor',
     name: 'Bachelor Party',
     icon: 'ti-confetti',
@@ -47,6 +40,27 @@ export const CELEBRATIONS: Celebration[] = [
     id: 'teamouting',
     name: 'Proposal',
     icon: 'ti-diamond',
+    img: '/assets/celeb-teamouting.png',
+    category: 'celebration',
+  },
+  {
+    id: 'milestone',
+    name: 'Milestone',
+    icon: 'ti-award',
+    img: '/assets/celeb-anniversary.png',
+    category: 'celebration',
+  },
+  {
+    id: 'culture',
+    name: 'Culture',
+    icon: 'ti-building-monument',
+    img: '/assets/celeb-adventure.png',
+    category: 'celebration',
+  },
+  {
+    id: 'conference',
+    name: 'Conference',
+    icon: 'ti-presentation',
     img: '/assets/celeb-teamouting.png',
     category: 'celebration',
   },
@@ -89,9 +103,10 @@ export const CELEBRATIONS: Celebration[] = [
  * Items in CELEB_EXCLUSIVE cannot be combined with anything else.
  */
 export const CELEB_GROUPS: string[][] = [
-  ['birthday', 'anniversary', 'honeymoon', 'bachelor'], // Celebration (excl. exclusives)
+  // Celebration (excl. exclusives)
+  ['birthday', 'anniversary', 'honeymoon', 'bachelor', 'milestone', 'culture', 'conference'],
   ['family', 'adventure', 'leisure', 'nature'], // Escapes — self-contained
 ];
 
-/** Occasions that must be booked on their own: Wedding and Proposal. */
-export const CELEB_EXCLUSIVE: string[] = ['wedding', 'teamouting'];
+/** Occasions that must be booked on their own: Proposal. */
+export const CELEB_EXCLUSIVE: string[] = ['teamouting'];

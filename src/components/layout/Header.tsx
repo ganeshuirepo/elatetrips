@@ -35,6 +35,13 @@ export default function Header() {
         <nav className="flex flex-wrap items-center gap-[26px]">
           <button
             type="button"
+            onClick={() => dispatch(setView('wedding'))}
+            className={navLink(view === 'wedding')}
+          >
+            Destination Wedding
+          </button>
+          <button
+            type="button"
             onClick={() => dispatch(setView('gifts'))}
             className={navLink(view === 'gifts')}
           >
