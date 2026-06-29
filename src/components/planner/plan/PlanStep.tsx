@@ -49,10 +49,10 @@ export default function PlanStep() {
           <TransportPicker />
         </div>
 
-        {/* Right — celebrations */}
+        {/* Right — celebrations. Wedding picks its date later, in the enquiry form. */}
         <div className="flex flex-col gap-5">
           <CelebrationGrid />
-          <CelebrationDays />
+          {!isWedding && <CelebrationDays />}
         </div>
       </div>
 
