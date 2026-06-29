@@ -36,7 +36,7 @@ export default function CelebrationGrid({ onPick }: { onPick?: (id: Celebration[
         }}
       >
         <span
-          className="flex items-center justify-center text-[38px]"
+          className="flex items-center justify-center text-[27px]"
           style={{ color: selected ? '#08201F' : 'var(--primary)' }}
         >
           <Icon name={c.icon} />
