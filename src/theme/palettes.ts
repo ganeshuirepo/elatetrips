@@ -28,7 +28,7 @@ export const PALETTES: Record<ThemeId, Palette> = {
   luxury: {
     label: 'Luxury',
     primary: '#0A2A2C', // deep teal — headings / brand on light surfaces
-    accent: '#DFBA6B', // gold — accents, selected states, CTAs
+    accent: '#E7C572', // bright warm gold — accents, selected states, CTAs
     accentInk: '#9C7C33', // darker gold — gold text on light surfaces
     sand: '#F4EEE2', // warm cream — chip / icon tints
     line: '#E7DECB', // warm hairline border

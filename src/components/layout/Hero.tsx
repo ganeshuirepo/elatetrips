@@ -24,7 +24,7 @@ export default function Hero() {
         Plan your perfect{' '}
         <span
           style={{
-            background: 'linear-gradient(90deg, #e9c97f, #c5a059)',
+            background: 'linear-gradient(90deg, #f0d693, #d4a94f)',
             WebkitBackgroundClip: 'text',
             backgroundClip: 'text',
             color: 'transparent',

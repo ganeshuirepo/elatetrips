@@ -16,9 +16,23 @@ import { buildMuiTheme } from './muiTheme';
  */
 function ThemedShell({ children }: { children: ReactNode }) {
   const themeId = useAppSelector((s) => s.ui.themeId);
+  const view = useAppSelector((s) => s.ui.view);
+  const step = useAppSelector((s) => s.ui.step);
   const palette = PALETTES[themeId];
   const theme = useMemo(() => buildMuiTheme(palette), [palette]);
-  const cssVars = useMemo(() => paletteToCssVars(palette), [palette]);
+
+  // Per-page atmospheric background (Canva art), shown faintly behind the canvas.
+  const pageBg = useMemo(() => {
+    if (view === 'gifts') return '/assets/bg-gifts.png';
+    if (view === 'partner') return '/assets/bg-partner.png';
+    if (view === 'planner' && step === 'wedding') return '/assets/bg-wedding.png';
+    return '/assets/bg-home.png';
+  }, [view, step]);
+
+  const cssVars = useMemo(
+    () => ({ ...paletteToCssVars(palette), '--page-bg': `url(${pageBg})` }),
+    [palette, pageBg],
+  );
 
   return (
     <ThemeProvider theme={theme}>

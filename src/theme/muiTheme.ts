@@ -16,7 +16,7 @@ export function buildMuiTheme(p: Palette): Theme {
       secondary: { main: p.primary, contrastText: '#ffffff' },
       text: { primary: p.ink, secondary: p.muted },
       divider: p.line,
-      background: { default: p.bg1, paper: '#ffffff' },
+      background: { default: p.bg1, paper: '#FAF7F2' },
     },
     shape: { borderRadius: 12 },
     typography: {

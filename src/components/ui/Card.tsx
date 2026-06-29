@@ -10,8 +10,8 @@ export default function Card({
 }) {
   return (
     <div
-      className={`rounded-[20px] border border-[#ECE7DC] bg-white p-[22px] ${className}`}
-      style={{ boxShadow: '0 20px 50px -26px rgba(28,60,143,.35)' }}
+      className={`rounded-[20px] border border-[#EBE1CF] bg-[#FAF7F2] p-[22px] ${className}`}
+      style={{ boxShadow: '0 34px 64px -34px rgba(3,18,19,.55)' }}
     >
       {children}
     </div>

@@ -9,7 +9,7 @@
  */
 :root {
   --primary: #0a2a2c;
-  --accent: #dfba6b;
+  --accent: #e7c572;
   --accent-ink: #9c7c33;
   --sand: #f4eee2;
   --line: #e7decb;
@@ -80,22 +80,23 @@ html {
   padding-bottom: 44px;
   color: var(--ink);
   background:
+    /* gold glow */
     radial-gradient(
       1200px 520px at 100% -8%,
-      color-mix(in srgb, var(--accent) 22%, transparent),
+      color-mix(in srgb, var(--accent) 16%, transparent),
       transparent 58%
     ),
-    radial-gradient(
-      1000px 560px at -6% 6%,
-      color-mix(in srgb, var(--accent) 10%, transparent),
-      transparent 55%
+    /* dark wash that veils the photo so cards + text stay legible */
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--bg2) 84%, transparent) 0%,
+      color-mix(in srgb, var(--bg1) 70%, transparent) 46%,
+      color-mix(in srgb, var(--bg2) 88%, transparent) 100%
     ),
-    radial-gradient(
-      1100px 800px at 50% 118%,
-      color-mix(in srgb, #0f4d4f 55%, transparent),
-      transparent 60%
-    ),
-    linear-gradient(168deg, var(--bg1) 0%, var(--bg2) 78%);
+    /* per-page Canva atmosphere */
+    var(--page-bg, none) center top / cover no-repeat,
+    /* solid base behind everything */
+    linear-gradient(168deg, var(--bg1) 0%, var(--bg2) 80%);
   background-attachment: fixed;
 }
 

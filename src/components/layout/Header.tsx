@@ -22,7 +22,7 @@ export default function Header() {
         onClick={() => dispatch(setView('planner'))}
         className="cursor-pointer border-none bg-transparent p-0 font-serif text-[26px] font-medium tracking-wide"
         style={{
-          background: 'linear-gradient(90deg, #dfba6b, #c5a059, #dfba6b)',
+          background: 'linear-gradient(90deg, #e9c97f, #d4a94f, #e9c97f)',
           WebkitBackgroundClip: 'text',
           backgroundClip: 'text',
           color: 'transparent',
