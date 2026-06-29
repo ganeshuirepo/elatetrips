@@ -3,7 +3,6 @@
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setStep } from '@/store/slices/uiSlice';
-import { selectShowCab } from '@/store/selectors/planSelectors';
 import HotelFilters from './HotelFilters';
 import HotelList from './HotelList';
 import HotelDetail from './HotelDetail';
@@ -17,14 +16,13 @@ import Icon from '@/components/ui/Icon';
 export default function HotelsStep() {
   const dispatch = useAppDispatch();
   const detailOpen = useAppSelector((s) => !!s.hotel.hOpen);
-  const showCab = useAppSelector(selectShowCab);
   const hasWedding = useAppSelector((s) => s.plan.celebs.includes('wedding'));
 
   if (detailOpen) {
     return (
       <div className="flex flex-col gap-6">
         <HotelDetail />
-        <ContinueBar back={() => dispatch(setStep(showCab ? 'cab' : 'plan'))} />
+        <ContinueBar back={() => dispatch(setStep('cab'))} />
       </div>
     );
   }
@@ -46,7 +44,7 @@ export default function HotelsStep() {
       <LocalGuideNote />
       <CostSummary />
 
-      <ContinueBar back={() => dispatch(setStep(showCab ? 'cab' : 'plan'))} />
+      <ContinueBar back={() => dispatch(setStep('cab'))} />
     </div>
   );
 }

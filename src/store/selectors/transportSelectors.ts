@@ -24,6 +24,8 @@ export const selectLocalEstimate = createSelector(selectTransport, selectDays, (
 
 /** Help text for the Cab step's continue gate. */
 export const selectCabHelp = createSelector(selectTransport, (t) => {
+  if (!t.tMode) return "Tell us how you'll get around.";
+  if (t.tMode === 'own') return 'Own transport — continue to hotels.';
   if (t.tMode === 'cab' && !t.tTrip) return 'Choose a trip type for your cab.';
   if (t.tMode === 'cab' && !t.tVehicle) return 'Pick a vehicle type for your cab.';
   if (t.tMode === 'cab' && t.tTrip === 'endtoend' && !(t.pickupCity.trim() && t.pickupAddr.trim()))

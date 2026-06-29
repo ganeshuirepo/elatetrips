@@ -18,12 +18,10 @@ interface StepDef {
  * the conservative "only Plan is reachable" state.
  */
 export default function WizardSteps({
-  showCab = false,
   planReady = false,
   transportFullReady = false,
   isWedding = false,
 }: {
-  showCab?: boolean;
   planReady?: boolean;
   transportFullReady?: boolean;
   isWedding?: boolean;
@@ -32,6 +30,7 @@ export default function WizardSteps({
   const step = useAppSelector((s) => s.ui.step);
 
   // A Wedding selection collapses the usual flow into a two-step enquiry journey.
+  // Otherwise the Cab (transport) step is always present.
   const defs: StepDef[] = isWedding
     ? [
         { id: 'plan', label: 'Plan' },
@@ -39,7 +38,7 @@ export default function WizardSteps({
       ]
     : [
         { id: 'plan', label: 'Plan' },
-        ...(showCab ? [{ id: 'cab' as const, label: 'Cab' }] : []),
+        { id: 'cab', label: 'Cab' },
         { id: 'stay', label: 'Hotels' },
         { id: 'shop', label: 'Shopping' },
         { id: 'review', label: 'Review' },

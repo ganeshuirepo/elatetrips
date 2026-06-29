@@ -3,7 +3,6 @@
 import { useAppSelector } from '@/store/hooks';
 import {
   selectPlanReady,
-  selectShowCab,
   selectTransportFullReady,
   selectIsWedding,
 } from '@/store/selectors/planSelectors';
@@ -20,7 +19,6 @@ import WeddingEnquiry from './wedding/WeddingEnquiry';
 /** Planner wizard: step breadcrumb + the active step panel. */
 export default function PlannerView() {
   const step = useAppSelector((s) => s.ui.step);
-  const showCab = useAppSelector(selectShowCab);
   const planReady = useAppSelector(selectPlanReady);
   const transportFullReady = useAppSelector(selectTransportFullReady);
   const isWedding = useAppSelector(selectIsWedding);
@@ -31,7 +29,6 @@ export default function PlannerView() {
       <div className="mx-auto max-w-[1080px] px-6 pt-2">
         {/* Stepper sits on the canvas; each step then owns its card surface(s). */}
         <WizardSteps
-          showCab={showCab}
           planReady={planReady}
           transportFullReady={transportFullReady}
           isWedding={isWedding}

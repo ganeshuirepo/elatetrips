@@ -3,17 +3,11 @@
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setStep } from '@/store/slices/uiSlice';
-import {
-  selectPlanReady,
-  selectShowCab,
-  selectPlanHelp,
-  selectIsWedding,
-} from '@/store/selectors/planSelectors';
+import { selectPlanReady, selectPlanHelp, selectIsWedding } from '@/store/selectors/planSelectors';
 import DestinationSearch from './DestinationSearch';
 import WhenWho from './WhenWho';
 import CelebrationGrid from './CelebrationGrid';
 import CelebrationDays from './CelebrationDays';
-import TransportPicker from './TransportPicker';
 import Card from '@/components/ui/Card';
 import Icon from '@/components/ui/Icon';
 
@@ -21,13 +15,12 @@ import Icon from '@/components/ui/Icon';
 export default function PlanStep() {
   const dispatch = useAppDispatch();
   const planReady = useAppSelector(selectPlanReady);
-  const showCab = useAppSelector(selectShowCab);
   const help = useAppSelector(selectPlanHelp);
   const isWedding = useAppSelector(selectIsWedding);
 
-  // A Wedding selection diverts the journey straight to the enquiry form.
-  const onContinue = () =>
-    dispatch(setStep(isWedding ? 'wedding' : showCab ? 'cab' : 'stay'));
+  // A Wedding selection diverts straight to the enquiry form; otherwise the
+  // Cab step (always shown) is next, where transport is chosen.
+  const onContinue = () => dispatch(setStep(isWedding ? 'wedding' : 'cab'));
 
   return (
     <div className="flex flex-col gap-6">
@@ -47,7 +40,6 @@ export default function PlanStep() {
             <DestinationSearch />
           </div>
           <WhenWho />
-          <TransportPicker />
         </Card>
 
         {/* Right card — celebrations. Wedding picks its date later, in the enquiry form. */}
@@ -71,7 +63,7 @@ export default function PlanStep() {
             onClick={onContinue}
             endIcon={<Icon name="arrow-right" size={18} />}
           >
-            {isWedding ? 'Continue to wedding details' : 'Continue to hotels'}
+            {isWedding ? 'Continue to wedding details' : 'Continue to transport'}
           </Button>
         </div>
       </Card>

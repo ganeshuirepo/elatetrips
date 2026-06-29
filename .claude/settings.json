@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node \"d:\\\\projects\\\\elatetrips-next\\\\_shot.mjs\" \"C:\\\\Users\\\\pvgan\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--projects-elatetrips-next\\\\0808129f-55aa-4ae2-83d3-abd26431b18e\\\\scratchpad\\\\straight.png\")"
+    ]
+  }
+}

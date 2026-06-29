@@ -5,25 +5,40 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setStep } from '@/store/slices/uiSlice';
 import { selectTransportFullReady } from '@/store/selectors/planSelectors';
 import { selectCabHelp } from '@/store/selectors/transportSelectors';
+import TransportPicker from '@/components/planner/plan/TransportPicker';
 import TripTypePicker from './TripTypePicker';
 import VehiclePicker from './VehiclePicker';
 import PickupSearch from './PickupSearch';
 import FareEstimate from './FareEstimate';
 import Icon from '@/components/ui/Icon';
 
-/** Step 2 — cab details: vehicle, pickup (complete trip), and fare estimate. */
+/** Step 2 — transport: own vs cab first, then cab details when a cab is chosen. */
 export default function CabStep() {
   const dispatch = useAppDispatch();
-  const { tTrip } = useAppSelector((s) => s.transport);
+  const { tMode, tTrip } = useAppSelector((s) => s.transport);
   const ready = useAppSelector(selectTransportFullReady);
   const help = useAppSelector(selectCabHelp);
 
   return (
     <div className="flex flex-col gap-6">
-      <TripTypePicker />
-      <VehiclePicker />
-      {tTrip === 'endtoend' && <PickupSearch />}
-      <FareEstimate />
+      {/* Transport choice always comes first. */}
+      <TransportPicker />
+
+      {tMode === 'cab' && (
+        <>
+          <TripTypePicker />
+          <VehiclePicker />
+          {tTrip === 'endtoend' && <PickupSearch />}
+          <FareEstimate />
+        </>
+      )}
+
+      {tMode === 'own' && (
+        <p className="text-muted flex items-center gap-2 text-[13px]">
+          <Icon name="circle-check" size={16} /> No cab needed — we&apos;ll skip transport and head
+          straight to hotels.
+        </p>
+      )}
 
       <div className="border-line flex flex-wrap items-center justify-between gap-3 border-t pt-4">
         <span className="text-muted flex items-center gap-2 text-[13px]">

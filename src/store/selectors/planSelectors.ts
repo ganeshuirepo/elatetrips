@@ -39,8 +39,6 @@ export const selectPickupOk = createSelector(
   (t) => !!t.pickupCity.trim() && !!t.pickupAddr.trim(),
 );
 
-export const selectTransportModeReady = createSelector(selectTransport, (t) => !!t.tMode);
-
 /** Transport fully specified: own transport, or cab with trip + vehicle (+ pickup if complete). */
 export const selectTransportFullReady = createSelector(
   selectTransport,
@@ -50,32 +48,21 @@ export const selectTransportFullReady = createSelector(
     (t.tMode === 'cab' && !!t.tTrip && !!t.tVehicle && (t.tTrip !== 'endtoend' || pickupOk)),
 );
 
-/** Plan step complete enough to advance (all basics + a transport mode chosen). */
-export const selectPlanReady = createSelector(
-  selectAllReady,
-  selectTransportModeReady,
-  (allReady, mode) => allReady && mode,
-);
-
-export const selectShowCab = createSelector(selectTransport, (t) => t.tMode === 'cab');
+/**
+ * Plan step complete enough to advance (destination, dates, celebrations).
+ * Transport now lives entirely on the Cab step, so it no longer gates Plan.
+ */
+export const selectPlanReady = createSelector(selectAllReady, (allReady) => allReady);
 
 /** Wedding occasion chosen — the journey diverts to the enquiry form. */
 export const selectIsWedding = createSelector(selectPlan, (p) => p.celebs.includes('wedding'));
 
 /** Contextual helper text shown beneath the primary action. */
-export const selectPlanHelp = createSelector(
-  selectPlan,
-  selectAllCelebDays,
-  selectTransport,
-  (p, allDays, t) => {
-    if (p.dest.length === 0) return 'Search and pick a destination to continue.';
-    if (!p.start || !p.end) return 'Choose your tour start and end dates.';
-    if (p.celebs.length === 0) return 'Pick at least one celebration to search.';
-    if (!allDays) return 'Choose a day for each celebration you selected.';
-    if (!t.tMode) return "Tell us how you'll get around.";
-    if (p.celebs.includes('wedding'))
-      return 'Everything looks good — continue to wedding details.';
-    if (t.tMode === 'cab') return 'Add your cab details on the next step.';
-    return 'Everything looks good — continue to hotels.';
-  },
-);
+export const selectPlanHelp = createSelector(selectPlan, selectAllCelebDays, (p, allDays) => {
+  if (p.dest.length === 0) return 'Search and pick a destination to continue.';
+  if (!p.start || !p.end) return 'Choose your tour start and end dates.';
+  if (p.celebs.length === 0) return 'Pick at least one celebration to search.';
+  if (!allDays) return 'Choose a day for each celebration you selected.';
+  if (p.celebs.includes('wedding')) return 'Everything looks good — continue to wedding details.';
+  return 'Everything looks good — choose your transport next.';
+});
