@@ -7,13 +7,13 @@ import { SHOPS } from '@/data/shop';
 import ProductGrid from '@/components/shop/ProductGrid';
 import Icon from '@/components/ui/Icon';
 
-/** Step 4 — surprise gifts + medical kits, sharing the cart. */
+/** Step 4 — surprise gifts (medical kits removed for now). */
 export default function ShopStep() {
   const dispatch = useAppDispatch();
 
   return (
     <div className="flex flex-col gap-7">
-      {(['gifts', 'medical'] as const).map((key) => (
+      {(['gifts'] as const).map((key) => (
         <section key={key} className="flex flex-col gap-3">
           <div className="flex flex-col">
             <h3 className="text-primary m-0 font-serif text-xl font-bold">{SHOPS[key].title}</h3>
