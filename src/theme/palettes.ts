@@ -1,12 +1,13 @@
 /**
- * Celebration palettes. Each palette maps 1:1 to a set of CSS custom properties
- * consumed by both Tailwind (via globals.css) and the MUI theme.
- * 'classic' preserves the original ElateTrips styling.
+ * Single luxury palette. The app uses one refined dark-teal + gold identity
+ * (the theme switcher is retired). Tokens map 1:1 to CSS custom properties
+ * consumed by Tailwind (via globals.css), inline styles and the MUI theme.
  *
- * Ported verbatim from `ElateTrips First Page.dc.html` (THEMES).
+ * Design language: deep teal canvas (#071F21), warm gold accents (#dfba6b),
+ * near-black headings on light surfaces, generous serif display type.
  */
 
-export type ThemeId = 'lagoon' | 'sunset' | 'classic' | 'rose' | 'emerald';
+export type ThemeId = 'luxury';
 
 export interface Palette {
   label: string;
@@ -19,80 +20,28 @@ export interface Palette {
   muted: string;
   bg1: string;
   bg2: string;
-  /** Travel photo shown faintly behind the theme gradient (under /public). */
+  /** Optional photo shown faintly behind the canvas; empty = none. */
   bgImage: string;
 }
 
 export const PALETTES: Record<ThemeId, Palette> = {
-  lagoon: {
-    label: 'Lagoon',
-    primary: '#0F7C8B',
-    accent: '#FF7A55',
-    accentInk: '#C9492A',
-    sand: '#E3F1F0',
-    line: '#D1E5E3',
-    ink: '#16242A',
-    muted: '#51666B',
-    bg1: '#F1FAF9',
-    bg2: '#E1F0EE',
-    bgImage: '/assets/bg-lagoon.jpg',
-  },
-  sunset: {
-    label: 'Sunset',
-    primary: '#C0306B',
-    accent: '#F5A524',
-    accentInk: '#B0710F',
-    sand: '#FBE7DA',
-    line: '#F0D8C8',
-    ink: '#2A1C22',
-    muted: '#6B5860',
-    bg1: '#FFF4EC',
-    bg2: '#FCE5D8',
-    bgImage: '/assets/bg-sunset.jpg',
-  },
-  classic: {
-    label: 'Classic',
-    primary: '#1C3C8F',
-    accent: '#E07B2D',
-    accentInk: '#B96212',
-    sand: '#F4ECDD',
-    line: '#E4E0D7',
-    ink: '#1F2433',
-    muted: '#5B6678',
-    bg1: '#FCF6EC',
-    bg2: '#F5EDDF',
-    bgImage: '/assets/bg-classic.jpg',
-  },
-  rose: {
-    label: 'Rose Soirée',
-    primary: '#8E2F57',
-    accent: '#E08AA6',
-    accentInk: '#B05576',
-    sand: '#F6E7EC',
-    line: '#ECDDE2',
-    ink: '#2A1F26',
-    muted: '#6B5A62',
-    bg1: '#FCF2F5',
-    bg2: '#F7E9EE',
-    bgImage: '/assets/bg-rose.jpg',
-  },
-  emerald: {
-    label: 'Emerald Fête',
-    primary: '#1E6B54',
-    accent: '#CDA24A',
-    accentInk: '#8F6E1E',
-    sand: '#E9EFE6',
-    line: '#DCE6D8',
-    ink: '#1E261F',
-    muted: '#566159',
-    bg1: '#F6F9F2',
-    bg2: '#EDF3E8',
-    bgImage: '/assets/bg-emerald.jpg',
+  luxury: {
+    label: 'Luxury',
+    primary: '#0A2A2C', // deep teal — headings / brand on light surfaces
+    accent: '#DFBA6B', // gold — accents, selected states, CTAs
+    accentInk: '#9C7C33', // darker gold — gold text on light surfaces
+    sand: '#F4EEE2', // warm cream — chip / icon tints
+    line: '#E7DECB', // warm hairline border
+    ink: '#10302F', // body text on light surfaces
+    muted: '#5E6E6C', // secondary text
+    bg1: '#071F21', // canvas top
+    bg2: '#051718', // canvas bottom
+    bgImage: '',
   },
 };
 
 export const THEME_IDS = Object.keys(PALETTES) as ThemeId[];
-export const DEFAULT_THEME: ThemeId = 'classic';
+export const DEFAULT_THEME: ThemeId = 'luxury';
 
 /** Map a palette to the CSS custom properties used across the app. */
 export function paletteToCssVars(p: Palette): Record<string, string> {
@@ -106,6 +55,6 @@ export function paletteToCssVars(p: Palette): Record<string, string> {
     '--muted': p.muted,
     '--bg1': p.bg1,
     '--bg2': p.bg2,
-    '--bg-image': `url(${p.bgImage})`,
+    '--bg-image': p.bgImage ? `url(${p.bgImage})` : 'none',
   };
 }

@@ -1,20 +1,21 @@
 import type { Metadata } from 'next';
-import { Playfair_Display, Lato } from 'next/font/google';
+import { Cormorant_Garamond, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import StoreProvider from '@/store/StoreProvider';
 import ThemeRegistry from '@/theme/ThemeRegistry';
 
-const playfair = Playfair_Display({
-  variable: '--font-playfair',
+// Luxury type pairing: Cormorant Garamond (display serif) + Plus Jakarta Sans (UI).
+const cormorant = Cormorant_Garamond({
+  variable: '--font-serif-lux',
   subsets: ['latin'],
-  weight: ['600', '700'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
 });
 
-const lato = Lato({
-  variable: '--font-lato',
+const jakarta = Plus_Jakarta_Sans({
+  variable: '--font-sans-lux',
   subsets: ['latin'],
-  weight: ['400', '700', '900'],
+  weight: ['300', '400', '500', '600', '700', '800'],
   display: 'swap',
 });
 
@@ -29,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${playfair.variable} ${lato.variable} h-full`}>
+    <html lang="en" className={`${cormorant.variable} ${jakarta.variable} h-full`}>
       <body className="min-h-full">
         <StoreProvider>
           <ThemeRegistry>{children}</ThemeRegistry>

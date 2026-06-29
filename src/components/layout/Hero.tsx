@@ -9,17 +9,32 @@ export default function Hero() {
   if (!heroShown || view !== 'planner') return null;
 
   return (
-    <section className="mx-auto flex max-w-[1080px] flex-wrap items-center gap-[13px] px-6 pt-[2px] pb-2">
+    <section className="mx-auto flex max-w-[1080px] flex-col gap-2 px-6 pt-3 pb-4">
       <span
-        className="text-accent-ink inline-block rounded-full px-[11px] py-1 text-[11px] font-black tracking-[0.05em] uppercase"
-        style={{ background: 'color-mix(in srgb, var(--accent) 12%, transparent)' }}
+        className="inline-block w-fit rounded-full px-[12px] py-1 text-[10.5px] font-semibold tracking-[0.18em] uppercase"
+        style={{
+          color: 'var(--accent)',
+          background: 'color-mix(in srgb, var(--accent) 12%, transparent)',
+          border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)',
+        }}
       >
         Celebration-first travel
       </span>
-      <h1 className="text-primary m-0 font-serif text-2xl leading-[1.1] font-bold tracking-[-0.01em]">
-        Plan your perfect celebration trip
+      <h1 className="m-0 font-serif text-[40px] leading-[1.05] font-medium tracking-[0.01em] text-white">
+        Plan your perfect{' '}
+        <span
+          style={{
+            background: 'linear-gradient(90deg, #e9c97f, #c5a059)',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            color: 'transparent',
+          }}
+        >
+          celebration
+        </span>{' '}
+        trip
       </h1>
-      <span className="text-muted text-[13px]">
+      <span className="text-[14px] text-white/65">
         Where, when, who and what — booked together in one go.
       </span>
     </section>

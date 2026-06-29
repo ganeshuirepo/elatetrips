@@ -11,19 +11,20 @@ export function buildMuiTheme(p: Palette): Theme {
   return createTheme({
     cssVariables: true,
     palette: {
-      primary: { main: p.primary, contrastText: '#ffffff' },
-      secondary: { main: p.accent, dark: p.accentInk, contrastText: '#ffffff' },
+      // Gold is the primary interactive colour (CTAs), on near-black text.
+      primary: { main: p.accent, dark: p.accentInk, contrastText: '#08201F' },
+      secondary: { main: p.primary, contrastText: '#ffffff' },
       text: { primary: p.ink, secondary: p.muted },
       divider: p.line,
       background: { default: p.bg1, paper: '#ffffff' },
     },
     shape: { borderRadius: 12 },
     typography: {
-      fontFamily: 'var(--font-lato), system-ui, sans-serif',
-      h1: { fontFamily: 'var(--font-playfair), Georgia, serif', fontWeight: 700 },
-      h2: { fontFamily: 'var(--font-playfair), Georgia, serif', fontWeight: 700 },
-      h3: { fontFamily: 'var(--font-playfair), Georgia, serif', fontWeight: 700 },
-      button: { textTransform: 'none', fontWeight: 700 },
+      fontFamily: 'var(--font-sans-lux), system-ui, sans-serif',
+      h1: { fontFamily: 'var(--font-serif-lux), Georgia, serif', fontWeight: 600 },
+      h2: { fontFamily: 'var(--font-serif-lux), Georgia, serif', fontWeight: 600 },
+      h3: { fontFamily: 'var(--font-serif-lux), Georgia, serif', fontWeight: 600 },
+      button: { textTransform: 'none', fontWeight: 600 },
     },
     components: {
       MuiButton: {
