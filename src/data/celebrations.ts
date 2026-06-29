@@ -58,9 +58,9 @@ export const CELEBRATIONS: Celebration[] = [
     category: 'celebration',
   },
   {
-    id: 'conference',
-    name: 'Conference',
-    icon: 'ti-presentation',
+    id: 'group',
+    name: 'Group',
+    icon: 'ti-users-group',
     img: '/assets/celeb-teamouting.png',
     category: 'celebration',
   },
@@ -104,7 +104,7 @@ export const CELEBRATIONS: Celebration[] = [
  */
 export const CELEB_GROUPS: string[][] = [
   // Celebration (excl. exclusives)
-  ['birthday', 'anniversary', 'honeymoon', 'bachelor', 'milestone', 'culture', 'conference'],
+  ['birthday', 'anniversary', 'honeymoon', 'bachelor', 'milestone', 'culture', 'group'],
   ['family', 'adventure', 'leisure', 'nature'], // Escapes — self-contained
 ];
 
