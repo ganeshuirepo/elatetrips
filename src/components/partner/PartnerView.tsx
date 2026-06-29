@@ -59,9 +59,14 @@ function Section({
 
 const gridStyle = { gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 13rem), 1fr))' };
 
-/** "Partner with us" — hotelier Expression of Interest form. */
-export default function PartnerView() {
+/**
+ * "Partner with us" — hotelier Expression of Interest form. Used both inside the
+ * app shell and as the standalone `/partner` route; `onBack` overrides the
+ * default "return to planner view" behaviour (e.g. to route home instead).
+ */
+export default function PartnerView({ onBack }: { onBack?: () => void } = {}) {
   const dispatch = useAppDispatch();
+  const back = onBack ?? (() => dispatch(setView('planner')));
   const [f, setF] = useState<PartnerForm>(initialForm);
   const [showErrors, setShowErrors] = useState(false);
   const [result, setResult] = useState<PartnerEoi | null>(null);
@@ -130,7 +135,7 @@ export default function PartnerView() {
               <Button variant="contained" color="primary" onClick={reset}>
                 Submit another property
               </Button>
-              <Button variant="outlined" color="primary" onClick={() => dispatch(setView('planner'))}>
+              <Button variant="outlined" color="primary" onClick={back}>
                 Back to planner
               </Button>
             </div>
@@ -145,7 +150,7 @@ export default function PartnerView() {
     <div id="eoi-form" className="mx-auto flex max-w-[860px] flex-col gap-4 px-6 pt-4 pb-16">
       <button
         type="button"
-        onClick={() => dispatch(setView('planner'))}
+        onClick={back}
         className="text-primary flex w-fit items-center gap-1.5 border-none bg-transparent p-0 text-[13px] font-bold"
       >
         <Icon name="arrow-left" size={16} /> Back to planner
