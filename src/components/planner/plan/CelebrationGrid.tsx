@@ -31,7 +31,7 @@ export default function CelebrationGrid() {
         style={{ opacity: disabled ? 0.45 : 1 }}
       >
         <span
-          className="flex h-[72px] w-[72px] items-center justify-center rounded-full text-[34px]"
+          className="flex h-[64px] w-[64px] items-center justify-center rounded-full text-[30px]"
           style={{
             background: selected ? 'var(--accent)' : TILE_ICON_FILL,
             color: selected ? '#fff' : 'var(--primary)',
