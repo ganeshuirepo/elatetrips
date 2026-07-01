@@ -75,6 +75,10 @@ const hotelSlice = createSlice({
     closeHotelDetail(state) {
       state.hOpen = '';
     },
+    /** Expand/collapse a listing inline (only one open at a time). */
+    toggleHotelExpand(state, action: PayloadAction<string>) {
+      state.hOpen = state.hOpen === action.payload ? '' : action.payload;
+    },
     selectRoom(state, action: PayloadAction<{ id: string; room: string }>) {
       state.hHotel = action.payload.id;
       state.hRoom = action.payload.room;
@@ -93,6 +97,7 @@ export const {
   selectHotel,
   openHotelDetail,
   closeHotelDetail,
+  toggleHotelExpand,
   selectRoom,
   toggleDetailPanel,
 } = hotelSlice.actions;

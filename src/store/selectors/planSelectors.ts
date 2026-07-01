@@ -19,11 +19,12 @@ export const selectPage1Ready = createSelector(
   (p) => p.dest.length > 0 && !!p.start && !!p.end,
 );
 
-/** Pickup city + address both present (required for a complete trip). */
-export const selectPickupOk = createSelector(
-  selectTransport,
-  (t) => !!t.pickupCity.trim() && !!t.pickupAddr.trim(),
-);
+/**
+ * A pickup location has been chosen. Mirrors PickupSearch's own `chosen` flag
+ * (address present): some Photon / geolocation results carry an address but no
+ * separate city, which should still count as a valid pickup.
+ */
+export const selectPickupOk = createSelector(selectTransport, (t) => !!t.pickupAddr.trim());
 
 /** Transport fully specified: own transport, or cab with trip + vehicle (+ pickup if complete). */
 export const selectTransportFullReady = createSelector(
@@ -35,14 +36,23 @@ export const selectTransportFullReady = createSelector(
 );
 
 /**
- * Plan step complete enough to advance to hotels. The Plan step now also carries
- * the transport question, so a full transport choice is required here.
+ * Plan STEP ready — its own fields only (destination, dates, transport).
+ * Celebration is now chosen *after* Plan, so it is not gated here.
+ */
+export const selectPlanStepReady = createSelector(
+  selectPage1Ready,
+  selectTransportFullReady,
+  (page1, transport) => page1 && transport,
+);
+
+/**
+ * Plan + celebration both complete — gates everything downstream of the
+ * Celebration step (Services, Hotels, Shopping, Review).
  */
 export const selectPlanReady = createSelector(
-  selectPage1Ready,
+  selectPlanStepReady,
   selectCelebReady,
-  selectTransportFullReady,
-  (page1, celeb, transport) => page1 && celeb && transport,
+  (planStep, celeb) => planStep && celeb,
 );
 
 /** Contextual helper text shown beneath the primary action on the Plan step. */
@@ -52,7 +62,7 @@ export const selectPlanHelp = createSelector(selectPlan, selectTransport, (p, t)
   if (!t.tMode) return "Tell us how you'll get around.";
   if (t.tMode === 'cab' && !t.tTrip) return 'Choose a trip type for your cab.';
   if (t.tMode === 'cab' && !t.tVehicle) return 'Pick a vehicle type for your cab.';
-  if (t.tMode === 'cab' && t.tTrip === 'endtoend' && !(t.pickupCity.trim() && t.pickupAddr.trim()))
+  if (t.tMode === 'cab' && t.tTrip === 'endtoend' && !t.pickupAddr.trim())
     return 'Search or share your pickup location.';
-  return 'Everything looks good — continue to hotels.';
+  return 'Everything looks good — next, choose your celebration.';
 });

@@ -27,8 +27,8 @@ export default function DestinationSearch() {
   const hasDest = dest.length > 0;
 
   return (
-    <div data-dest ref={ref} className="relative">
-      <div className="relative">
+    <div data-dest ref={ref} className="relative h-full">
+      <div className="relative h-full">
         <span className="text-muted pointer-events-none absolute top-1/2 left-[15px] -translate-y-1/2 text-[19px]">
           <Icon name="map-pin" />
         </span>
@@ -40,7 +40,7 @@ export default function DestinationSearch() {
             dispatch(setDestQuery(e.target.value));
             dispatch(openOnly('destOpen'));
           }}
-          className="text-ink w-full rounded-[14px] border-[1.5px] bg-white py-[14px] pr-[42px] pl-[44px] text-[15px] font-semibold outline-none"
+          className="text-ink h-full w-full rounded-[14px] border-[1.5px] bg-white py-[14px] pr-[42px] pl-[44px] text-[15px] font-semibold outline-none"
           style={{
             borderColor: hasDest ? 'var(--primary)' : 'var(--line)',
             boxShadow: open

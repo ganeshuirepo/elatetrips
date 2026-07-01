@@ -41,19 +41,31 @@ export default function Header() {
       }
     >
       <div className="mx-auto flex max-w-[1080px] flex-wrap items-center justify-between gap-3 px-6 py-[18px]">
-      <button
-        type="button"
-        onClick={() => dispatch(setView('planner'))}
-        className="cursor-pointer border-none bg-transparent p-0 font-serif text-[26px] font-medium tracking-wide"
-        style={{
-          background: 'linear-gradient(90deg, #e9c97f, #d4a94f, #e9c97f)',
-          WebkitBackgroundClip: 'text',
-          backgroundClip: 'text',
-          color: 'transparent',
-        }}
-      >
-        ElateTrips
-      </button>
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={() => dispatch(setView('planner'))}
+          className="cursor-pointer border-none bg-transparent p-0 font-serif text-[26px] font-medium tracking-wide"
+          style={{
+            background: 'linear-gradient(90deg, #e9c97f, #d4a94f, #e9c97f)',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            color: 'transparent',
+          }}
+        >
+          ElateTrips
+        </button>
+        <span
+          className="hidden text-[10.5px] font-semibold tracking-[0.18em] uppercase sm:inline-block"
+          style={{
+            color: 'var(--accent)',
+            borderLeft: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)',
+            paddingLeft: '12px',
+          }}
+        >
+          Celebration-first travel
+        </span>
+      </div>
 
       <div className="flex flex-wrap items-center gap-[20px]">
         <nav className="flex flex-wrap items-center gap-[26px]">

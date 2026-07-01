@@ -18,27 +18,29 @@ interface StepDef {
  * the conservative "only Plan is reachable" state.
  */
 export default function WizardSteps({
-  celebReady = false,
+  planStepReady = false,
   planReady = false,
 }: {
-  celebReady?: boolean;
+  planStepReady?: boolean;
   planReady?: boolean;
 }) {
   const dispatch = useAppDispatch();
   const step = useAppSelector((s) => s.ui.step);
 
-  // Celebration opens the flow; Plan now folds in the transport/cab questions.
+  // Plan opens the flow (where, when, transport); Celebration follows.
   const defs: StepDef[] = [
-    { id: 'celebration', label: 'Celebration' },
     { id: 'plan', label: 'Plan' },
+    { id: 'celebration', label: 'Celebration' },
+    { id: 'services', label: 'Services' },
     { id: 'stay', label: 'Hotels' },
     { id: 'shop', label: 'Shopping' },
     { id: 'review', label: 'Review' },
   ];
 
   const reach: Record<WizardStep, boolean> = {
-    celebration: true,
-    plan: celebReady,
+    plan: true,
+    celebration: planStepReady,
+    services: planReady,
     stay: planReady,
     shop: planReady,
     review: planReady,

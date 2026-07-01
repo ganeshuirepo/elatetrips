@@ -20,7 +20,7 @@ export default function VehiclePicker() {
 
   return (
     <div className="flex flex-col gap-3">
-      <span className="text-accent-ink text-[11px] font-black tracking-[0.06em] uppercase">
+      <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
         Pick your vehicle ({pax} {pax === 1 ? 'traveller' : 'travellers'})
       </span>
       <div
@@ -52,7 +52,7 @@ export default function VehiclePicker() {
       </div>
 
       {tTrip === 'local' && (
-        <label className="text-ink flex items-center gap-3 text-[13px] font-semibold">
+        <label className="flex items-center gap-3 text-[13px] font-semibold text-white/80">
           Local-trip days
           <input
             type="number"
@@ -60,9 +60,9 @@ export default function VehiclePicker() {
             max={maxDays}
             value={Math.min(tDays, maxDays)}
             onChange={(e) => dispatch(setTDays(Math.min(maxDays, Number(e.target.value) || 1)))}
-            className="border-line w-[80px] rounded-[10px] border px-3 py-2 text-[13px] outline-none"
+            className="text-ink w-[80px] rounded-[10px] border border-[#DAD6CC] bg-white px-3 py-2 text-[13px] outline-none"
           />
-          <span className="text-muted text-[12px]">of {maxDays} tour days</span>
+          <span className="text-[12px] text-white/50">of {maxDays} tour days</span>
         </label>
       )}
     </div>

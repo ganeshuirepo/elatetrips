@@ -57,10 +57,10 @@ export default function TransportPicker() {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-baseline justify-between gap-2">
-        <span className="text-accent-ink text-[11px] font-black tracking-[0.06em] uppercase">
+        <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
           Transport
         </span>
-        <span className="text-muted text-[12.5px]">How you&apos;ll get around</span>
+        <span className="text-[12.5px] text-white/55">How you&apos;ll get around</span>
       </div>
       <div className="flex flex-wrap gap-2">
         {MODES.map((m) =>

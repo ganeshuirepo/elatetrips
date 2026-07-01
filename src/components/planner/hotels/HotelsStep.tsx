@@ -1,29 +1,21 @@
 'use client';
 
 import Button from '@mui/material/Button';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { useAppDispatch } from '@/store/hooks';
 import { setStep } from '@/store/slices/uiSlice';
 import HotelFilters from './HotelFilters';
 import HotelList from './HotelList';
-import HotelDetail from './HotelDetail';
 import LocalGuideNote from './LocalGuideNote';
 import CostSummary from './CostSummary';
 import Card from '@/components/ui/Card';
 import Icon from '@/components/ui/Icon';
 
-/** Step 3 — hotels, packages, activities and the running cost summary. */
+/**
+ * Step 3 — hotels. Listing and detail are now one screen: each stay expands
+ * inline (rooms, packages, activities), so there is no separate detail page.
+ */
 export default function HotelsStep() {
   const dispatch = useAppDispatch();
-  const detailOpen = useAppSelector((s) => !!s.hotel.hOpen);
-
-  if (detailOpen) {
-    return (
-      <Card className="flex flex-col gap-6">
-        <HotelDetail />
-        <ContinueBar back={() => dispatch(setStep('plan'))} />
-      </Card>
-    );
-  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -41,7 +33,7 @@ export default function HotelsStep() {
       <Card className="flex flex-col gap-5">
         <LocalGuideNote />
         <CostSummary />
-        <ContinueBar back={() => dispatch(setStep('plan'))} />
+        <ContinueBar back={() => dispatch(setStep('services'))} />
       </Card>
     </div>
   );

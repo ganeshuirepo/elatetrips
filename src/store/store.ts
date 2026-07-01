@@ -3,6 +3,7 @@ import uiReducer from './slices/uiSlice';
 import cartReducer from './slices/cartSlice';
 import planReducer from './slices/planSlice';
 import transportReducer from './slices/transportSlice';
+import servicesReducer from './slices/servicesSlice';
 import hotelReducer from './slices/hotelSlice';
 import addonsReducer from './slices/addonsSlice';
 import reviewReducer from './slices/reviewSlice';
@@ -23,6 +24,7 @@ export const makeStore = () =>
       cart: cartReducer,
       plan: planReducer,
       transport: transportReducer,
+      services: servicesReducer,
       hotel: hotelReducer,
       addons: addonsReducer,
       review: reviewReducer,

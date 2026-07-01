@@ -52,12 +52,15 @@ export default function CelebrationGrid({ onPick }: { onPick?: (id: Celebration[
   };
 
   return (
-    <div className="flex flex-col gap-5">
+    // Two parallel sections side by side: Celebration (4 cols) | Escapes (2 cols).
+    // The 4:2 flex ratio keeps tiles the same size across both sections.
+    <div className="flex items-start gap-10">
       {CELEB_CATEGORY_META.map((cat) => {
         const items = CELEBRATIONS.filter((c) => c.category === cat.id);
         if (items.length === 0) return null;
+        const cols = cat.id === 'rejuvenate' ? 2 : 4;
         return (
-          <div key={cat.id} className="flex flex-col gap-3">
+          <div key={cat.id} className="flex min-w-0 flex-col gap-3" style={{ flex: cols }}>
             <div className="flex items-baseline justify-between gap-2">
               <span
                 className="text-[11px] font-black tracking-[0.06em] uppercase"
@@ -67,7 +70,10 @@ export default function CelebrationGrid({ onPick }: { onPick?: (id: Celebration[
               </span>
               <span className="text-[12.5px] text-white/55">{cat.sub}</span>
             </div>
-            <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(6, minmax(0, 1fr))' }}>
+            <div
+              className="grid gap-3"
+              style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
+            >
               {items.map(tile)}
             </div>
           </div>

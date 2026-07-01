@@ -35,7 +35,7 @@ export default function PickupSearch() {
 
   return (
     <div data-pickup ref={ref} className="flex flex-col gap-2">
-      <span className="text-accent-ink text-[11px] font-black tracking-[0.06em] uppercase">
+      <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
         Pickup location
       </span>
       <div className="relative">
@@ -104,12 +104,18 @@ export default function PickupSearch() {
           onClick={locate}
           startIcon={<Icon name="current-location" size={16} />}
           disabled={geoStatus === 'locating'}
+          sx={{
+            color: 'var(--accent)',
+            borderColor: 'color-mix(in srgb, var(--accent) 45%, transparent)',
+            '&:hover': {
+              borderColor: 'var(--accent)',
+              background: 'color-mix(in srgb, var(--accent) 10%, transparent)',
+            },
+          }}
         >
           {geoStatus === 'locating' ? 'Locating…' : 'Use my location'}
         </Button>
-        {GEO_MSG[geoStatus] && (
-          <span className="text-accent-ink text-[12px]">{GEO_MSG[geoStatus]}</span>
-        )}
+        {GEO_MSG[geoStatus] && <span className="text-accent text-[12px]">{GEO_MSG[geoStatus]}</span>}
       </div>
     </div>
   );

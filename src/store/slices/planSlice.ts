@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { TRAVELLERS_MAX, MAX_CELEBRATIONS_DEFAULT } from '@/data/constants';
+import { TRAVELLERS_MAX, ROOMS_MAX, MAX_CELEBRATIONS_DEFAULT } from '@/data/constants';
 import { celebComboValid } from '@/domain/rules';
 
 /** Step 1 trip basics: where, when, who, and which celebrations. */
@@ -11,6 +11,7 @@ export interface PlanState {
   end: string;
   adults: number;
   children: number;
+  rooms: number;
   celebs: string[];
   celebDays: Record<string, string>;
   celebAge: Record<string, string>;
@@ -26,6 +27,7 @@ const initialState: PlanState = {
   end: '',
   adults: 2,
   children: 0,
+  rooms: 1,
   celebs: [],
   celebDays: {},
   celebAge: {},
@@ -74,6 +76,9 @@ const planSlice = createSlice({
       const min = key === 'adults' ? 1 : 0;
       state[key] = Math.max(min, Math.min(TRAVELLERS_MAX, state[key] + delta));
     },
+    stepRooms(state, action: PayloadAction<number>) {
+      state.rooms = Math.max(1, Math.min(ROOMS_MAX, state.rooms + action.payload));
+    },
     toggleCeleb(state, action: PayloadAction<string>) {
       const id = action.payload;
       if (state.celebs.includes(id)) {
@@ -103,6 +108,7 @@ export const {
   pickDay,
   clearDates,
   stepTravellers,
+  stepRooms,
   toggleCeleb,
   setCelebDay,
   setCelebAge,
