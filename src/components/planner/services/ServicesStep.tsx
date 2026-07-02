@@ -106,7 +106,7 @@ export default function ServicesStep() {
       {/* Heading */}
       <div className="flex flex-col gap-2">
         <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
-          Celebration services
+          Celebration surprises
         </span>
         <span className="text-[13px] text-white/60">
           For each occasion, pick a day from your tour, a time, and the touches you&apos;d like.

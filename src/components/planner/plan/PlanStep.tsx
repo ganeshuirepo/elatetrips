@@ -79,7 +79,7 @@ export default function PlanStep() {
               '&.Mui-disabled': { background: 'rgba(255,255,255,.12)', color: 'rgba(255,255,255,.4)' },
             }}
           >
-            Continue to services
+            Continue to surprises
           </Button>
         </div>
       </div>
