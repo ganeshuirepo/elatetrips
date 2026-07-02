@@ -29,6 +29,7 @@ import {
   type ServiceOption,
 } from '@/data/services';
 import { CELEBRATIONS } from '@/data/celebrations';
+import { GOLD_BUTTON } from '@/components/planner/goldButton';
 import Icon from '@/components/ui/Icon';
 
 const NAME_BY_ID = Object.fromEntries(CELEBRATIONS.map((c) => [c.id, c.name]));
@@ -245,9 +246,9 @@ export default function ServicesStep() {
         />
       </Section>
 
-      {/* Action bar — sticky so Continue is always in reach */}
+      {/* Action bar — sticky; Back left, Continue right, matching styles */}
       <div
-        className="sticky bottom-0 z-30 flex flex-wrap items-center justify-between gap-3 border-t border-white/15 py-3 backdrop-blur-md"
+        className="sticky bottom-0 z-30 flex flex-col gap-2 border-t border-white/15 py-3 backdrop-blur-md"
         style={{ background: 'color-mix(in srgb, var(--bg2) 82%, transparent)' }}
       >
         <span className="flex items-center gap-2 text-[13px] text-white/65">
@@ -256,11 +257,13 @@ export default function ServicesStep() {
             ? 'These help us shortlist the right hotels & packages.'
             : 'Answer or skip each section above to continue.'}
         </span>
-        <div className="flex gap-2">
+        <div className="flex w-full items-center justify-between gap-3">
           <Button
-            variant="text"
+            variant="contained"
+            size="large"
             onClick={() => dispatch(setStep('plan'))}
-            sx={{ color: 'rgba(255,255,255,.7)' }}
+            startIcon={<Icon name="arrow-left" size={18} />}
+            sx={GOLD_BUTTON}
           >
             Back
           </Button>
@@ -270,17 +273,7 @@ export default function ServicesStep() {
             disabled={!canContinue}
             onClick={() => dispatch(setStep('stay'))}
             endIcon={<Icon name="arrow-right" size={18} />}
-            sx={{
-              background: 'linear-gradient(180deg,#e9c97f,#d4a94f)',
-              color: '#08201f',
-              fontWeight: 800,
-              boxShadow: 'none',
-              '&:hover': {
-                background: 'linear-gradient(180deg,#edd089,#d9af55)',
-                boxShadow: 'none',
-              },
-              '&.Mui-disabled': { background: 'rgba(255,255,255,.12)', color: 'rgba(255,255,255,.4)' },
-            }}
+            sx={GOLD_BUTTON}
           >
             Continue to hotels
           </Button>

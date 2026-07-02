@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setStep } from '@/store/slices/uiSlice';
 import { selectPlanStepReady, selectPlanHelp } from '@/store/selectors/planSelectors';
+import { GOLD_BUTTON } from '@/components/planner/goldButton';
 import DestinationSearch from './DestinationSearch';
 import DatesField from './DatesField';
 import CelebrationGrid from './CelebrationGrid';
@@ -70,14 +71,7 @@ export default function PlanStep() {
             disabled={!stepReady}
             onClick={() => dispatch(setStep('services'))}
             endIcon={<Icon name="arrow-right" size={18} />}
-            sx={{
-              background: 'linear-gradient(180deg,#e9c97f,#d4a94f)',
-              color: '#08201f',
-              fontWeight: 800,
-              boxShadow: 'none',
-              '&:hover': { background: 'linear-gradient(180deg,#edd089,#d9af55)', boxShadow: 'none' },
-              '&.Mui-disabled': { background: 'rgba(255,255,255,.12)', color: 'rgba(255,255,255,.4)' },
-            }}
+            sx={GOLD_BUTTON}
           >
             Continue to surprises
           </Button>

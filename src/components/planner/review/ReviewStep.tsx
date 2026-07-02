@@ -111,8 +111,14 @@ export default function ReviewStep() {
           </>
         )}
 
-        <div className="border-line sticky bottom-0 z-30 flex flex-wrap items-center justify-between gap-3 border-t bg-white py-3">
-          <Button variant="text" color="primary" onClick={() => dispatch(setStep('stay'))}>
+        <div className="border-line sticky bottom-0 z-30 flex items-center justify-between gap-3 border-t bg-white py-3">
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={() => dispatch(setStep('stay'))}
+            startIcon={<Icon name="arrow-left" size={18} />}
+          >
             Back
           </Button>
           <Button

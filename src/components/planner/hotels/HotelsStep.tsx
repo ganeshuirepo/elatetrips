@@ -83,12 +83,18 @@ function ContinueBar({ back }: { back: () => void }) {
   const help = useAppSelector(selectTransportHelp);
 
   return (
-    <div className="border-line flex flex-wrap items-center justify-between gap-3 border-t pt-4">
+    <div className="border-line flex flex-col gap-2 border-t pt-4">
       <span className="text-muted flex items-center gap-2 text-[13px]">
         <Icon name="info-circle" size={16} /> {help}
       </span>
-      <div className="flex gap-2">
-        <Button variant="text" color="primary" onClick={back}>
+      <div className="flex w-full items-center justify-between gap-3">
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={back}
+          startIcon={<Icon name="arrow-left" size={18} />}
+        >
           Back
         </Button>
         <Button
