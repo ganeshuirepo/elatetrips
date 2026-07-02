@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setStep } from '@/store/slices/uiSlice';
@@ -18,21 +19,51 @@ import Icon from '@/components/ui/Icon';
  */
 export default function HotelsStep() {
   const dispatch = useAppDispatch();
+  // Filters are always visible on desktop; on phones they open via the icon.
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   return (
     <div className="flex flex-col gap-6">
       {/* Transport sits on the canvas like the Plan widgets do. */}
       <TransportSection />
 
-      {/* Filters + listing — two separate cards, flex-wrap reflow, no breakpoints */}
+      {/* Filters + listing — two separate cards, flex-wrap reflow */}
       <div className="flex flex-wrap gap-6">
-        <Card className="min-w-[15rem] flex-[1_1_15rem] self-start">
-          <HotelFilters />
-        </Card>
+        <div
+          id="hotel-filters"
+          className={`min-w-[15rem] flex-[1_1_15rem] self-start ${filtersOpen ? '' : 'hidden'} md:block`}
+        >
+          <Card>
+            <HotelFilters />
+          </Card>
+        </div>
         <Card className="min-w-[18rem] flex-[3_1_22rem]">
-          {/* Rooms sits atop the listing; defaults to travellers ÷ 2 per room. */}
-          <div className="mb-4">
+          <div className="mb-4 flex items-end justify-between gap-3">
             <RoomsField />
+            {/* Filter toggle — phones only */}
+            <button
+              type="button"
+              aria-label="Toggle filters"
+              aria-expanded={filtersOpen}
+              onClick={() =>
+                setFiltersOpen((o) => {
+                  const next = !o;
+                  if (next)
+                    setTimeout(
+                      () =>
+                        document
+                          .getElementById('hotel-filters')
+                          ?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+                      60,
+                    );
+                  return next;
+                })
+              }
+              className="border-line text-ink flex cursor-pointer items-center gap-1.5 rounded-[12px] border-[1.5px] bg-white px-3 py-2.5 text-[13px] font-bold md:hidden"
+              style={filtersOpen ? { borderColor: 'var(--primary)', color: 'var(--primary)' } : {}}
+            >
+              <Icon name="adjustments-horizontal" size={17} /> Filters
+            </button>
           </div>
           <HotelList />
         </Card>
