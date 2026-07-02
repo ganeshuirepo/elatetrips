@@ -499,7 +499,8 @@ function OccasionTiles({
           ))}
         </div>
       )}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+      {/* One full-width tile per row on phones; 3-up from tablet width. */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
         {tiles.map(({ catId, option }) => (
           <PackageTile
             key={`${catId}:${option.id}`}
