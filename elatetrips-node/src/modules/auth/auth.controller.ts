@@ -6,10 +6,13 @@ export class AuthController {
   constructor(private readonly service: AuthService) {}
 
   requestOtp = async (req: Request, res: Response): Promise<Response> =>
-    ok(res, this.service.requestOtp(req.body.phone));
+    ok(res, await this.service.requestOtp(req.body.identifier));
 
   verifyOtp = async (req: Request, res: Response): Promise<Response> =>
-    ok(res, await this.service.verifyOtp(req.body.phone, req.body.otp));
+    ok(res, await this.service.verifyOtp(req.body.identifier, req.body.otp));
+
+  resendOtp = async (req: Request, res: Response): Promise<Response> =>
+    ok(res, await this.service.resendOtp(req.body.identifier));
 
   signup = async (req: Request, res: Response): Promise<Response> => {
     const { verifyVia, ...data } = req.body;

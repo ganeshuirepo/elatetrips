@@ -5,35 +5,44 @@ describe('celebComboValid', () => {
   it('allows zero or one occasion', () => {
     expect(celebComboValid([])).toBe(true);
     expect(celebComboValid(['birthday'])).toBe(true);
+    expect(celebComboValid(['honeymoon'])).toBe(true);
     expect(celebComboValid(['wedding'])).toBe(true);
-    expect(celebComboValid(['teamouting'])).toBe(true);
   });
 
-  it('allows combinations within the Celebration group', () => {
+  it('combines Birthday and Anniversary freely', () => {
     expect(celebComboValid(['birthday', 'anniversary'])).toBe(true);
-    expect(celebComboValid(['birthday', 'anniversary', 'honeymoon', 'bachelor'])).toBe(true);
   });
 
-  it('allows combinations within the Escapes group', () => {
+  it('treats Honeymoon, Bachelor, Proposal and Group as solo among celebrations', () => {
+    expect(celebComboValid(['honeymoon', 'birthday'])).toBe(false);
+    expect(celebComboValid(['bachelor', 'anniversary'])).toBe(false);
+    expect(celebComboValid(['teamouting', 'birthday'])).toBe(false);
+    expect(celebComboValid(['group', 'birthday'])).toBe(false);
+    expect(celebComboValid(['honeymoon', 'bachelor'])).toBe(false); // two solos
+  });
+
+  it('lets any celebration add escapes', () => {
+    expect(celebComboValid(['birthday', 'adventure'])).toBe(true);
+    expect(celebComboValid(['honeymoon', 'family'])).toBe(true);
+    expect(celebComboValid(['teamouting', 'nature'])).toBe(true);
+    expect(celebComboValid(['group', 'adventure'])).toBe(true);
+    expect(celebComboValid(['birthday', 'anniversary', 'family'])).toBe(true);
+    expect(celebComboValid(['honeymoon', 'family', 'adventure'])).toBe(true);
+  });
+
+  it('places no restriction on escape combinations', () => {
     expect(celebComboValid(['family', 'adventure'])).toBe(true);
-    expect(celebComboValid(['family', 'adventure', 'leisure', 'nature'])).toBe(true);
+    expect(celebComboValid(['family', 'adventure', 'nature'])).toBe(true);
   });
 
-  it('never combines Escapes with Celebration items', () => {
-    expect(celebComboValid(['birthday', 'adventure'])).toBe(false);
-    expect(celebComboValid(['anniversary', 'family'])).toBe(false);
-    expect(celebComboValid(['honeymoon', 'nature'])).toBe(false);
+  it('rejects a solo celebration mixed with another celebration, even alongside escapes', () => {
+    expect(celebComboValid(['honeymoon', 'adventure', 'birthday'])).toBe(false);
   });
 
-  it('treats Wedding as exclusive', () => {
+  it('treats Wedding as exclusive (its own flow)', () => {
     expect(celebComboValid(['wedding', 'honeymoon'])).toBe(false);
     expect(celebComboValid(['wedding', 'anniversary'])).toBe(false);
     expect(celebComboValid(['wedding', 'family'])).toBe(false);
-  });
-
-  it('treats Proposal (teamouting) as exclusive', () => {
-    expect(celebComboValid(['teamouting', 'birthday'])).toBe(false);
-    expect(celebComboValid(['teamouting', 'family'])).toBe(false);
   });
 });
 

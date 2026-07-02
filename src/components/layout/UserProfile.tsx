@@ -14,6 +14,12 @@ const fmtBooked = (iso: string) =>
 
 type Tab = 'profile' | 'trips';
 
+const PAYMENT_LABEL: Record<string, string> = {
+  upi: 'UPI',
+  card: 'Card',
+  netbanking: 'Net banking',
+};
+
 /** Top-bar account menu: login/signup, profile details, and the user's trips. */
 export default function UserProfile() {
   const dispatch = useAppDispatch();
@@ -25,6 +31,7 @@ export default function UserProfile() {
 
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<Tab>('profile');
+  const [detailsFor, setDetailsFor] = useState<string | null>(null);
   const ref = useRef<HTMLDivElement>(null);
   useOutsideClick(ref, () => setOpen(false), open);
 
@@ -126,30 +133,95 @@ export default function UserProfile() {
                   No trips on this account yet. Confirm a plan to see it here.
                 </p>
               ) : (
-                <div className="flex max-h-[300px] flex-col gap-2 overflow-y-auto">
-                  {orders.map((o) => (
-                    <div key={o.tripId} className="border-line rounded-[12px] border p-3">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-ink flex items-center gap-1.5 text-[12.5px] font-extrabold">
-                          <Icon name="ticket" size={14} style={{ color: 'var(--accent-ink)' }} />
-                          {o.tripId}
-                        </span>
-                        <span className="rounded-full bg-[#E6F4EA] px-2 py-0.5 text-[10.5px] font-bold text-[#1E7A3A]">
-                          Confirmed
-                        </span>
+                <div className="flex max-h-[340px] flex-col gap-2 overflow-y-auto">
+                  {orders.map((o) => {
+                    const expanded = detailsFor === o.tripId;
+                    return (
+                      <div key={o.tripId} className="border-line rounded-[12px] border p-3">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-ink flex items-center gap-1.5 text-[12.5px] font-extrabold">
+                            <Icon name="ticket" size={14} style={{ color: 'var(--accent-ink)' }} />
+                            {o.tripId}
+                          </span>
+                          <span className="rounded-full bg-[#E6F4EA] px-2 py-0.5 text-[10.5px] font-bold text-[#1E7A3A]">
+                            Confirmed
+                          </span>
+                        </div>
+                        <div className="text-muted mt-1 flex flex-col gap-0.5 text-[12px]">
+                          <span className="text-ink font-semibold">{o.summary.destination}</span>
+                          <span>{o.summary.dates}</span>
+                          <span>{o.summary.hotelLabel}</span>
+                          <span>{o.summary.travellers}</span>
+                        </div>
+
+                        {expanded && (
+                          <div className="border-line mt-2 flex flex-col gap-1.5 border-t pt-2 text-[12px]">
+                            {(o.summary.items ?? []).map((it, i) => (
+                              <div key={i} className="flex items-baseline justify-between gap-2">
+                                <span className="text-ink min-w-0">
+                                  <span className="font-semibold">{it.label}</span>
+                                  {it.detail && <span className="text-muted"> · {it.detail}</span>}
+                                </span>
+                                <span className="text-ink font-bold whitespace-nowrap">
+                                  {inr(it.amount)}
+                                </span>
+                              </div>
+                            ))}
+                            {o.summary.packages.map((p) => (
+                              <span key={p.celeb} className="text-ink">
+                                <span className="font-semibold">{p.celeb}:</span>{' '}
+                                {p.names.join(', ')}
+                              </span>
+                            ))}
+                            {o.summary.adventures.length > 0 && (
+                              <span className="text-ink">
+                                <span className="font-semibold">Adventures:</span>{' '}
+                                {o.summary.adventures.join(', ')}
+                              </span>
+                            )}
+                            {o.summary.experiences.length > 0 && (
+                              <span className="text-ink">
+                                <span className="font-semibold">Experiences:</span>{' '}
+                                {o.summary.experiences.join(', ')}
+                              </span>
+                            )}
+                            <span className="text-ink">
+                              <span className="font-semibold">Transport:</span>{' '}
+                              {o.summary.transportLabel}
+                            </span>
+                            {(o.discount ?? 0) > 0 && (
+                              <span className="font-semibold text-[#1E7A3A]">
+                                Coupon {o.coupon}: −{inr(o.discount ?? 0)}
+                              </span>
+                            )}
+                            {o.payment && (
+                              <span className="text-muted">
+                                Paid via {PAYMENT_LABEL[o.payment.method] ?? o.payment.method} ·{' '}
+                                {o.payment.txnId}
+                              </span>
+                            )}
+                          </div>
+                        )}
+
+                        <div className="mt-2 flex items-center justify-between">
+                          <button
+                            type="button"
+                            onClick={() => setDetailsFor(expanded ? null : o.tripId)}
+                            className="text-primary flex cursor-pointer items-center gap-1 border-none bg-transparent p-0 text-[11.5px] font-bold"
+                          >
+                            {expanded ? 'Hide details' : 'Details'}
+                            <Icon name={expanded ? 'chevron-up' : 'chevron-down'} size={13} />
+                          </button>
+                          <span className="text-muted text-[11px]">
+                            Booked {fmtBooked(o.createdAt)}
+                          </span>
+                          <span className="text-accent-ink text-[13px] font-extrabold">
+                            {inr(o.total)}
+                          </span>
+                        </div>
                       </div>
-                      <div className="text-muted mt-1 flex flex-col gap-0.5 text-[12px]">
-                        <span className="text-ink font-semibold">{o.summary.destination}</span>
-                        <span>{o.summary.dates}</span>
-                        <span>{o.summary.hotelLabel}</span>
-                        <span>{o.summary.travellers}</span>
-                      </div>
-                      <div className="mt-2 flex items-center justify-between">
-                        <span className="text-muted text-[11px]">Booked {fmtBooked(o.createdAt)}</span>
-                        <span className="text-accent-ink text-[13px] font-extrabold">{inr(o.total)}</span>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
 

@@ -26,6 +26,7 @@ import { OrderController } from './modules/orders/order.controller';
 
 import { JwtTokenService } from './modules/auth/token.service';
 import { InMemoryOtpStore } from './modules/auth/otp.store';
+import { buildOtpSender } from './modules/auth/otp.sender';
 import { BcryptPasswordHasher } from './modules/auth/password.service';
 import { AuthService } from './modules/auth/auth.service';
 import { AuthController } from './modules/auth/auth.controller';
@@ -82,6 +83,7 @@ export function createContainer(): Container {
   // Cross-cutting auth primitives
   const tokenService = new JwtTokenService();
   const otpStore = new InMemoryOtpStore();
+  const otpSender = buildOtpSender();
   const passwordHasher = new BcryptPasswordHasher();
 
   // Services (use cases)
@@ -99,7 +101,7 @@ export function createContainer(): Container {
   });
   const userService = new UserService(usersRepo);
   const orderService = new OrderService(ordersRepo);
-  const authService = new AuthService(otpStore, tokenService, passwordHasher, usersRepo);
+  const authService = new AuthService(otpStore, otpSender, tokenService, passwordHasher, usersRepo);
   const pricingService = new PricingService(vehiclesRepo, destinationsRepo);
   const partnerService = new PartnerService(partnersRepo);
   const weddingService = new WeddingService(weddingsRepo);

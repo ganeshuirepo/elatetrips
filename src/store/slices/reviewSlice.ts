@@ -20,7 +20,7 @@ export interface BillingDetails {
   billGst: string;
 }
 
-/** Step 5 review state: OTP auth, contact + billing, share-with-guests. */
+/** Step 5 review state: OTP auth, contact + billing, coupon, share-with-guests. */
 export interface ReviewState extends ContactDetails, BillingDetails {
   loggedIn: boolean;
   authPhone: string;
@@ -28,6 +28,8 @@ export interface ReviewState extends ContactDetails, BillingDetails {
   otpSent: boolean;
   shareGuests: Guest[];
   confirmed: boolean;
+  /** Applied coupon code ('' = none). Discount is derived in selectors. */
+  coupon: string;
 }
 
 const initialState: ReviewState = {
@@ -46,6 +48,7 @@ const initialState: ReviewState = {
   billGst: '',
   shareGuests: [],
   confirmed: false,
+  coupon: '',
 };
 
 const reviewSlice = createSlice({
@@ -100,6 +103,12 @@ const reviewSlice = createSlice({
     confirmBooking(state) {
       state.confirmed = true;
     },
+    setAppliedCoupon(state, action: PayloadAction<string>) {
+      state.coupon = action.payload.trim().toUpperCase();
+    },
+    clearCoupon(state) {
+      state.coupon = '';
+    },
   },
 });
 
@@ -116,5 +125,7 @@ export const {
   removeGuest,
   setGuest,
   confirmBooking,
+  setAppliedCoupon,
+  clearCoupon,
 } = reviewSlice.actions;
 export default reviewSlice.reducer;

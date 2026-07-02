@@ -5,5 +5,9 @@ export const TRAVELLERS_MAX = 40;
 export const ROOMS_MAX = 20;
 export const TRIP_DAYS_MAX = 60;
 
-/** Configurable component props (originally `maxCelebrations`, `showHero`, `theme`). */
-export const MAX_CELEBRATIONS_DEFAULT = 4;
+/**
+ * Cap on total selected occasions. Set above the largest valid combination
+ * (Birthday + Anniversary + all 3 escapes = 5) so escapes are never blocked by
+ * the count — structural validity is enforced by `celebComboValid`.
+ */
+export const MAX_CELEBRATIONS_DEFAULT = 6;

@@ -9,8 +9,8 @@ export default function Hero() {
   if (!heroShown || view !== 'planner') return null;
 
   return (
-    <section className="mx-auto flex max-w-[1080px] flex-col gap-2 px-6 pt-3 pb-4">
-      <h1 className="m-0 font-serif text-[40px] leading-[1.05] font-medium tracking-[0.01em] text-white">
+    <section className="mx-auto flex max-w-[1080px] flex-col gap-2 px-6 pt-1 pb-2">
+      <h1 className="m-0 font-serif text-[30px] leading-[1.05] font-medium tracking-[0.01em] text-white">
         Plan your perfect{' '}
         <span
           style={{

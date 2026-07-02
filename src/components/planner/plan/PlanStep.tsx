@@ -6,27 +6,23 @@ import { setStep } from '@/store/slices/uiSlice';
 import { selectPlanStepReady, selectPlanHelp } from '@/store/selectors/planSelectors';
 import DestinationSearch from './DestinationSearch';
 import DatesField from './DatesField';
-import TravellersRooms from './TravellersRooms';
-import TransportPicker from './TransportPicker';
-import TripTypePicker from '@/components/planner/cab/TripTypePicker';
-import VehiclePicker from '@/components/planner/cab/VehiclePicker';
-import PickupSearch from '@/components/planner/cab/PickupSearch';
-import FareEstimate from '@/components/planner/cab/FareEstimate';
+import CelebrationGrid from './CelebrationGrid';
 import Icon from '@/components/ui/Icon';
 
 /**
- * Step 1 — the full planning screen: where, when & who, then the transport
- * question (own vs cab) and cab details when a cab is chosen.
+ * Step 1 — the full planning screen: where & when (destination, tour dates),
+ * travellers & rooms, then the celebration picker. Transport is chosen later,
+ * on the Hotels step.
  */
 export default function PlanStep() {
   const dispatch = useAppDispatch();
   const stepReady = useAppSelector(selectPlanStepReady);
   const help = useAppSelector(selectPlanHelp);
-  const { tMode, tTrip } = useAppSelector((s) => s.transport);
 
   return (
     // No card surface — the white widgets float directly on the dark canvas.
-    <div className="flex flex-col gap-5">
+    // Kept compact so the whole step (incl. Continue) fits one viewport.
+    <div className="flex flex-col gap-4">
       {/* Where & when — destination and tour dates share one row */}
       <div className="flex flex-col gap-3">
         <div className="flex items-baseline justify-between gap-2">
@@ -36,50 +32,30 @@ export default function PlanStep() {
           <span className="text-[12.5px] text-white/55">Ooty is live — more soon</span>
         </div>
         <div className="flex flex-wrap items-stretch gap-3">
-          <div className="min-w-[240px] flex-[2_1_260px]">
+          <div className="min-w-[240px] flex-[2_1_240px]">
             <DestinationSearch />
           </div>
-          <div className="min-w-[240px] flex-[2_1_260px]">
+          <div className="min-w-[360px] flex-[3_1_460px]">
             <DatesField />
           </div>
         </div>
       </div>
 
-      {/* Travellers & rooms (left) + Transport (right) share a row */}
-      <div className="flex flex-wrap gap-x-8 gap-y-5">
-        <div className="flex min-w-[280px] flex-1 flex-col gap-3">
-          <div className="flex items-baseline justify-between gap-2">
-            <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
-              Travellers &amp; rooms
-            </span>
-            <span className="text-[12.5px] text-white/55">Who&apos;s coming and how many rooms</span>
-          </div>
-          <TravellersRooms />
+      {/* Celebration — merged from the former Celebration step */}
+      <div className="flex flex-col gap-2">
+        <div className="flex items-baseline justify-between gap-2">
+          <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
+            What are we celebrating?
+          </span>
+          <span className="text-[12.5px] text-white/55">
+            Pick one or more occasions — we&apos;ll tailor your services and stays to suit.
+          </span>
         </div>
-        <div className="flex min-w-[280px] flex-1 flex-col">
-          <TransportPicker />
-        </div>
+        <CelebrationGrid />
       </div>
 
-      {/* Cab details appear only when a cab is chosen */}
-      {tMode === 'cab' && (
-        <>
-          <TripTypePicker />
-          <VehiclePicker />
-          {tTrip === 'endtoend' && <PickupSearch />}
-          <FareEstimate />
-        </>
-      )}
-
-      {tMode === 'own' && (
-        <p className="flex items-center gap-2 text-[13px] text-white/65">
-          <Icon name="circle-check" size={16} /> No cab needed — we&apos;ll skip transport and head
-          straight to hotels.
-        </p>
-      )}
-
       {/* Action bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/15 pt-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/15 pt-3">
         <span className="flex items-center gap-2 text-[13px] text-white/65">
           <Icon name="info-circle" size={16} /> {help}
         </span>
@@ -88,7 +64,7 @@ export default function PlanStep() {
             variant="contained"
             size="large"
             disabled={!stepReady}
-            onClick={() => dispatch(setStep('celebration'))}
+            onClick={() => dispatch(setStep('services'))}
             endIcon={<Icon name="arrow-right" size={18} />}
             sx={{
               background: 'linear-gradient(180deg,#e9c97f,#d4a94f)',
@@ -99,7 +75,7 @@ export default function PlanStep() {
               '&.Mui-disabled': { background: 'rgba(255,255,255,.12)', color: 'rgba(255,255,255,.4)' },
             }}
           >
-            Continue to celebration
+            Continue to services
           </Button>
         </div>
       </div>

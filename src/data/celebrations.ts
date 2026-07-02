@@ -44,20 +44,6 @@ export const CELEBRATIONS: Celebration[] = [
     category: 'celebration',
   },
   {
-    id: 'milestone',
-    name: 'Milestone',
-    icon: 'ti-award',
-    img: '/assets/celeb-anniversary.png',
-    category: 'celebration',
-  },
-  {
-    id: 'culture',
-    name: 'Culture',
-    icon: 'ti-building-monument',
-    img: '/assets/celeb-adventure.png',
-    category: 'celebration',
-  },
-  {
     id: 'group',
     name: 'Group',
     icon: 'ti-users-group',
@@ -79,34 +65,31 @@ export const CELEBRATIONS: Celebration[] = [
     category: 'rejuvenate',
   },
   {
-    id: 'leisure',
-    name: 'Leisure',
-    icon: 'ti-umbrella',
-    img: '/assets/celeb-honeymoon.png',
-    category: 'rejuvenate',
-  },
-  {
     id: 'nature',
-    name: 'Nature Escape',
-    icon: 'ti-trees',
+    name: 'Local experiences',
+    icon: 'ti-map-pin',
     img: '/assets/celeb-adventure.png',
     category: 'rejuvenate',
   },
 ];
 
 /**
- * Which occasions may be booked together. A valid selection must sit entirely
- * within ONE group:
- *  - Celebration items combine among themselves.
- *  - Escapes (the four 'rejuvenate' occasions) combine only with each other and
- *    never with a Celebration item.
- * Items in CELEB_EXCLUSIVE cannot be combined with anything else.
+ * Combination rules:
+ *  - Wedding has its own flow and never combines with anything.
+ *  - Honeymoon, Bachelor, Proposal and Group are "solo" celebrations: each must
+ *    be the ONLY celebration chosen — Escapes may still be added alongside.
+ *  - Birthday and Anniversary combine freely with each other.
+ *  - Escapes (the 'rejuvenate' occasions) are unrestricted: any number, with
+ *    each other and with any celebration selection.
  */
-export const CELEB_GROUPS: string[][] = [
-  // Celebration (excl. exclusives)
-  ['birthday', 'anniversary', 'honeymoon', 'bachelor', 'milestone', 'culture', 'group'],
-  ['family', 'adventure', 'leisure', 'nature'], // Escapes — self-contained
-];
 
-/** Occasions that must be booked on their own: Proposal. */
-export const CELEB_EXCLUSIVE: string[] = ['teamouting'];
+/** Occasions that cannot be combined with anything else. */
+export const CELEB_EXCLUSIVE: string[] = ['wedding'];
+
+/** Celebrations that must be the only *celebration* chosen (escapes may be added). */
+export const CELEB_SOLO: string[] = ['honeymoon', 'bachelor', 'teamouting', 'group'];
+
+/** Escape (rejuvenate) occasion ids — combine freely with each other and any celebration. */
+export const ESCAPE_IDS: string[] = CELEBRATIONS.filter((c) => c.category === 'rejuvenate').map(
+  (c) => c.id,
+);

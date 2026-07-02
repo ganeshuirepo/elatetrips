@@ -24,8 +24,11 @@ const cartSlice = createSlice({
       if (next <= 0) delete state.items[id];
       else state.items[id] = next;
     },
+    removeFromCart(state, action: PayloadAction<string>) {
+      delete state.items[action.payload];
+    },
   },
 });
 
-export const { addToCart, decFromCart } = cartSlice.actions;
+export const { addToCart, decFromCart, removeFromCart } = cartSlice.actions;
 export default cartSlice.reducer;

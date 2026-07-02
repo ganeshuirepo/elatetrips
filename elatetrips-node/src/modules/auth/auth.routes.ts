@@ -5,6 +5,7 @@ import { validate } from '../../common/middleware/validate';
 import {
   requestOtpSchema,
   verifyOtpSchema,
+  resendOtpSchema,
   signupSchema,
   verifyAccountSchema,
   loginSchema,
@@ -63,7 +64,7 @@ export function buildAuthRouter(controller: AuthController): Router {
    *             required: [identifier, otp]
    *             properties:
    *               identifier: { type: string, description: "Email or phone the OTP was sent to" }
-   *               otp: { type: string, example: "1234" }
+   *               otp: { type: string, example: "123456" }
    *     responses:
    *       200: { description: "{ token, user }" }
    *       401: { description: Invalid or expired OTP }
@@ -153,18 +154,19 @@ export function buildAuthRouter(controller: AuthController): Router {
    * /api/v1/auth/request-otp:
    *   post:
    *     tags: [Auth]
-   *     summary: "Passwordless login: request an OTP for a mobile number"
+   *     summary: "OTP login: send a login OTP to a registered email or mobile"
    *     requestBody:
    *       required: true
    *       content:
    *         application/json:
    *           schema:
    *             type: object
-   *             required: [phone]
+   *             required: [identifier]
    *             properties:
-   *               phone: { type: string, example: "9876543210" }
+   *               identifier: { type: string, example: "9876543210" }
    *     responses:
-   *       200: { description: OTP issued }
+   *       200: { description: OTP sent }
+   *       404: { description: No account for this identifier }
    */
   router.post('/request-otp', validate({ body: requestOtpSchema }), asyncHandler(controller.requestOtp));
 
@@ -173,22 +175,43 @@ export function buildAuthRouter(controller: AuthController): Router {
    * /api/v1/auth/verify-otp:
    *   post:
    *     tags: [Auth]
-   *     summary: "Passwordless login: verify OTP (any 4 digits) and receive a JWT"
+   *     summary: "OTP login: verify the 6-digit OTP and receive a JWT"
    *     requestBody:
    *       required: true
    *       content:
    *         application/json:
    *           schema:
    *             type: object
-   *             required: [phone, otp]
+   *             required: [identifier, otp]
    *             properties:
-   *               phone: { type: string, example: "9876543210" }
-   *               otp: { type: string, example: "1234" }
+   *               identifier: { type: string, example: "9876543210" }
+   *               otp: { type: string, example: "123456" }
    *     responses:
    *       200: { description: "{ token, user }" }
    *       401: { description: Invalid or expired OTP }
    */
   router.post('/verify-otp', validate({ body: verifyOtpSchema }), asyncHandler(controller.verifyOtp));
+
+  /**
+   * @openapi
+   * /api/v1/auth/resend-otp:
+   *   post:
+   *     tags: [Auth]
+   *     summary: Re-send an OTP to a registered email or mobile
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required: [identifier]
+   *             properties:
+   *               identifier: { type: string }
+   *     responses:
+   *       200: { description: "OTP re-sent if the account exists" }
+   *       429: { description: Requested again too soon }
+   */
+  router.post('/resend-otp', validate({ body: resendOtpSchema }), asyncHandler(controller.resendOtp));
 
   return router;
 }

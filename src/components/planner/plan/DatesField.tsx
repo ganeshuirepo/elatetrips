@@ -7,9 +7,13 @@ import { openOnly, setPopover, closeAllPopovers } from '@/store/slices/uiSlice';
 import { buildCalendar, shiftViewMonth } from '@/domain/calendar';
 import { firstISO, fmtBig, fmtSub } from '@/domain/format';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
+import Travellers from './Travellers';
 import Icon from '@/components/ui/Icon';
 
-/** Tour start / end date bar with a two-month range calendar popover. */
+/**
+ * Tour start / end / travellers bar. The two date cells share a two-month
+ * range calendar popover; the travellers cell has its own counter popover.
+ */
 export default function DatesField() {
   const dispatch = useAppDispatch();
   const { start, end, viewMonth } = useAppSelector((s) => s.plan);
@@ -49,6 +53,8 @@ export default function DatesField() {
       {dateCell('Tour start', start)}
       <div className="my-[9px] w-px flex-none bg-[#ECE7DC]" />
       {dateCell('Tour end', end)}
+      <div className="my-[9px] w-px flex-none bg-[#ECE7DC]" />
+      <Travellers />
 
       {calOpen && (
         <div className="border-line absolute top-[calc(100%+10px)] left-0 z-40 w-[27rem] max-w-[calc(100vw-2rem)] cursor-default rounded-[16px] border bg-white p-3 shadow-xl">

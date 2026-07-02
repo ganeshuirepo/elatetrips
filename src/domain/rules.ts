@@ -1,6 +1,6 @@
 /** Pure business rules. Framework-free and exhaustively unit-tested. */
 
-import { CELEB_GROUPS, CELEB_EXCLUSIVE } from '@/data/celebrations';
+import { CELEB_EXCLUSIVE, CELEB_SOLO, ESCAPE_IDS } from '@/data/celebrations';
 import { VEHICLES } from '@/data/vehicles';
 import { PKGS, PKG_AGE } from '@/data/packages';
 import type { AgeRange } from '@/domain/types';
@@ -8,14 +8,18 @@ import type { AgeRange } from '@/domain/types';
 /**
  * Whether a set of occasion ids may be booked together.
  * - 1 or fewer → always valid.
- * - An exclusive occasion (Wedding, Proposal) cannot be combined with anything.
- * - otherwise all ids must fit inside a single combination group, so Escapes
- *   never mix with Celebration items.
+ * - An exclusive occasion (Wedding) cannot be combined with anything.
+ * - Escapes are unrestricted (any number, with each other and any celebration).
+ * - A "solo" celebration (Honeymoon, Bachelor, Proposal, Group) must be the only
+ *   celebration chosen, though escapes may still be added.
+ * - Otherwise the remaining celebrations (Birthday, Anniversary) combine freely.
  */
 export function celebComboValid(ids: string[]): boolean {
   if (ids.length <= 1) return true;
   if (ids.some((i) => CELEB_EXCLUSIVE.includes(i))) return false;
-  return CELEB_GROUPS.some((g) => ids.every((i) => g.includes(i)));
+  const celebs = ids.filter((i) => !ESCAPE_IDS.includes(i));
+  if (celebs.some((i) => CELEB_SOLO.includes(i))) return celebs.length === 1;
+  return true;
 }
 
 /**
