@@ -3,11 +3,13 @@
  * Frontend: Next.js production server on :3000.
  * Backend:  compiled Express API on :4000.
  */
+const HOME = process.env.HOME || '/home/ec2-user';
+
 module.exports = {
   apps: [
     {
       name: 'elate-frontend',
-      cwd: '/home/ubuntu/elatetrips',
+      cwd: `${HOME}/elatetrips`,
       script: 'node_modules/next/dist/bin/next',
       args: 'start -p 3000',
       env: { NODE_ENV: 'production' },
@@ -15,7 +17,7 @@ module.exports = {
     },
     {
       name: 'elate-backend',
-      cwd: '/home/ubuntu/elatetrips/elatetrips-node',
+      cwd: `${HOME}/elatetrips/elatetrips-node`,
       script: 'dist/server.js',
       env: { NODE_ENV: 'production' },
       max_memory_restart: '400M',

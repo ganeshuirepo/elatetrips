@@ -13,7 +13,7 @@ Browser ──▶ Nginx :80 ──▶ /        ──▶ Next.js :3000  (pm2: el
 
 | # | Item | Notes |
 |---|------|-------|
-| 1 | AWS account + EC2 instance | Ubuntu 22.04/24.04. **t3.small recommended** (2 GB RAM). t2/t3.micro works — the setup script adds 2 GB swap for builds. |
+| 1 | AWS account + EC2 instance | Ubuntu 22.04/24.04 **or Amazon Linux 2023** (login user `ubuntu` vs `ec2-user`). **t3.small recommended** (2 GB RAM); t2/t3.micro works — the setup script adds 2 GB swap for builds. |
 | 2 | Security group | Inbound: 22 (SSH, your IP only), 80 (HTTP, anywhere), 443 (HTTPS, if using a domain). |
 | 3 | Elastic IP | Attach one so the public IP survives restarts. |
 | 4 | Key pair (.pem) | For SSH; its private key also goes into GitHub secrets for auto-deploy. |
@@ -28,7 +28,8 @@ EC2 → Launch instance → Ubuntu 22.04 LTS, t3.small, your key pair, the secur
 Attach an Elastic IP. Then SSH in:
 
 ```bash
-ssh -i your-key.pem ubuntu@<ELASTIC_IP>
+ssh -i your-key.pem ubuntu@<ELASTIC_IP>      # Ubuntu AMI
+ssh -i your-key.pem ec2-user@<ELASTIC_IP>    # Amazon Linux AMI
 ```
 
 ## 2. Bootstrap the server (one time)
@@ -66,7 +67,7 @@ Add three secrets in GitHub → repo → Settings → Secrets and variables → 
 | Secret | Value |
 |--------|-------|
 | `EC2_HOST` | The Elastic IP (or domain) |
-| `EC2_USER` | `ubuntu` |
+| `EC2_USER` | `ubuntu` (Ubuntu AMI) or `ec2-user` (Amazon Linux AMI) |
 | `EC2_SSH_KEY` | Full contents of your `.pem` private key |
 
 That's the whole pipeline: `git push origin main` → tests → live on EC2 in ~3–5 minutes.

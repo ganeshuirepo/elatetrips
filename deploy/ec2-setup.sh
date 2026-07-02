@@ -1,19 +1,30 @@
 #!/usr/bin/env bash
-# One-time EC2 bootstrap (Ubuntu 22.04/24.04). Run as the `ubuntu` user:
+# One-time EC2 bootstrap — supports Ubuntu (apt) and Amazon Linux 2023 (dnf).
+# Run as the default login user (ubuntu / ec2-user):
 #   curl -fsSL https://raw.githubusercontent.com/ganeshuirepo/elatetrips/main/deploy/ec2-setup.sh | bash
 set -euo pipefail
 
 REPO_URL="https://github.com/ganeshuirepo/elatetrips.git"
 APP_DIR="$HOME/elatetrips"
 
-echo "==> 1/6 System packages"
-sudo apt-get update -y
-sudo apt-get install -y git nginx curl
+if command -v dnf >/dev/null; then PKG="dnf"; else PKG="apt"; fi
+echo "==> 1/6 System packages (via $PKG)"
+if [ "$PKG" = "dnf" ]; then
+  sudo dnf install -y git nginx
+else
+  sudo apt-get update -y
+  sudo apt-get install -y git nginx curl
+fi
 
 echo "==> 2/6 Node.js 20 + PM2"
 if ! command -v node >/dev/null || [[ "$(node -v)" != v20* ]]; then
-  curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-  sudo apt-get install -y nodejs
+  if [ "$PKG" = "dnf" ]; then
+    curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash -
+    sudo dnf install -y nodejs
+  else
+    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+  fi
 fi
 sudo npm install -g pm2
 
@@ -48,10 +59,16 @@ if [ ! -f elatetrips-node/.env ]; then
 fi
 
 echo "==> 6/6 Nginx + PM2 boot service"
-sudo cp deploy/nginx.conf /etc/nginx/sites-available/elatetrips
-sudo ln -sf /etc/nginx/sites-available/elatetrips /etc/nginx/sites-enabled/elatetrips
-sudo rm -f /etc/nginx/sites-enabled/default
-sudo nginx -t && sudo systemctl reload nginx
+if [ -d /etc/nginx/sites-available ]; then
+  # Debian/Ubuntu layout
+  sudo cp deploy/nginx.conf /etc/nginx/sites-available/elatetrips
+  sudo ln -sf /etc/nginx/sites-available/elatetrips /etc/nginx/sites-enabled/elatetrips
+  sudo rm -f /etc/nginx/sites-enabled/default
+else
+  # RHEL/Amazon Linux layout — conf.d + our block marked default_server wins.
+  sudo cp deploy/nginx.conf /etc/nginx/conf.d/elatetrips.conf
+fi
+sudo nginx -t && sudo systemctl enable --now nginx && sudo systemctl reload nginx
 pm2 startup systemd -u "$USER" --hp "$HOME" | tail -1 | sudo bash || true
 
 echo "Setup complete. Fill elatetrips-node/.env, then: bash deploy/deploy.sh"
