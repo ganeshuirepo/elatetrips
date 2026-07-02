@@ -8,8 +8,6 @@ import TransportSection from './TransportSection';
 import RoomsField from './RoomsField';
 import HotelFilters from './HotelFilters';
 import HotelList from './HotelList';
-import LocalGuideNote from './LocalGuideNote';
-import CostSummary from './CostSummary';
 import Card from '@/components/ui/Card';
 import Icon from '@/components/ui/Icon';
 
@@ -40,10 +38,8 @@ export default function HotelsStep() {
         </Card>
       </div>
 
-      {/* Guide note, running total and the step actions, grounded in one card. */}
+      {/* Step actions — the running total and guide note live on Review now. */}
       <Card className="flex flex-col gap-5">
-        <LocalGuideNote />
-        <CostSummary />
         <ContinueBar back={() => dispatch(setStep('services'))} />
       </Card>
     </div>

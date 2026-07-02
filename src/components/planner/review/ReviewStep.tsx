@@ -9,6 +9,7 @@ import { selectOrderGross, selectDiscount, selectPayable } from '@/store/selecto
 import { applyCoupon } from '@/domain/coupons';
 import { inr } from '@/domain/format';
 import ReviewSummary from './ReviewSummary';
+import LocalGuideNote from '@/components/planner/hotels/LocalGuideNote';
 import AuthOtp from './AuthOtp';
 import ContactForm from './ContactForm';
 import BillingForm from './BillingForm';
@@ -94,7 +95,10 @@ export default function ReviewStep() {
       className="grid items-start gap-6"
       style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 22rem), 1fr))' }}
     >
-      <ReviewSummary />
+      <div className="flex flex-col gap-4">
+        <ReviewSummary />
+        <LocalGuideNote />
+      </div>
 
       <div className="flex flex-col gap-4">
         <AuthOtp />
