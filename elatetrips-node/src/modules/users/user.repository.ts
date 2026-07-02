@@ -18,6 +18,8 @@ export interface IUserRepository {
   ensure(phone: string): Promise<User>;
   /** Create a pending account from signup data + a hashed password. */
   createPending(data: SignupData, passwordHash: string): Promise<User>;
+  /** Replace a still-pending signup for the same phone (re-registration). */
+  updatePending(data: SignupData, passwordHash: string): Promise<User | null>;
   /** Mark a verification channel confirmed and activate the account. */
   markVerified(identifier: string, channel: VerifyChannel): Promise<User | null>;
   setPassword(identifier: string, passwordHash: string): Promise<User | null>;
@@ -70,6 +72,27 @@ export class UserRepository implements IUserRepository {
     delete obj._id;
     delete obj.passwordHash;
     return obj as unknown as User;
+  }
+
+  async updatePending(data: SignupData, passwordHash: string): Promise<User | null> {
+    return UserModel.findOneAndUpdate(
+      { phone: data.phone, status: 'pending' },
+      {
+        $set: {
+          email: data.email,
+          name: data.name,
+          gender: data.gender,
+          age: data.age,
+          passwordHash,
+          emailVerified: false,
+          mobileVerified: false,
+        },
+      },
+      { new: true },
+    )
+      .select(publicProjection)
+      .lean<User>()
+      .exec();
   }
 
   async markVerified(identifier: string, channel: VerifyChannel): Promise<User | null> {

@@ -8,10 +8,10 @@ import { DEFAULT_THEME, type ThemeId } from '@/theme/palettes';
 export type AppView = 'planner' | 'gifts' | 'medical' | 'partner' | 'wedding';
 
 /**
- * Wizard steps within the planner view. 'plan' is the opening step (where, when,
- * transport); 'celebration' (pick an occasion) follows, then services & hotels.
+ * Wizard steps within the planner view. 'plan' opens the flow (where, when,
+ * travellers & the celebration picker); transport is decided on 'stay'.
  */
-export type WizardStep = 'celebration' | 'plan' | 'services' | 'stay' | 'review';
+export type WizardStep = 'plan' | 'services' | 'stay' | 'review' | 'payment';
 
 /** Which form the global auth dialog opens to. */
 export type AuthMode = 'login' | 'signup' | 'forgot';

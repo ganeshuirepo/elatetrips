@@ -28,6 +28,13 @@ export interface SignupBody {
   verifyVia: 'email' | 'mobile';
 }
 
+export interface OrderItem {
+  label: string;
+  detail: string;
+  qty: number;
+  amount: number;
+}
+
 export interface OrderSummary {
   destination: string;
   dates: string;
@@ -37,6 +44,14 @@ export interface OrderSummary {
   packages: { celeb: string; names: string[] }[];
   adventures: string[];
   experiences: string[];
+  /** Cart lines (surprise gifts, services, stay) included in the order. */
+  items?: OrderItem[];
+}
+
+export interface PaymentInfo {
+  method: string;
+  txnId: string;
+  status: 'paid';
 }
 
 export interface Order {
@@ -47,6 +62,9 @@ export interface Order {
   contactName: string;
   contactPhone: string;
   contactEmail: string;
+  coupon?: string;
+  discount?: number;
+  payment?: PaymentInfo;
   summary: OrderSummary;
   createdAt: string;
 }
@@ -56,6 +74,9 @@ export interface CreateOrderBody {
   contactName: string;
   contactPhone: string;
   contactEmail: string;
+  coupon?: string;
+  discount?: number;
+  payment?: PaymentInfo;
   summary: OrderSummary;
 }
 
@@ -160,11 +181,15 @@ export const elateApi = createApi({
       query: (body) => ({ url: '/auth/reset-password', method: 'POST', body }),
       transformResponse: pick<Session>(),
     }),
-    requestOtp: build.mutation<OtpResult, { phone: string }>({
+    requestOtp: build.mutation<OtpResult, { identifier: string }>({
       query: (body) => ({ url: '/auth/request-otp', method: 'POST', body }),
       transformResponse: pick<OtpResult>(),
     }),
-    verifyOtp: build.mutation<Session, { phone: string; otp: string }>({
+    resendOtp: build.mutation<OtpResult, { identifier: string }>({
+      query: (body) => ({ url: '/auth/resend-otp', method: 'POST', body }),
+      transformResponse: pick<OtpResult>(),
+    }),
+    verifyOtp: build.mutation<Session, { identifier: string; otp: string }>({
       query: (body) => ({ url: '/auth/verify-otp', method: 'POST', body }),
       transformResponse: pick<Session>(),
     }),
@@ -201,6 +226,7 @@ export const {
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useRequestOtpMutation,
+  useResendOtpMutation,
   useVerifyOtpMutation,
   useGetProfileQuery,
   useGetOrdersQuery,

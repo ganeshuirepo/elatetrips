@@ -11,6 +11,7 @@ const summarySchema = new Schema(
     packages: [{ _id: false, celeb: String, names: [String] }],
     adventures: [String],
     experiences: [String],
+    items: [{ _id: false, label: String, detail: String, qty: Number, amount: Number }],
   },
   { _id: false },
 );
@@ -24,6 +25,15 @@ const orderSchema = new Schema<Order>(
     contactName: { type: String, default: '' },
     contactPhone: { type: String, default: '' },
     contactEmail: { type: String, default: '' },
+    coupon: { type: String, default: '' },
+    discount: { type: Number, default: 0 },
+    payment: {
+      type: new Schema(
+        { method: String, txnId: String, status: String },
+        { _id: false },
+      ),
+      required: false,
+    },
     summary: { type: summarySchema, required: true },
   },
   { timestamps: true, versionKey: false },

@@ -26,7 +26,18 @@ export const env = {
   mongoUri: required('MONGODB_URI', 'mongodb://127.0.0.1:27017/elatetrips'),
   jwtSecret: required('JWT_SECRET', 'change-me-in-production'),
   jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? '7d',
-  mockOtp: process.env.MOCK_OTP ?? '1234',
+
+  // ---- OTP delivery providers (all optional — console fallback in dev) ------
+  // Email OTP: Brevo (free tier: 300 emails/day, no credit card) — brevo.com
+  brevoApiKey: process.env.BREVO_API_KEY ?? '',
+  brevoFromEmail: process.env.BREVO_FROM_EMAIL ?? '',
+  brevoFromName: process.env.BREVO_FROM_NAME ?? 'ElateTrips',
+  // SMS OTP option A: Twilio trial (free credit; can only text verified numbers)
+  twilioAccountSid: process.env.TWILIO_ACCOUNT_SID ?? '',
+  twilioAuthToken: process.env.TWILIO_AUTH_TOKEN ?? '',
+  twilioFromNumber: process.env.TWILIO_FROM_NUMBER ?? '',
+  // SMS OTP option B: Fast2SMS (India; ₹50 free credit, OTP route needs no DLT)
+  fast2smsApiKey: process.env.FAST2SMS_API_KEY ?? '',
   get isProd(): boolean {
     return this.nodeEnv === 'production';
   },

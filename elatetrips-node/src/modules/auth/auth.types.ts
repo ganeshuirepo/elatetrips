@@ -20,6 +20,14 @@ export interface IOtpStore {
   verify(identifier: string, code: string): boolean;
 }
 
+/**
+ * Delivers an issued OTP to the user over a channel — email or SMS.
+ * Implementations: console (dev), Brevo (email), Twilio / Fast2SMS (SMS).
+ */
+export interface IOtpSender {
+  send(channel: 'email' | 'mobile', identifier: string, code: string): Promise<void>;
+}
+
 /** Password hashing abstraction (bcrypt now, argon2/scrypt later). */
 export interface IPasswordHasher {
   hash(plain: string): Promise<string>;

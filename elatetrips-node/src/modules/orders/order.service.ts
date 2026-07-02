@@ -1,5 +1,6 @@
 import type { IOrderRepository } from './order.repository';
-import { NotFoundError, ForbiddenError } from '../../common/errors/AppError';
+import { NotFoundError, ForbiddenError, BadRequestError } from '../../common/errors/AppError';
+import { couponDiscount } from './coupons';
 import type { Order, CreateOrderInput } from './order.types';
 
 /**
@@ -10,6 +11,13 @@ export class OrderService {
   constructor(private readonly orders: IOrderRepository) {}
 
   createOrder(phone: string, input: CreateOrderInput): Promise<Order> {
+    // Recompute the coupon server-side so a tampered client can't invent
+    // discounts. `total` arrives net; gross = net + claimed discount.
+    const claimed = input.discount ?? 0;
+    const expected = input.coupon ? couponDiscount(input.coupon, input.total + claimed) : 0;
+    if (claimed !== expected) {
+      throw new BadRequestError('Coupon discount does not match the order total');
+    }
     return this.orders.create(phone, input);
   }
 

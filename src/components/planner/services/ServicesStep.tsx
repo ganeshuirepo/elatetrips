@@ -9,9 +9,11 @@ import {
   setOccasionField,
   toggleSvcPick,
   setTileSchedule,
+  setSkipSection,
   type ServiceScalarKey,
 } from '@/store/slices/servicesSlice';
 import { selectDays } from '@/store/selectors/planSelectors';
+import { selectServicesReady } from '@/store/selectors/servicesSelectors';
 import { fmtBig, fmtSub } from '@/domain/format';
 import {
   CATEGORY_BY_ID,
@@ -94,6 +96,16 @@ export default function ServicesStep() {
   const activeView = view === 'all' || blocks.some((b) => b.key === view) ? view : 'all';
   const showViewFilter = blocks.length > 1;
 
+  // Single-open accordion: all panels start closed; opening one closes the rest.
+  const [openPanel, setOpenPanel] = useState<string | null>(null);
+  const panelProps = (key: string) => ({
+    open: openPanel === key,
+    onToggle: () => setOpenPanel((p) => (p === key ? null : key)),
+  });
+
+  // Continue unlocks once the user engages with the section — or opts out.
+  const canContinue = useAppSelector(selectServicesReady);
+
   return (
     <div className="flex max-w-[804px] flex-col gap-6">
       {/* Heading */}
@@ -106,6 +118,17 @@ export default function ServicesStep() {
         </span>
       </div>
 
+      {/* Opt-out — unlocks Continue without picking any services */}
+      <label className="flex w-fit cursor-pointer items-center gap-2.5 text-[13.5px] font-semibold text-white/80">
+        <input
+          type="checkbox"
+          checked={svc.skipSection}
+          onChange={(e) => dispatch(setSkipSection(e.target.checked))}
+          className="h-4 w-4 accent-[color:var(--accent)]"
+        />
+        I&apos;ll skip this section — no services needed, take me to hotels.
+      </label>
+
       {/* Quick filter across the occasion blocks */}
       {showViewFilter && (
         <div className="flex flex-wrap gap-2">
@@ -115,7 +138,10 @@ export default function ServicesStep() {
               key={b.key}
               label={b.label}
               active={activeView === b.key}
-              onClick={() => setView(b.key)}
+              onClick={() => {
+                setView(b.key);
+                setOpenPanel(b.key);
+              }}
             />
           ))}
         </div>
@@ -131,17 +157,7 @@ export default function ServicesStep() {
           const showMilestone = owned.includes('milestoneFor');
           const tileCats = owned.map((s) => CATEGORY_BY_ID[s]).filter(Boolean);
           return (
-            <div
-              key={id}
-              className="flex flex-col gap-4 rounded-[16px] border border-white/10 bg-white/[0.03] p-4"
-            >
-              <div className="flex flex-col gap-0.5">
-                <span className="font-serif text-[18px] font-bold text-white">
-                  {NAME_BY_ID[id] ?? id}
-                </span>
-                <span className="text-[12.5px] text-white/55">{tpl.blurb}</span>
-              </div>
-
+            <CollapsibleBlock key={id} title={NAME_BY_ID[id] ?? id} sub={tpl.blurb} {...panelProps(id)}>
               <div className="flex flex-wrap items-end gap-x-8 gap-y-5">
                 {tpl.date && (
                   <Field label="Day">
@@ -222,46 +238,42 @@ export default function ServicesStep() {
                   onToggle={(cat, oid) => dispatch(toggleSvcPick({ cat, id: oid }))}
                 />
               )}
-            </div>
+            </CollapsibleBlock>
           );
         })}
 
       {/* All escapes in one block: filter by Wellness / Adventure / Local */}
       {(activeView === 'all' || activeView === 'escapes') && escapeCats.length > 0 && (
-        <div className="flex flex-col gap-4 rounded-[16px] border border-white/10 bg-white/[0.03] p-4">
-          <div className="flex flex-col gap-0.5">
-            <span className="font-serif text-[18px] font-bold text-white">Escapes</span>
-            <span className="text-[12.5px] text-white/55">
-              Add the experiences you&apos;d like and set a day &amp; time for each.
-            </span>
-          </div>
+        <CollapsibleBlock
+          title="Escapes"
+          sub="Add the experiences you'd like and set a day & time for each."
+          {...panelProps('escapes')}
+        >
           <OccasionTiles
             cats={escapeCats}
             picks={svc.picks}
             onToggle={(cat, oid) => dispatch(toggleSvcPick({ cat, id: oid }))}
             renderSchedule={escapeSchedule}
           />
-        </div>
+        </CollapsibleBlock>
       )}
 
       {/* Surprise gifts — always available, independent of occasions */}
       {(activeView === 'all' || activeView === SURPRISE_GIFTS.id) && (
-        <div className="flex flex-col gap-4 rounded-[16px] border border-white/10 bg-white/[0.03] p-4">
-          <div className="flex flex-col gap-0.5">
-            <span className="font-serif text-[18px] font-bold text-white">
-              {SURPRISE_GIFTS.label}
-            </span>
-            <span className="text-[12.5px] text-white/55">{SURPRISE_GIFTS.sub}</span>
-          </div>
+        <CollapsibleBlock
+          title={SURPRISE_GIFTS.label}
+          sub={SURPRISE_GIFTS.sub}
+          {...panelProps(SURPRISE_GIFTS.id)}
+        >
           <OccasionTiles
             cats={[SURPRISE_GIFTS]}
             picks={svc.picks}
             onToggle={(cat, oid) => dispatch(toggleSvcPick({ cat, id: oid }))}
           />
-        </div>
+        </CollapsibleBlock>
       )}
 
-      <Section label="Anything else?" sub="Special requests or ideas">
+      <Section label="Anything else?" sub="Special requests or ideas" {...panelProps('notes')}>
         <textarea
           value={svc.notes}
           onChange={(e) => setField('notes', e.target.value)}
@@ -274,13 +286,15 @@ export default function ServicesStep() {
       {/* Action bar */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/15 pt-4">
         <span className="flex items-center gap-2 text-[13px] text-white/65">
-          <Icon name="info-circle" size={16} /> These help us shortlist the right hotels &amp;
-          packages — all optional.
+          <Icon name="info-circle" size={16} />{' '}
+          {canContinue
+            ? 'These help us shortlist the right hotels & packages.'
+            : 'Pick at least one service — or tick "skip this section" above to move on.'}
         </span>
         <div className="flex gap-2">
           <Button
             variant="text"
-            onClick={() => dispatch(setStep('celebration'))}
+            onClick={() => dispatch(setStep('plan'))}
             sx={{ color: 'rgba(255,255,255,.7)' }}
           >
             Back
@@ -288,6 +302,7 @@ export default function ServicesStep() {
           <Button
             variant="contained"
             size="large"
+            disabled={!canContinue}
             onClick={() => dispatch(setStep('stay'))}
             endIcon={<Icon name="arrow-right" size={18} />}
             sx={{
@@ -299,6 +314,7 @@ export default function ServicesStep() {
                 background: 'linear-gradient(180deg,#edd089,#d9af55)',
                 boxShadow: 'none',
               },
+              '&.Mui-disabled': { background: 'rgba(255,255,255,.12)', color: 'rgba(255,255,255,.4)' },
             }}
           >
             Continue to hotels
@@ -309,25 +325,88 @@ export default function ServicesStep() {
   );
 }
 
-/** A labelled block on the dark canvas. */
+/**
+ * A labelled block on the dark canvas — collapsible. Pass `open`/`onToggle` to
+ * join the page's single-open accordion; omit them for a standalone toggle.
+ */
 function Section({
   label,
   sub,
   children,
+  open: openProp,
+  onToggle,
 }: {
   label: string;
   sub?: string;
   children: React.ReactNode;
+  open?: boolean;
+  onToggle?: () => void;
 }) {
+  const [localOpen, setLocalOpen] = useState(true);
+  const open = openProp ?? localOpen;
+  const toggle = onToggle ?? (() => setLocalOpen((o) => !o));
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex items-baseline justify-between gap-2">
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={toggle}
+        className="flex cursor-pointer items-baseline justify-between gap-2 border-none bg-transparent p-0 text-left"
+      >
         <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
           {label}
         </span>
-        {sub && <span className="text-[12.5px] text-white/55">{sub}</span>}
-      </div>
-      {children}
+        <span className="flex items-center gap-2">
+          {sub && <span className="text-[12.5px] text-white/55">{sub}</span>}
+          <Icon
+            name={open ? 'chevron-up' : 'chevron-down'}
+            size={15}
+            style={{ color: 'rgba(255,255,255,.55)' }}
+          />
+        </span>
+      </button>
+      {open && children}
+    </div>
+  );
+}
+
+/**
+ * Accordion wrapper for the occasion blocks — same transparent surface and
+ * header as before, with a chevron toggle. Controlled by the page's
+ * single-open accordion state (all closed by default).
+ */
+function CollapsibleBlock({
+  title,
+  sub,
+  children,
+  open,
+  onToggle,
+}: {
+  title: string;
+  sub?: string;
+  children: React.ReactNode;
+  open: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <div className="flex flex-col gap-4 rounded-[16px] border border-white/10 bg-white/[0.03] p-4">
+      <button
+        type="button"
+        aria-expanded={open}
+        onClick={onToggle}
+        className="flex cursor-pointer items-center justify-between gap-3 border-none bg-transparent p-0 text-left"
+      >
+        <span className="flex flex-col gap-0.5">
+          <span className="font-serif text-[18px] font-bold text-white">{title}</span>
+          {sub && <span className="text-[12.5px] text-white/55">{sub}</span>}
+        </span>
+        <Icon
+          name={open ? 'chevron-up' : 'chevron-down'}
+          size={18}
+          style={{ color: 'rgba(255,255,255,.6)' }}
+        />
+      </button>
+      {open && children}
     </div>
   );
 }

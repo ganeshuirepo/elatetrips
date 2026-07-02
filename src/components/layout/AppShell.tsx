@@ -7,6 +7,7 @@ import ShopView from '@/components/shop/ShopView';
 import PartnerView from '@/components/partner/PartnerView';
 import WeddingEnquiry from '@/components/planner/wedding/WeddingEnquiry';
 import AuthDialog from '@/components/auth/AuthDialog';
+import VoiceAssistant from '@/components/voice/VoiceAssistant';
 
 /**
  * Top-level client shell. Renders the persistent header and switches the body
@@ -23,6 +24,7 @@ export default function AppShell() {
       {view === 'partner' && <PartnerView />}
       {view === 'wedding' && <WeddingEnquiry />}
       <AuthDialog />
+      <VoiceAssistant />
     </>
   );
 }

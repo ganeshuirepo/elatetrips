@@ -31,6 +31,8 @@ export interface ServicesState {
    * its own. Keyed by `${occasionId}:${categoryId}:${optionId}`.
    */
   schedule: Record<string, OccasionBasics>;
+  /** User chose "I'll skip this section" — unlocks Continue with no picks. */
+  skipSection: boolean;
 }
 
 const initialState: ServicesState = {
@@ -43,6 +45,7 @@ const initialState: ServicesState = {
   occasions: {},
   picks: {},
   schedule: {},
+  skipSection: false,
 };
 
 const defaultOccasion = (): OccasionBasics => ({ date: '', time: '' });
@@ -69,6 +72,9 @@ const servicesSlice = createSlice({
       const arr = state.picks[cat] ?? [];
       state.picks[cat] = arr.includes(id) ? arr.filter((x) => x !== id) : [...arr, id];
     },
+    setSkipSection(state, action: PayloadAction<boolean>) {
+      state.skipSection = action.payload;
+    },
     /** Set the day or time for a single tile (escapes schedule per experience). */
     setTileSchedule(
       state,
@@ -81,6 +87,6 @@ const servicesSlice = createSlice({
   },
 });
 
-export const { setSvcField, setOccasionField, toggleSvcPick, setTileSchedule } =
+export const { setSvcField, setOccasionField, toggleSvcPick, setTileSchedule, setSkipSection } =
   servicesSlice.actions;
 export default servicesSlice.reducer;
