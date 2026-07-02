@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setStep } from '@/store/slices/uiSlice';
 import { selectPlanStepReady, selectPlanHelp } from '@/store/selectors/planSelectors';
+import { GOLD_BUTTON } from '@/components/planner/goldButton';
 import DestinationSearch from './DestinationSearch';
 import DatesField from './DatesField';
 import CelebrationGrid from './CelebrationGrid';
@@ -35,7 +36,8 @@ export default function PlanStep() {
           <div className="min-w-[240px] flex-[2_1_240px]">
             <DestinationSearch />
           </div>
-          <div className="min-w-[360px] flex-[3_1_460px]">
+          {/* min-w stays phone-friendly; the travellers cell wraps inside the bar */}
+          <div className="min-w-[240px] flex-[3_1_460px]">
             <DatesField />
           </div>
         </div>
@@ -54,8 +56,11 @@ export default function PlanStep() {
         <CelebrationGrid />
       </div>
 
-      {/* Action bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/15 pt-3">
+      {/* Action bar — sticky so Continue is always in reach */}
+      <div
+        className="sticky bottom-0 z-30 flex flex-wrap items-center justify-between gap-3 border-t border-white/15 py-3 backdrop-blur-md"
+        style={{ background: 'color-mix(in srgb, var(--bg2) 82%, transparent)' }}
+      >
         <span className="flex items-center gap-2 text-[13px] text-white/65">
           <Icon name="info-circle" size={16} /> {help}
         </span>
@@ -66,16 +71,9 @@ export default function PlanStep() {
             disabled={!stepReady}
             onClick={() => dispatch(setStep('services'))}
             endIcon={<Icon name="arrow-right" size={18} />}
-            sx={{
-              background: 'linear-gradient(180deg,#e9c97f,#d4a94f)',
-              color: '#08201f',
-              fontWeight: 800,
-              boxShadow: 'none',
-              '&:hover': { background: 'linear-gradient(180deg,#edd089,#d9af55)', boxShadow: 'none' },
-              '&.Mui-disabled': { background: 'rgba(255,255,255,.12)', color: 'rgba(255,255,255,.4)' },
-            }}
+            sx={GOLD_BUTTON}
           >
-            Continue to services
+            Continue to surprises
           </Button>
         </div>
       </div>

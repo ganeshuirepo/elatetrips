@@ -151,7 +151,8 @@ export default function VoiceAssistant() {
   };
 
   return (
-    <div className="fixed right-6 bottom-6 z-50 flex flex-col items-end gap-3">
+    // Sits above the sticky step action bar so it never covers Continue.
+    <div className="fixed right-4 bottom-28 z-50 flex flex-col items-end gap-3 sm:right-6 sm:bottom-24">
       {open && (
         <div
           className="flex w-[360px] max-w-[calc(100vw-2rem)] flex-col gap-3 rounded-[18px] border p-4 shadow-2xl"

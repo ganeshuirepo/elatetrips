@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setStep } from '@/store/slices/uiSlice';
@@ -8,8 +9,6 @@ import TransportSection from './TransportSection';
 import RoomsField from './RoomsField';
 import HotelFilters from './HotelFilters';
 import HotelList from './HotelList';
-import LocalGuideNote from './LocalGuideNote';
-import CostSummary from './CostSummary';
 import Card from '@/components/ui/Card';
 import Icon from '@/components/ui/Icon';
 
@@ -20,37 +19,58 @@ import Icon from '@/components/ui/Icon';
  */
 export default function HotelsStep() {
   const dispatch = useAppDispatch();
+  // Filters are always visible on desktop; on phones they open via the icon.
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   return (
     <div className="flex flex-col gap-6">
       {/* Transport sits on the canvas like the Plan widgets do. */}
       <TransportSection />
 
-      {/* Rooms — decided alongside the stay */}
-      <div className="flex flex-col gap-3">
-        <div className="flex items-baseline justify-between gap-2">
-          <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
-            Rooms
-          </span>
-          <span className="text-[12.5px] text-white/55">How many rooms for your stay</span>
-        </div>
-        <RoomsField />
-      </div>
-
-      {/* Filters + listing — two separate cards, flex-wrap reflow, no breakpoints */}
+      {/* Filters + listing — two separate cards, flex-wrap reflow */}
       <div className="flex flex-wrap gap-6">
-        <Card className="min-w-[15rem] flex-[1_1_15rem] self-start">
-          <HotelFilters />
-        </Card>
+        <div
+          id="hotel-filters"
+          className={`min-w-[15rem] flex-[1_1_15rem] self-start ${filtersOpen ? '' : 'hidden'} md:block`}
+        >
+          <Card>
+            <HotelFilters />
+          </Card>
+        </div>
         <Card className="min-w-[18rem] flex-[3_1_22rem]">
+          <div className="mb-4 flex items-end justify-between gap-3">
+            <RoomsField />
+            {/* Filter toggle — phones only */}
+            <button
+              type="button"
+              aria-label="Toggle filters"
+              aria-expanded={filtersOpen}
+              onClick={() =>
+                setFiltersOpen((o) => {
+                  const next = !o;
+                  if (next)
+                    setTimeout(
+                      () =>
+                        document
+                          .getElementById('hotel-filters')
+                          ?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+                      60,
+                    );
+                  return next;
+                })
+              }
+              className="border-line text-ink flex cursor-pointer items-center gap-1.5 rounded-[12px] border-[1.5px] bg-white px-3 py-2.5 text-[13px] font-bold md:hidden"
+              style={filtersOpen ? { borderColor: 'var(--primary)', color: 'var(--primary)' } : {}}
+            >
+              <Icon name="adjustments-horizontal" size={17} /> Filters
+            </button>
+          </div>
           <HotelList />
         </Card>
       </div>
 
-      {/* Guide note, running total and the step actions, grounded in one card. */}
-      <Card className="flex flex-col gap-5">
-        <LocalGuideNote />
-        <CostSummary />
+      {/* Step actions — sticky so Continue is always in reach. */}
+      <Card className="sticky bottom-2 z-30 flex flex-col gap-5">
         <ContinueBar back={() => dispatch(setStep('services'))} />
       </Card>
     </div>
@@ -63,12 +83,18 @@ function ContinueBar({ back }: { back: () => void }) {
   const help = useAppSelector(selectTransportHelp);
 
   return (
-    <div className="border-line flex flex-wrap items-center justify-between gap-3 border-t pt-4">
+    <div className="border-line flex flex-col gap-2 border-t pt-4">
       <span className="text-muted flex items-center gap-2 text-[13px]">
         <Icon name="info-circle" size={16} /> {help}
       </span>
-      <div className="flex gap-2">
-        <Button variant="text" color="primary" onClick={back}>
+      <div className="flex w-full items-center justify-between gap-3">
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={back}
+          startIcon={<Icon name="arrow-left" size={18} />}
+        >
           Back
         </Button>
         <Button

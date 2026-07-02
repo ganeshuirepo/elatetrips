@@ -76,9 +76,6 @@ const planSlice = createSlice({
       const min = key === 'adults' ? 1 : 0;
       state[key] = Math.max(min, Math.min(TRAVELLERS_MAX, state[key] + delta));
     },
-    stepRooms(state, action: PayloadAction<number>) {
-      state.rooms = Math.max(1, Math.min(ROOMS_MAX, state.rooms + action.payload));
-    },
     /** Set traveller counts directly (used by the voice assistant). */
     setTravellers(state, action: PayloadAction<{ adults?: number; children?: number }>) {
       if (action.payload.adults != null)
@@ -86,7 +83,7 @@ const planSlice = createSlice({
       if (action.payload.children != null)
         state.children = Math.max(0, Math.min(TRAVELLERS_MAX, action.payload.children));
     },
-    /** Set room count directly (used by the voice assistant). */
+    /** Set room count directly (rooms dropdown + voice assistant). */
     setRooms(state, action: PayloadAction<number>) {
       state.rooms = Math.max(1, Math.min(ROOMS_MAX, action.payload));
     },
@@ -119,7 +116,6 @@ export const {
   pickDay,
   clearDates,
   stepTravellers,
-  stepRooms,
   setTravellers,
   setRooms,
   toggleCeleb,

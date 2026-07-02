@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { selectRoom } from '@/store/slices/hotelSlice';
@@ -8,7 +7,6 @@ import { ROOM_META } from '@/data/hotels';
 import { AMENITIES } from '@/data/hotelOptions';
 import { inr } from '@/domain/format';
 import Icon from '@/components/ui/Icon';
-import ExpandableRow from '@/components/ui/ExpandableRow';
 import type { Hotel, RoomSizeId } from '@/domain/types';
 
 const amenityName = (id: string) => AMENITIES.find((a) => a.id === id)?.name ?? id;
@@ -42,12 +40,11 @@ function Gallery({ hotel }: { hotel: Hotel }) {
   );
 }
 
-/** "Choose a room" — each room type is an expandable row with a Select button. */
+/** "Choose a room" — every room type visible at once with a Select button. */
 function RoomSection({ hotel }: { hotel: Hotel }) {
   const dispatch = useAppDispatch();
   const hRoom = useAppSelector((s) => s.hotel.hRoom);
   const selectedHotel = useAppSelector((s) => s.hotel.hHotel);
-  const [open, setOpen] = useState<Record<string, boolean>>({});
 
   return (
     <div className="flex flex-col gap-2">
@@ -56,30 +53,22 @@ function RoomSection({ hotel }: { hotel: Hotel }) {
         const price = Math.round(hotel.price * meta.mult);
         const active = selectedHotel === hotel.id && hRoom === rid;
         return (
-          <ExpandableRow
+          <div
             key={rid}
-            open={!!open[rid]}
-            onToggle={() => setOpen((o) => ({ ...o, [rid]: !o[rid] }))}
-            icon="ti-bed"
-            title={meta.name}
-            subtitle={`${meta.sqft} sq ft · ${meta.occ}`}
-            active={active}
-            right={<span className="text-ink text-[14px] font-extrabold">{inr(price)}</span>}
+            className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-[12px] border-[1.5px] bg-white px-3.5 py-3"
+            style={{ borderColor: active ? 'var(--accent)' : 'var(--line)' }}
           >
-            <div className="flex flex-col gap-3">
-              <div className="text-muted flex flex-col gap-1 text-[12px]">
-                <span className="flex items-center gap-1.5">
-                  <Icon name="ti-bed" size={13} style={{ color: 'var(--accent)' }} /> {meta.bed}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Icon name="ti-users-group" size={13} style={{ color: 'var(--accent)' }} />{' '}
-                  {meta.occ}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Icon name="ti-ruler-2" size={13} style={{ color: 'var(--accent)' }} /> {meta.sqft}{' '}
-                  sq ft
+            <div className="flex min-w-0 items-center gap-2.5">
+              <Icon name="ti-bed" size={18} style={{ color: 'var(--primary)' }} />
+              <div className="flex min-w-0 flex-col">
+                <span className="text-ink text-[13.5px] font-extrabold">{meta.name}</span>
+                <span className="text-muted text-[12px]">
+                  {meta.bed} · {meta.occ} · {meta.sqft} sq ft
                 </span>
               </div>
+            </div>
+            <div className="flex flex-none items-center gap-3">
+              <span className="text-ink text-[14px] font-extrabold">{inr(price)}</span>
               <Button
                 size="small"
                 variant={active ? 'contained' : 'outlined'}
@@ -89,7 +78,7 @@ function RoomSection({ hotel }: { hotel: Hotel }) {
                 {active ? 'Selected' : 'Select room'}
               </Button>
             </div>
-          </ExpandableRow>
+          </div>
         );
       })}
     </div>

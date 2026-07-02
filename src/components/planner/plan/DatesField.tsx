@@ -48,13 +48,16 @@ export default function DatesField() {
     <div
       data-cal
       ref={ref}
-      className="border-line relative flex h-full items-stretch rounded-[14px] border-[1.5px] bg-white"
+      className="border-line relative flex h-full flex-wrap items-stretch rounded-[14px] border-[1.5px] bg-white"
     >
       {dateCell('Tour start', start)}
       <div className="my-[9px] w-px flex-none bg-[#ECE7DC]" />
       {dateCell('Tour end', end)}
-      <div className="my-[9px] w-px flex-none bg-[#ECE7DC]" />
-      <Travellers />
+      <div className="my-[9px] hidden w-px flex-none bg-[#ECE7DC] sm:block" />
+      {/* On phones the travellers cell wraps to its own full-width row. */}
+      <div className="flex w-full basis-full border-t border-[#ECE7DC] sm:w-auto sm:flex-1 sm:basis-auto sm:border-t-0">
+        <Travellers />
+      </div>
 
       {calOpen && (
         <div className="border-line absolute top-[calc(100%+10px)] left-0 z-40 w-[27rem] max-w-[calc(100vw-2rem)] cursor-default rounded-[16px] border bg-white p-3 shadow-xl">

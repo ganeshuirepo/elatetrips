@@ -158,14 +158,16 @@ export default function PaymentStep() {
           </div>
         )}
 
-        <div className="border-line flex flex-wrap items-center justify-between gap-3 border-t pt-4">
+        <div className="border-line sticky bottom-0 z-30 flex items-center justify-between gap-3 border-t bg-white py-3">
           <Button
-            variant="text"
+            variant="contained"
             color="primary"
+            size="large"
             disabled={paying}
             onClick={() => dispatch(setStep('review'))}
+            startIcon={<Icon name="arrow-left" size={18} />}
           >
-            Back to review
+            Back
           </Button>
           <Button
             variant="contained"

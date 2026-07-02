@@ -31,8 +31,12 @@ export interface ServicesState {
    * its own. Keyed by `${occasionId}:${categoryId}:${optionId}`.
    */
   schedule: Record<string, OccasionBasics>;
-  /** User chose "I'll skip this section" — unlocks Continue with no picks. */
-  skipSection: boolean;
+  /**
+   * Panels the user skipped via "I'll skip this" (keyed by panel id — a
+   * celebration id, 'escapes' or 'surprisegifts'). A skipped panel counts as
+   * answered when gating "Continue to hotels".
+   */
+  skippedSections: Record<string, boolean>;
 }
 
 const initialState: ServicesState = {
@@ -45,7 +49,7 @@ const initialState: ServicesState = {
   occasions: {},
   picks: {},
   schedule: {},
-  skipSection: false,
+  skippedSections: {},
 };
 
 const defaultOccasion = (): OccasionBasics => ({ date: '', time: '' });
@@ -72,8 +76,10 @@ const servicesSlice = createSlice({
       const arr = state.picks[cat] ?? [];
       state.picks[cat] = arr.includes(id) ? arr.filter((x) => x !== id) : [...arr, id];
     },
-    setSkipSection(state, action: PayloadAction<boolean>) {
-      state.skipSection = action.payload;
+    toggleSkipPanel(state, action: PayloadAction<string>) {
+      const key = action.payload;
+      if (state.skippedSections[key]) delete state.skippedSections[key];
+      else state.skippedSections[key] = true;
     },
     /** Set the day or time for a single tile (escapes schedule per experience). */
     setTileSchedule(
@@ -87,6 +93,6 @@ const servicesSlice = createSlice({
   },
 });
 
-export const { setSvcField, setOccasionField, toggleSvcPick, setTileSchedule, setSkipSection } =
+export const { setSvcField, setOccasionField, toggleSvcPick, setTileSchedule, toggleSkipPanel } =
   servicesSlice.actions;
 export default servicesSlice.reducer;

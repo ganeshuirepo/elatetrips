@@ -9,7 +9,7 @@ import {
   setOccasionField,
   toggleSvcPick,
   setTileSchedule,
-  setSkipSection,
+  toggleSkipPanel,
   type ServiceScalarKey,
 } from '@/store/slices/servicesSlice';
 import { selectDays } from '@/store/selectors/planSelectors';
@@ -29,6 +29,7 @@ import {
   type ServiceOption,
 } from '@/data/services';
 import { CELEBRATIONS } from '@/data/celebrations';
+import { GOLD_BUTTON } from '@/components/planner/goldButton';
 import Icon from '@/components/ui/Icon';
 
 const NAME_BY_ID = Object.fromEntries(CELEBRATIONS.map((c) => [c.id, c.name]));
@@ -83,27 +84,22 @@ export default function ServicesStep() {
     );
   };
 
-  // Top-level quick filter across the blocks: one pill per celebration, plus a
-  // single "Escapes" pill (all escapes share one block). Shown only when there
-  // is more than one block to jump between.
-  const blocks = [
-    ...celebrationIds.map((id) => ({ key: id, label: NAME_BY_ID[id] ?? id })),
-    ...(escapeCats.length > 0 ? [{ key: 'escapes', label: 'Escapes' }] : []),
-    // Surprise gifts always shows, regardless of the occasions chosen.
-    { key: SURPRISE_GIFTS.id, label: SURPRISE_GIFTS.label },
-  ];
-  const [view, setView] = useState('all');
-  const activeView = view === 'all' || blocks.some((b) => b.key === view) ? view : 'all';
-  const showViewFilter = blocks.length > 1;
-
-  // Single-open accordion: all panels start closed; opening one closes the rest.
+  // Single-open accordion: all panels start closed; opening one closes the
+  // rest. Each panel carries its own "I'll skip this" button — skipping closes
+  // the panel and counts it as answered.
   const [openPanel, setOpenPanel] = useState<string | null>(null);
+  const skippedSections = svc.skippedSections;
   const panelProps = (key: string) => ({
-    open: openPanel === key,
+    open: openPanel === key && !skippedSections[key],
     onToggle: () => setOpenPanel((p) => (p === key ? null : key)),
+    skipped: !!skippedSections[key],
+    onSkip: () => {
+      dispatch(toggleSkipPanel(key));
+      setOpenPanel((p) => (p === key ? null : p));
+    },
   });
 
-  // Continue unlocks once the user engages with the section — or opts out.
+  // Continue unlocks once every panel is answered or skipped.
   const canContinue = useAppSelector(selectServicesReady);
 
   return (
@@ -111,46 +107,15 @@ export default function ServicesStep() {
       {/* Heading */}
       <div className="flex flex-col gap-2">
         <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
-          Celebration services
+          Celebration surprises
         </span>
         <span className="text-[13px] text-white/60">
           For each occasion, pick a day from your tour, a time, and the touches you&apos;d like.
         </span>
       </div>
 
-      {/* Opt-out — unlocks Continue without picking any services */}
-      <label className="flex w-fit cursor-pointer items-center gap-2.5 text-[13.5px] font-semibold text-white/80">
-        <input
-          type="checkbox"
-          checked={svc.skipSection}
-          onChange={(e) => dispatch(setSkipSection(e.target.checked))}
-          className="h-4 w-4 accent-[color:var(--accent)]"
-        />
-        I&apos;ll skip this section — no services needed, take me to hotels.
-      </label>
-
-      {/* Quick filter across the occasion blocks */}
-      {showViewFilter && (
-        <div className="flex flex-wrap gap-2">
-          <FilterPill label="All" active={activeView === 'all'} onClick={() => setView('all')} />
-          {blocks.map((b) => (
-            <FilterPill
-              key={b.key}
-              label={b.label}
-              active={activeView === b.key}
-              onClick={() => {
-                setView(b.key);
-                setOpenPanel(b.key);
-              }}
-            />
-          ))}
-        </div>
-      )}
-
       {/* One clubbed block per selected celebration: basics + its services */}
-      {celebrationIds
-        .filter((id) => activeView === 'all' || activeView === id)
-        .map((id) => {
+      {celebrationIds.map((id) => {
           const tpl = templateFor(id);
           const occ = svc.occasions[id] ?? { date: '', time: '' };
           const owned = sectionsFor(id).filter((s) => sectionOwner.get(s) === id);
@@ -243,7 +208,7 @@ export default function ServicesStep() {
         })}
 
       {/* All escapes in one block: filter by Wellness / Adventure / Local */}
-      {(activeView === 'all' || activeView === 'escapes') && escapeCats.length > 0 && (
+      {escapeCats.length > 0 && (
         <CollapsibleBlock
           title="Escapes"
           sub="Add the experiences you'd like and set a day & time for each."
@@ -259,19 +224,17 @@ export default function ServicesStep() {
       )}
 
       {/* Surprise gifts — always available, independent of occasions */}
-      {(activeView === 'all' || activeView === SURPRISE_GIFTS.id) && (
-        <CollapsibleBlock
-          title={SURPRISE_GIFTS.label}
-          sub={SURPRISE_GIFTS.sub}
-          {...panelProps(SURPRISE_GIFTS.id)}
-        >
-          <OccasionTiles
-            cats={[SURPRISE_GIFTS]}
-            picks={svc.picks}
-            onToggle={(cat, oid) => dispatch(toggleSvcPick({ cat, id: oid }))}
-          />
-        </CollapsibleBlock>
-      )}
+      <CollapsibleBlock
+        title={SURPRISE_GIFTS.label}
+        sub={SURPRISE_GIFTS.sub}
+        {...panelProps(SURPRISE_GIFTS.id)}
+      >
+        <OccasionTiles
+          cats={[SURPRISE_GIFTS]}
+          picks={svc.picks}
+          onToggle={(cat, oid) => dispatch(toggleSvcPick({ cat, id: oid }))}
+        />
+      </CollapsibleBlock>
 
       <Section label="Anything else?" sub="Special requests or ideas" {...panelProps('notes')}>
         <textarea
@@ -283,19 +246,24 @@ export default function ServicesStep() {
         />
       </Section>
 
-      {/* Action bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/15 pt-4">
+      {/* Action bar — sticky; Back left, Continue right, matching styles */}
+      <div
+        className="sticky bottom-0 z-30 flex flex-col gap-2 border-t border-white/15 py-3 backdrop-blur-md"
+        style={{ background: 'color-mix(in srgb, var(--bg2) 82%, transparent)' }}
+      >
         <span className="flex items-center gap-2 text-[13px] text-white/65">
           <Icon name="info-circle" size={16} />{' '}
           {canContinue
             ? 'These help us shortlist the right hotels & packages.'
-            : 'Pick at least one service — or tick "skip this section" above to move on.'}
+            : 'Answer or skip each section above to continue.'}
         </span>
-        <div className="flex gap-2">
+        <div className="flex w-full items-center justify-between gap-3">
           <Button
-            variant="text"
+            variant="contained"
+            size="large"
             onClick={() => dispatch(setStep('plan'))}
-            sx={{ color: 'rgba(255,255,255,.7)' }}
+            startIcon={<Icon name="arrow-left" size={18} />}
+            sx={GOLD_BUTTON}
           >
             Back
           </Button>
@@ -305,17 +273,7 @@ export default function ServicesStep() {
             disabled={!canContinue}
             onClick={() => dispatch(setStep('stay'))}
             endIcon={<Icon name="arrow-right" size={18} />}
-            sx={{
-              background: 'linear-gradient(180deg,#e9c97f,#d4a94f)',
-              color: '#08201f',
-              fontWeight: 800,
-              boxShadow: 'none',
-              '&:hover': {
-                background: 'linear-gradient(180deg,#edd089,#d9af55)',
-                boxShadow: 'none',
-              },
-              '&.Mui-disabled': { background: 'rgba(255,255,255,.12)', color: 'rgba(255,255,255,.4)' },
-            }}
+            sx={GOLD_BUTTON}
           >
             Continue to hotels
           </Button>
@@ -372,8 +330,9 @@ function Section({
 
 /**
  * Accordion wrapper for the occasion blocks — same transparent surface and
- * header as before, with a chevron toggle. Controlled by the page's
- * single-open accordion state (all closed by default).
+ * header as before, with a chevron toggle and an "I'll skip this" button at
+ * the top right. Controlled by the page's single-open accordion state (all
+ * closed by default); a skipped panel stays closed and counts as answered.
  */
 function CollapsibleBlock({
   title,
@@ -381,31 +340,57 @@ function CollapsibleBlock({
   children,
   open,
   onToggle,
+  skipped,
+  onSkip,
 }: {
   title: string;
   sub?: string;
   children: React.ReactNode;
   open: boolean;
   onToggle: () => void;
+  skipped: boolean;
+  onSkip: () => void;
 }) {
   return (
-    <div className="flex flex-col gap-4 rounded-[16px] border border-white/10 bg-white/[0.03] p-4">
-      <button
-        type="button"
+    <div
+      className="flex flex-col gap-4 rounded-[16px] border border-white/10 bg-white/[0.03] p-4"
+      style={{ opacity: skipped ? 0.65 : 1 }}
+    >
+      <div
+        role="button"
+        tabIndex={0}
         aria-expanded={open}
         onClick={onToggle}
-        className="flex cursor-pointer items-center justify-between gap-3 border-none bg-transparent p-0 text-left"
+        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onToggle()}
+        className="flex cursor-pointer items-center justify-between gap-3 text-left"
       >
-        <span className="flex flex-col gap-0.5">
+        <span className="flex min-w-0 flex-1 flex-col gap-0.5">
           <span className="font-serif text-[18px] font-bold text-white">{title}</span>
           {sub && <span className="text-[12.5px] text-white/55">{sub}</span>}
         </span>
-        <Icon
-          name={open ? 'chevron-up' : 'chevron-down'}
-          size={18}
-          style={{ color: 'rgba(255,255,255,.6)' }}
-        />
-      </button>
+        <span className="flex flex-none items-center gap-3">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onSkip();
+            }}
+            className="cursor-pointer rounded-full border-[1.5px] px-3 py-1 text-[11.5px] font-bold transition-colors"
+            style={{
+              background: skipped ? 'var(--accent)' : 'transparent',
+              borderColor: skipped ? 'var(--accent)' : 'rgba(255,255,255,.25)',
+              color: skipped ? '#08201F' : 'rgba(255,255,255,.75)',
+            }}
+          >
+            {skipped ? 'Skipped — undo' : "I'll skip this"}
+          </button>
+          <Icon
+            name={open ? 'chevron-up' : 'chevron-down'}
+            size={18}
+            style={{ color: 'rgba(255,255,255,.6)' }}
+          />
+        </span>
+      </div>
       {open && children}
     </div>
   );
@@ -510,7 +495,8 @@ function OccasionTiles({
           ))}
         </div>
       )}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+      {/* One full-width tile per row on phones; 3-up from tablet width. */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
         {tiles.map(({ catId, option }) => (
           <PackageTile
             key={`${catId}:${option.id}`}
