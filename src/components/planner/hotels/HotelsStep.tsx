@@ -26,23 +26,16 @@ export default function HotelsStep() {
       {/* Transport sits on the canvas like the Plan widgets do. */}
       <TransportSection />
 
-      {/* Rooms — decided alongside the stay */}
-      <div className="flex flex-col gap-3">
-        <div className="flex items-baseline justify-between gap-2">
-          <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
-            Rooms
-          </span>
-          <span className="text-[12.5px] text-white/55">How many rooms for your stay</span>
-        </div>
-        <RoomsField />
-      </div>
-
       {/* Filters + listing — two separate cards, flex-wrap reflow, no breakpoints */}
       <div className="flex flex-wrap gap-6">
         <Card className="min-w-[15rem] flex-[1_1_15rem] self-start">
           <HotelFilters />
         </Card>
         <Card className="min-w-[18rem] flex-[3_1_22rem]">
+          {/* Rooms sits atop the listing; defaults to travellers ÷ 2 per room. */}
+          <div className="mb-4">
+            <RoomsField />
+          </div>
           <HotelList />
         </Card>
       </div>

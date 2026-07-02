@@ -1,33 +1,30 @@
 'use client';
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { stepRooms } from '@/store/slices/planSlice';
-import Stepper from '@/components/ui/Stepper';
+import { setRooms } from '@/store/slices/planSlice';
 import { ROOMS_MAX } from '@/data/constants';
 
-/** Room-count stepper — lives with the stay, next to the hotel picking. */
+/** Labelled rooms dropdown atop the hotel listing. */
 export default function RoomsField() {
   const dispatch = useAppDispatch();
   const rooms = useAppSelector((s) => s.plan.rooms);
 
   return (
-    <div className="border-line flex min-w-[220px] max-w-[320px] items-center justify-between gap-3 rounded-[14px] border-[1.5px] bg-white px-4 py-[11px]">
-      <span className="flex flex-col">
-        <span className="text-muted block text-[10.5px] font-black tracking-[0.05em] uppercase">
-          Rooms
-        </span>
-        <span className="text-ink text-[16px] leading-[1.1] font-bold">
-          {rooms} Room{rooms === 1 ? '' : 's'}
-        </span>
+    <label className="flex w-fit flex-col gap-1.5">
+      <span className="text-muted text-[10.5px] font-black tracking-[0.05em] uppercase">
+        Number of rooms
       </span>
-      <Stepper
-        ariaLabel="Rooms"
+      <select
         value={rooms}
-        min={1}
-        max={ROOMS_MAX}
-        onDec={() => dispatch(stepRooms(-1))}
-        onInc={() => dispatch(stepRooms(1))}
-      />
-    </div>
+        onChange={(e) => dispatch(setRooms(Number(e.target.value)))}
+        className="text-ink min-w-[180px] cursor-pointer rounded-[12px] border border-[#DAD6CC] bg-white px-3.5 py-2.5 text-[14px] font-semibold outline-none"
+      >
+        {Array.from({ length: ROOMS_MAX }, (_, i) => i + 1).map((n) => (
+          <option key={n} value={n}>
+            {n} Room{n === 1 ? '' : 's'}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }
