@@ -38,8 +38,8 @@ export default function HotelsStep() {
         </Card>
       </div>
 
-      {/* Step actions — the running total and guide note live on Review now. */}
-      <Card className="flex flex-col gap-5">
+      {/* Step actions — sticky so Continue is always in reach. */}
+      <Card className="sticky bottom-2 z-30 flex flex-col gap-5">
         <ContinueBar back={() => dispatch(setStep('services'))} />
       </Card>
     </div>

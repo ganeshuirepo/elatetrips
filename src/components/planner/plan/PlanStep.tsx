@@ -55,8 +55,11 @@ export default function PlanStep() {
         <CelebrationGrid />
       </div>
 
-      {/* Action bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/15 pt-3">
+      {/* Action bar — sticky so Continue is always in reach */}
+      <div
+        className="sticky bottom-0 z-30 flex flex-wrap items-center justify-between gap-3 border-t border-white/15 py-3 backdrop-blur-md"
+        style={{ background: 'color-mix(in srgb, var(--bg2) 82%, transparent)' }}
+      >
         <span className="flex items-center gap-2 text-[13px] text-white/65">
           <Icon name="info-circle" size={16} /> {help}
         </span>

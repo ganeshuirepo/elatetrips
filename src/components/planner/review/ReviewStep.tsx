@@ -111,7 +111,7 @@ export default function ReviewStep() {
           </>
         )}
 
-        <div className="border-line flex flex-wrap items-center justify-between gap-3 border-t pt-4">
+        <div className="border-line sticky bottom-0 z-30 flex flex-wrap items-center justify-between gap-3 border-t bg-white py-3">
           <Button variant="text" color="primary" onClick={() => dispatch(setStep('stay'))}>
             Back
           </Button>
