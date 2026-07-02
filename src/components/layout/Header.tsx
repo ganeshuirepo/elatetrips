@@ -67,8 +67,8 @@ export default function Header() {
         </span>
       </div>
 
-      <div className="flex flex-wrap items-center gap-[20px]">
-        <nav className="flex flex-wrap items-center gap-[26px]">
+      <div className="flex flex-wrap items-center gap-x-[20px] gap-y-2">
+        <nav className="flex flex-wrap items-center gap-x-[26px] gap-y-1">
           <button
             type="button"
             onClick={() => dispatch(setView('wedding'))}

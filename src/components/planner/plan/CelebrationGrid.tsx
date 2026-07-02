@@ -42,7 +42,7 @@ export default function CelebrationGrid({ onPick }: { onPick?: (id: Celebration[
           <Icon name={c.icon} />
         </span>
         <span
-          className="min-w-0 text-center text-[16px] leading-tight font-bold whitespace-nowrap"
+          className="min-w-0 text-center text-[16px] leading-tight font-bold"
           style={{ color: selected ? '#08201F' : 'var(--ink)' }}
         >
           {c.name}
@@ -52,21 +52,21 @@ export default function CelebrationGrid({ onPick }: { onPick?: (id: Celebration[
   };
 
   return (
-    // Two parallel sections side by side: Celebration (4 cols) | Escapes (2 cols).
-    // The 4:2 flex ratio keeps tiles the same size across both sections.
-    <div className="flex items-start gap-6">
+    // Celebration | Escapes side by side on wide screens; the flex-basis makes
+    // them stack on phones. Tile columns adapt to the available width so
+    // labels never clip (auto-fill keeps every tile the same size).
+    <div className="flex flex-wrap items-start gap-x-6 gap-y-4">
       {CELEB_CATEGORY_META.map((cat) => {
         const items = CELEBRATIONS.filter((c) => c.category === cat.id);
         if (items.length === 0) return null;
-        // 3 columns keep every label (e.g. "Anniversary") on one line at 21px.
-        const cols = cat.id === 'rejuvenate' ? 2 : 3;
+        const wide = cat.id !== 'rejuvenate';
         return (
           <div
             key={cat.id}
             className="flex min-w-0 flex-col gap-2"
-            style={{ flex: cat.id === 'rejuvenate' ? 2.4 : 3.6 }}
+            style={{ flex: wide ? '3.6 1 320px' : '2.4 1 220px' }}
           >
-            <div className="flex items-baseline justify-between gap-2">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
               <span
                 className="text-[11px] font-black tracking-[0.06em] uppercase"
                 style={{ color: 'var(--accent)' }}
@@ -77,7 +77,7 @@ export default function CelebrationGrid({ onPick }: { onPick?: (id: Celebration[
             </div>
             <div
               className="grid gap-2"
-              style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
+              style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))' }}
             >
               {items.map(tile)}
             </div>

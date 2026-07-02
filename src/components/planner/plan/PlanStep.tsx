@@ -35,7 +35,8 @@ export default function PlanStep() {
           <div className="min-w-[240px] flex-[2_1_240px]">
             <DestinationSearch />
           </div>
-          <div className="min-w-[360px] flex-[3_1_460px]">
+          {/* min-w stays phone-friendly; the travellers cell wraps inside the bar */}
+          <div className="min-w-[240px] flex-[3_1_460px]">
             <DatesField />
           </div>
         </div>

@@ -368,7 +368,7 @@ function CollapsibleBlock({
         onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onToggle()}
         className="flex cursor-pointer items-center justify-between gap-3 text-left"
       >
-        <span className="flex flex-col gap-0.5">
+        <span className="flex min-w-0 flex-1 flex-col gap-0.5">
           <span className="font-serif text-[18px] font-bold text-white">{title}</span>
           {sub && <span className="text-[12.5px] text-white/55">{sub}</span>}
         </span>
