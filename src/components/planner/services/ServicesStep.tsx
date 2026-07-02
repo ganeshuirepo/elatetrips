@@ -1,20 +1,23 @@
 'use client';
 
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setStep } from '@/store/slices/uiSlice';
 import {
   setSvcField,
-  setSvcGuests,
+  setOccasionField,
   toggleSvcPick,
+  setTileSchedule,
   type ServiceScalarKey,
 } from '@/store/slices/servicesSlice';
+import { selectDays } from '@/store/selectors/planSelectors';
+import { fmtBig, fmtSub } from '@/domain/format';
 import {
-  SHARED_CATEGORIES,
-  SPECIAL_CATEGORIES,
+  CATEGORY_BY_ID,
+  TILE_CATEGORIES,
+  OCCASION_TILES,
   TIME_OPTIONS,
-  VENUE_OPTIONS,
-  AGE_GROUPS,
   GENDERS,
   MILESTONE_FOR,
   templateFor,
@@ -22,29 +25,59 @@ import {
   type ServiceOption,
 } from '@/data/services';
 import { CELEBRATIONS } from '@/data/celebrations';
-import Stepper from '@/components/ui/Stepper';
 import Icon from '@/components/ui/Icon';
 
 const NAME_BY_ID = Object.fromEntries(CELEBRATIONS.map((c) => [c.id, c.name]));
+const CATEGORY_OF = Object.fromEntries(CELEBRATIONS.map((c) => [c.id, c.category]));
 
 /**
- * Step between Plan and Hotels: gather the kind of celebration services wanted.
- * The basic questions adapt to the selected occasion(s) via per-occasion
- * templates; shared option grids (decor, food, music, …) are offered to all.
+ * Step between Plan and Hotels. Each chosen celebration gets its own block
+ * clubbing its basics (day, time, celebrant) with its tailored service tiles.
+ * All chosen escapes collapse into a single block whose tiles are filtered by
+ * experience (Wellness / Adventure / Local) and scheduled per tile.
  */
 export default function ServicesStep() {
   const dispatch = useAppDispatch();
   const celebs = useAppSelector((s) => s.plan.celebs);
   const svc = useAppSelector((s) => s.services);
-
-  // The chosen occasions drive which questions appear. Combine their needs so a
-  // shared field (date, guests…) is asked once, and gather their extra sections.
-  const templates = (celebs.length ? celebs : ['']).map((id) => ({ id, t: templateFor(id) }));
-  const need = (k: 'date' | 'time' | 'guests' | 'age' | 'gender') =>
-    templates.some(({ t }) => t[k]);
-  const sections = [...new Set(templates.flatMap(({ t }) => t.sections))];
+  const tourDays = useAppSelector(selectDays);
 
   const setField = (key: ServiceScalarKey, value: string) => dispatch(setSvcField({ key, value }));
+
+  const celebrationIds = celebs.filter((id) => CATEGORY_OF[id] !== 'rejuvenate');
+  const escapeIds = celebs.filter((id) => CATEGORY_OF[id] === 'rejuvenate');
+
+  // Celebration blocks wrap their own tiles: the occasion's template sections
+  // plus the shared celebration categories. Selection state is shared trip-wide,
+  // so each category is rendered only under the first celebration that declares it.
+  const sectionsFor = (id: string): string[] => {
+    const bucket = TILE_CATEGORIES[CATEGORY_OF[id] ?? 'celebration'] ?? [];
+    return [...templateFor(id).sections, ...bucket].filter((s, i, a) => a.indexOf(s) === i);
+  };
+  const sectionOwner = new Map<string, string>();
+  celebrationIds.forEach((id) =>
+    sectionsFor(id).forEach((s) => {
+      if (!sectionOwner.has(s)) sectionOwner.set(s, id);
+    }),
+  );
+
+  // All selected escapes collapse into one section with per-experience filters
+  // (Wellness / Adventure / Local experiences) and per-tile day/time scheduling.
+  const escapeCats = escapeIds
+    .flatMap((id) => OCCASION_TILES[id] ?? [])
+    .filter((c, i, a) => a.indexOf(c) === i)
+    .map((cid) => CATEGORY_BY_ID[cid])
+    .filter(Boolean);
+  const escapeSchedule = (catId: string, optId: string) => {
+    const key = `escape:${catId}:${optId}`;
+    return (
+      <TileSchedule
+        tourDays={tourDays}
+        value={svc.schedule[key] ?? { date: '', time: '' }}
+        onChange={(field, value) => dispatch(setTileSchedule({ key, field, value }))}
+      />
+    );
+  };
 
   return (
     <div className="flex max-w-[804px] flex-col gap-6">
@@ -54,142 +87,128 @@ export default function ServicesStep() {
           Celebration services
         </span>
         <span className="text-[13px] text-white/60">
-          Tell us what you&apos;re celebrating and the touches you&apos;d like — we&apos;ll match
-          hotels and packages to suit.
+          For each occasion, pick a day from your tour, a time, and the touches you&apos;d like.
         </span>
-        {celebs.length > 0 && (
-          <div className="mt-1 flex flex-wrap gap-2">
-            {celebs.map((id) => (
-              <span
-                key={id}
-                className="flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-bold"
-                style={{
-                  color: 'var(--accent)',
-                  background: 'color-mix(in srgb, var(--accent) 12%, transparent)',
-                  border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)',
-                }}
-              >
-                {NAME_BY_ID[id] ?? id}
-              </span>
-            ))}
-          </div>
-        )}
       </div>
 
-      {/* Basics — adapt to the occasion templates */}
-      <Section label="The basics" sub="When, who and how">
-        <div className="flex flex-wrap items-end gap-x-8 gap-y-5">
-          {need('date') && (
-            <Field label="Date">
-              <input
-                type="date"
-                value={svc.date}
-                onChange={(e) => setField('date', e.target.value)}
-                className="text-ink rounded-[12px] border border-[#DAD6CC] bg-white px-3.5 py-2.5 text-[14px] font-semibold outline-none"
-              />
-            </Field>
-          )}
-          {need('guests') && (
-            <Field label="Guests">
-              <Stepper
-                ariaLabel="Guests"
-                value={svc.guests}
-                min={1}
-                max={500}
-                onDec={() => dispatch(setSvcGuests(svc.guests - 1))}
-                onInc={() => dispatch(setSvcGuests(svc.guests + 1))}
-              />
-            </Field>
-          )}
-          {need('age') && (
-            <Field label="Age (years)">
-              <input
-                type="number"
-                min={0}
-                max={120}
-                placeholder="—"
-                value={svc.age}
-                onChange={(e) => setField('age', e.target.value.replace(/[^0-9]/g, '').slice(0, 3))}
-                className="text-ink w-[88px] rounded-[12px] border border-[#DAD6CC] bg-white px-3.5 py-2.5 text-[14px] font-semibold outline-none"
-              />
-            </Field>
-          )}
-        </div>
-
-        {need('time') && (
-          <ChipRow
-            label="Time of day"
-            options={TIME_OPTIONS}
-            value={svc.time}
-            onSelect={(id) => setField('time', id === svc.time ? '' : id)}
-          />
-        )}
-        {need('gender') && (
-          <ChipRow
-            label="Celebrant"
-            options={GENDERS}
-            value={svc.gender}
-            onSelect={(id) => setField('gender', id)}
-          />
-        )}
-      </Section>
-
-      {/* Occasion-specific sections */}
-      {sections.map((sec) => {
-        if (sec === 'ageGroup') {
-          return (
-            <Section key={sec} label="Age group" sub="We'll tailor the activities & menu">
-              <ChipRow
-                options={AGE_GROUPS}
-                value={svc.ageGroup}
-                onSelect={(id) => setField('ageGroup', id === svc.ageGroup ? '' : id)}
-              />
-            </Section>
-          );
-        }
-        if (sec === 'milestoneFor') {
-          return (
-            <Section key={sec} label="Celebrating" sub="Who or what is this milestone for?">
-              <ChipRow
-                options={MILESTONE_FOR}
-                value={svc.milestoneFor}
-                onSelect={(id) => setField('milestoneFor', id === svc.milestoneFor ? '' : id)}
-              />
-            </Section>
-          );
-        }
-        const cat = SPECIAL_CATEGORIES[sec];
-        if (!cat) return null;
+      {/* One clubbed block per selected celebration: basics + its services */}
+      {celebrationIds.map((id) => {
+        const tpl = templateFor(id);
+        const occ = svc.occasions[id] ?? { date: '', time: '' };
+        const owned = sectionsFor(id).filter((s) => sectionOwner.get(s) === id);
+        const showMilestone = owned.includes('milestoneFor');
+        const tileCats = owned.map((s) => CATEGORY_BY_ID[s]).filter(Boolean);
         return (
-          <Section key={sec} label={cat.label} sub={cat.sub}>
-            <OptionGrid
-              category={cat}
-              selected={svc.picks[cat.id] ?? []}
-              onToggle={(id) => dispatch(toggleSvcPick({ cat: cat.id, id }))}
-            />
-          </Section>
+          <div
+            key={id}
+            className="flex flex-col gap-4 rounded-[16px] border border-white/10 bg-white/[0.03] p-4"
+          >
+            <div className="flex flex-col gap-0.5">
+              <span className="font-serif text-[18px] font-bold text-white">
+                {NAME_BY_ID[id] ?? id}
+              </span>
+              <span className="text-[12.5px] text-white/55">{tpl.blurb}</span>
+            </div>
+
+            <div className="flex flex-wrap items-end gap-x-8 gap-y-5">
+              {tpl.date && (
+                <Field label="Day">
+                  <select
+                    value={occ.date}
+                    onChange={(e) =>
+                      dispatch(setOccasionField({ id, key: 'date', value: e.target.value }))
+                    }
+                    className="text-ink rounded-[12px] border border-[#DAD6CC] bg-white px-3.5 py-2.5 text-[14px] font-semibold outline-none"
+                  >
+                    <option value="">Select a tour day</option>
+                    {tourDays.map((iso) => (
+                      <option key={iso} value={iso}>
+                        {fmtBig(iso)} · {fmtSub(iso)}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
+              )}
+              {tpl.time && (
+                <Field label="Time of day">
+                  <select
+                    value={occ.time}
+                    onChange={(e) =>
+                      dispatch(setOccasionField({ id, key: 'time', value: e.target.value }))
+                    }
+                    className="text-ink rounded-[12px] border border-[#DAD6CC] bg-white px-3.5 py-2.5 text-[14px] font-semibold outline-none"
+                  >
+                    <option value="">Select a time</option>
+                    {TIME_OPTIONS.map((o) => (
+                      <option key={o.id} value={o.id}>
+                        {o.label}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
+              )}
+              {tpl.age && (
+                <Field label="Age (years)">
+                  <input
+                    type="number"
+                    min={0}
+                    max={120}
+                    placeholder="—"
+                    value={svc.age}
+                    onChange={(e) =>
+                      setField('age', e.target.value.replace(/[^0-9]/g, '').slice(0, 3))
+                    }
+                    className="text-ink w-[88px] rounded-[12px] border border-[#DAD6CC] bg-white px-3.5 py-2.5 text-[14px] font-semibold outline-none"
+                  />
+                </Field>
+              )}
+              {tpl.gender && (
+                <ChipRow
+                  label="Celebrant"
+                  options={GENDERS}
+                  value={svc.gender}
+                  onSelect={(g) => setField('gender', g)}
+                />
+              )}
+            </div>
+
+            {showMilestone && (
+              <Section label="Celebrating" sub="Who or what is this for?">
+                <ChipRow
+                  options={MILESTONE_FOR}
+                  value={svc.milestoneFor}
+                  onSelect={(mid) => setField('milestoneFor', mid === svc.milestoneFor ? '' : mid)}
+                />
+              </Section>
+            )}
+            {tileCats.length > 0 && (
+              <OccasionTiles
+                cats={tileCats}
+                picks={svc.picks}
+                onToggle={(cat, oid) => dispatch(toggleSvcPick({ cat, id: oid }))}
+              />
+            )}
+          </div>
         );
       })}
 
-      {/* Shared service categories */}
-      {SHARED_CATEGORIES.map((cat) => (
-        <Section key={cat.id} label={cat.label} sub={cat.sub}>
-          <OptionGrid
-            category={cat}
-            selected={svc.picks[cat.id] ?? []}
-            onToggle={(id) => dispatch(toggleSvcPick({ cat: cat.id, id }))}
+      {/* All escapes in one block: filter by Wellness / Adventure / Local */}
+      {escapeCats.length > 0 && (
+        <div className="flex flex-col gap-4 rounded-[16px] border border-white/10 bg-white/[0.03] p-4">
+          <div className="flex flex-col gap-0.5">
+            <span className="font-serif text-[18px] font-bold text-white">Escapes</span>
+            <span className="text-[12.5px] text-white/55">
+              Add the experiences you&apos;d like and set a day &amp; time for each.
+            </span>
+          </div>
+          <OccasionTiles
+            cats={escapeCats}
+            picks={svc.picks}
+            onToggle={(cat, oid) => dispatch(toggleSvcPick({ cat, id: oid }))}
+            renderSchedule={escapeSchedule}
           />
-        </Section>
-      ))}
-
-      {/* Venue + notes */}
-      <Section label="Venue" sub="Indoor, outdoor or either">
-        <ChipRow
-          options={VENUE_OPTIONS}
-          value={svc.venue}
-          onSelect={(id) => setField('venue', id === svc.venue ? '' : id)}
-        />
-      </Section>
+        </div>
+      )}
 
       <Section label="Anything else?" sub="Special requests or ideas">
         <textarea
@@ -225,7 +244,10 @@ export default function ServicesStep() {
               color: '#08201f',
               fontWeight: 800,
               boxShadow: 'none',
-              '&:hover': { background: 'linear-gradient(180deg,#edd089,#d9af55)', boxShadow: 'none' },
+              '&:hover': {
+                background: 'linear-gradient(180deg,#edd089,#d9af55)',
+                boxShadow: 'none',
+              },
             }}
           >
             Continue to hotels
@@ -319,38 +341,249 @@ function ChipRow({
   );
 }
 
-/** Multi-select option grid for a category. */
-function OptionGrid({
-  category,
-  selected,
+/**
+ * All of an occasion's package tiles combined into one grid, with single-select
+ * category filter pills (radio-style) above. "All" shows everything; picking a
+ * category narrows the grid. Selection state lives per category in the store.
+ */
+function OccasionTiles({
+  cats,
+  picks,
   onToggle,
+  renderSchedule,
 }: {
-  category: ServiceCategory;
-  selected: string[];
-  onToggle: (id: string) => void;
+  cats: ServiceCategory[];
+  picks: Record<string, string[]>;
+  onToggle: (cat: string, id: string) => void;
+  /** When set, each tile shows this per-experience day/time control (escapes). */
+  renderSchedule?: (catId: string, optionId: string) => React.ReactNode;
+}) {
+  const [filter, setFilter] = useState('all');
+  const active = cats.some((c) => c.id === filter) ? filter : 'all';
+  const shown = active === 'all' ? cats : cats.filter((c) => c.id === active);
+  const tiles = shown.flatMap((c) => c.options.map((o) => ({ catId: c.id, option: o })));
+  // A single category needs no filter — the grid already shows only its tiles.
+  const showFilters = cats.length > 1;
+
+  return (
+    <div className="flex flex-col gap-3">
+      {showFilters && (
+        <div className="flex flex-wrap gap-2">
+          <FilterPill label="All" active={active === 'all'} onClick={() => setFilter('all')} />
+          {cats.map((c) => (
+            <FilterPill
+              key={c.id}
+              label={c.label}
+              active={active === c.id}
+              onClick={() => setFilter(c.id)}
+            />
+          ))}
+        </div>
+      )}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {tiles.map(({ catId, option }) => (
+          <PackageTile
+            key={`${catId}:${option.id}`}
+            option={option}
+            active={(picks[catId] ?? []).includes(option.id)}
+            onToggle={() => onToggle(catId, option.id)}
+            schedule={renderSchedule?.(catId, option.id)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Single-select filter pill (radio-style) for the tile category filter. */
+function FilterPill({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
 }) {
   return (
-    <div className="flex flex-wrap gap-2">
-      {category.options.map((o) => {
-        const active = selected.includes(o.id);
-        return (
-          <button
-            key={o.id}
-            type="button"
-            aria-pressed={active}
-            onClick={() => onToggle(o.id)}
-            className={chipClass}
-            style={{
-              background: active ? 'var(--accent)' : '#FAF7F2',
-              borderColor: active ? 'var(--accent)' : '#EBE1CF',
-              color: active ? '#08201F' : 'var(--ink)',
-            }}
-          >
-            <Icon name={o.icon} size={16} />
-            {o.label}
-          </button>
-        );
-      })}
+    <button
+      type="button"
+      role="radio"
+      aria-checked={active}
+      onClick={onClick}
+      className="rounded-full border-[1.5px] px-3.5 py-1.5 text-[12.5px] font-semibold transition-colors"
+      style={{
+        background: active ? 'var(--accent)' : 'transparent',
+        borderColor: active ? 'var(--accent)' : 'rgba(255,255,255,.22)',
+        color: active ? '#08201F' : 'rgba(255,255,255,.75)',
+      }}
+    >
+      {label}
+    </button>
+  );
+}
+
+/** A single package card: image carousel, title, description, price + add/added. */
+function PackageTile({
+  option,
+  active,
+  onToggle,
+  schedule,
+}: {
+  option: ServiceOption;
+  active: boolean;
+  onToggle: () => void;
+  /** Optional per-tile day/time control, rendered below the card (escapes). */
+  schedule?: React.ReactNode;
+}) {
+  const images = option.images ?? [];
+  const [idx, setIdx] = useState(0);
+  const step = (delta: number) => (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIdx((i) => (i + delta + images.length) % images.length);
+  };
+
+  return (
+    <div
+      className="group flex flex-col overflow-hidden rounded-[16px] border-[1.5px] transition-colors"
+      style={{ background: '#FAF7F2', borderColor: active ? 'var(--accent)' : '#EBE1CF' }}
+    >
+      <button
+        type="button"
+        aria-pressed={active}
+        onClick={onToggle}
+        className="flex flex-1 flex-col text-left"
+      >
+        <div className="relative aspect-[4/3] w-full overflow-hidden bg-black/10">
+          {images.length > 0 && (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={images[idx]}
+              alt={option.label}
+              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+            />
+          )}
+          {images.length > 1 && (
+            <>
+              <span
+                role="button"
+                tabIndex={-1}
+                aria-label="Previous image"
+                onClick={step(-1)}
+                className="absolute top-1/2 left-1.5 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white opacity-0 transition-opacity group-hover:opacity-100"
+              >
+                <Icon name="chevron-left" size={15} />
+              </span>
+              <span
+                role="button"
+                tabIndex={-1}
+                aria-label="Next image"
+                onClick={step(1)}
+                className="absolute top-1/2 right-1.5 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white opacity-0 transition-opacity group-hover:opacity-100"
+              >
+                <Icon name="chevron-right" size={15} />
+              </span>
+              <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1">
+                {images.map((src, i) => (
+                  <span
+                    key={src}
+                    className="h-1.5 rounded-full transition-all"
+                    style={{
+                      width: i === idx ? 12 : 6,
+                      background: i === idx ? '#fff' : 'rgba(255,255,255,.6)',
+                    }}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+          {active && (
+            <span
+              className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full"
+              style={{ background: 'var(--accent)', color: '#08201F' }}
+            >
+              <Icon name="check" size={15} />
+            </span>
+          )}
+        </div>
+
+        <div className="flex flex-1 flex-col gap-1 p-3">
+          <div className="flex items-center gap-1.5">
+            <Icon name={option.icon} size={15} className="text-ink/70" />
+            <span className="text-ink text-[14px] leading-tight font-bold">{option.label}</span>
+          </div>
+          {option.description && (
+            <span className="text-ink/55 text-[12px] leading-snug">{option.description}</span>
+          )}
+          <div className="mt-auto flex items-end justify-between gap-2 pt-2">
+            {option.price != null && (
+              <span className="text-ink text-[13px] font-extrabold">
+                ₹{option.price.toLocaleString('en-IN')}
+                <span className="text-ink/45 ml-1 text-[11px] font-medium">onwards</span>
+              </span>
+            )}
+            <span
+              className="rounded-full px-2.5 py-1 text-[12px] font-bold"
+              style={{
+                background: active ? 'var(--accent)' : '#08201F',
+                color: active ? '#08201F' : '#fff',
+              }}
+            >
+              {active ? 'Added' : 'Add'}
+            </span>
+          </div>
+        </div>
+      </button>
+      {schedule && <div className="border-t border-[#EBE1CF] p-3">{schedule}</div>}
+    </div>
+  );
+}
+
+/** Compact day + time selectors placed inside an escape tile. */
+function TileSchedule({
+  tourDays,
+  value,
+  onChange,
+}: {
+  tourDays: string[];
+  value: { date: string; time: string };
+  onChange: (field: 'date' | 'time', value: string) => void;
+}) {
+  const sel =
+    'text-ink w-full rounded-[10px] border border-[#DAD6CC] bg-white px-2.5 py-2 text-[12.5px] font-semibold outline-none';
+  const lbl = 'text-ink/50 text-[9.5px] font-black tracking-[0.05em] uppercase';
+  return (
+    <div className="grid grid-cols-2 gap-2">
+      <label className="flex flex-col gap-1">
+        <span className={lbl}>Day</span>
+        <select
+          className={sel}
+          value={value.date}
+          onChange={(e) => onChange('date', e.target.value)}
+        >
+          <option value="">Select</option>
+          {tourDays.map((iso) => (
+            <option key={iso} value={iso}>
+              {fmtBig(iso)}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label className="flex flex-col gap-1">
+        <span className={lbl}>Time</span>
+        <select
+          className={sel}
+          value={value.time}
+          onChange={(e) => onChange('time', e.target.value)}
+        >
+          <option value="">Select</option>
+          {TIME_OPTIONS.map((o) => (
+            <option key={o.id} value={o.id}>
+              {o.label}
+            </option>
+          ))}
+        </select>
+      </label>
     </div>
   );
 }
