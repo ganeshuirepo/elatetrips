@@ -9,8 +9,6 @@ import { AMENITIES } from '@/data/hotelOptions';
 import { inr } from '@/domain/format';
 import Icon from '@/components/ui/Icon';
 import ExpandableRow from '@/components/ui/ExpandableRow';
-import CelebrationPackages from './CelebrationPackages';
-import ActivitiesExperiences from './ActivitiesExperiences';
 import type { Hotel, RoomSizeId } from '@/domain/types';
 
 const amenityName = (id: string) => AMENITIES.find((a) => a.id === id)?.name ?? id;
@@ -103,8 +101,8 @@ const sectionTitle = (text: string) => (
 );
 
 /**
- * Inline hotel detail shown when a listing is expanded — images clubbed on the
- * left, room selection + celebration packages + activities on the right.
+ * Inline hotel detail shown when a listing is expanded — room photos clubbed on
+ * the left, hotel details (amenities) and room selection on the right.
  */
 export default function HotelInlineDetail({ hotel }: { hotel: Hotel }) {
   return (
@@ -126,16 +124,6 @@ export default function HotelInlineDetail({ hotel }: { hotel: Hotel }) {
         <section className="flex flex-col gap-3">
           {sectionTitle('Choose a room')}
           <RoomSection hotel={hotel} />
-        </section>
-
-        <section className="flex flex-col gap-3">
-          {sectionTitle('Celebration packages')}
-          <CelebrationPackages celebFilter={[]} categoryFilter={[]} />
-        </section>
-
-        <section className="flex flex-col gap-3">
-          {sectionTitle('Activities & experiences')}
-          <ActivitiesExperiences kind="all" categoryFilter={[]} />
         </section>
       </div>
     </div>

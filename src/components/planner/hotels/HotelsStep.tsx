@@ -54,10 +54,10 @@ function ContinueBar({ back }: { back: () => void }) {
           variant="contained"
           color="primary"
           size="large"
-          onClick={() => dispatch(setStep('shop'))}
+          onClick={() => dispatch(setStep('review'))}
           endIcon={<Icon name="arrow-right" size={18} />}
         >
-          Continue to shopping
+          Continue to review
         </Button>
       </div>
     </div>

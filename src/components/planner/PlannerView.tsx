@@ -9,7 +9,6 @@ import CelebrationStep from './celebration/CelebrationStep';
 import PlanStep from './plan/PlanStep';
 import ServicesStep from './services/ServicesStep';
 import HotelsStep from './hotels/HotelsStep';
-import ShopStep from './shop/ShopStep';
 import ReviewStep from './review/ReviewStep';
 
 /** Planner wizard: step breadcrumb + the active step panel. */
@@ -36,10 +35,7 @@ export default function PlannerView() {
           // Hotels owns its surfaces too — filters + listing as separate cards.
           <HotelsStep />
         ) : (
-          <Card>
-            {step === 'shop' && <ShopStep />}
-            {step === 'review' && <ReviewStep />}
-          </Card>
+          <Card>{step === 'review' && <ReviewStep />}</Card>
         )}
       </div>
     </>

@@ -33,7 +33,6 @@ export default function WizardSteps({
     { id: 'celebration', label: 'Celebration' },
     { id: 'services', label: 'Services' },
     { id: 'stay', label: 'Hotels' },
-    { id: 'shop', label: 'Shopping' },
     { id: 'review', label: 'Review' },
   ];
 
@@ -42,7 +41,6 @@ export default function WizardSteps({
     celebration: planStepReady,
     services: planReady,
     stay: planReady,
-    shop: planReady,
     review: planReady,
   };
 

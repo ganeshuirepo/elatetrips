@@ -87,7 +87,7 @@ export default function ReviewStep() {
         )}
 
         <div className="border-line flex flex-wrap items-center justify-between gap-3 border-t pt-4">
-          <Button variant="text" color="primary" onClick={() => dispatch(setStep('shop'))}>
+          <Button variant="text" color="primary" onClick={() => dispatch(setStep('stay'))}>
             Back
           </Button>
           <Button
