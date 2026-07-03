@@ -262,9 +262,9 @@ function CatalogPanel({
                         onChange={(e) => onPickDay(e.target.value)}
                         className="text-ink rounded-[10px] border border-[#DAD6CC] bg-white px-2 py-1.5 text-[12.5px] font-semibold outline-none"
                       >
-                        {days.map((d, i) => (
+                        {days.map((d) => (
                           <option key={d} value={d}>
-                            Day {i + 1} · {fmtDay(d)}
+                            {fmtDay(d)}
                           </option>
                         ))}
                       </select>
@@ -310,6 +310,9 @@ export default function PreferencesStep() {
   const catalog = useMemo(buildCatalog, []);
   const noDates = days.length === 0;
   const dayNo = (day: string) => days.indexOf(day) + 1;
+  /** Compact date label for buttons/dropdowns, e.g. "24 Dec". */
+  const shortDate = (iso: string) =>
+    new Date(`${iso}T00:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 
   // Selected day shown in the middle timeline panel.
   const [selectedDay, setSelectedDay] = useState('');
@@ -377,9 +380,9 @@ export default function PreferencesStep() {
     pushItem(entry, slot.day, slot.startMin);
     setDropNote(
       slot.late
-        ? `Won't fit before sunset — added to Day ${dayNo(slot.day)}, but most places will be closed. Consider freeing up an earlier slot.`
+        ? `Won't fit before sunset — added to ${shortDate(slot.day)}, but most places will be closed. Consider freeing up an earlier slot.`
         : slot.packed
-          ? `Added to Day ${dayNo(slot.day)} — that day is overloaded.`
+          ? `Added to ${shortDate(slot.day)} — that day is overloaded.`
           : null,
     );
   };
@@ -407,7 +410,7 @@ export default function PreferencesStep() {
       dispatch(moveTimelineItem({ id: it.id, day, startMin: target.startMin }));
       setSelectedDay(day);
       if (target.late)
-        setDropNote(`Moved after sunset on Day ${dayNo(day)} — most places will be closed then.`);
+        setDropNote(`Moved after sunset on ${shortDate(day)} — most places will be closed then.`);
       return;
     }
     const key = e.dataTransfer.getData('application/x-catalog-entry');
@@ -419,7 +422,7 @@ export default function PreferencesStep() {
       const spot = placeOnDay(timeline, day, entry.durationH);
       pushItem(entry, day, spot.startMin);
       if (spot.late)
-        setDropNote(`Added after sunset on Day ${dayNo(day)} — most places will be closed then.`);
+        setDropNote(`Added after sunset on ${shortDate(day)} — most places will be closed then.`);
     }
   };
   const dropProps = (day: string) => ({
@@ -484,7 +487,7 @@ export default function PreferencesStep() {
               <Icon name="chevron-left" size={15} />
             </button>
             <div ref={dayStripRef} className="flex flex-1 gap-1.5 overflow-x-auto pb-0.5">
-              {days.map((d, i) => {
+              {days.map((d) => {
                 const active = d === activeDay;
                 return (
                   <button
@@ -499,7 +502,7 @@ export default function PreferencesStep() {
                       color: active || dragOver === d ? '#08201F' : 'rgba(255,255,255,.8)',
                     }}
                   >
-                    Day {i + 1}
+                    {shortDate(d)}
                   </button>
                 );
               })}
@@ -597,14 +600,14 @@ export default function PreferencesStep() {
                             setSelectedDay(toDay);
                             if (target.late)
                               setDropNote(
-                                `Won't fit before sunset on Day ${dayNo(toDay)} — this place may be closed.`,
+                                `Won't fit before sunset on ${shortDate(toDay)} — this place may be closed.`,
                               );
                           }}
                           className="cursor-pointer rounded-md border border-white/25 bg-transparent py-0.5 pl-1 text-[10.5px] font-bold text-white/75 outline-none"
                         >
-                          {days.map((d, i) => (
+                          {days.map((d) => (
                             <option key={d} value={d} style={{ color: '#08201F', background: '#fff' }}>
-                              Day {i + 1}
+                              {shortDate(d)}
                             </option>
                           ))}
                         </select>
