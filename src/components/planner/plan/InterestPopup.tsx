@@ -3,12 +3,17 @@
 import { useState } from 'react';
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setOccasionInterests } from '@/store/slices/prefsSlice';
+import {
+  setOccasionInterests,
+  addTimelineItem,
+  removeTimelineItem,
+} from '@/store/slices/prefsSlice';
 import { setOccasionField } from '@/store/slices/servicesSlice';
 import { selectDays } from '@/store/selectors/planSelectors';
 import { interestsFor } from '@/data/occasionInterests';
 import { CELEBRATIONS } from '@/data/celebrations';
 import { TIME_OPTIONS } from '@/data/services';
+import { DEFAULT_SERVICE_MIN, minutesLabel } from '@/domain/timeline';
 import { fmtBig, fmtSub } from '@/domain/format';
 import Icon from '@/components/ui/Icon';
 
@@ -77,6 +82,33 @@ export default function InterestPopup({
         dispatch(setOccasionField({ id: c.id, key: 'date', value: d.date }));
         dispatch(setOccasionField({ id: c.id, key: 'time', value: d.time }));
       }
+    }
+    // A dated occasion lands on the itinerary timeline right away (stable id,
+    // so re-saving updates in place); undated or deselected ones are cleared.
+    for (const c of CELEBRATIONS) {
+      const d = celebs.includes(c.id) ? drafts[c.id] : undefined;
+      const id = `occasion:${c.id}`;
+      if (!d || c.noSchedule || !d.date) {
+        dispatch(removeTimelineItem(id));
+        continue;
+      }
+      const startMin = d.time
+        ? Number(d.time.slice(0, 2)) * 60 + Number(d.time.slice(3, 5))
+        : c.category === 'rejuvenate'
+          ? 9 * 60
+          : DEFAULT_SERVICE_MIN;
+      dispatch(
+        addTimelineItem({
+          id,
+          kind: 'service',
+          refId: c.id,
+          name: c.name,
+          day: d.date,
+          startMin,
+          durationH: 2,
+          meta: `${c.category === 'rejuvenate' ? 'Escape' : 'Celebration'} · ${minutesLabel(startMin)}`,
+        }),
+      );
     }
     onSave();
   };

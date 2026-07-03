@@ -78,7 +78,7 @@ export default function PlanStep() {
             endIcon={<Icon name="arrow-right" size={18} />}
             sx={GOLD_BUTTON}
           >
-            Continue to preferences
+            Continue to itinerary
           </Button>
         </div>
       </div>
