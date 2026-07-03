@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setStep } from '@/store/slices/uiSlice';
@@ -45,6 +45,8 @@ interface CatalogEntry {
   meta: string;
   durationH: number;
   icon: string;
+  /** Service category (filter pills in the services panel). */
+  catLabel?: string;
 }
 
 /** Typical time a celebration service occupies, by category. */
@@ -84,6 +86,7 @@ function buildCatalog(): CatalogEntry[] {
         meta: `${cat.label}${o.price != null ? ` · ₹${o.price.toLocaleString('en-IN')}` : ''}`,
         durationH: SERVICE_DURATION[cat.id] ?? 1.5,
         icon: o.icon,
+        catLabel: cat.label,
       });
     }
   }
@@ -110,17 +113,31 @@ function buildCatalog(): CatalogEntry[] {
   return [...places, ...services, ...adventures];
 }
 
-const KIND_LABEL: Record<TimelineKind, string> = {
-  place: 'Places',
-  service: 'Services',
-  adventure: 'Adventures',
-};
-
 const fmtH = (h: number) => (h >= 1 ? `~${+h.toFixed(1)}h` : `~${Math.round(h * 60)}min`);
 const entryKey = (e: CatalogEntry) => `${e.kind}:${e.refId}`;
 
 type Feedback = { key: string; kind: 'ok' | 'warn' | 'error'; text: string };
 const FEEDBACK_COLOR = { ok: '#1E7A3A', warn: '#B96212', error: '#C0392B' } as const;
+
+/** Small filter pill used inside the panels. */
+function Pill({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      role="radio"
+      aria-checked={active}
+      onClick={onClick}
+      className="flex-none cursor-pointer rounded-full border-[1.5px] px-3 py-1 text-[12px] font-semibold whitespace-nowrap transition-colors"
+      style={{
+        background: active ? 'var(--accent)' : 'transparent',
+        borderColor: active ? 'var(--accent)' : 'rgba(255,255,255,.22)',
+        color: active ? '#08201F' : 'rgba(255,255,255,.75)',
+      }}
+    >
+      {label}
+    </button>
+  );
+}
 
 /** Multi-select chip shared by both preference groups. */
 function PrefChip({
@@ -152,11 +169,166 @@ function PrefChip({
   );
 }
 
+interface PanelShared {
+  noDates: boolean;
+  days: string[];
+  timeline: TimelineItem[];
+  addingService: CatalogEntry | null;
+  selDay: string;
+  selTime: number;
+  onPickDay: (d: string) => void;
+  onPickTime: (t: number) => void;
+  onConfirmService: () => void;
+  onCancelService: () => void;
+  onBeginService: (e: CatalogEntry) => void;
+  onAddSequential: (e: CatalogEntry) => void;
+  feedback: Feedback | null;
+}
+
+/** A filterable, scrollable list of addable entries (left/right panels). */
+function CatalogPanel({
+  title,
+  sub,
+  entries,
+  filters,
+  shared,
+}: {
+  title: string;
+  sub: string;
+  entries: CatalogEntry[];
+  filters: { id: string; label: string; match: (e: CatalogEntry) => boolean }[];
+  shared: PanelShared;
+}) {
+  const [f, setF] = useState('all');
+  const act = filters.find((x) => x.id === f) ?? filters[0];
+  const list = entries.filter(act.match);
+  const {
+    noDates,
+    days,
+    addingService,
+    selDay,
+    selTime,
+    onPickDay,
+    onPickTime,
+    onConfirmService,
+    onCancelService,
+    onBeginService,
+    onAddSequential,
+    feedback,
+  } = shared;
+
+  return (
+    <div className="flex min-w-0 flex-col gap-2 rounded-[16px] border border-white/10 bg-white/[0.03] p-3.5">
+      <div className="flex flex-col">
+        <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">{title}</span>
+        <span className="text-[11.5px] text-white/50">{sub}</span>
+      </div>
+      <div className="flex gap-1.5 overflow-x-auto pb-1">
+        {filters.map((x) => (
+          <Pill key={x.id} label={x.label} active={f === x.id} onClick={() => setF(x.id)} />
+        ))}
+      </div>
+      <div className="flex max-h-[430px] flex-col gap-1.5 overflow-y-auto pr-1">
+        {list.map((entry) => {
+          const key = entryKey(entry);
+          const isAdding = addingService ? entryKey(addingService) === key : false;
+          return (
+            <div
+              key={key}
+              draggable={!noDates}
+              onDragStart={(e) => e.dataTransfer.setData('application/x-catalog-entry', key)}
+              className="flex cursor-grab flex-col rounded-[12px] border-[1.5px] border-[#EBE1CF] bg-[#FAF7F2] px-3 py-2 active:cursor-grabbing"
+            >
+              <div className="flex items-center gap-2.5">
+                <Icon name={entry.icon} size={16} style={{ color: 'var(--primary)' }} className="flex-none" />
+                <div className="flex min-w-0 flex-1 flex-col">
+                  <span className="text-ink truncate text-[13px] leading-tight font-bold">{entry.name}</span>
+                  <span className="text-muted truncate text-[11px]">
+                    {entry.meta} · <Icon name="clock" size={10} /> {fmtH(entry.durationH)}
+                  </span>
+                </div>
+                <Button
+                  size="small"
+                  variant={isAdding ? 'outlined' : 'contained'}
+                  color="primary"
+                  disabled={noDates}
+                  sx={{ minWidth: 52, px: 1 }}
+                  onClick={() =>
+                    entry.kind === 'service'
+                      ? isAdding
+                        ? onCancelService()
+                        : onBeginService(entry)
+                      : onAddSequential(entry)
+                  }
+                >
+                  {isAdding ? 'Cancel' : 'Add'}
+                </Button>
+              </div>
+
+              {feedback?.key === key && (
+                <span className="mt-1 text-[11.5px] font-semibold" style={{ color: FEEDBACK_COLOR[feedback.kind] }}>
+                  {feedback.text}
+                </span>
+              )}
+
+              {isAdding && (
+                <div className="mt-2 flex flex-col gap-2 border-t border-[#EBE1CF] pt-2">
+                  <div className="flex flex-wrap items-end gap-2">
+                    <label className="flex flex-col gap-1">
+                      <span className="text-muted text-[10px] font-black tracking-[0.05em] uppercase">Day</span>
+                      <select
+                        value={selDay}
+                        onChange={(e) => onPickDay(e.target.value)}
+                        className="text-ink rounded-[10px] border border-[#DAD6CC] bg-white px-2 py-1.5 text-[12.5px] font-semibold outline-none"
+                      >
+                        {days.map((d, i) => (
+                          <option key={d} value={d}>
+                            Day {i + 1} · {fmtDay(d)}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className="flex flex-col gap-1">
+                      <span className="text-muted text-[10px] font-black tracking-[0.05em] uppercase">Time</span>
+                      <select
+                        value={selTime}
+                        onChange={(e) => onPickTime(Number(e.target.value))}
+                        className="text-ink rounded-[10px] border border-[#DAD6CC] bg-white px-2 py-1.5 text-[12.5px] font-semibold outline-none"
+                      >
+                        {SERVICE_TIME_OPTIONS.map((t) => (
+                          <option key={t} value={t}>
+                            {minutesLabel(t)}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <Button size="small" variant="contained" color="primary" onClick={onConfirmService}>
+                      Add
+                    </Button>
+                  </div>
+                  <span className="text-muted text-[11.5px]">
+                    Celebrations can run at any hour — late night included.
+                  </span>
+                </div>
+              )}
+            </div>
+          );
+        })}
+        {list.length === 0 && (
+          <span className="px-2 py-4 text-center text-[12px] text-white/40">
+            Everything here is already on your timeline.
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
 /**
- * Step 2 — Preferences: interests, then the trip timeline. Sightseeing and
- * adventures auto-sequence into daylight (till ~6 PM); celebrations take an
- * explicit day + time and may run at any hour. Items can also be dragged
- * from the list onto a day, or between days.
+ * Step 2 — Preferences. The planning board: places & adventures on the left,
+ * one-day-at-a-time vertical timeline in the middle (day buttons + arrows),
+ * celebration services on the right. Items already on the timeline leave the
+ * lists; on phones the two lists merge into one filterable panel.
  */
 export default function PreferencesStep() {
   const dispatch = useAppDispatch();
@@ -164,8 +336,13 @@ export default function PreferencesStep() {
   const days = useAppSelector(selectDays);
 
   const catalog = useMemo(buildCatalog, []);
-  const [filter, setFilter] = useState<'all' | TimelineKind>('all');
-  const [showTimeline, setShowTimeline] = useState(true);
+  const noDates = days.length === 0;
+  const dayNo = (day: string) => days.indexOf(day) + 1;
+
+  // Selected day shown in the middle timeline panel.
+  const [selectedDay, setSelectedDay] = useState('');
+  const activeDay = days.includes(selectedDay) ? selectedDay : (days[0] ?? '');
+  const dayStripRef = useRef<HTMLDivElement>(null);
 
   // Service add flow (day + time picker); places/adventures add instantly.
   const [addingService, setAddingService] = useState<CatalogEntry | null>(null);
@@ -173,8 +350,8 @@ export default function PreferencesStep() {
   const [selTime, setSelTime] = useState(SERVICE_TIME_OPTIONS[37]); // 6:30 PM
 
   const [feedback, setFeedback] = useState<Feedback | null>(null);
-  const [dragOverDay, setDragOverDay] = useState<string | null>(null);
-  const [dropNote, setDropNote] = useState<{ day: string; text: string } | null>(null);
+  const [dragOver, setDragOver] = useState<string | null>(null); // day being hovered
+  const [dropNote, setDropNote] = useState<string | null>(null);
 
   useEffect(() => {
     if (!feedback) return;
@@ -187,9 +364,10 @@ export default function PreferencesStep() {
     return () => clearTimeout(t);
   }, [dropNote]);
 
-  const shown = catalog.filter((e) => filter === 'all' || e.kind === filter);
-  const noDates = days.length === 0;
-  const dayNo = (day: string) => days.indexOf(day) + 1;
+  /** Items already planned disappear from the lists until removed. */
+  const onTimeline = (e: CatalogEntry) =>
+    timeline.some((i) => i.kind === e.kind && i.refId === e.refId);
+  const available = catalog.filter((e) => !onTimeline(e));
 
   const pushItem = (entry: CatalogEntry, day: string, startMin: number) => {
     dispatch(
@@ -204,7 +382,7 @@ export default function PreferencesStep() {
         meta: entry.meta,
       }),
     );
-    setShowTimeline(true);
+    setSelectedDay(day);
   };
 
   /** Add button for places/adventures: pure sequence, no time to choose. */
@@ -229,7 +407,7 @@ export default function PreferencesStep() {
   };
 
   const beginServiceAdd = (entry: CatalogEntry) => {
-    const day = days[0];
+    const day = activeDay || days[0];
     setAddingService(entry);
     setSelDay(day);
     setSelTime(nextServiceStart(timeline, day));
@@ -238,28 +416,24 @@ export default function PreferencesStep() {
   const confirmServiceAdd = () => {
     if (!addingService) return;
     pushItem(addingService, selDay, selTime);
-    setFeedback({
-      key: entryKey(addingService),
-      kind: 'ok',
-      text: `Added to Day ${dayNo(selDay)} at ${minutesLabel(selTime)}${isNight(selTime) ? ' (night celebration 🌙)' : ''}.`,
-    });
     setAddingService(null);
   };
 
   // ---- Drag & drop -----------------------------------------------------------
-  const onDropOnDay = (e: React.DragEvent, day: string) => {
+  const handleDrop = (e: React.DragEvent, day: string) => {
     e.preventDefault();
-    setDragOverDay(null);
+    setDragOver(null);
     const itemId = e.dataTransfer.getData('application/x-timeline-item');
     if (itemId) {
       const it = timeline.find((i) => i.id === itemId);
       if (!it || it.day === day) return;
       const target = moveTarget(timeline, it, day);
       if (!target) {
-        setDropNote({ day, text: `No room before sunset on Day ${dayNo(day)} — try another day.` });
+        setDropNote(`No room before sunset on Day ${dayNo(day)} — try another day.`);
         return;
       }
       dispatch(moveTimelineItem({ id: it.id, day, startMin: target.startMin }));
+      setSelectedDay(day);
       return;
     }
     const key = e.dataTransfer.getData('application/x-catalog-entry');
@@ -268,11 +442,235 @@ export default function PreferencesStep() {
     if (entry.kind === 'service') {
       pushItem(entry, day, nextServiceStart(timeline, day));
     } else if (daylightFits(timeline, day, entry.durationH)) {
-      pushItem(entry, day, nextDaylightStart(timeline, day));
+      pushItem(entry, day, nextDaylightStart(timeline, day, entry.durationH));
     } else {
-      setDropNote({ day, text: `No room before sunset on Day ${dayNo(day)} — try another day.` });
+      setDropNote(`No room before sunset on Day ${dayNo(day)} — try another day.`);
     }
   };
+  const dropProps = (day: string) => ({
+    onDragOver: (e: React.DragEvent) => {
+      e.preventDefault();
+      setDragOver(day);
+    },
+    onDragLeave: () => setDragOver((d) => (d === day ? null : d)),
+    onDrop: (e: React.DragEvent) => handleDrop(e, day),
+  });
+
+  const panelShared = {
+    noDates,
+    days,
+    timeline,
+    addingService,
+    selDay,
+    selTime,
+    onPickDay: (d: string) => {
+      setSelDay(d);
+      setSelTime(nextServiceStart(timeline, d));
+    },
+    onPickTime: setSelTime,
+    onConfirmService: confirmServiceAdd,
+    onCancelService: () => setAddingService(null),
+    onBeginService: beginServiceAdd,
+    onAddSequential: addSequential,
+    feedback,
+  };
+
+  // ---- Timeline panel (middle column) ------------------------------------------
+  const timelinePanel = (
+    <div className="flex min-w-0 flex-col gap-2 rounded-[16px] border border-white/10 bg-white/[0.03] p-3.5">
+      <div className="flex items-baseline justify-between gap-2">
+        <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
+          Timeline ({timeline.length})
+        </span>
+        {!noDates && (
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() => {
+              dispatch(setTimeline(autoFillTimeline(days, interests)));
+            }}
+            startIcon={<Icon name="wand" size={14} />}
+            sx={{ color: 'rgba(255,255,255,.85)', borderColor: 'rgba(255,255,255,.3)', py: 0.2 }}
+          >
+            Auto-plan
+          </Button>
+        )}
+      </div>
+
+      {noDates ? (
+        <span className="px-2 py-6 text-center text-[12.5px] text-white/50">
+          Pick your tour dates on the Plan step to start the timeline.
+        </span>
+      ) : (
+        <>
+          {/* Day switcher: arrows + scrollable day buttons (drop targets too) */}
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              aria-label="Previous day"
+              disabled={dayNo(activeDay) <= 1}
+              onClick={() => setSelectedDay(days[Math.max(0, dayNo(activeDay) - 2)])}
+              className="flex h-7 w-7 flex-none cursor-pointer items-center justify-center rounded-full border border-white/25 bg-transparent text-white/75 disabled:opacity-30"
+            >
+              <Icon name="chevron-left" size={15} />
+            </button>
+            <div ref={dayStripRef} className="flex flex-1 gap-1.5 overflow-x-auto pb-0.5">
+              {days.map((d, i) => {
+                const active = d === activeDay;
+                return (
+                  <button
+                    key={d}
+                    type="button"
+                    {...dropProps(d)}
+                    onClick={() => setSelectedDay(d)}
+                    className="flex-none cursor-pointer rounded-full border-[1.5px] px-3 py-1 text-[12px] font-bold whitespace-nowrap transition-colors"
+                    style={{
+                      background: active || dragOver === d ? 'var(--accent)' : 'transparent',
+                      borderColor: active || dragOver === d ? 'var(--accent)' : 'rgba(255,255,255,.25)',
+                      color: active || dragOver === d ? '#08201F' : 'rgba(255,255,255,.8)',
+                    }}
+                  >
+                    Day {i + 1}
+                  </button>
+                );
+              })}
+            </div>
+            <button
+              type="button"
+              aria-label="Next day"
+              disabled={dayNo(activeDay) >= days.length}
+              onClick={() => setSelectedDay(days[Math.min(days.length - 1, dayNo(activeDay))])}
+              className="flex h-7 w-7 flex-none cursor-pointer items-center justify-center rounded-full border border-white/25 bg-transparent text-white/75 disabled:opacity-30"
+            >
+              <Icon name="chevron-right" size={15} />
+            </button>
+          </div>
+
+          {/* Selected day's vertical timeline (drop target) */}
+          {(() => {
+            const day = activeDay;
+            const list = itemsOn(timeline, day);
+            const packed = daylightHours(timeline, day) > DAY_COMFORT_H;
+            const totalH = dayHours(timeline, day);
+            const isOver = dragOver === day;
+            return (
+              <div
+                {...dropProps(day)}
+                data-tl-day={day}
+                className="flex min-h-[220px] flex-col gap-2 rounded-[12px] border p-3 transition-colors"
+                style={{
+                  borderColor: isOver ? 'var(--accent)' : 'rgba(255,255,255,.12)',
+                  background: isOver ? 'color-mix(in srgb, var(--accent) 8%, transparent)' : 'transparent',
+                }}
+              >
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="text-[12px] font-bold text-white/80">{fmtDay(day)}</span>
+                  <span className="text-[11.5px] font-bold" style={{ color: packed ? '#E8A87C' : 'rgba(255,255,255,.45)' }}>
+                    {totalH > 0 ? `${totalH.toFixed(1)}h planned` : 'Nothing yet'}
+                    {packed && ' · packed'}
+                  </span>
+                </div>
+
+                <div className="flex max-h-[360px] flex-col overflow-y-auto pr-1">
+                  {list.map((it, idx) => (
+                    <div
+                      key={it.id}
+                      data-tl-item={it.id}
+                      draggable
+                      onDragStart={(e) => e.dataTransfer.setData('application/x-timeline-item', it.id)}
+                      className="relative flex cursor-grab gap-3 active:cursor-grabbing"
+                    >
+                      <div className="flex w-7 flex-none flex-col items-center">
+                        <span
+                          className="flex h-7 w-7 flex-none items-center justify-center rounded-full border-[1.5px]"
+                          style={{
+                            borderColor: 'color-mix(in srgb, var(--accent) 55%, transparent)',
+                            background: 'color-mix(in srgb, var(--accent) 14%, transparent)',
+                            color: 'var(--accent)',
+                          }}
+                        >
+                          <Icon
+                            name={
+                              it.kind === 'service'
+                                ? isNight(it.startMin)
+                                  ? 'moon'
+                                  : 'sparkles'
+                                : it.kind === 'adventure'
+                                  ? 'mountain'
+                                  : 'map-pin'
+                            }
+                            size={13}
+                          />
+                        </span>
+                        {idx < list.length - 1 && (
+                          <span className="my-1 w-px flex-1 bg-white/15" style={{ minHeight: 12 }} />
+                        )}
+                      </div>
+                      <div className="flex min-w-0 flex-1 flex-col pb-3">
+                        <span className="text-[10.5px] font-black tracking-[0.04em]" style={{ color: 'var(--accent)' }}>
+                          {minutesLabel(it.startMin)}
+                          {it.kind === 'service' && isNight(it.startMin) && ' · NIGHT'}
+                        </span>
+                        <span className="text-[13px] leading-tight font-bold text-white">
+                          {it.name} <span className="font-medium text-white/45">{fmtH(it.durationH)}</span>
+                        </span>
+                        <span className="truncate text-[11px] text-white/45">{it.meta}</span>
+                      </div>
+                      <div className="flex flex-none items-start gap-1.5 pt-1">
+                        <Icon name="grip-vertical" size={14} className="hidden text-white/25 md:block" />
+                        <button
+                          type="button"
+                          aria-label={`Remove ${it.name}`}
+                          onClick={() => dispatch(removeTimelineItem(it.id))}
+                          className="cursor-pointer border-none bg-transparent p-0 text-white/40 hover:text-[#E8A87C]"
+                        >
+                          <Icon name="x" size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  {list.length === 0 && (
+                    <span className="rounded-[10px] border border-dashed border-white/20 px-3 py-6 text-center text-[12px] text-white/40">
+                      Drag items here — or use Add and we&apos;ll slot them in sequence.
+                    </span>
+                  )}
+                </div>
+
+                {packed && (
+                  <span className="flex items-start gap-1.5 text-[11.5px] font-semibold" style={{ color: '#E8A87C' }}>
+                    <Icon name="alert-triangle" size={13} className="mt-[1px] flex-none" />
+                    Too many plans for this day — drag something onto another day button.
+                  </span>
+                )}
+                {dropNote && (
+                  <span className="text-[11.5px] font-semibold" style={{ color: '#E8A87C' }}>
+                    {dropNote}
+                  </span>
+                )}
+              </div>
+            );
+          })()}
+        </>
+      )}
+    </div>
+  );
+
+  const placeFilters = [
+    { id: 'all', label: 'All', match: () => true },
+    { id: 'place', label: 'Places', match: (e: CatalogEntry) => e.kind === 'place' },
+    { id: 'adventure', label: 'Adventures', match: (e: CatalogEntry) => e.kind === 'adventure' },
+  ];
+  const serviceCats = [...new Set(available.filter((e) => e.kind === 'service').map((e) => e.catLabel!))];
+  const serviceFilters = [
+    { id: 'all', label: 'All', match: () => true },
+    ...serviceCats.map((c) => ({ id: c, label: c, match: (e: CatalogEntry) => e.catLabel === c })),
+  ];
+  const combinedFilters = [
+    { id: 'all', label: 'All', match: () => true },
+    { id: 'place', label: 'Places', match: (e: CatalogEntry) => e.kind === 'place' },
+    { id: 'service', label: 'Services', match: (e: CatalogEntry) => e.kind === 'service' },
+    { id: 'adventure', label: 'Adventures', match: (e: CatalogEntry) => e.kind === 'adventure' },
+  ];
 
   return (
     <div className="flex flex-col gap-6">
@@ -282,7 +680,8 @@ export default function PreferencesStep() {
           Preferences
         </span>
         <span className="text-[13px] text-white/60">
-          Tell us what you love, then build your day-by-day timeline.
+          Tell us what you love, then build your day-by-day timeline — sightseeing wraps by sunset,
+          celebrations can go late 🌙
         </span>
       </div>
 
@@ -328,318 +727,33 @@ export default function PreferencesStep() {
         </div>
       </div>
 
-      {/* Timeline header + controls */}
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="flex flex-col">
-          <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
-            Plan your days
-          </span>
-          <span className="text-[12.5px] text-white/55">
-            {noDates
-              ? 'Pick your tour dates on the Plan step to start the timeline.'
-              : 'Sightseeing & adventures run till sunset (~6 PM) · celebrations can go late 🌙'}
-          </span>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {!noDates && (
-            <Button
-              size="small"
-              variant="outlined"
-              onClick={() => {
-                dispatch(setTimeline(autoFillTimeline(days, interests)));
-                setShowTimeline(true);
-              }}
-              startIcon={<Icon name="wand" size={15} />}
-              sx={{ color: 'rgba(255,255,255,.85)', borderColor: 'rgba(255,255,255,.3)' }}
-            >
-              Auto-plan
-            </Button>
-          )}
-          <Button
-            size="small"
-            variant={showTimeline ? 'contained' : 'outlined'}
-            onClick={() => setShowTimeline((o) => !o)}
-            startIcon={<Icon name="calendar-time" size={15} />}
-            sx={
-              showTimeline
-                ? { ...GOLD_BUTTON, py: 0.5 }
-                : { color: 'rgba(255,255,255,.85)', borderColor: 'rgba(255,255,255,.3)' }
-            }
-          >
-            Timeline ({timeline.length})
-          </Button>
-        </div>
+      {/* Planning board: desktop = 3 columns; mobile = timeline + combined list */}
+      <div className="hidden gap-4 lg:grid" style={{ gridTemplateColumns: '1fr 1.15fr 1fr' }}>
+        <CatalogPanel
+          title="Places & adventures"
+          sub="Daylight only — till ~6 PM · drag onto a day or Add"
+          entries={available.filter((e) => e.kind !== 'service')}
+          filters={placeFilters}
+          shared={panelShared}
+        />
+        {timelinePanel}
+        <CatalogPanel
+          title="Celebration services"
+          sub="Any hour — late night included"
+          entries={available.filter((e) => e.kind === 'service')}
+          filters={serviceFilters}
+          shared={panelShared}
+        />
       </div>
-
-      {/* Vertical day timelines — drop targets */}
-      {showTimeline && !noDates && (
-        <div
-          className="grid gap-3"
-          style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))' }}
-        >
-          {days.map((day, i) => {
-            const list = itemsOn(timeline, day);
-            const dayH = daylightHours(timeline, day);
-            const totalH = dayHours(timeline, day);
-            const packed = dayH > DAY_COMFORT_H;
-            const isOver = dragOverDay === day;
-            return (
-              <div
-                key={day}
-                data-tl-day={day}
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  setDragOverDay(day);
-                }}
-                onDragLeave={() => setDragOverDay((d) => (d === day ? null : d))}
-                onDrop={(e) => onDropOnDay(e, day)}
-                className="flex flex-col gap-2 rounded-[16px] border p-4 transition-colors"
-                style={{
-                  borderColor: isOver ? 'var(--accent)' : 'rgba(255,255,255,.1)',
-                  background: isOver
-                    ? 'color-mix(in srgb, var(--accent) 8%, transparent)'
-                    : 'rgba(255,255,255,.03)',
-                }}
-              >
-                <div className="flex items-baseline justify-between gap-2">
-                  <span className="font-serif text-[16px] font-bold text-white">Day {i + 1}</span>
-                  <span className="text-[11.5px] text-white/55">{fmtDay(day)}</span>
-                </div>
-                <span
-                  className="text-[11.5px] font-bold"
-                  style={{ color: packed ? '#E8A87C' : 'rgba(255,255,255,.45)' }}
-                >
-                  {totalH > 0 ? `${totalH.toFixed(1)}h planned` : 'Nothing planned yet'}
-                  {packed && ' · packed'}
-                </span>
-
-                {/* Vertical timeline */}
-                <div className="flex flex-col">
-                  {list.map((it, idx) => (
-                    <div
-                      key={it.id}
-                      data-tl-item={it.id}
-                      draggable
-                      onDragStart={(e) =>
-                        e.dataTransfer.setData('application/x-timeline-item', it.id)
-                      }
-                      className="group relative flex cursor-grab gap-3 active:cursor-grabbing"
-                    >
-                      {/* rail: dot + connector */}
-                      <div className="flex w-7 flex-none flex-col items-center">
-                        <span
-                          className="flex h-7 w-7 flex-none items-center justify-center rounded-full border-[1.5px]"
-                          style={{
-                            borderColor: 'color-mix(in srgb, var(--accent) 55%, transparent)',
-                            background: 'color-mix(in srgb, var(--accent) 14%, transparent)',
-                            color: 'var(--accent)',
-                          }}
-                        >
-                          <Icon
-                            name={
-                              it.kind === 'service'
-                                ? isNight(it.startMin)
-                                  ? 'moon'
-                                  : 'sparkles'
-                                : it.kind === 'adventure'
-                                  ? 'mountain'
-                                  : 'map-pin'
-                            }
-                            size={13}
-                          />
-                        </span>
-                        {idx < list.length - 1 && (
-                          <span className="my-1 w-px flex-1 bg-white/15" style={{ minHeight: 14 }} />
-                        )}
-                      </div>
-                      {/* content */}
-                      <div className="flex min-w-0 flex-1 flex-col pb-3.5">
-                        <span
-                          className="text-[10.5px] font-black tracking-[0.04em]"
-                          style={{ color: 'var(--accent)' }}
-                        >
-                          {minutesLabel(it.startMin)}
-                          {it.kind === 'service' && isNight(it.startMin) && ' · NIGHT'}
-                        </span>
-                        <span className="text-[13px] leading-tight font-bold text-white">
-                          {it.name}{' '}
-                          <span className="font-medium text-white/45">{fmtH(it.durationH)}</span>
-                        </span>
-                        <span className="truncate text-[11px] text-white/45">{it.meta}</span>
-                      </div>
-                      <div className="flex flex-none items-start gap-1.5 pt-1">
-                        <Icon
-                          name="grip-vertical"
-                          size={14}
-                          className="hidden text-white/25 md:block"
-                        />
-                        <button
-                          type="button"
-                          aria-label={`Remove ${it.name}`}
-                          onClick={() => dispatch(removeTimelineItem(it.id))}
-                          className="cursor-pointer border-none bg-transparent p-0 text-white/40 hover:text-[#E8A87C]"
-                        >
-                          <Icon name="x" size={14} />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                  {list.length === 0 && (
-                    <span className="rounded-[10px] border border-dashed border-white/20 px-3 py-4 text-center text-[12px] text-white/40">
-                      Drag items here, or use Add below
-                    </span>
-                  )}
-                </div>
-
-                {packed && (
-                  <span
-                    className="flex items-start gap-1.5 text-[11.5px] font-semibold"
-                    style={{ color: '#E8A87C' }}
-                  >
-                    <Icon name="alert-triangle" size={13} className="mt-[1px] flex-none" />
-                    Too many plans for one day — drag something to a day with room.
-                  </span>
-                )}
-                {dropNote?.day === day && (
-                  <span className="text-[11.5px] font-semibold" style={{ color: '#E8A87C' }}>
-                    {dropNote.text}
-                  </span>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {/* Catalog list with filters */}
-      <div className="flex flex-col gap-2">
-        <div className="flex flex-wrap gap-2">
-          {(['all', 'place', 'service', 'adventure'] as const).map((f) => (
-            <button
-              key={f}
-              type="button"
-              role="radio"
-              aria-checked={filter === f}
-              onClick={() => setFilter(f)}
-              className="rounded-full border-[1.5px] px-3.5 py-1.5 text-[12.5px] font-semibold transition-colors"
-              style={{
-                background: filter === f ? 'var(--accent)' : 'transparent',
-                borderColor: filter === f ? 'var(--accent)' : 'rgba(255,255,255,.22)',
-                color: filter === f ? '#08201F' : 'rgba(255,255,255,.75)',
-              }}
-            >
-              {f === 'all' ? `All (${catalog.length})` : KIND_LABEL[f]}
-            </button>
-          ))}
-          <span className="hidden items-center gap-1 text-[11.5px] text-white/40 md:flex">
-            <Icon name="hand-move" size={13} /> drag any row onto a day
-          </span>
-        </div>
-
-        <div className="flex max-h-[560px] flex-col gap-2 overflow-y-auto pr-1">
-          {shown.map((entry) => {
-            const key = entryKey(entry);
-            const isAdding = addingService ? entryKey(addingService) === key : false;
-            return (
-              <div
-                key={key}
-                draggable={!noDates}
-                onDragStart={(e) => e.dataTransfer.setData('application/x-catalog-entry', key)}
-                className="flex cursor-grab flex-col rounded-[14px] border-[1.5px] border-[#EBE1CF] bg-[#FAF7F2] px-3.5 py-2.5 active:cursor-grabbing"
-              >
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-                  <Icon
-                    name={entry.icon}
-                    size={18}
-                    style={{ color: 'var(--primary)' }}
-                    className="flex-none"
-                  />
-                  <div className="flex min-w-0 flex-1 flex-col">
-                    <span className="text-ink text-[13.5px] leading-tight font-bold">{entry.name}</span>
-                    <span className="text-muted text-[11.5px]">{entry.meta}</span>
-                  </div>
-                  <span className="text-ink/60 flex-none rounded-md bg-white px-2 py-0.5 text-[11px] font-bold">
-                    <Icon name="clock" size={11} /> {fmtH(entry.durationH)}
-                  </span>
-                  <Button
-                    size="small"
-                    variant={isAdding ? 'outlined' : 'contained'}
-                    color="primary"
-                    disabled={noDates}
-                    onClick={() =>
-                      entry.kind === 'service'
-                        ? isAdding
-                          ? setAddingService(null)
-                          : beginServiceAdd(entry)
-                        : addSequential(entry)
-                    }
-                  >
-                    {isAdding ? 'Cancel' : 'Add'}
-                  </Button>
-                </div>
-
-                {feedback?.key === key && (
-                  <span
-                    className="mt-1.5 text-[12px] font-semibold"
-                    style={{ color: FEEDBACK_COLOR[feedback.kind] }}
-                  >
-                    {feedback.text}
-                  </span>
-                )}
-
-                {isAdding && (
-                  <div className="mt-2.5 flex flex-col gap-2 border-t border-[#EBE1CF] pt-2.5">
-                    <div className="flex flex-wrap items-end gap-3">
-                      <label className="flex flex-col gap-1">
-                        <span className="text-muted text-[10px] font-black tracking-[0.05em] uppercase">Day</span>
-                        <select
-                          value={selDay}
-                          onChange={(e) => {
-                            setSelDay(e.target.value);
-                            setSelTime(nextServiceStart(timeline, e.target.value));
-                          }}
-                          className="text-ink rounded-[10px] border border-[#DAD6CC] bg-white px-2.5 py-2 text-[13px] font-semibold outline-none"
-                        >
-                          {days.map((d, i) => (
-                            <option key={d} value={d}>
-                              Day {i + 1} · {fmtDay(d)}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                      <label className="flex flex-col gap-1">
-                        <span className="text-muted text-[10px] font-black tracking-[0.05em] uppercase">Time</span>
-                        <select
-                          value={selTime}
-                          onChange={(e) => setSelTime(Number(e.target.value))}
-                          className="text-ink rounded-[10px] border border-[#DAD6CC] bg-white px-2.5 py-2 text-[13px] font-semibold outline-none"
-                        >
-                          {SERVICE_TIME_OPTIONS.map((t) => (
-                            <option key={t} value={t}>
-                              {minutesLabel(t)}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                      <Button
-                        size="small"
-                        variant="contained"
-                        color="primary"
-                        onClick={confirmServiceAdd}
-                        startIcon={<Icon name="calendar-plus" size={15} />}
-                      >
-                        Add to Day {dayNo(selDay)}
-                      </Button>
-                    </div>
-                    <span className="text-muted text-[12px]">
-                      Celebrations can run at any hour — late night and early morning included.
-                    </span>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+      <div className="flex flex-col gap-4 lg:hidden">
+        {timelinePanel}
+        <CatalogPanel
+          title="Places & services"
+          sub="Sightseeing till sunset · celebrations any hour"
+          entries={available}
+          filters={combinedFilters}
+          shared={panelShared}
+        />
       </div>
 
       {/* Action bar */}
@@ -648,8 +762,8 @@ export default function PreferencesStep() {
         style={{ background: 'color-mix(in srgb, var(--bg2) 82%, transparent)' }}
       >
         <span className="flex items-center gap-2 text-[13px] text-white/65">
-          <Icon name="info-circle" size={16} /> All optional — sightseeing wraps by sunset,
-          celebrations can go late.
+          <Icon name="info-circle" size={16} /> All optional — added items leave the lists and come
+          back if you remove them.
         </span>
         <div className="flex w-full items-center justify-between gap-3">
           <Button
