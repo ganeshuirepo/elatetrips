@@ -98,28 +98,54 @@ export const firstDaylightStart = (
 export const daylightFits = (items: TimelineItem[], day: string, durationH: number) =>
   firstDaylightStart(items, day, durationH) !== null;
 
-export type SlotSuggestion = { day: string; startMin: number; packed: boolean };
+/** A daylight activity scheduled to run past sunset — likely closed. */
+export const endsAfterSunset = (item: TimelineItem) =>
+  item.kind !== 'service' && item.startMin + Math.round(item.durationH * 60) > DAYLIGHT_END_MIN;
 
 /**
- * Sequential placement for places/adventures: the first day where the item
- * still fits before sunset — comfortable days first, then packed ones
- * (flagged). Null when every day is full: the UI says remove or extend.
+ * Place on `day` even when sunset room is gone: use the first pre-sunset gap
+ * when there is one, otherwise append after the last daylight item and flag
+ * it `late` — the user is warned, never blocked.
+ */
+export function placeOnDay(
+  items: TimelineItem[],
+  day: string,
+  durationH: number,
+): { startMin: number; late: boolean } {
+  const start = firstDaylightStart(items, day, durationH);
+  if (start !== null) return { startMin: start, late: false };
+  const list = daylightOn(items, day);
+  const after =
+    list.length === 0
+      ? DAY_START_MIN
+      : Math.max(...list.map((i) => i.startMin + Math.round(i.durationH * 60))) + 30;
+  return { startMin: Math.min(after, 23 * 60), late: true };
+}
+
+export type SlotSuggestion = { day: string; startMin: number; packed: boolean; late: boolean };
+
+/**
+ * Sequential placement for places/adventures: the first day with a
+ * comfortable pre-sunset gap, then any pre-sunset gap (flagged packed), and
+ * as a last resort a post-sunset slot on the lightest day (flagged late) —
+ * adding is never blocked, only warned about.
  */
 export function suggestDaylightSlot(
   items: TimelineItem[],
   days: string[],
   durationH: number,
-): SlotSuggestion | null {
+): SlotSuggestion {
   for (const day of days) {
     const start = firstDaylightStart(items, day, durationH);
     if (start !== null && daylightHours(items, day) + durationH <= DAY_COMFORT_H)
-      return { day, startMin: start, packed: false };
+      return { day, startMin: start, packed: false, late: false };
   }
   for (const day of days) {
     const start = firstDaylightStart(items, day, durationH);
-    if (start !== null) return { day, startMin: start, packed: true };
+    if (start !== null) return { day, startMin: start, packed: true, late: false };
   }
-  return null;
+  const lightest = [...days].sort((a, b) => daylightHours(items, a) - daylightHours(items, b))[0];
+  return { day: lightest, ...placeOnDay(items, lightest, durationH), packed: true, late: true };
 }
 
 /** Suggested celebration time: after that day's last service, else evening. */
@@ -132,18 +158,18 @@ export const nextServiceStart = (items: TimelineItem[], day: string): number => 
 
 /**
  * Where an item lands when dropped on `day`. Services keep their clock time;
- * daylight activities re-sequence — or refuse (null) when the day is full.
+ * daylight activities re-sequence — spilling past sunset (flagged `late`)
+ * rather than refusing when the day is already full.
  */
 export function moveTarget(
   items: TimelineItem[],
   item: TimelineItem,
   day: string,
-): { startMin: number } | null {
-  if (item.day === day) return { startMin: item.startMin };
-  if (item.kind === 'service') return { startMin: item.startMin };
+): { startMin: number; late: boolean } {
+  if (item.day === day) return { startMin: item.startMin, late: endsAfterSunset(item) };
+  if (item.kind === 'service') return { startMin: item.startMin, late: false };
   const rest = items.filter((i) => i.id !== item.id);
-  const start = firstDaylightStart(rest, day, item.durationH);
-  return start !== null ? { startMin: start } : null;
+  return placeOnDay(rest, day, item.durationH);
 }
 
 /** Seed the timeline from the AI day-planner (places only, one tap). */

@@ -19,7 +19,8 @@ import {
   dayHours,
   daylightHours,
   itemsOn,
-  firstDaylightStart,
+  placeOnDay,
+  endsAfterSunset,
   nextServiceStart,
   suggestDaylightSlot,
   moveTarget,
@@ -115,8 +116,6 @@ function buildCatalog(): CatalogEntry[] {
 const fmtH = (h: number) => (h >= 1 ? `~${+h.toFixed(1)}h` : `~${Math.round(h * 60)}min`);
 const entryKey = (e: CatalogEntry) => `${e.kind}:${e.refId}`;
 
-type Feedback = { key: string; kind: 'ok' | 'warn' | 'error'; text: string };
-const FEEDBACK_COLOR = { ok: '#1E7A3A', warn: '#B96212', error: '#C0392B' } as const;
 
 /** Small filter pill used inside the panels. */
 function Pill({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
@@ -181,7 +180,6 @@ interface PanelShared {
   onCancelService: () => void;
   onBeginService: (e: CatalogEntry) => void;
   onAddSequential: (e: CatalogEntry) => void;
-  feedback: Feedback | null;
 }
 
 /** A filterable, scrollable list of addable entries (left/right panels). */
@@ -213,7 +211,6 @@ function CatalogPanel({
     onCancelService,
     onBeginService,
     onAddSequential,
-    feedback,
   } = shared;
 
   return (
@@ -263,12 +260,6 @@ function CatalogPanel({
                   {isAdding ? 'Cancel' : 'Add'}
                 </Button>
               </div>
-
-              {feedback?.key === key && (
-                <span className="mt-1 text-[11.5px] font-semibold" style={{ color: FEEDBACK_COLOR[feedback.kind] }}>
-                  {feedback.text}
-                </span>
-              )}
 
               {isAdding && (
                 <div className="mt-2 flex flex-col gap-2 border-t border-[#EBE1CF] pt-2">
@@ -348,18 +339,12 @@ export default function PreferencesStep() {
   const [selDay, setSelDay] = useState('');
   const [selTime, setSelTime] = useState(SERVICE_TIME_OPTIONS[37]); // 6:30 PM
 
-  const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [dragOver, setDragOver] = useState<string | null>(null); // day being hovered
   const [dropNote, setDropNote] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!feedback) return;
-    const t = setTimeout(() => setFeedback(null), 4000);
-    return () => clearTimeout(t);
-  }, [feedback]);
-  useEffect(() => {
     if (!dropNote) return;
-    const t = setTimeout(() => setDropNote(null), 4000);
+    const t = setTimeout(() => setDropNote(null), 6000);
     return () => clearTimeout(t);
   }, [dropNote]);
 
@@ -384,25 +369,17 @@ export default function PreferencesStep() {
     setSelectedDay(day);
   };
 
-  /** Add button for places/adventures: pure sequence, no time to choose. */
+  /** Add button for places/adventures: pure sequence, warnings never blocks. */
   const addSequential = (entry: CatalogEntry) => {
     const slot = suggestDaylightSlot(timeline, days, entry.durationH);
-    if (!slot) {
-      setFeedback({
-        key: entryKey(entry),
-        kind: 'error',
-        text: 'Every day is full before sunset — remove something or extend your dates.',
-      });
-      return;
-    }
     pushItem(entry, slot.day, slot.startMin);
-    setFeedback({
-      key: entryKey(entry),
-      kind: slot.packed ? 'warn' : 'ok',
-      text: slot.packed
-        ? `Added to Day ${dayNo(slot.day)} at ${minutesLabel(slot.startMin)} — that day is getting packed.`
-        : `Added to Day ${dayNo(slot.day)} at ${minutesLabel(slot.startMin)}.`,
-    });
+    setDropNote(
+      slot.late
+        ? `Added to Day ${dayNo(slot.day)} after sunset — most places will be closed. Consider freeing up an earlier slot.`
+        : slot.packed
+          ? `Added to Day ${dayNo(slot.day)} at ${minutesLabel(slot.startMin)} — that day is overloaded.`
+          : null,
+    );
   };
 
   const beginServiceAdd = (entry: CatalogEntry) => {
@@ -427,12 +404,10 @@ export default function PreferencesStep() {
       const it = timeline.find((i) => i.id === itemId);
       if (!it || it.day === day) return;
       const target = moveTarget(timeline, it, day);
-      if (!target) {
-        setDropNote(`No room before sunset on Day ${dayNo(day)} — try another day.`);
-        return;
-      }
       dispatch(moveTimelineItem({ id: it.id, day, startMin: target.startMin }));
       setSelectedDay(day);
+      if (target.late)
+        setDropNote(`Moved after sunset on Day ${dayNo(day)} — most places will be closed then.`);
       return;
     }
     const key = e.dataTransfer.getData('application/x-catalog-entry');
@@ -441,9 +416,10 @@ export default function PreferencesStep() {
     if (entry.kind === 'service') {
       pushItem(entry, day, nextServiceStart(timeline, day));
     } else {
-      const start = firstDaylightStart(timeline, day, entry.durationH);
-      if (start !== null) pushItem(entry, day, start);
-      else setDropNote(`No room before sunset on Day ${dayNo(day)} — try another day.`);
+      const spot = placeOnDay(timeline, day, entry.durationH);
+      pushItem(entry, day, spot.startMin);
+      if (spot.late)
+        setDropNote(`Added after sunset on Day ${dayNo(day)} — most places will be closed then.`);
     }
   };
   const dropProps = (day: string) => ({
@@ -471,7 +447,6 @@ export default function PreferencesStep() {
     onCancelService: () => setAddingService(null),
     onBeginService: beginServiceAdd,
     onAddSequential: addSequential,
-    feedback,
   };
 
   // ---- Timeline panel (middle column) ------------------------------------------
@@ -606,14 +581,44 @@ export default function PreferencesStep() {
                         )}
                       </div>
                       <div className="flex min-w-0 flex-1 flex-col pb-3">
-                        <span className="text-[10.5px] font-black tracking-[0.04em]" style={{ color: 'var(--accent)' }}>
-                          {minutesLabel(it.startMin)}
-                          {it.kind === 'service' && isNight(it.startMin) && ' · NIGHT'}
+                        <span className="flex items-center gap-1.5">
+                          {/* Editable start time — interchange slots freely */}
+                          <select
+                            value={it.startMin}
+                            onChange={(e) =>
+                              dispatch(
+                                moveTimelineItem({
+                                  id: it.id,
+                                  day: it.day,
+                                  startMin: Number(e.target.value),
+                                }),
+                              )
+                            }
+                            className="cursor-pointer rounded-md border-none py-0.5 pr-0.5 pl-1 text-[10.5px] font-black tracking-[0.04em] outline-none"
+                            style={{
+                              background: 'color-mix(in srgb, var(--accent) 18%, transparent)',
+                              color: 'var(--accent)',
+                            }}
+                          >
+                            {SERVICE_TIME_OPTIONS.map((t) => (
+                              <option key={t} value={t} style={{ color: '#08201F', background: '#fff' }}>
+                                {minutesLabel(t)}
+                              </option>
+                            ))}
+                          </select>
+                          {it.kind === 'service' && isNight(it.startMin) && (
+                            <span className="text-[10px] font-black text-white/50">NIGHT</span>
+                          )}
                         </span>
                         <span className="text-[13px] leading-tight font-bold text-white">
                           {it.name} <span className="font-medium text-white/45">{fmtH(it.durationH)}</span>
                         </span>
                         <span className="truncate text-[11px] text-white/45">{it.meta}</span>
+                        {endsAfterSunset(it) && (
+                          <span className="flex items-center gap-1 text-[10.5px] font-semibold" style={{ color: '#E8A87C' }}>
+                            <Icon name="alert-triangle" size={11} /> After sunset — this place may be closed
+                          </span>
+                        )}
                       </div>
                       <div className="flex flex-none items-start gap-1.5 pt-1">
                         <Icon name="grip-vertical" size={14} className="hidden text-white/25 md:block" />

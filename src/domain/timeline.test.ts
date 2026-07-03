@@ -7,6 +7,7 @@ import {
   firstDaylightStart,
   nextServiceStart,
   moveTarget,
+  endsAfterSunset,
   autoFillTimeline,
   isNight,
   minutesLabel,
@@ -42,6 +43,7 @@ describe('daylight sequencing (places & adventures)', () => {
       day: DAYS[0],
       startMin: DAY_START_MIN,
       packed: false,
+      late: false,
     });
   });
 
@@ -78,14 +80,17 @@ describe('daylight sequencing (places & adventures)', () => {
     expect(slot?.day).toBe(DAYS[1]);
   });
 
-  it('returns null when no day can take the activity before sunset', () => {
+  it('never blocks — falls back to a post-sunset slot flagged late', () => {
     const items = DAYS.map((d) => item(d, 8 * 60, 9.5, 'place', `f${d}`));
-    expect(suggestDaylightSlot(items, DAYS, 2)).toBeNull();
+    const slot = suggestDaylightSlot(items, DAYS, 2);
+    expect(slot.late).toBe(true);
+    expect(slot.packed).toBe(true);
+    expect(DAYS).toContain(slot.day);
   });
 
   it('gives full-day outings (9h+) a dawn start on an empty day', () => {
     const slot = suggestDaylightSlot([], DAYS, 11); // Mudumalai-style safari
-    expect(slot).toEqual({ day: DAYS[0], startMin: 6 * 60, packed: true });
+    expect(slot).toEqual({ day: DAYS[0], startMin: 6 * 60, packed: true, late: false });
   });
 
   it('flags packed days beyond the comfort hours', () => {
@@ -116,19 +121,30 @@ describe('celebration timing (any hour)', () => {
 describe('moveTarget (drag & drop between days)', () => {
   it('keeps a celebration’s clock time on the new day', () => {
     const svc = item(DAYS[0], 22 * 60, 2, 'service');
-    expect(moveTarget([svc], svc, DAYS[2])).toEqual({ startMin: 22 * 60 });
+    expect(moveTarget([svc], svc, DAYS[2])).toEqual({ startMin: 22 * 60, late: false });
   });
 
   it('re-sequences a place on the target day', () => {
     const moving = item(DAYS[0], 8 * 60, 2, 'place', 'mv');
     const other = item(DAYS[1], 8 * 60, 3, 'place', 'other');
-    expect(moveTarget([moving, other], moving, DAYS[1])).toEqual({ startMin: 11 * 60 + 30 });
+    expect(moveTarget([moving, other], moving, DAYS[1])).toEqual({
+      startMin: 11 * 60 + 30,
+      late: false,
+    });
   });
 
-  it('refuses to move a place onto a day that is full before sunset', () => {
+  it('moving onto a full day lands after sunset with the late flag', () => {
     const moving = item(DAYS[0], 8 * 60, 3, 'place', 'mv');
     const full = item(DAYS[1], 8 * 60, 9.5, 'place', 'full');
-    expect(moveTarget([moving, full], moving, DAYS[1])).toBeNull();
+    const t = moveTarget([moving, full], moving, DAYS[1]);
+    expect(t.late).toBe(true);
+    expect(t.startMin).toBe(18 * 60); // after the 5:30 PM end + 30 min
+  });
+
+  it('flags daylight items that run past sunset', () => {
+    expect(endsAfterSunset(item(DAYS[0], 17 * 60, 2, 'place'))).toBe(true);
+    expect(endsAfterSunset(item(DAYS[0], 15 * 60, 2, 'place'))).toBe(false);
+    expect(endsAfterSunset(item(DAYS[0], 22 * 60, 2, 'service'))).toBe(false);
   });
 });
 
