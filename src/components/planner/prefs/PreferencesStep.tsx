@@ -14,8 +14,6 @@ import {
 } from '@/store/slices/prefsSlice';
 import { selectDays } from '@/store/selectors/planSelectors';
 import {
-  SERVICE_TIME_OPTIONS,
-  minutesLabel,
   dayHours,
   daylightHours,
   itemsOn,
@@ -25,7 +23,6 @@ import {
   suggestDaylightSlot,
   moveTarget,
   autoFillTimeline,
-  isNight,
   DAY_COMFORT_H,
   type TimelineItem,
   type TimelineKind,
@@ -178,9 +175,7 @@ interface PanelShared {
   timeline: TimelineItem[];
   addingService: CatalogEntry | null;
   selDay: string;
-  selTime: number;
   onPickDay: (d: string) => void;
-  onPickTime: (t: number) => void;
   onConfirmService: () => void;
   onCancelService: () => void;
   onBeginService: (e: CatalogEntry) => void;
@@ -207,9 +202,7 @@ function CatalogPanel({
     days,
     addingService,
     selDay,
-    selTime,
     onPickDay,
-    onPickTime,
     onConfirmService,
     onCancelService,
     onBeginService,
@@ -276,26 +269,12 @@ function CatalogPanel({
                         ))}
                       </select>
                     </label>
-                    <label className="flex flex-col gap-1">
-                      <span className="text-muted text-[10px] font-black tracking-[0.05em] uppercase">Time</span>
-                      <select
-                        value={selTime}
-                        onChange={(e) => onPickTime(Number(e.target.value))}
-                        className="text-ink rounded-[10px] border border-[#DAD6CC] bg-white px-2 py-1.5 text-[12.5px] font-semibold outline-none"
-                      >
-                        {SERVICE_TIME_OPTIONS.map((t) => (
-                          <option key={t} value={t}>
-                            {minutesLabel(t)}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
                     <Button size="small" variant="contained" color="primary" onClick={onConfirmService}>
                       Add
                     </Button>
                   </div>
                   <span className="text-muted text-[11.5px]">
-                    Celebrations can run at any hour — late night included.
+                    Celebrations run in the evening after the day&apos;s sightseeing.
                   </span>
                 </div>
               )}
@@ -337,10 +316,9 @@ export default function PreferencesStep() {
   const activeDay = days.includes(selectedDay) ? selectedDay : (days[0] ?? '');
   const dayStripRef = useRef<HTMLDivElement>(null);
 
-  // Service add flow (day + time picker); places/adventures add instantly.
+  // Service add flow (day picker; the evening slot is assigned automatically).
   const [addingService, setAddingService] = useState<CatalogEntry | null>(null);
   const [selDay, setSelDay] = useState('');
-  const [selTime, setSelTime] = useState(SERVICE_TIME_OPTIONS[37]); // 6:30 PM
 
   const [dragOver, setDragOver] = useState<string | null>(null); // day being hovered
   const [dropNote, setDropNote] = useState<string | null>(null);
@@ -399,23 +377,21 @@ export default function PreferencesStep() {
     pushItem(entry, slot.day, slot.startMin);
     setDropNote(
       slot.late
-        ? `Added to Day ${dayNo(slot.day)} after sunset — most places will be closed. Consider freeing up an earlier slot.`
+        ? `Won't fit before sunset — added to Day ${dayNo(slot.day)}, but most places will be closed. Consider freeing up an earlier slot.`
         : slot.packed
-          ? `Added to Day ${dayNo(slot.day)} at ${minutesLabel(slot.startMin)} — that day is overloaded.`
+          ? `Added to Day ${dayNo(slot.day)} — that day is overloaded.`
           : null,
     );
   };
 
   const beginServiceAdd = (entry: CatalogEntry) => {
-    const day = activeDay || days[0];
     setAddingService(entry);
-    setSelDay(day);
-    setSelTime(nextServiceStart(timeline, day));
+    setSelDay(activeDay || days[0]);
   };
 
   const confirmServiceAdd = () => {
     if (!addingService) return;
-    pushItem(addingService, selDay, selTime);
+    pushItem(addingService, selDay, nextServiceStart(timeline, selDay));
     setAddingService(null);
   };
 
@@ -461,12 +437,7 @@ export default function PreferencesStep() {
     timeline,
     addingService,
     selDay,
-    selTime,
-    onPickDay: (d: string) => {
-      setSelDay(d);
-      setSelTime(nextServiceStart(timeline, d));
-    },
-    onPickTime: setSelTime,
+    onPickDay: setSelDay,
     onConfirmService: confirmServiceAdd,
     onCancelService: () => setAddingService(null),
     onBeginService: beginServiceAdd,
@@ -590,9 +561,7 @@ export default function PreferencesStep() {
                           <Icon
                             name={
                               it.kind === 'service'
-                                ? isNight(it.startMin)
-                                  ? 'moon'
-                                  : 'sparkles'
+                                ? 'sparkles'
                                 : it.kind === 'adventure'
                                   ? 'mountain'
                                   : 'map-pin'
@@ -605,48 +574,13 @@ export default function PreferencesStep() {
                         )}
                       </div>
                       <div className="flex min-w-0 flex-1 flex-col pb-3">
-                        <span className="flex items-center gap-1.5">
-                          {/* Editable start time — interchange slots freely */}
-                          <select
-                            value={it.startMin}
-                            onChange={(e) =>
-                              dispatch(
-                                moveTimelineItem({
-                                  id: it.id,
-                                  day: it.day,
-                                  startMin: Number(e.target.value),
-                                }),
-                              )
-                            }
-                            className="cursor-pointer rounded-md border-none py-0.5 pr-0.5 pl-1 text-[10.5px] font-black tracking-[0.04em] outline-none"
-                            style={{
-                              background: 'color-mix(in srgb, var(--accent) 18%, transparent)',
-                              color: 'var(--accent)',
-                            }}
-                          >
-                            {/* Legacy items may sit off the 30-min grid — keep them visible. */}
-                            {!SERVICE_TIME_OPTIONS.includes(it.startMin) && (
-                              <option value={it.startMin} style={{ color: '#08201F', background: '#fff' }}>
-                                {minutesLabel(it.startMin)}
-                              </option>
-                            )}
-                            {SERVICE_TIME_OPTIONS.map((t) => (
-                              <option key={t} value={t} style={{ color: '#08201F', background: '#fff' }}>
-                                {minutesLabel(t)}
-                              </option>
-                            ))}
-                          </select>
-                          {it.kind === 'service' && isNight(it.startMin) && (
-                            <span className="text-[10px] font-black text-white/50">NIGHT</span>
-                          )}
-                        </span>
                         <span className="text-[13px] leading-tight font-bold text-white">
                           {it.name} <span className="font-medium text-white/45">{fmtH(it.durationH)}</span>
                         </span>
                         <span className="truncate text-[11px] text-white/45">{it.meta}</span>
                         {endsAfterSunset(it) && (
                           <span className="flex items-center gap-1 text-[10.5px] font-semibold" style={{ color: '#E8A87C' }}>
-                            <Icon name="alert-triangle" size={11} /> After sunset — this place may be closed
+                            <Icon name="alert-triangle" size={11} /> Won&apos;t fit before sunset — this place may be closed
                           </span>
                         )}
                       </div>
