@@ -1,21 +1,29 @@
 'use client';
 
+import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { toggleCeleb } from '@/store/slices/planSlice';
 import { CELEBRATIONS, CELEB_CATEGORY_META } from '@/data/celebrations';
+import { interestsFor } from '@/data/occasionInterests';
 import { celebComboValid } from '@/domain/rules';
 import Icon from '@/components/ui/Icon';
+import InterestPopup from './InterestPopup';
 import type { Celebration } from '@/domain/types';
 
 /** Occasion picker — compact pill tiles grouped by category. Incompatible tiles dim. */
 export default function CelebrationGrid({ onPick }: { onPick?: (id: Celebration['id']) => void }) {
   const dispatch = useAppDispatch();
   const { celebs, maxCelebrations } = useAppSelector((s) => s.plan);
+  const occasionInterests = useAppSelector((s) => s.prefs.occasionInterests);
   const atMax = celebs.length >= maxCelebrations;
+  // Occasion whose interest popup is open — set on pick, or via the tile's
+  // filter badge on an already-selected tile.
+  const [popupFor, setPopupFor] = useState<Celebration | null>(null);
 
   const tile = (c: Celebration) => {
     const selected = celebs.includes(c.id);
     const disabled = !selected && (atMax || !celebComboValid([...celebs, c.id]));
+    const savedCount = (occasionInterests[c.id] ?? []).length;
     return (
       <button
         key={c.id}
@@ -25,9 +33,12 @@ export default function CelebrationGrid({ onPick }: { onPick?: (id: Celebration[
         disabled={disabled}
         onClick={() => {
           dispatch(toggleCeleb(c.id));
+          // Picking an occasion opens its interest filters right away;
+          // un-picking just clears the tile.
+          if (!selected && interestsFor(c.id).length > 0) setPopupFor(c);
           onPick?.(c.id);
         }}
-        className="flex items-center justify-center gap-2 rounded-[14px] border-[1.5px] px-2.5 py-9.5 transition-colors disabled:cursor-not-allowed"
+        className="relative flex items-center justify-center gap-2 rounded-[14px] border-[1.5px] px-2.5 py-9.5 transition-colors disabled:cursor-not-allowed"
         style={{
           opacity: disabled ? 0.4 : 1,
           background: selected ? 'var(--accent)' : '#FAF7F2',
@@ -47,6 +58,29 @@ export default function CelebrationGrid({ onPick }: { onPick?: (id: Celebration[
         >
           {c.name}
         </span>
+        {/* Filter badge — reopens the interest popup without toggling the tile */}
+        {selected && interestsFor(c.id).length > 0 && (
+          <span
+            role="button"
+            tabIndex={0}
+            aria-label={`Edit ${c.name} interests`}
+            onClick={(e) => {
+              e.stopPropagation();
+              setPopupFor(c);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.stopPropagation();
+                setPopupFor(c);
+              }
+            }}
+            className="absolute top-2 right-2 flex h-7 items-center gap-1 rounded-full px-2 text-[11px] font-black"
+            style={{ background: '#08201F', color: 'var(--accent)' }}
+          >
+            <Icon name="adjustments-horizontal" size={14} />
+            {savedCount > 0 && savedCount}
+          </span>
+        )}
       </button>
     );
   };
@@ -84,6 +118,7 @@ export default function CelebrationGrid({ onPick }: { onPick?: (id: Celebration[
           </div>
         );
       })}
+      {popupFor && <InterestPopup celeb={popupFor} onClose={() => setPopupFor(null)} />}
     </div>
   );
 }

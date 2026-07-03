@@ -11,6 +11,11 @@ export interface PrefsState {
   interests: string[];
   /** Service-type ids the user wants for the celebration (decor, music…). */
   servicePrefs: string[];
+  /**
+   * Interests saved per occasion from the tile popup on the Plan step
+   * (keyed by celebration/escape id → chosen option ids).
+   */
+  occasionInterests: Record<string, string[]>;
   /** User-curated day/time plan. */
   timeline: TimelineItem[];
 }
@@ -18,6 +23,7 @@ export interface PrefsState {
 const initialState: PrefsState = {
   interests: [],
   servicePrefs: [],
+  occasionInterests: {},
   timeline: [],
 };
 
@@ -33,6 +39,10 @@ const prefsSlice = createSlice({
     },
     toggleServicePref(state, action: PayloadAction<string>) {
       state.servicePrefs = toggle(state.servicePrefs, action.payload);
+    },
+    /** "Save interests" in the occasion popup — replaces that occasion's set. */
+    setOccasionInterests(state, action: PayloadAction<{ id: string; interests: string[] }>) {
+      state.occasionInterests[action.payload.id] = action.payload.interests;
     },
     addTimelineItem(state, action: PayloadAction<TimelineItem>) {
       // Replace rather than duplicate if the exact same slot exists.
@@ -65,6 +75,7 @@ const prefsSlice = createSlice({
 export const {
   toggleInterest,
   toggleServicePref,
+  setOccasionInterests,
   addTimelineItem,
   removeTimelineItem,
   moveTimelineItem,
