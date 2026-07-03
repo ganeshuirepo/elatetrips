@@ -116,7 +116,7 @@ export default function ReviewStep() {
             variant="contained"
             color="primary"
             size="large"
-            onClick={() => dispatch(setStep('stay'))}
+            onClick={() => dispatch(setStep('services'))}
             startIcon={<Icon name="arrow-left" size={18} />}
           >
             Back

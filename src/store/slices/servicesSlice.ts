@@ -32,9 +32,9 @@ export interface ServicesState {
    */
   schedule: Record<string, OccasionBasics>;
   /**
-   * Panels the user skipped via "I'll skip this" (keyed by panel id — a
-   * celebration id, 'escapes' or 'surprisegifts'). A skipped panel counts as
-   * answered when gating "Continue to hotels".
+   * Sections the user skipped via "I'll skip this" (keyed by section id, e.g.
+   * 'surprisegifts'). A skipped section counts as answered when gating
+   * "Continue to review" on the Local specials step.
    */
   skippedSections: Record<string, boolean>;
 }

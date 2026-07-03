@@ -1043,11 +1043,11 @@ export default function PreferencesStep() {
           <Button
             variant="contained"
             size="large"
-            onClick={() => dispatch(setStep('services'))}
+            onClick={() => dispatch(setStep('stay'))}
             endIcon={<Icon name="arrow-right" size={18} />}
             sx={GOLD_BUTTON}
           >
-            Continue to surprises
+            Continue to hotels
           </Button>
         </div>
       </div>

@@ -71,5 +71,5 @@ export const selectTransportHelp = createSelector(selectTransport, (t) => {
   if (t.tMode === 'cab' && !t.tVehicle) return 'Pick a vehicle type for your cab.';
   if (t.tMode === 'cab' && t.tTrip === 'endtoend' && !t.pickupAddr.trim())
     return 'Search or share your pickup location.';
-  return 'Add any extras, then review your celebration plan.';
+  return 'Add any extras, then browse the local specials.';
 });

@@ -71,7 +71,7 @@ export default function HotelsStep() {
 
       {/* Step actions — sticky so Continue is always in reach. */}
       <Card className="sticky bottom-2 z-30 flex flex-col gap-5">
-        <ContinueBar back={() => dispatch(setStep('services'))} />
+        <ContinueBar back={() => dispatch(setStep('prefs'))} />
       </Card>
     </div>
   );
@@ -102,10 +102,10 @@ function ContinueBar({ back }: { back: () => void }) {
           color="primary"
           size="large"
           disabled={!transportReady}
-          onClick={() => dispatch(setStep('review'))}
+          onClick={() => dispatch(setStep('services'))}
           endIcon={<Icon name="arrow-right" size={18} />}
         >
-          Continue to review
+          Continue to local specials
         </Button>
       </div>
     </div>
