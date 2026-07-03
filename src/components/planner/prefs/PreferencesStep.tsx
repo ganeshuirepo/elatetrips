@@ -32,6 +32,7 @@ import {
 } from '@/domain/timeline';
 import { OOTY_PLACES, PLACE_INTERESTS, SERVICE_PREFS } from '@/data/ootyPlaces';
 import { SHARED_CATEGORIES, SPECIAL_CATEGORIES, SURPRISE_GIFTS } from '@/data/services';
+import { CELEBRATIONS } from '@/data/celebrations';
 import { ADVENTURES, EXPERIENCES } from '@/data/activities';
 import { fmtDay } from '@/domain/format';
 import { GOLD_BUTTON } from '@/components/planner/goldButton';
@@ -62,6 +63,13 @@ const PREF_TO_CATS: Record<string, string[]> = {
   wellness: ['wellness'],
   adventure: ['adventure', 'local'],
 };
+
+/** Service categories that belong to escapes rather than celebrations. */
+const ESCAPE_CATS = ['wellness', 'adventure', 'local'];
+/** Preference chips that belong to escapes. */
+const ESCAPE_PREFS = ['wellness', 'adventure'];
+
+const OCCASION_CATEGORY = Object.fromEntries(CELEBRATIONS.map((c) => [c.id, c.category]));
 
 /** Typical time a celebration service occupies, by category. */
 const SERVICE_DURATION: Record<string, number> = {
@@ -214,7 +222,9 @@ function CatalogPanel({
   shared: PanelShared;
 }) {
   const [f, setF] = useState('all');
-  const act = filters.find((x) => x.id === f) ?? filters[0];
+  // Pills that would show nothing (e.g. Adventures on a no-escape trip) hide.
+  const visibleFilters = filters.filter((x) => x.id === 'all' || entries.some(x.match));
+  const act = visibleFilters.find((x) => x.id === f) ?? visibleFilters[0];
   const list = entries.filter(act.match);
   const {
     noDates,
@@ -237,8 +247,8 @@ function CatalogPanel({
         <span className="text-[11.5px] text-white/50">{sub}</span>
       </div>
       <div className="flex gap-1.5 overflow-x-auto pb-1">
-        {filters.map((x) => (
-          <Pill key={x.id} label={x.label} active={f === x.id} onClick={() => setF(x.id)} />
+        {visibleFilters.map((x) => (
+          <Pill key={x.id} label={x.label} active={act.id === x.id} onClick={() => setF(x.id)} />
         ))}
       </div>
       <div className="flex max-h-[430px] flex-col gap-1.5 overflow-y-auto pr-1">
@@ -341,6 +351,11 @@ export default function PreferencesStep() {
   const dispatch = useAppDispatch();
   const { interests, servicePrefs, timeline } = useAppSelector((s) => s.prefs);
   const days = useAppSelector(selectDays);
+  const celebs = useAppSelector((s) => s.plan.celebs);
+
+  // What the trip is actually about — hides irrelevant chips and list items.
+  const hasCelebration = celebs.some((id) => OCCASION_CATEGORY[id] !== 'rejuvenate');
+  const hasEscapes = celebs.some((id) => OCCASION_CATEGORY[id] === 'rejuvenate');
 
   const catalog = useMemo(buildCatalog, []);
   const noDates = days.length === 0;
@@ -369,16 +384,26 @@ export default function PreferencesStep() {
   const onTimeline = (e: CatalogEntry) =>
     timeline.some((i) => i.kind === e.kind && i.refId === e.refId);
 
+  /** Items only make sense for the occasions chosen on the Plan step. */
+  const matchesOccasions = (e: CatalogEntry) => {
+    if (e.kind === 'place') return true;
+    if (e.kind === 'adventure') return hasEscapes;
+    return ESCAPE_CATS.includes(e.catId ?? '') ? hasEscapes : hasCelebration;
+  };
+
   /** The preference chips above narrow the list to matching items. */
   const matchesPrefs = (e: CatalogEntry) => {
     if (e.kind === 'service') {
-      if (servicePrefs.length === 0) return true;
-      return servicePrefs.some((p) => (PREF_TO_CATS[p] ?? []).includes(e.catId ?? ''));
+      const activePrefs = servicePrefs.filter((p) =>
+        ESCAPE_PREFS.includes(p) ? hasEscapes : hasCelebration,
+      );
+      if (activePrefs.length === 0) return true;
+      return activePrefs.some((p) => (PREF_TO_CATS[p] ?? []).includes(e.catId ?? ''));
     }
     if (interests.length === 0) return true;
     return (e.tags ?? []).some((t) => interests.includes(t));
   };
-  const available = catalog.filter((e) => !onTimeline(e) && matchesPrefs(e));
+  const available = catalog.filter((e) => !onTimeline(e) && matchesOccasions(e) && matchesPrefs(e));
 
   const pushItem = (entry: CatalogEntry, day: string, startMin: number) => {
     dispatch(
@@ -715,7 +740,7 @@ export default function PreferencesStep() {
           <span className="text-[12.5px] text-white/55">Filters the list below & guides the auto-planner</span>
         </div>
         <div className="flex flex-wrap gap-2">
-          {PLACE_INTERESTS.map((i) => (
+          {PLACE_INTERESTS.filter((i) => i.id !== 'adventure' || hasEscapes).map((i) => (
             <PrefChip
               key={i.id}
               label={i.label}
@@ -727,26 +752,30 @@ export default function PreferencesStep() {
         </div>
       </div>
 
-      {/* Service types */}
-      <div className="flex flex-col gap-2">
-        <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
-          <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
-            Celebration services you&apos;d like
-          </span>
-          <span className="text-[12.5px] text-white/55">Filters the services in the list below</span>
+      {/* Service types — only for the occasions actually chosen on Plan */}
+      {(hasCelebration || hasEscapes) && (
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
+            <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
+              {hasCelebration ? 'Celebration services you’d like' : 'Escape experiences you’d like'}
+            </span>
+            <span className="text-[12.5px] text-white/55">Filters the services in the list below</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {SERVICE_PREFS.filter((sp) =>
+              ESCAPE_PREFS.includes(sp.id) ? hasEscapes : hasCelebration,
+            ).map((sp) => (
+              <PrefChip
+                key={sp.id}
+                label={sp.label}
+                icon={sp.icon}
+                active={servicePrefs.includes(sp.id)}
+                onClick={() => dispatch(toggleServicePref(sp.id))}
+              />
+            ))}
+          </div>
         </div>
-        <div className="flex flex-wrap gap-2">
-          {SERVICE_PREFS.map((sp) => (
-            <PrefChip
-              key={sp.id}
-              label={sp.label}
-              icon={sp.icon}
-              active={servicePrefs.includes(sp.id)}
-              onClick={() => dispatch(toggleServicePref(sp.id))}
-            />
-          ))}
-        </div>
-      </div>
+      )}
 
       {/* Planning board: list + timeline. Two columns on desktop, stacked
           (timeline first) on phones. */}
