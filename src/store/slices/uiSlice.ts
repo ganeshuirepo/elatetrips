@@ -11,7 +11,7 @@ export type AppView = 'planner' | 'gifts' | 'medical' | 'partner' | 'wedding';
  * Wizard steps within the planner view. 'plan' opens the flow (where, when,
  * travellers & the celebration picker); transport is decided on 'stay'.
  */
-export type WizardStep = 'plan' | 'services' | 'stay' | 'review' | 'payment';
+export type WizardStep = 'plan' | 'prefs' | 'services' | 'stay' | 'review' | 'payment';
 
 /** Which form the global auth dialog opens to. */
 export type AuthMode = 'login' | 'signup' | 'forgot';

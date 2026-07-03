@@ -61,7 +61,7 @@ export const selectPlanHelp = createSelector(selectPlan, (p) => {
   if (p.dest.length === 0) return 'Search and pick a destination to continue.';
   if (!p.start || !p.end) return 'Choose your tour start and end dates.';
   if (p.celebs.length === 0) return 'Pick at least one occasion to celebrate.';
-  return 'Everything looks good — next, tailor your surprises.';
+  return 'Everything looks good — next, set your preferences.';
 });
 
 /** Contextual helper text for the transport question on the Hotels step. */

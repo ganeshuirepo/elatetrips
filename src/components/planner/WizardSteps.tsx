@@ -33,6 +33,7 @@ export default function WizardSteps({
   // decided on the Hotels step, so Review additionally needs transport ready.
   const defs: StepDef[] = [
     { id: 'plan', label: 'Plan' },
+    { id: 'prefs', label: 'Preferences' },
     { id: 'services', label: 'Surprises' },
     { id: 'stay', label: 'Hotels' },
     { id: 'review', label: 'Review' },
@@ -41,6 +42,7 @@ export default function WizardSteps({
 
   const reach: Record<WizardStep, boolean> = {
     plan: true,
+    prefs: planStepReady,
     services: planStepReady,
     // Hotels needs the Services step answered (picks made or explicitly skipped).
     stay: planStepReady && servicesReady,

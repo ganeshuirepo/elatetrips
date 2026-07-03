@@ -261,7 +261,7 @@ export default function ServicesStep() {
           <Button
             variant="contained"
             size="large"
-            onClick={() => dispatch(setStep('plan'))}
+            onClick={() => dispatch(setStep('prefs'))}
             startIcon={<Icon name="arrow-left" size={18} />}
             sx={GOLD_BUTTON}
           >

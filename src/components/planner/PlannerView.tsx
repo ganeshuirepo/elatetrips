@@ -7,6 +7,7 @@ import Hero from '@/components/layout/Hero';
 import Card from '@/components/ui/Card';
 import WizardSteps from './WizardSteps';
 import PlanStep from './plan/PlanStep';
+import PreferencesStep from './prefs/PreferencesStep';
 import ServicesStep from './services/ServicesStep';
 import HotelsStep from './hotels/HotelsStep';
 import ReviewStep from './review/ReviewStep';
@@ -32,6 +33,9 @@ export default function PlannerView() {
         {step === 'plan' ? (
           // The Plan screen carries where, when, travellers & the celebration picker.
           <PlanStep />
+        ) : step === 'prefs' ? (
+          // Preferences: interests, local places and the AI-crafted itinerary.
+          <PreferencesStep />
         ) : step === 'services' ? (
           // Celebration-services questionnaire, between Plan and Hotels.
           <ServicesStep />

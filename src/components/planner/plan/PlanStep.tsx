@@ -69,11 +69,11 @@ export default function PlanStep() {
             variant="contained"
             size="large"
             disabled={!stepReady}
-            onClick={() => dispatch(setStep('services'))}
+            onClick={() => dispatch(setStep('prefs'))}
             endIcon={<Icon name="arrow-right" size={18} />}
             sx={GOLD_BUTTON}
           >
-            Continue to surprises
+            Continue to preferences
           </Button>
         </div>
       </div>
