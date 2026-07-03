@@ -584,7 +584,30 @@ export default function PreferencesStep() {
                           </span>
                         )}
                       </div>
-                      <div className="flex flex-none items-start gap-1.5 pt-1">
+                      <div className="flex flex-none items-center gap-1.5 pt-1">
+                        {/* Move to another day — the no-drag way */}
+                        <select
+                          value={it.day}
+                          aria-label={`Move ${it.name} to another day`}
+                          onChange={(e) => {
+                            const toDay = e.target.value;
+                            if (toDay === it.day) return;
+                            const target = moveTarget(timeline, it, toDay);
+                            dispatch(moveTimelineItem({ id: it.id, day: toDay, startMin: target.startMin }));
+                            setSelectedDay(toDay);
+                            if (target.late)
+                              setDropNote(
+                                `Won't fit before sunset on Day ${dayNo(toDay)} — this place may be closed.`,
+                              );
+                          }}
+                          className="cursor-pointer rounded-md border border-white/25 bg-transparent py-0.5 pl-1 text-[10.5px] font-bold text-white/75 outline-none"
+                        >
+                          {days.map((d, i) => (
+                            <option key={d} value={d} style={{ color: '#08201F', background: '#fff' }}>
+                              Day {i + 1}
+                            </option>
+                          ))}
+                        </select>
                         <Icon name="grip-vertical" size={14} className="hidden text-white/25 md:block" />
                         <button
                           type="button"
