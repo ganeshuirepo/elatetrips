@@ -28,7 +28,6 @@ import {
 } from '@/domain/timeline';
 import { OOTY_PLACES, PLACE_INTERESTS } from '@/data/ootyPlaces';
 import { PLACE_IMAGES } from '@/data/placeImages';
-import { SHARED_CATEGORIES, SPECIAL_CATEGORIES, SURPRISE_GIFTS, detailsFor } from '@/data/services';
 import { CELEBRATIONS } from '@/data/celebrations';
 import { ADVENTURES, EXPERIENCES } from '@/data/activities';
 import { fmtDay } from '@/domain/format';
@@ -77,19 +76,6 @@ const ESCAPE_CATS = ['wellness', 'adventure', 'local'];
 
 const OCCASION_CATEGORY = Object.fromEntries(CELEBRATIONS.map((c) => [c.id, c.category]));
 
-/** Typical time a celebration service occupies, by category. */
-const SERVICE_DURATION: Record<string, number> = {
-  decor: 2,
-  onground: 3,
-  food: 2,
-  music: 2.5,
-  welcome: 1,
-  romance: 1.5,
-  surprises: 1,
-  menu: 1.5,
-  surprisegifts: 0.5,
-};
-
 function buildCatalog(): CatalogEntry[] {
   const places: CatalogEntry[] = OOTY_PLACES.map((p) => ({
     kind: 'place',
@@ -113,28 +99,9 @@ function buildCatalog(): CatalogEntry[] {
     },
   }));
 
-  const seen = new Set<string>();
-  const services: CatalogEntry[] = [];
-  for (const cat of [...SHARED_CATEGORIES, ...Object.values(SPECIAL_CATEGORIES), SURPRISE_GIFTS]) {
-    for (const o of cat.options) {
-      const key = `${cat.id}:${o.id}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      services.push({
-        kind: 'service',
-        refId: key,
-        name: o.label,
-        meta: `${cat.label}${o.price != null ? ` · ₹${o.price.toLocaleString('en-IN')}` : ''}`,
-        durationH: SERVICE_DURATION[cat.id] ?? 1.5,
-        icon: o.icon,
-        catId: cat.id,
-        images: o.images,
-        description: o.description,
-        detail: detailsFor(o),
-      });
-    }
-  }
-
+  // Celebration services are picked on the hotel detail, not here — the
+  // itinerary list carries places and adventures only; the occasions
+  // themselves land on the timeline from the Plan popup.
   const adventures: CatalogEntry[] = [
     ...ADVENTURES.map((v) => ({
       kind: 'adventure' as const,
@@ -160,7 +127,7 @@ function buildCatalog(): CatalogEntry[] {
     })),
   ];
 
-  return [...places, ...services, ...adventures];
+  return [...places, ...adventures];
 }
 
 const fmtH = (h: number) => (h >= 1 ? `~${+h.toFixed(1)}h` : `~${Math.round(h * 60)}min`);
@@ -949,7 +916,7 @@ export default function PreferencesStep() {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.15fr_1fr]">
         <div className="order-2 lg:order-1">
           <CatalogPanel
-            title="Places & services"
+            title="Places & adventures"
             sub="Matches your preferences above · sightseeing till sunset, celebrations any hour"
             entries={available}
             emptyMessage={

@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { selectRoom } from '@/store/slices/hotelSlice';
 import { ROOM_META } from '@/data/hotels';
 import { AMENITIES } from '@/data/hotelOptions';
+import CelebrationServices from './CelebrationServices';
 import { inr } from '@/domain/format';
 import Icon from '@/components/ui/Icon';
 import type { Hotel, RoomSizeId } from '@/domain/types';
@@ -114,6 +115,9 @@ export default function HotelInlineDetail({ hotel }: { hotel: Hotel }) {
           {sectionTitle('Choose a room')}
           <RoomSection hotel={hotel} />
         </section>
+
+        {/* Every chosen occasion's services are picked here, with the stay. */}
+        <CelebrationServices />
       </div>
     </div>
   );
