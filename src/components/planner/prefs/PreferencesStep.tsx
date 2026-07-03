@@ -624,6 +624,12 @@ export default function PreferencesStep() {
                               color: 'var(--accent)',
                             }}
                           >
+                            {/* Legacy items may sit off the 30-min grid — keep them visible. */}
+                            {!SERVICE_TIME_OPTIONS.includes(it.startMin) && (
+                              <option value={it.startMin} style={{ color: '#08201F', background: '#fff' }}>
+                                {minutesLabel(it.startMin)}
+                              </option>
+                            )}
                             {SERVICE_TIME_OPTIONS.map((t) => (
                               <option key={t} value={t} style={{ color: '#08201F', background: '#fff' }}>
                                 {minutesLabel(t)}

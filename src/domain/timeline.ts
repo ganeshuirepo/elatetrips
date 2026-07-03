@@ -36,6 +36,9 @@ export const DAY_COMFORT_H = 7;
 
 const GAP_MIN = 30;
 
+/** Snap to the next half-hour so starts always match the time dropdowns. */
+const snap30 = (mins: number) => Math.ceil(mins / 30) * 30;
+
 export const minutesLabel = (mins: number): string => {
   const h24 = Math.floor(mins / 60) % 24;
   const m = mins % 60;
@@ -89,7 +92,7 @@ export const firstDaylightStart = (
   for (const it of list) {
     const gapEnd = it.startMin - GAP_MIN;
     if (cursor + need <= Math.min(gapEnd, DAYLIGHT_END_MIN)) return cursor;
-    cursor = Math.max(cursor, it.startMin + Math.round(it.durationH * 60) + GAP_MIN);
+    cursor = snap30(Math.max(cursor, it.startMin + Math.round(it.durationH * 60) + GAP_MIN));
   }
   return cursor + need <= DAYLIGHT_END_MIN ? cursor : null;
 };
@@ -118,7 +121,7 @@ export function placeOnDay(
   const after =
     list.length === 0
       ? DAY_START_MIN
-      : Math.max(...list.map((i) => i.startMin + Math.round(i.durationH * 60))) + 30;
+      : snap30(Math.max(...list.map((i) => i.startMin + Math.round(i.durationH * 60))) + 30);
   return { startMin: Math.min(after, 23 * 60), late: true };
 }
 
@@ -153,7 +156,7 @@ export const nextServiceStart = (items: TimelineItem[], day: string): number => 
   const list = itemsOn(items, day).filter((i) => i.kind === 'service');
   if (list.length === 0) return DEFAULT_SERVICE_MIN;
   const end = Math.max(...list.map((i) => i.startMin + Math.round(i.durationH * 60)));
-  return Math.min(end + GAP_MIN, 23 * 60 + 30);
+  return Math.min(snap30(end + GAP_MIN), 23 * 60 + 30);
 };
 
 /**

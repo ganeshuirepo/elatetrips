@@ -52,6 +52,13 @@ describe('daylight sequencing (places & adventures)', () => {
     expect(firstDaylightStart(items, DAYS[0], 1)).toBe(10 * 60 + 30);
   });
 
+  it('snaps sequential starts to the half-hour grid (odd durations)', () => {
+    // 1.3h museum ends 9:18; +30 gap = 9:48 → snapped to 10:00 so the time
+    // dropdown always has a matching option.
+    const items = [item(DAYS[0], 8 * 60, 1.3)];
+    expect(firstDaylightStart(items, DAYS[0], 0.5)).toBe(10 * 60);
+  });
+
   it('ignores night celebrations when sequencing daylight activities', () => {
     const items = [item(DAYS[0], 21 * 60, 2, 'service')];
     expect(firstDaylightStart(items, DAYS[0], 1)).toBe(DAY_START_MIN);
