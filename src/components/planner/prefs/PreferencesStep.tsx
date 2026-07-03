@@ -28,12 +28,22 @@ import {
   type TimelineKind,
 } from '@/domain/timeline';
 import { OOTY_PLACES, PLACE_INTERESTS, SERVICE_PREFS } from '@/data/ootyPlaces';
-import { SHARED_CATEGORIES, SPECIAL_CATEGORIES, SURPRISE_GIFTS } from '@/data/services';
+import { SHARED_CATEGORIES, SPECIAL_CATEGORIES, SURPRISE_GIFTS, detailsFor } from '@/data/services';
 import { CELEBRATIONS } from '@/data/celebrations';
 import { ADVENTURES, EXPERIENCES } from '@/data/activities';
 import { fmtDay } from '@/domain/format';
 import { GOLD_BUTTON } from '@/components/planner/goldButton';
 import Icon from '@/components/ui/Icon';
+
+/** Sections shown in the details popup. */
+interface EntryDetail {
+  itinerary?: string[];
+  inclusions?: string[];
+  exclusions?: string[];
+  highlights?: string[];
+  facts?: { label: string; value: string }[];
+  tip?: string;
+}
 
 /** One addable row in the catalog — a place, a service or an adventure. */
 interface CatalogEntry {
@@ -47,7 +57,20 @@ interface CatalogEntry {
   tags?: string[];
   /** Service category id — matched against the service-preference chips. */
   catId?: string;
+  images?: string[];
+  description?: string;
+  detail?: EntryDetail;
 }
+
+/** Placeholder gradients for entries without photos (places, adventures). */
+const TILE_GRADIENTS = [
+  'linear-gradient(135deg, #1f4a44, #c9a45a)',
+  'linear-gradient(135deg, #2b5c54, #e7c572)',
+  'linear-gradient(135deg, #394f39, #bfa15a)',
+  'linear-gradient(135deg, #4a3f2f, #d4a94f)',
+  'linear-gradient(135deg, #143a3c, #9c7c33)',
+];
+const tileGradient = (id: string) => TILE_GRADIENTS[id.charCodeAt(id.length - 1) % TILE_GRADIENTS.length];
 
 /** Which service categories each preference chip covers. */
 const PREF_TO_CATS: Record<string, string[]> = {
@@ -90,6 +113,17 @@ function buildCatalog(): CatalogEntry[] {
     durationH: p.durationH,
     icon: 'map-pin',
     tags: p.tags,
+    description: p.bestTime,
+    detail: {
+      highlights: p.highlights,
+      facts: [
+        { label: 'Timings', value: p.timings },
+        { label: 'Entry', value: p.fee },
+        { label: 'Distance', value: `${p.distanceKm} km from Ooty` },
+        { label: 'Best time', value: p.bestTime },
+      ],
+      tip: p.tip,
+    },
   }));
 
   const seen = new Set<string>();
@@ -107,6 +141,9 @@ function buildCatalog(): CatalogEntry[] {
         durationH: SERVICE_DURATION[cat.id] ?? 1.5,
         icon: o.icon,
         catId: cat.id,
+        images: o.images,
+        description: o.description,
+        detail: detailsFor(o),
       });
     }
   }
@@ -120,6 +157,8 @@ function buildCatalog(): CatalogEntry[] {
       durationH: 2.5,
       icon: v.icon,
       tags: ['adventure'],
+      description: v.sub,
+      detail: { inclusions: v.inc, facts: [{ label: 'Price', value: `₹${v.price.toLocaleString('en-IN')} per person` }] },
     })),
     ...EXPERIENCES.map((v) => ({
       kind: 'adventure' as const,
@@ -129,6 +168,8 @@ function buildCatalog(): CatalogEntry[] {
       durationH: 2,
       icon: v.icon,
       tags: ['adventure', 'heritage'],
+      description: v.sub,
+      detail: { inclusions: v.inc, facts: [{ label: 'Price', value: `₹${v.price.toLocaleString('en-IN')} per person` }] },
     })),
   ];
 
@@ -138,6 +179,179 @@ function buildCatalog(): CatalogEntry[] {
 const fmtH = (h: number) => (h >= 1 ? `~${+h.toFixed(1)}h` : `~${Math.round(h * 60)}min`);
 const entryKey = (e: CatalogEntry) => `${e.kind}:${e.refId}`;
 
+
+/** A titled block inside the details modal. */
+function DetailBlock({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <span className="text-accent-ink text-[11px] font-black tracking-[0.06em] uppercase">
+        {title}
+      </span>
+      {children}
+    </div>
+  );
+}
+
+/** Details popup — mirrors the Surprises step's package modal. */
+function CatalogDetailsModal({
+  entry,
+  onAdd,
+  onClose,
+}: {
+  entry: CatalogEntry;
+  onAdd: () => void;
+  onClose: () => void;
+}) {
+  const d = entry.detail ?? {};
+  const hero = entry.images?.[0];
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4"
+      onClick={onClose}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        className="flex max-h-[90vh] w-full max-w-[520px] flex-col overflow-hidden rounded-[18px] bg-white shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="relative">
+          {hero ? (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img src={hero} alt={entry.name} className="h-40 w-full object-cover" />
+          ) : (
+            <div
+              className="flex h-40 w-full items-center justify-center text-white/85"
+              style={{ background: tileGradient(entry.refId) }}
+            >
+              <Icon name={entry.icon} size={44} />
+            </div>
+          )}
+          <button
+            type="button"
+            aria-label="Close"
+            onClick={onClose}
+            className="absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/45 text-white"
+          >
+            <Icon name="x" size={16} />
+          </button>
+        </div>
+
+        <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-5">
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+              <Icon name={entry.icon} size={18} className="text-ink/70" />
+              <h2 className="text-ink m-0 font-serif text-[20px] font-bold">{entry.name}</h2>
+            </div>
+            {entry.description && <p className="text-ink/60 m-0 text-[13px]">{entry.description}</p>}
+            <span className="text-ink text-[13px] font-extrabold">
+              {entry.meta}
+              <span className="text-ink/45 ml-2 text-[11px] font-medium">
+                <Icon name="clock" size={11} /> {fmtH(entry.durationH)}
+              </span>
+            </span>
+          </div>
+
+          {d.facts && d.facts.length > 0 && (
+            <DetailBlock title="Good to know">
+              <div className="flex flex-col gap-1">
+                {d.facts.map((f) => (
+                  <div key={f.label} className="flex gap-2 text-[13px]">
+                    <span className="text-ink/50 w-[84px] flex-none font-semibold">{f.label}</span>
+                    <span className="text-ink/85">{f.value}</span>
+                  </div>
+                ))}
+              </div>
+            </DetailBlock>
+          )}
+
+          {d.highlights && d.highlights.length > 0 && (
+            <DetailBlock title="Things to do">
+              <ul className="m-0 flex list-none flex-col gap-1.5 p-0">
+                {d.highlights.map((s) => (
+                  <li key={s} className="text-ink/80 flex items-start gap-2 text-[13px]">
+                    <Icon name="point" size={14} className="mt-0.5 shrink-0" style={{ color: 'var(--accent-ink)' }} />
+                    {s}
+                  </li>
+                ))}
+              </ul>
+            </DetailBlock>
+          )}
+
+          {d.itinerary && d.itinerary.length > 0 && (
+            <DetailBlock title="Itinerary">
+              <ol className="m-0 flex list-none flex-col gap-2 p-0">
+                {d.itinerary.map((s, i) => (
+                  <li key={s} className="text-ink/80 flex gap-2.5 text-[13px]">
+                    <span
+                      className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-black text-[#08201F]"
+                      style={{ background: 'var(--accent)' }}
+                    >
+                      {i + 1}
+                    </span>
+                    {s}
+                  </li>
+                ))}
+              </ol>
+            </DetailBlock>
+          )}
+
+          {d.inclusions && d.inclusions.length > 0 && (
+            <DetailBlock title="Inclusions">
+              <ul className="m-0 flex list-none flex-col gap-1.5 p-0">
+                {d.inclusions.map((s) => (
+                  <li key={s} className="text-ink/80 flex items-start gap-2 text-[13px]">
+                    <Icon name="circle-check" size={16} className="mt-0.5 shrink-0" style={{ color: '#1E9E6A' }} />
+                    {s}
+                  </li>
+                ))}
+              </ul>
+            </DetailBlock>
+          )}
+
+          {d.exclusions && d.exclusions.length > 0 && (
+            <DetailBlock title="Exclusions">
+              <ul className="m-0 flex list-none flex-col gap-1.5 p-0">
+                {d.exclusions.map((s) => (
+                  <li key={s} className="text-ink/80 flex items-start gap-2 text-[13px]">
+                    <Icon name="circle-x" size={16} className="mt-0.5 shrink-0" style={{ color: '#C0392B' }} />
+                    {s}
+                  </li>
+                ))}
+              </ul>
+            </DetailBlock>
+          )}
+
+          {d.tip && (
+            <p className="m-0 text-[13px] font-semibold" style={{ color: 'var(--accent-ink)' }}>
+              Tip: {d.tip}
+            </p>
+          )}
+        </div>
+
+        <div className="flex shrink-0 items-center justify-end gap-2 border-t border-[#EBE1CF] p-4">
+          <Button variant="text" onClick={onClose} sx={{ color: 'var(--ink)', fontWeight: 700 }}>
+            Close
+          </Button>
+          <Button
+            variant="contained"
+            onClick={onAdd}
+            startIcon={<Icon name="calendar-plus" size={16} />}
+            sx={{
+              background: 'linear-gradient(180deg,#e9c97f,#d4a94f)',
+              color: '#08201f',
+              fontWeight: 800,
+              boxShadow: 'none',
+              '&:hover': { background: 'linear-gradient(180deg,#edd089,#d9af55)', boxShadow: 'none' },
+            }}
+          >
+            Add to timeline
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 /** Multi-select chip shared by both preference groups. */
 function PrefChip({
@@ -180,6 +394,7 @@ interface PanelShared {
   onCancelService: () => void;
   onBeginService: (e: CatalogEntry) => void;
   onAddSequential: (e: CatalogEntry) => void;
+  onShowDetails: (e: CatalogEntry) => void;
 }
 
 /** A scrollable list of addable entries, driven purely by the preference chips. */
@@ -207,6 +422,7 @@ function CatalogPanel({
     onCancelService,
     onBeginService,
     onAddSequential,
+    onShowDetails,
   } = shared;
 
   return (
@@ -226,13 +442,35 @@ function CatalogPanel({
               onDragStart={(e) => e.dataTransfer.setData('application/x-catalog-entry', key)}
               className="flex cursor-grab flex-col rounded-[12px] border-[1.5px] border-[#EBE1CF] bg-[#FAF7F2] px-3 py-2 active:cursor-grabbing"
             >
-              <div className="flex items-center gap-2.5">
-                <Icon name={entry.icon} size={16} style={{ color: 'var(--primary)' }} className="flex-none" />
-                <div className="flex min-w-0 flex-1 flex-col">
+              <div className="flex items-center gap-3">
+                {/* Photo (services) or branded placeholder (places/adventures) */}
+                {entry.images?.[0] ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={entry.images[0]}
+                    alt={entry.name}
+                    className="h-[56px] w-[72px] flex-none rounded-[10px] object-cover"
+                  />
+                ) : (
+                  <span
+                    className="flex h-[56px] w-[72px] flex-none items-center justify-center rounded-[10px] text-white/85"
+                    style={{ background: tileGradient(entry.refId) }}
+                  >
+                    <Icon name={entry.icon} size={22} />
+                  </span>
+                )}
+                <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                   <span className="text-ink truncate text-[13px] leading-tight font-bold">{entry.name}</span>
                   <span className="text-muted truncate text-[11px]">
                     {entry.meta} · <Icon name="clock" size={10} /> {fmtH(entry.durationH)}
                   </span>
+                  <button
+                    type="button"
+                    onClick={() => onShowDetails(entry)}
+                    className="text-primary flex w-fit cursor-pointer items-center gap-1 border-none bg-transparent p-0 text-[11.5px] font-bold"
+                  >
+                    <Icon name="list-details" size={12} /> Details
+                  </button>
                 </div>
                 <Button
                   size="small"
@@ -322,6 +560,8 @@ export default function PreferencesStep() {
   // Service add flow (day picker; the evening slot is assigned automatically).
   const [addingService, setAddingService] = useState<CatalogEntry | null>(null);
   const [selDay, setSelDay] = useState('');
+  // Details popup (like the Surprises step's package modal).
+  const [detailsEntry, setDetailsEntry] = useState<CatalogEntry | null>(null);
 
   const [dragOver, setDragOver] = useState<string | null>(null); // day being hovered
   const [dropNote, setDropNote] = useState<string | null>(null);
@@ -445,6 +685,7 @@ export default function PreferencesStep() {
     onCancelService: () => setAddingService(null),
     onBeginService: beginServiceAdd,
     onAddSequential: addSequential,
+    onShowDetails: setDetailsEntry,
   };
 
   // ---- Timeline panel (middle column) ------------------------------------------
@@ -726,6 +967,20 @@ export default function PreferencesStep() {
         </div>
         <div className="order-1 lg:order-2">{timelinePanel}</div>
       </div>
+
+      {/* Details popup */}
+      {detailsEntry && (
+        <CatalogDetailsModal
+          entry={detailsEntry}
+          onClose={() => setDetailsEntry(null)}
+          onAdd={() => {
+            const entry = detailsEntry;
+            setDetailsEntry(null);
+            if (entry.kind === 'service') beginServiceAdd(entry);
+            else addSequential(entry);
+          }}
+        />
+      )}
 
       {/* Action bar */}
       <div
