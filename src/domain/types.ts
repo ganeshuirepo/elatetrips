@@ -24,6 +24,8 @@ export interface Celebration {
   img: string;
   /** Which picker group the occasion belongs to. */
   category: CelebCategory;
+  /** Occasion spans the whole trip — no day/time asked in the interest popup. */
+  noSchedule?: boolean;
 }
 
 export interface Vehicle {

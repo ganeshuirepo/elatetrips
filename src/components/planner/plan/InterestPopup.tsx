@@ -73,8 +73,10 @@ export default function InterestPopup({
     for (const c of chosen) {
       const d = drafts[c.id];
       dispatch(setOccasionInterests({ id: c.id, interests: d.interests }));
-      dispatch(setOccasionField({ id: c.id, key: 'date', value: d.date }));
-      dispatch(setOccasionField({ id: c.id, key: 'time', value: d.time }));
+      if (!c.noSchedule) {
+        dispatch(setOccasionField({ id: c.id, key: 'date', value: d.date }));
+        dispatch(setOccasionField({ id: c.id, key: 'time', value: d.time }));
+      }
     }
     onSave();
   };
@@ -131,7 +133,8 @@ export default function InterestPopup({
                   <span className="text-ink font-serif text-[17px] font-bold">{c.name}</span>
                 </div>
 
-                {/* Day & time for this occasion */}
+                {/* Day & time — skipped for trip-long occasions like Honeymoon */}
+                {!c.noSchedule && (
                 <div className="flex flex-wrap gap-2.5">
                   <label className="flex min-w-[180px] flex-1 flex-col gap-1.5">
                     <span className="text-ink/55 text-[10.5px] font-black tracking-[0.05em] uppercase">
@@ -168,6 +171,7 @@ export default function InterestPopup({
                     </select>
                   </label>
                 </div>
+                )}
 
                 {/* Configurable interest filters */}
                 {options.length > 0 && (

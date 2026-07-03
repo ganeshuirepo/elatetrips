@@ -28,6 +28,7 @@ export const CELEBRATIONS: Celebration[] = [
     icon: 'ti-flower',
     img: '/assets/celeb-honeymoon.png',
     category: 'celebration',
+    noSchedule: true,
   },
   {
     id: 'bachelor',
