@@ -1,27 +1,24 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { ItineraryDay } from '@/domain/itinerary';
+import type { TimelineItem } from '@/domain/timeline';
 
 /**
  * Preferences step state: what the traveller cares about (place interests +
- * celebration-service types) and the generated day-wise itinerary. The
- * itinerary is stored with the inputs it was built from so the UI can offer a
- * refresh when dates or interests change.
+ * celebration-service types) and the day-by-day trip timeline they curate —
+ * places, celebration services and adventures placed on specific days/times.
  */
 export interface PrefsState {
   /** Place-interest tag ids (gardens, viewpoints, wildlife…). */
   interests: string[];
   /** Service-type ids the user wants for the celebration (decor, music…). */
   servicePrefs: string[];
-  itinerary: ItineraryDay[] | null;
-  /** Fingerprint of the inputs the itinerary was generated from. */
-  generatedFor: string;
+  /** User-curated day/time plan. */
+  timeline: TimelineItem[];
 }
 
 const initialState: PrefsState = {
   interests: [],
   servicePrefs: [],
-  itinerary: null,
-  generatedFor: '',
+  timeline: [],
 };
 
 const toggle = (list: string[], id: string) =>
@@ -37,17 +34,32 @@ const prefsSlice = createSlice({
     toggleServicePref(state, action: PayloadAction<string>) {
       state.servicePrefs = toggle(state.servicePrefs, action.payload);
     },
-    setItinerary(state, action: PayloadAction<{ days: ItineraryDay[]; fingerprint: string }>) {
-      state.itinerary = action.payload.days;
-      state.generatedFor = action.payload.fingerprint;
+    addTimelineItem(state, action: PayloadAction<TimelineItem>) {
+      // Replace rather than duplicate if the exact same slot exists.
+      state.timeline = [
+        ...state.timeline.filter((i) => i.id !== action.payload.id),
+        action.payload,
+      ];
     },
-    clearItinerary(state) {
-      state.itinerary = null;
-      state.generatedFor = '';
+    removeTimelineItem(state, action: PayloadAction<string>) {
+      state.timeline = state.timeline.filter((i) => i.id !== action.payload);
+    },
+    /** Wholesale replace — used by the AI auto-planner. */
+    setTimeline(state, action: PayloadAction<TimelineItem[]>) {
+      state.timeline = action.payload;
+    },
+    clearTimeline(state) {
+      state.timeline = [];
     },
   },
 });
 
-export const { toggleInterest, toggleServicePref, setItinerary, clearItinerary } =
-  prefsSlice.actions;
+export const {
+  toggleInterest,
+  toggleServicePref,
+  addTimelineItem,
+  removeTimelineItem,
+  setTimeline,
+  clearTimeline,
+} = prefsSlice.actions;
 export default prefsSlice.reducer;
