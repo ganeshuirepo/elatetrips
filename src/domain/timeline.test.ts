@@ -4,7 +4,7 @@ import {
   daylightFits,
   daylightHours,
   dayHours,
-  nextDaylightStart,
+  firstDaylightStart,
   nextServiceStart,
   moveTarget,
   autoFillTimeline,
@@ -47,12 +47,27 @@ describe('daylight sequencing (places & adventures)', () => {
 
   it('sequences after the last daylight item with a 30-minute gap', () => {
     const items = [item(DAYS[0], 8 * 60, 2)];
-    expect(nextDaylightStart(items, DAYS[0])).toBe(10 * 60 + 30);
+    expect(firstDaylightStart(items, DAYS[0], 1)).toBe(10 * 60 + 30);
   });
 
   it('ignores night celebrations when sequencing daylight activities', () => {
     const items = [item(DAYS[0], 21 * 60, 2, 'service')];
-    expect(nextDaylightStart(items, DAYS[0])).toBe(DAY_START_MIN);
+    expect(firstDaylightStart(items, DAYS[0], 1)).toBe(DAY_START_MIN);
+  });
+
+  it('re-uses the gap left by a deleted middle item', () => {
+    // 8–10 AM and 1–5:30 PM remain; the 10:30–12:30 slot was deleted.
+    const items = [item(DAYS[0], 8 * 60, 2, 'place', 'a'), item(DAYS[0], 13 * 60, 4.5, 'place', 'b')];
+    expect(firstDaylightStart(items, DAYS[0], 1.5)).toBe(10 * 60 + 30);
+    // …and an add is possible even though the last item ends at sunset.
+    const lateOnly = [item(DAYS[0], 15 * 60 + 30, 2.5, 'place', 'late')]; // ends 6 PM
+    expect(firstDaylightStart(lateOnly, DAYS[0], 2)).toBe(DAY_START_MIN);
+  });
+
+  it('skips gaps that are too small for the new item', () => {
+    const items = [item(DAYS[0], 8 * 60, 2, 'place', 'a'), item(DAYS[0], 11 * 60, 3, 'place', 'b')];
+    // Gap 10:30–10:30 is zero-width → lands after b at 2:30 PM.
+    expect(firstDaylightStart(items, DAYS[0], 1)).toBe(14 * 60 + 30);
   });
 
   it('never schedules a daylight activity past sunset — overflows to next day', () => {

@@ -73,20 +73,30 @@ export const daylightHours = (items: TimelineItem[], day: string) =>
   daylightOn(items, day).reduce((s, i) => s + i.durationH, 0);
 
 /**
- * Next sequential daylight start: after the day's last place/adventure.
- * Full-day outings (9h+, e.g. the Mudumalai safari) get a dawn start on an
- * empty day — exactly how such trips run in practice.
+ * First opening in the day that fits a daylight activity — scans the gaps
+ * BETWEEN existing items too, so deleting something in the middle frees its
+ * slot for the next add. Full-day outings (9h+, e.g. the Mudumalai safari)
+ * may start at dawn. Returns null when nothing fits before sunset.
  */
-export const nextDaylightStart = (items: TimelineItem[], day: string, durationH = 0): number => {
+export const firstDaylightStart = (
+  items: TimelineItem[],
+  day: string,
+  durationH: number,
+): number | null => {
+  const need = Math.round(durationH * 60);
   const list = daylightOn(items, day);
-  if (list.length === 0) return durationH >= 9 ? 6 * 60 : DAY_START_MIN;
-  const end = Math.max(...list.map((i) => i.startMin + Math.round(i.durationH * 60)));
-  return Math.max(end + GAP_MIN, DAY_START_MIN);
+  let cursor = durationH >= 9 ? 6 * 60 : DAY_START_MIN;
+  for (const it of list) {
+    const gapEnd = it.startMin - GAP_MIN;
+    if (cursor + need <= Math.min(gapEnd, DAYLIGHT_END_MIN)) return cursor;
+    cursor = Math.max(cursor, it.startMin + Math.round(it.durationH * 60) + GAP_MIN);
+  }
+  return cursor + need <= DAYLIGHT_END_MIN ? cursor : null;
 };
 
-/** Can a daylight activity of `durationH` still finish before sunset that day? */
+/** Can a daylight activity of `durationH` still fit somewhere that day? */
 export const daylightFits = (items: TimelineItem[], day: string, durationH: number) =>
-  nextDaylightStart(items, day, durationH) + Math.round(durationH * 60) <= DAYLIGHT_END_MIN;
+  firstDaylightStart(items, day, durationH) !== null;
 
 export type SlotSuggestion = { day: string; startMin: number; packed: boolean };
 
@@ -101,12 +111,13 @@ export function suggestDaylightSlot(
   durationH: number,
 ): SlotSuggestion | null {
   for (const day of days) {
-    if (daylightFits(items, day, durationH) && daylightHours(items, day) + durationH <= DAY_COMFORT_H)
-      return { day, startMin: nextDaylightStart(items, day, durationH), packed: false };
+    const start = firstDaylightStart(items, day, durationH);
+    if (start !== null && daylightHours(items, day) + durationH <= DAY_COMFORT_H)
+      return { day, startMin: start, packed: false };
   }
   for (const day of days) {
-    if (daylightFits(items, day, durationH))
-      return { day, startMin: nextDaylightStart(items, day, durationH), packed: true };
+    const start = firstDaylightStart(items, day, durationH);
+    if (start !== null) return { day, startMin: start, packed: true };
   }
   return null;
 }
@@ -131,9 +142,8 @@ export function moveTarget(
   if (item.day === day) return { startMin: item.startMin };
   if (item.kind === 'service') return { startMin: item.startMin };
   const rest = items.filter((i) => i.id !== item.id);
-  return daylightFits(rest, day, item.durationH)
-    ? { startMin: nextDaylightStart(rest, day, item.durationH) }
-    : null;
+  const start = firstDaylightStart(rest, day, item.durationH);
+  return start !== null ? { startMin: start } : null;
 }
 
 /** Seed the timeline from the AI day-planner (places only, one tap). */

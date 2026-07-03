@@ -19,10 +19,9 @@ import {
   dayHours,
   daylightHours,
   itemsOn,
-  nextDaylightStart,
+  firstDaylightStart,
   nextServiceStart,
   suggestDaylightSlot,
-  daylightFits,
   moveTarget,
   autoFillTimeline,
   isNight,
@@ -441,10 +440,10 @@ export default function PreferencesStep() {
     if (!entry) return;
     if (entry.kind === 'service') {
       pushItem(entry, day, nextServiceStart(timeline, day));
-    } else if (daylightFits(timeline, day, entry.durationH)) {
-      pushItem(entry, day, nextDaylightStart(timeline, day, entry.durationH));
     } else {
-      setDropNote(`No room before sunset on Day ${dayNo(day)} — try another day.`);
+      const start = firstDaylightStart(timeline, day, entry.durationH);
+      if (start !== null) pushItem(entry, day, start);
+      else setDropNote(`No room before sunset on Day ${dayNo(day)} — try another day.`);
     }
   };
   const dropProps = (day: string) => ({
