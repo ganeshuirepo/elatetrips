@@ -6,7 +6,6 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setStep } from '@/store/slices/uiSlice';
 import {
   toggleInterest,
-  toggleServicePref,
   addTimelineItem,
   removeTimelineItem,
   moveTimelineItem,
@@ -27,7 +26,7 @@ import {
   type TimelineItem,
   type TimelineKind,
 } from '@/domain/timeline';
-import { OOTY_PLACES, PLACE_INTERESTS, SERVICE_PREFS } from '@/data/ootyPlaces';
+import { OOTY_PLACES, PLACE_INTERESTS } from '@/data/ootyPlaces';
 import { PLACE_IMAGES } from '@/data/placeImages';
 import { SHARED_CATEGORIES, SPECIAL_CATEGORIES, SURPRISE_GIFTS, detailsFor } from '@/data/services';
 import { CELEBRATIONS } from '@/data/celebrations';
@@ -73,22 +72,8 @@ const TILE_GRADIENTS = [
 ];
 const tileGradient = (id: string) => TILE_GRADIENTS[id.charCodeAt(id.length - 1) % TILE_GRADIENTS.length];
 
-/** Which service categories each preference chip covers. */
-const PREF_TO_CATS: Record<string, string[]> = {
-  decor: ['decor'],
-  onground: ['onground'],
-  food: ['food', 'menu'],
-  music: ['music'],
-  romance: ['romance'],
-  surprisegifts: ['surprisegifts', 'surprises'],
-  wellness: ['wellness'],
-  adventure: ['adventure', 'local'],
-};
-
 /** Service categories that belong to escapes rather than celebrations. */
 const ESCAPE_CATS = ['wellness', 'adventure', 'local'];
-/** Preference chips that belong to escapes. */
-const ESCAPE_PREFS = ['wellness', 'adventure'];
 
 const OCCASION_CATEGORY = Object.fromEntries(CELEBRATIONS.map((c) => [c.id, c.category]));
 
@@ -587,7 +572,7 @@ function CatalogPanel({
  */
 export default function PreferencesStep() {
   const dispatch = useAppDispatch();
-  const { interests, servicePrefs, timeline } = useAppSelector((s) => s.prefs);
+  const { interests, timeline } = useAppSelector((s) => s.prefs);
   const days = useAppSelector(selectDays);
   const celebs = useAppSelector((s) => s.plan.celebs);
 
@@ -634,16 +619,12 @@ export default function PreferencesStep() {
   };
 
   /**
-   * The list shows ONLY what the preference chips ask for — nothing selected
-   * means an empty list with a nudge to pick interests.
+   * Places follow the interest chips (nothing selected → empty list with a
+   * nudge); services need no chips — the occasion gating above decides them.
    */
-  const activeServicePrefs = servicePrefs.filter((p) =>
-    ESCAPE_PREFS.includes(p) ? hasEscapes : hasCelebration,
-  );
-  const hasAnyPref = interests.length > 0 || activeServicePrefs.length > 0;
+  const hasAnyPref = interests.length > 0;
   const matchesPrefs = (e: CatalogEntry) => {
-    if (e.kind === 'service')
-      return activeServicePrefs.some((p) => (PREF_TO_CATS[p] ?? []).includes(e.catId ?? ''));
+    if (e.kind === 'service') return true;
     return (e.tags ?? []).some((t) => interests.includes(t));
   };
   const available = catalog.filter((e) => !onTimeline(e) && matchesOccasions(e) && matchesPrefs(e));
@@ -962,31 +943,6 @@ export default function PreferencesStep() {
           ))}
         </div>
       </div>
-
-      {/* Service types — only for the occasions actually chosen on Plan */}
-      {(hasCelebration || hasEscapes) && (
-        <div className="flex flex-col gap-2">
-          <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
-            <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
-              {hasCelebration ? 'Celebration services you’d like' : 'Escape experiences you’d like'}
-            </span>
-            <span className="text-[12.5px] text-white/55">Filters the services in the list below</span>
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {SERVICE_PREFS.filter((sp) =>
-              ESCAPE_PREFS.includes(sp.id) ? hasEscapes : hasCelebration,
-            ).map((sp) => (
-              <PrefChip
-                key={sp.id}
-                label={sp.label}
-                icon={sp.icon}
-                active={servicePrefs.includes(sp.id)}
-                onClick={() => dispatch(toggleServicePref(sp.id))}
-              />
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Planning board: list + timeline. Two columns on desktop, stacked
           (timeline first) on phones. */}
