@@ -10,6 +10,7 @@ import { applyCoupon } from '@/domain/coupons';
 import { inr } from '@/domain/format';
 import ReviewSummary from './ReviewSummary';
 import LocalGuideNote from '@/components/planner/hotels/LocalGuideNote';
+import { GOLD_BUTTON } from '@/components/planner/goldButton';
 import AuthOtp from './AuthOtp';
 import ContactForm from './ContactForm';
 import BillingForm from './BillingForm';
@@ -111,23 +112,26 @@ export default function ReviewStep() {
           </>
         )}
 
-        <div className="border-line sticky bottom-0 z-30 flex items-center justify-between gap-3 border-t bg-white py-3">
+        <div
+          className="sticky bottom-0 z-30 flex items-center justify-between gap-3 border-t border-white/15 py-3 backdrop-blur-md"
+          style={{ background: 'color-mix(in srgb, var(--bg2) 82%, transparent)' }}
+        >
           <Button
             variant="contained"
-            color="primary"
             size="large"
             onClick={() => dispatch(setStep('services'))}
             startIcon={<Icon name="arrow-left" size={18} />}
+            sx={GOLD_BUTTON}
           >
             Back
           </Button>
           <Button
             variant="contained"
-            color="primary"
             size="large"
             disabled={!loggedIn || payable <= 0}
             onClick={() => dispatch(setStep('payment'))}
             endIcon={<Icon name="arrow-right" size={18} />}
+            sx={GOLD_BUTTON}
           >
             Proceed to payment · {inr(payable)}
           </Button>

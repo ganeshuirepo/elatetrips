@@ -42,12 +42,11 @@ export default function PlannerView() {
         ) : step === 'stay' ? (
           // Hotels owns its surfaces too — filters + listing as separate cards.
           <HotelsStep />
-        ) : step === 'payment' ? (
-          <Card>
-            <PaymentStep />
-          </Card>
+        ) : step === 'review' ? (
+          // Review floats its white section cards directly on the canvas.
+          <ReviewStep />
         ) : (
-          <Card>{step === 'review' && <ReviewStep />}</Card>
+          <Card>{step === 'payment' && <PaymentStep />}</Card>
         )}
       </div>
     </>
