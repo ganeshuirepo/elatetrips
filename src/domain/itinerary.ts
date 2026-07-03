@@ -29,7 +29,9 @@ const CIRCUIT_ORDER = [
   'peaks-and-pykara',
   'coonoor',
   'avalanche',
+  'kotagiri',
   'falls-and-tribes',
+  'town-museums',
   'mudumalai',
 ] as const;
 
@@ -38,7 +40,9 @@ const CIRCUIT_TITLES: Record<string, string> = {
   'peaks-and-pykara': 'Peaks, tea & the Pykara circuit',
   coonoor: 'Coonoor day out',
   avalanche: 'Avalanche & Emerald lakes',
+  kotagiri: 'Kotagiri & Catherine Falls',
   'falls-and-tribes': 'Falls, treks & Toda culture',
+  'town-museums': 'Museums, temples & bazaar lanes',
   mudumalai: 'Mudumalai wildlife safari',
 };
 
@@ -128,9 +132,11 @@ export function buildItinerary(dates: string[], interests: string[]): ItineraryD
     interests.length === 0
       ? rest
       : [...rest].sort((a, b) => {
-          const total = (c: string) =>
-            OOTY_PLACES.filter((p) => p.circuit === c).reduce((s, p) => s + matchCount(p, interests), 0);
-          return total(b) - total(a);
+          // Rank by the strongest single experience a circuit offers for these
+          // interests — a dedicated safari day beats three mild matches.
+          const best = (c: string) =>
+            Math.max(...OOTY_PLACES.filter((p) => p.circuit === c).map((p) => score(p, interests)));
+          return best(b) - best(a);
         });
 
   const circuits = ['town-classics', ...ranked];

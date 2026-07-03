@@ -49,8 +49,10 @@ describe('buildItinerary', () => {
     expect(names.join()).not.toContain('Thread Garden');
   });
 
-  it('fills extra days with a leisure day', () => {
-    const days = buildItinerary(dates(7), []);
-    expect(days[6].title).toBe('At leisure');
+  it('fills extra days with a leisure day once every circuit is used', () => {
+    const days = buildItinerary(dates(9), []);
+    expect(days[8].title).toBe('At leisure');
+    // With 8 circuits available, day 8 is still a real outing.
+    expect(days[7].title).not.toBe('At leisure');
   });
 });

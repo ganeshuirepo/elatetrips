@@ -62,7 +62,13 @@ function PlaceCard({ place }: { place: OotyPlace }) {
           className="rounded-full px-2 py-0.5 text-[10px] font-black tracking-[0.04em] uppercase"
           style={{ background: 'color-mix(in srgb, var(--primary) 9%, transparent)', color: 'var(--primary)' }}
         >
-          {place.zone === 'ooty-town' ? 'In town' : place.zone === 'coonoor' ? 'Coonoor' : 'Excursion'}
+          {place.zone === 'ooty-town'
+            ? 'In town'
+            : place.zone === 'coonoor'
+              ? 'Coonoor'
+              : place.zone === 'kotagiri'
+                ? 'Kotagiri'
+                : 'Excursion'}
         </span>
       </div>
       <span className="text-ink/70 mt-1.5 text-[12px]">
