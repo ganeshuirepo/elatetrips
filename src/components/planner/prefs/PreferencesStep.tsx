@@ -412,7 +412,7 @@ function CatalogDetailsModal({
   );
 }
 
-/** Multi-select chip shared by both preference groups. */
+/** Compact multi-select filter chip shared by both preference groups. */
 function PrefChip({
   label,
   icon,
@@ -429,14 +429,14 @@ function PrefChip({
       type="button"
       aria-pressed={active}
       onClick={onClick}
-      className="flex cursor-pointer items-center gap-2 rounded-full border-[1.5px] px-3.5 py-2 text-[13px] font-semibold transition-colors"
+      className="flex cursor-pointer items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11.5px] font-semibold transition-colors"
       style={{
-        background: active ? 'var(--accent)' : '#FAF7F2',
-        borderColor: active ? 'var(--accent)' : '#EBE1CF',
-        color: active ? '#08201F' : 'var(--ink)',
+        background: active ? 'var(--accent)' : 'rgba(255,255,255,.06)',
+        borderColor: active ? 'var(--accent)' : 'rgba(255,255,255,.22)',
+        color: active ? '#08201F' : 'rgba(255,255,255,.8)',
       }}
     >
-      <Icon name={icon} size={16} />
+      <Icon name={icon} size={13} />
       {label}
     </button>
   );
@@ -941,18 +941,7 @@ export default function PreferencesStep() {
   );
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Heading */}
-      <div className="flex flex-col gap-1">
-        <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
-          Preferences
-        </span>
-        <span className="text-[13px] text-white/60">
-          Tell us what you love, then build your day-by-day timeline — sightseeing wraps by sunset,
-          celebrations can go late 🌙
-        </span>
-      </div>
-
+    <div className="flex flex-col gap-5">
       {/* Interests */}
       <div className="flex flex-col gap-2">
         <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
@@ -961,7 +950,7 @@ export default function PreferencesStep() {
           </span>
           <span className="text-[12.5px] text-white/55">Filters the list below & guides the auto-planner</span>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1.5">
           {PLACE_INTERESTS.filter((i) => i.id !== 'adventure' || hasEscapes).map((i) => (
             <PrefChip
               key={i.id}
@@ -983,7 +972,7 @@ export default function PreferencesStep() {
             </span>
             <span className="text-[12.5px] text-white/55">Filters the services in the list below</span>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {SERVICE_PREFS.filter((sp) =>
               ESCAPE_PREFS.includes(sp.id) ? hasEscapes : hasCelebration,
             ).map((sp) => (
