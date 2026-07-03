@@ -142,26 +142,6 @@ const fmtH = (h: number) => (h >= 1 ? `~${+h.toFixed(1)}h` : `~${Math.round(h * 
 const entryKey = (e: CatalogEntry) => `${e.kind}:${e.refId}`;
 
 
-/** Small filter pill used inside the panels. */
-function Pill({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      role="radio"
-      aria-checked={active}
-      onClick={onClick}
-      className="flex-none cursor-pointer rounded-full border-[1.5px] px-3 py-1 text-[12px] font-semibold whitespace-nowrap transition-colors"
-      style={{
-        background: active ? 'var(--accent)' : 'transparent',
-        borderColor: active ? 'var(--accent)' : 'rgba(255,255,255,.22)',
-        color: active ? '#08201F' : 'rgba(255,255,255,.75)',
-      }}
-    >
-      {label}
-    </button>
-  );
-}
-
 /** Multi-select chip shared by both preference groups. */
 function PrefChip({
   label,
@@ -207,25 +187,21 @@ interface PanelShared {
   onAddSequential: (e: CatalogEntry) => void;
 }
 
-/** A filterable, scrollable list of addable entries (left/right panels). */
+/** A scrollable list of addable entries, driven purely by the preference chips. */
 function CatalogPanel({
   title,
   sub,
   entries,
-  filters,
+  emptyMessage,
   shared,
 }: {
   title: string;
   sub: string;
   entries: CatalogEntry[];
-  filters: { id: string; label: string; match: (e: CatalogEntry) => boolean }[];
+  emptyMessage: string;
   shared: PanelShared;
 }) {
-  const [f, setF] = useState('all');
-  // Pills that would show nothing (e.g. Adventures on a no-escape trip) hide.
-  const visibleFilters = filters.filter((x) => x.id === 'all' || entries.some(x.match));
-  const act = visibleFilters.find((x) => x.id === f) ?? visibleFilters[0];
-  const list = entries.filter(act.match);
+  const list = entries;
   const {
     noDates,
     days,
@@ -245,11 +221,6 @@ function CatalogPanel({
       <div className="flex flex-col">
         <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">{title}</span>
         <span className="text-[11.5px] text-white/50">{sub}</span>
-      </div>
-      <div className="flex gap-1.5 overflow-x-auto pb-1">
-        {visibleFilters.map((x) => (
-          <Pill key={x.id} label={x.label} active={act.id === x.id} onClick={() => setF(x.id)} />
-        ))}
       </div>
       <div className="flex max-h-[430px] flex-col gap-1.5 overflow-y-auto pr-1">
         {list.map((entry) => {
@@ -332,8 +303,8 @@ function CatalogPanel({
           );
         })}
         {list.length === 0 && (
-          <span className="px-2 py-4 text-center text-[12px] text-white/40">
-            Everything here is already on your timeline.
+          <span className="rounded-[10px] border border-dashed border-white/20 px-3 py-6 text-center text-[12.5px] text-white/45">
+            {emptyMessage}
           </span>
         )}
       </div>
@@ -391,16 +362,17 @@ export default function PreferencesStep() {
     return ESCAPE_CATS.includes(e.catId ?? '') ? hasEscapes : hasCelebration;
   };
 
-  /** The preference chips above narrow the list to matching items. */
+  /**
+   * The list shows ONLY what the preference chips ask for — nothing selected
+   * means an empty list with a nudge to pick interests.
+   */
+  const activeServicePrefs = servicePrefs.filter((p) =>
+    ESCAPE_PREFS.includes(p) ? hasEscapes : hasCelebration,
+  );
+  const hasAnyPref = interests.length > 0 || activeServicePrefs.length > 0;
   const matchesPrefs = (e: CatalogEntry) => {
-    if (e.kind === 'service') {
-      const activePrefs = servicePrefs.filter((p) =>
-        ESCAPE_PREFS.includes(p) ? hasEscapes : hasCelebration,
-      );
-      if (activePrefs.length === 0) return true;
-      return activePrefs.some((p) => (PREF_TO_CATS[p] ?? []).includes(e.catId ?? ''));
-    }
-    if (interests.length === 0) return true;
+    if (e.kind === 'service')
+      return activeServicePrefs.some((p) => (PREF_TO_CATS[p] ?? []).includes(e.catId ?? ''));
     return (e.tags ?? []).some((t) => interests.includes(t));
   };
   const available = catalog.filter((e) => !onTimeline(e) && matchesOccasions(e) && matchesPrefs(e));
@@ -711,13 +683,6 @@ export default function PreferencesStep() {
     </div>
   );
 
-  const combinedFilters = [
-    { id: 'all', label: 'All', match: () => true },
-    { id: 'place', label: 'Places', match: (e: CatalogEntry) => e.kind === 'place' },
-    { id: 'service', label: 'Services', match: (e: CatalogEntry) => e.kind === 'service' },
-    { id: 'adventure', label: 'Adventures', match: (e: CatalogEntry) => e.kind === 'adventure' },
-  ];
-
   return (
     <div className="flex flex-col gap-6">
       {/* Heading */}
@@ -783,9 +748,13 @@ export default function PreferencesStep() {
         <div className="order-2 lg:order-1">
           <CatalogPanel
             title="Places & services"
-            sub="Filtered by your preferences above · sightseeing till sunset, celebrations any hour"
+            sub="Matches your preferences above · sightseeing till sunset, celebrations any hour"
             entries={available}
-            filters={combinedFilters}
+            emptyMessage={
+              hasAnyPref
+                ? 'Everything matching your preferences is already on your timeline.'
+                : 'Add your interests above to plan the itinerary.'
+            }
             shared={panelShared}
           />
         </div>
