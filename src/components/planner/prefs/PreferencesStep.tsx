@@ -45,9 +45,23 @@ interface CatalogEntry {
   meta: string;
   durationH: number;
   icon: string;
-  /** Service category (filter pills in the services panel). */
-  catLabel?: string;
+  /** Interest tags (places & adventures) — matched against the chips above. */
+  tags?: string[];
+  /** Service category id — matched against the service-preference chips. */
+  catId?: string;
 }
+
+/** Which service categories each preference chip covers. */
+const PREF_TO_CATS: Record<string, string[]> = {
+  decor: ['decor'],
+  onground: ['onground'],
+  food: ['food', 'menu'],
+  music: ['music'],
+  romance: ['romance'],
+  surprisegifts: ['surprisegifts', 'surprises'],
+  wellness: ['wellness'],
+  adventure: ['adventure', 'local'],
+};
 
 /** Typical time a celebration service occupies, by category. */
 const SERVICE_DURATION: Record<string, number> = {
@@ -70,6 +84,7 @@ function buildCatalog(): CatalogEntry[] {
     meta: `${p.distanceKm} km · ${p.fee}`,
     durationH: p.durationH,
     icon: 'map-pin',
+    tags: p.tags,
   }));
 
   const seen = new Set<string>();
@@ -86,7 +101,7 @@ function buildCatalog(): CatalogEntry[] {
         meta: `${cat.label}${o.price != null ? ` · ₹${o.price.toLocaleString('en-IN')}` : ''}`,
         durationH: SERVICE_DURATION[cat.id] ?? 1.5,
         icon: o.icon,
-        catLabel: cat.label,
+        catId: cat.id,
       });
     }
   }
@@ -99,6 +114,7 @@ function buildCatalog(): CatalogEntry[] {
       meta: `${v.sub} · ₹${v.price.toLocaleString('en-IN')}/person`,
       durationH: 2.5,
       icon: v.icon,
+      tags: ['adventure'],
     })),
     ...EXPERIENCES.map((v) => ({
       kind: 'adventure' as const,
@@ -107,6 +123,7 @@ function buildCatalog(): CatalogEntry[] {
       meta: `${v.sub} · ₹${v.price.toLocaleString('en-IN')}/person`,
       durationH: 2,
       icon: v.icon,
+      tags: ['adventure', 'heritage'],
     })),
   ];
 
@@ -351,7 +368,17 @@ export default function PreferencesStep() {
   /** Items already planned disappear from the lists until removed. */
   const onTimeline = (e: CatalogEntry) =>
     timeline.some((i) => i.kind === e.kind && i.refId === e.refId);
-  const available = catalog.filter((e) => !onTimeline(e));
+
+  /** The preference chips above narrow the list to matching items. */
+  const matchesPrefs = (e: CatalogEntry) => {
+    if (e.kind === 'service') {
+      if (servicePrefs.length === 0) return true;
+      return servicePrefs.some((p) => (PREF_TO_CATS[p] ?? []).includes(e.catId ?? ''));
+    }
+    if (interests.length === 0) return true;
+    return (e.tags ?? []).some((t) => interests.includes(t));
+  };
+  const available = catalog.filter((e) => !onTimeline(e) && matchesPrefs(e));
 
   const pushItem = (entry: CatalogEntry, day: string, startMin: number) => {
     dispatch(
@@ -659,16 +686,6 @@ export default function PreferencesStep() {
     </div>
   );
 
-  const placeFilters = [
-    { id: 'all', label: 'All', match: () => true },
-    { id: 'place', label: 'Places', match: (e: CatalogEntry) => e.kind === 'place' },
-    { id: 'adventure', label: 'Adventures', match: (e: CatalogEntry) => e.kind === 'adventure' },
-  ];
-  const serviceCats = [...new Set(available.filter((e) => e.kind === 'service').map((e) => e.catLabel!))];
-  const serviceFilters = [
-    { id: 'all', label: 'All', match: () => true },
-    ...serviceCats.map((c) => ({ id: c, label: c, match: (e: CatalogEntry) => e.catLabel === c })),
-  ];
   const combinedFilters = [
     { id: 'all', label: 'All', match: () => true },
     { id: 'place', label: 'Places', match: (e: CatalogEntry) => e.kind === 'place' },
@@ -695,7 +712,7 @@ export default function PreferencesStep() {
           <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
             What are you into?
           </span>
-          <span className="text-[12.5px] text-white/55">Used by the auto-planner</span>
+          <span className="text-[12.5px] text-white/55">Filters the list below & guides the auto-planner</span>
         </div>
         <div className="flex flex-wrap gap-2">
           {PLACE_INTERESTS.map((i) => (
@@ -716,7 +733,7 @@ export default function PreferencesStep() {
           <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
             Celebration services you&apos;d like
           </span>
-          <span className="text-[12.5px] text-white/55">We&apos;ll highlight these on the Surprises step</span>
+          <span className="text-[12.5px] text-white/55">Filters the services in the list below</span>
         </div>
         <div className="flex flex-wrap gap-2">
           {SERVICE_PREFS.map((sp) => (
@@ -731,33 +748,19 @@ export default function PreferencesStep() {
         </div>
       </div>
 
-      {/* Planning board: desktop = 3 columns; mobile = timeline + combined list */}
-      <div className="hidden gap-4 lg:grid" style={{ gridTemplateColumns: '1fr 1.15fr 1fr' }}>
-        <CatalogPanel
-          title="Places & adventures"
-          sub="Daylight only — till ~6 PM · drag onto a day or Add"
-          entries={available.filter((e) => e.kind !== 'service')}
-          filters={placeFilters}
-          shared={panelShared}
-        />
-        {timelinePanel}
-        <CatalogPanel
-          title="Celebration services"
-          sub="Any hour — late night included"
-          entries={available.filter((e) => e.kind === 'service')}
-          filters={serviceFilters}
-          shared={panelShared}
-        />
-      </div>
-      <div className="flex flex-col gap-4 lg:hidden">
-        {timelinePanel}
-        <CatalogPanel
-          title="Places & services"
-          sub="Sightseeing till sunset · celebrations any hour"
-          entries={available}
-          filters={combinedFilters}
-          shared={panelShared}
-        />
+      {/* Planning board: list + timeline. Two columns on desktop, stacked
+          (timeline first) on phones. */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.15fr_1fr]">
+        <div className="order-2 lg:order-1">
+          <CatalogPanel
+            title="Places & services"
+            sub="Filtered by your preferences above · sightseeing till sunset, celebrations any hour"
+            entries={available}
+            filters={combinedFilters}
+            shared={panelShared}
+          />
+        </div>
+        <div className="order-1 lg:order-2">{timelinePanel}</div>
       </div>
 
       {/* Action bar */}

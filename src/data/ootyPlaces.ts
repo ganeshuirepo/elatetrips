@@ -640,6 +640,7 @@ export const PLACE_INTERESTS: { id: string; label: string; icon: string }[] = [
   { id: 'tea', label: 'Tea estates', icon: 'leaf' },
   { id: 'family', label: 'Kid-friendly', icon: 'mood-kid' },
   { id: 'photography', label: 'Photography', icon: 'camera' },
+  { id: 'adventure', label: 'Adventure sports', icon: 'trekking' },
 ];
 
 /** Service-type chips (map to Surprises-step categories for future filtering). */
