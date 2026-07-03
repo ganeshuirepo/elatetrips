@@ -66,7 +66,7 @@ export const CELEBRATIONS: Celebration[] = [
   },
   {
     id: 'nature',
-    name: 'Local experiences',
+    name: 'Experiences',
     icon: 'ti-map-pin',
     img: '/assets/celeb-adventure.png',
     category: 'rejuvenate',
