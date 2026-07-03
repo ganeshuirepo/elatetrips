@@ -44,6 +44,14 @@ const prefsSlice = createSlice({
     removeTimelineItem(state, action: PayloadAction<string>) {
       state.timeline = state.timeline.filter((i) => i.id !== action.payload);
     },
+    /** Drag & drop: relocate an item to another day (time already resolved). */
+    moveTimelineItem(state, action: PayloadAction<{ id: string; day: string; startMin: number }>) {
+      const it = state.timeline.find((i) => i.id === action.payload.id);
+      if (it) {
+        it.day = action.payload.day;
+        it.startMin = action.payload.startMin;
+      }
+    },
     /** Wholesale replace — used by the AI auto-planner. */
     setTimeline(state, action: PayloadAction<TimelineItem[]>) {
       state.timeline = action.payload;
@@ -59,6 +67,7 @@ export const {
   toggleServicePref,
   addTimelineItem,
   removeTimelineItem,
+  moveTimelineItem,
   setTimeline,
   clearTimeline,
 } = prefsSlice.actions;

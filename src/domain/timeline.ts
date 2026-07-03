@@ -3,9 +3,10 @@ import { OOTY_PLACES } from '@/data/ootyPlaces';
 
 /**
  * The trip timeline: user-placed items (places, celebration services,
- * adventures) on specific days and times. Capacity rules keep days humane —
- * a comfort threshold triggers "packed day" warnings and a hard cap blocks
- * over-planning, pushing new items to the next day with room.
+ * adventures) on specific days. Practical time windows apply — sightseeing
+ * and adventures only run in daylight (till ~sunset), while celebrations may
+ * happen at any hour, late night included. Places/adventures are placed
+ * sequentially; services carry an explicit day + time.
  */
 
 export type TimelineKind = 'place' | 'service' | 'adventure';
@@ -24,16 +25,19 @@ export interface TimelineItem {
   meta: string;
 }
 
-/** A comfortable day of sightseeing/celebrations, incl. travel & breaks. */
-export const DAY_COMFORT_H = 7;
-/** Hard cap — beyond this, adding is blocked and the next day is suggested. */
-export const DAY_CAPACITY_H = 9;
+/** Sightseeing day starts here… */
 export const DAY_START_MIN = 8 * 60;
+/** …and daylight activities wrap up by sunset. */
+export const DAYLIGHT_END_MIN = 18 * 60;
+/** Default suggestion for celebrations — early evening. */
+export const DEFAULT_SERVICE_MIN = 18 * 60 + 30;
+/** A comfortable amount of daylight activity per day. */
+export const DAY_COMFORT_H = 7;
+
 const GAP_MIN = 30;
-const LATEST_START_MIN = 20 * 60;
 
 export const minutesLabel = (mins: number): string => {
-  const h24 = Math.floor(mins / 60);
+  const h24 = Math.floor(mins / 60) % 24;
   const m = mins % 60;
   const suffix = h24 >= 12 ? 'PM' : 'AM';
   const h12 = h24 % 12 === 0 ? 12 : h24 % 12;
@@ -48,53 +52,89 @@ export const parseTimeLabel = (label: string): number => {
   return h * 60 + Number(m[2]);
 };
 
-/** Half-hour start-time choices from 6 AM to 8 PM. */
-export const TIME_OPTIONS: number[] = Array.from(
-  { length: (LATEST_START_MIN - 6 * 60) / 30 + 1 },
-  (_, i) => 6 * 60 + i * 30,
-);
+/** Celebrations can start at any half-hour of the day or night. */
+export const SERVICE_TIME_OPTIONS: number[] = Array.from({ length: 48 }, (_, i) => i * 30);
+
+/** True when a start time falls outside daylight (moon marker in the UI). */
+export const isNight = (startMin: number) => startMin < 6 * 60 || startMin >= DAYLIGHT_END_MIN;
 
 export const itemsOn = (items: TimelineItem[], day: string) =>
   items.filter((i) => i.day === day).sort((a, b) => a.startMin - b.startMin);
 
-/** Planned hours on a day (durations only — the comfort cap absorbs travel). */
+/** All planned hours on a day (used for display + packed warnings). */
 export const dayHours = (items: TimelineItem[], day: string) =>
   itemsOn(items, day).reduce((s, i) => s + i.durationH, 0);
 
-/** Next free sequential start on a day: after the last item, 30 min gap. */
-export const nextStart = (items: TimelineItem[], day: string): number => {
-  const list = itemsOn(items, day);
-  if (list.length === 0) return DAY_START_MIN;
+const daylightOn = (items: TimelineItem[], day: string) =>
+  itemsOn(items, day).filter((i) => i.kind !== 'service');
+
+/** Daylight (sightseeing + adventure) hours on a day. */
+export const daylightHours = (items: TimelineItem[], day: string) =>
+  daylightOn(items, day).reduce((s, i) => s + i.durationH, 0);
+
+/**
+ * Next sequential daylight start: after the day's last place/adventure.
+ * Full-day outings (9h+, e.g. the Mudumalai safari) get a dawn start on an
+ * empty day — exactly how such trips run in practice.
+ */
+export const nextDaylightStart = (items: TimelineItem[], day: string, durationH = 0): number => {
+  const list = daylightOn(items, day);
+  if (list.length === 0) return durationH >= 9 ? 6 * 60 : DAY_START_MIN;
   const end = Math.max(...list.map((i) => i.startMin + Math.round(i.durationH * 60)));
-  return Math.min(Math.max(end + GAP_MIN, DAY_START_MIN), LATEST_START_MIN);
+  return Math.max(end + GAP_MIN, DAY_START_MIN);
 };
+
+/** Can a daylight activity of `durationH` still finish before sunset that day? */
+export const daylightFits = (items: TimelineItem[], day: string, durationH: number) =>
+  nextDaylightStart(items, day, durationH) + Math.round(durationH * 60) <= DAYLIGHT_END_MIN;
 
 export type SlotSuggestion = { day: string; startMin: number; packed: boolean };
 
 /**
- * Where should this item go? The first day it fits comfortably; failing that
- * the first day under the hard cap (flagged `packed`); null when every day is
- * full — the UI should tell the user to remove something or extend the trip.
+ * Sequential placement for places/adventures: the first day where the item
+ * still fits before sunset — comfortable days first, then packed ones
+ * (flagged). Null when every day is full: the UI says remove or extend.
  */
-export function suggestSlot(
+export function suggestDaylightSlot(
   items: TimelineItem[],
   days: string[],
   durationH: number,
 ): SlotSuggestion | null {
   for (const day of days) {
-    if (dayHours(items, day) + durationH <= DAY_COMFORT_H)
-      return { day, startMin: nextStart(items, day), packed: false };
+    if (daylightFits(items, day, durationH) && daylightHours(items, day) + durationH <= DAY_COMFORT_H)
+      return { day, startMin: nextDaylightStart(items, day, durationH), packed: false };
   }
   for (const day of days) {
-    if (dayHours(items, day) + durationH <= DAY_CAPACITY_H)
-      return { day, startMin: nextStart(items, day), packed: true };
+    if (daylightFits(items, day, durationH))
+      return { day, startMin: nextDaylightStart(items, day, durationH), packed: true };
   }
   return null;
 }
 
-/** Can `durationH` land on `day` at all? Used when the user picks a day manually. */
-export const fitsOn = (items: TimelineItem[], day: string, durationH: number) =>
-  dayHours(items, day) + durationH <= DAY_CAPACITY_H;
+/** Suggested celebration time: after that day's last service, else evening. */
+export const nextServiceStart = (items: TimelineItem[], day: string): number => {
+  const list = itemsOn(items, day).filter((i) => i.kind === 'service');
+  if (list.length === 0) return DEFAULT_SERVICE_MIN;
+  const end = Math.max(...list.map((i) => i.startMin + Math.round(i.durationH * 60)));
+  return Math.min(end + GAP_MIN, 23 * 60 + 30);
+};
+
+/**
+ * Where an item lands when dropped on `day`. Services keep their clock time;
+ * daylight activities re-sequence — or refuse (null) when the day is full.
+ */
+export function moveTarget(
+  items: TimelineItem[],
+  item: TimelineItem,
+  day: string,
+): { startMin: number } | null {
+  if (item.day === day) return { startMin: item.startMin };
+  if (item.kind === 'service') return { startMin: item.startMin };
+  const rest = items.filter((i) => i.id !== item.id);
+  return daylightFits(rest, day, item.durationH)
+    ? { startMin: nextDaylightStart(rest, day, item.durationH) }
+    : null;
+}
 
 /** Seed the timeline from the AI day-planner (places only, one tap). */
 export function autoFillTimeline(days: string[], interests: string[]): TimelineItem[] {

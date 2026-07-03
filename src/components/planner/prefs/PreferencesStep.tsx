@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setStep } from '@/store/slices/uiSlice';
@@ -9,20 +9,24 @@ import {
   toggleServicePref,
   addTimelineItem,
   removeTimelineItem,
+  moveTimelineItem,
   setTimeline,
 } from '@/store/slices/prefsSlice';
 import { selectDays } from '@/store/selectors/planSelectors';
 import {
-  TIME_OPTIONS,
+  SERVICE_TIME_OPTIONS,
   minutesLabel,
   dayHours,
+  daylightHours,
   itemsOn,
-  nextStart,
-  suggestSlot,
-  fitsOn,
+  nextDaylightStart,
+  nextServiceStart,
+  suggestDaylightSlot,
+  daylightFits,
+  moveTarget,
   autoFillTimeline,
+  isNight,
   DAY_COMFORT_H,
-  DAY_CAPACITY_H,
   type TimelineItem,
   type TimelineKind,
 } from '@/domain/timeline';
@@ -43,7 +47,7 @@ interface CatalogEntry {
   icon: string;
 }
 
-/** Typical time a celebration service occupies in the day, by category. */
+/** Typical time a celebration service occupies, by category. */
 const SERVICE_DURATION: Record<string, number> = {
   decor: 2,
   onground: 3,
@@ -106,13 +110,17 @@ function buildCatalog(): CatalogEntry[] {
   return [...places, ...services, ...adventures];
 }
 
-const KIND_META: Record<TimelineKind, { label: string; icon: string }> = {
-  place: { label: 'Places', icon: 'map-pin' },
-  service: { label: 'Services', icon: 'sparkles' },
-  adventure: { label: 'Adventures', icon: 'mountain' },
+const KIND_LABEL: Record<TimelineKind, string> = {
+  place: 'Places',
+  service: 'Services',
+  adventure: 'Adventures',
 };
 
 const fmtH = (h: number) => (h >= 1 ? `~${+h.toFixed(1)}h` : `~${Math.round(h * 60)}min`);
+const entryKey = (e: CatalogEntry) => `${e.kind}:${e.refId}`;
+
+type Feedback = { key: string; kind: 'ok' | 'warn' | 'error'; text: string };
+const FEEDBACK_COLOR = { ok: '#1E7A3A', warn: '#B96212', error: '#C0392B' } as const;
 
 /** Multi-select chip shared by both preference groups. */
 function PrefChip({
@@ -145,10 +153,10 @@ function PrefChip({
 }
 
 /**
- * Step 2 — Preferences: interests, then the trip timeline. Places, services
- * and adventures live in one filterable list; adding an item suggests the
- * next free slot, overflows to the next day when one is full, and warns when
- * a day gets packed.
+ * Step 2 — Preferences: interests, then the trip timeline. Sightseeing and
+ * adventures auto-sequence into daylight (till ~6 PM); celebrations take an
+ * explicit day + time and may run at any hour. Items can also be dragged
+ * from the list onto a day, or between days.
  */
 export default function PreferencesStep() {
   const dispatch = useAppDispatch();
@@ -157,67 +165,114 @@ export default function PreferencesStep() {
 
   const catalog = useMemo(buildCatalog, []);
   const [filter, setFilter] = useState<'all' | TimelineKind>('all');
-  const [showTimeline, setShowTimeline] = useState(false);
+  const [showTimeline, setShowTimeline] = useState(true);
 
-  // Inline add flow
-  const [adding, setAdding] = useState<CatalogEntry | null>(null);
+  // Service add flow (day + time picker); places/adventures add instantly.
+  const [addingService, setAddingService] = useState<CatalogEntry | null>(null);
   const [selDay, setSelDay] = useState('');
-  const [selTime, setSelTime] = useState(TIME_OPTIONS[4]);
+  const [selTime, setSelTime] = useState(SERVICE_TIME_OPTIONS[37]); // 6:30 PM
+
+  const [feedback, setFeedback] = useState<Feedback | null>(null);
+  const [dragOverDay, setDragOverDay] = useState<string | null>(null);
+  const [dropNote, setDropNote] = useState<{ day: string; text: string } | null>(null);
+
+  useEffect(() => {
+    if (!feedback) return;
+    const t = setTimeout(() => setFeedback(null), 4000);
+    return () => clearTimeout(t);
+  }, [feedback]);
+  useEffect(() => {
+    if (!dropNote) return;
+    const t = setTimeout(() => setDropNote(null), 4000);
+    return () => clearTimeout(t);
+  }, [dropNote]);
 
   const shown = catalog.filter((e) => filter === 'all' || e.kind === filter);
   const noDates = days.length === 0;
+  const dayNo = (day: string) => days.indexOf(day) + 1;
 
-  const beginAdd = (entry: CatalogEntry) => {
-    const slot = suggestSlot(timeline, days, entry.durationH);
-    setAdding(entry);
-    setSelDay(slot?.day ?? days[0]);
-    setSelTime(slot?.startMin ?? TIME_OPTIONS[4]);
-  };
-
-  const pickDay = (day: string) => {
-    setSelDay(day);
-    setSelTime(nextStart(timeline, day));
-  };
-
-  const confirmAdd = () => {
-    if (!adding || !fitsOn(timeline, selDay, adding.durationH)) return;
+  const pushItem = (entry: CatalogEntry, day: string, startMin: number) => {
     dispatch(
       addTimelineItem({
-        id: `${adding.kind}:${adding.refId}:${selDay}:${selTime}`,
-        kind: adding.kind,
-        refId: adding.refId,
-        name: adding.name,
-        day: selDay,
-        startMin: selTime,
-        durationH: adding.durationH,
-        meta: adding.meta,
+        id: `${entry.kind}:${entry.refId}:${day}:${startMin}`,
+        kind: entry.kind,
+        refId: entry.refId,
+        name: entry.name,
+        day,
+        startMin,
+        durationH: entry.durationH,
+        meta: entry.meta,
       }),
     );
     setShowTimeline(true);
-    setAdding(null);
   };
 
-  /** Add-flow status for the currently selected day. */
-  const addStatus = useMemo(() => {
-    if (!adding) return null;
-    const after = dayHours(timeline, selDay) + adding.durationH;
-    const dayNo = days.indexOf(selDay) + 1;
-    if (!fitsOn(timeline, selDay, adding.durationH)) {
-      const alt = suggestSlot(timeline, days, adding.durationH);
-      return {
-        kind: 'error' as const,
-        text: `Day ${dayNo} is already full (${dayHours(timeline, selDay).toFixed(1)}h planned). ${
-          alt ? `Try Day ${days.indexOf(alt.day) + 1} instead.` : 'Remove an item or extend your dates.'
-        }`,
-      };
+  /** Add button for places/adventures: pure sequence, no time to choose. */
+  const addSequential = (entry: CatalogEntry) => {
+    const slot = suggestDaylightSlot(timeline, days, entry.durationH);
+    if (!slot) {
+      setFeedback({
+        key: entryKey(entry),
+        kind: 'error',
+        text: 'Every day is full before sunset — remove something or extend your dates.',
+      });
+      return;
     }
-    if (after > DAY_COMFORT_H)
-      return {
-        kind: 'warn' as const,
-        text: `This makes Day ${dayNo} a packed ${after.toFixed(1)}-hour day — a lighter day might be more fun.`,
-      };
-    return { kind: 'ok' as const, text: `Fits nicely — Day ${dayNo}, ${minutesLabel(selTime)}.` };
-  }, [adding, selDay, selTime, timeline, days]);
+    pushItem(entry, slot.day, slot.startMin);
+    setFeedback({
+      key: entryKey(entry),
+      kind: slot.packed ? 'warn' : 'ok',
+      text: slot.packed
+        ? `Added to Day ${dayNo(slot.day)} at ${minutesLabel(slot.startMin)} — that day is getting packed.`
+        : `Added to Day ${dayNo(slot.day)} at ${minutesLabel(slot.startMin)}.`,
+    });
+  };
+
+  const beginServiceAdd = (entry: CatalogEntry) => {
+    const day = days[0];
+    setAddingService(entry);
+    setSelDay(day);
+    setSelTime(nextServiceStart(timeline, day));
+  };
+
+  const confirmServiceAdd = () => {
+    if (!addingService) return;
+    pushItem(addingService, selDay, selTime);
+    setFeedback({
+      key: entryKey(addingService),
+      kind: 'ok',
+      text: `Added to Day ${dayNo(selDay)} at ${minutesLabel(selTime)}${isNight(selTime) ? ' (night celebration 🌙)' : ''}.`,
+    });
+    setAddingService(null);
+  };
+
+  // ---- Drag & drop -----------------------------------------------------------
+  const onDropOnDay = (e: React.DragEvent, day: string) => {
+    e.preventDefault();
+    setDragOverDay(null);
+    const itemId = e.dataTransfer.getData('application/x-timeline-item');
+    if (itemId) {
+      const it = timeline.find((i) => i.id === itemId);
+      if (!it || it.day === day) return;
+      const target = moveTarget(timeline, it, day);
+      if (!target) {
+        setDropNote({ day, text: `No room before sunset on Day ${dayNo(day)} — try another day.` });
+        return;
+      }
+      dispatch(moveTimelineItem({ id: it.id, day, startMin: target.startMin }));
+      return;
+    }
+    const key = e.dataTransfer.getData('application/x-catalog-entry');
+    const entry = catalog.find((c) => entryKey(c) === key);
+    if (!entry) return;
+    if (entry.kind === 'service') {
+      pushItem(entry, day, nextServiceStart(timeline, day));
+    } else if (daylightFits(timeline, day, entry.durationH)) {
+      pushItem(entry, day, nextDaylightStart(timeline, day));
+    } else {
+      setDropNote({ day, text: `No room before sunset on Day ${dayNo(day)} — try another day.` });
+    }
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -282,7 +337,7 @@ export default function PreferencesStep() {
           <span className="text-[12.5px] text-white/55">
             {noDates
               ? 'Pick your tour dates on the Plan step to start the timeline.'
-              : `${days.length} day${days.length > 1 ? 's' : ''} · a comfortable day is ~${DAY_COMFORT_H}h of plans`}
+              : 'Sightseeing & adventures run till sunset (~6 PM) · celebrations can go late 🌙'}
           </span>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -316,15 +371,36 @@ export default function PreferencesStep() {
         </div>
       </div>
 
-      {/* Timeline panel */}
+      {/* Vertical day timelines — drop targets */}
       {showTimeline && !noDates && (
-        <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))' }}>
+        <div
+          className="grid gap-3"
+          style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))' }}
+        >
           {days.map((day, i) => {
             const list = itemsOn(timeline, day);
-            const hours = dayHours(timeline, day);
-            const packed = hours > DAY_COMFORT_H;
+            const dayH = daylightHours(timeline, day);
+            const totalH = dayHours(timeline, day);
+            const packed = dayH > DAY_COMFORT_H;
+            const isOver = dragOverDay === day;
             return (
-              <div key={day} className="flex flex-col gap-2 rounded-[16px] border border-white/10 bg-white/[0.03] p-4">
+              <div
+                key={day}
+                data-tl-day={day}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setDragOverDay(day);
+                }}
+                onDragLeave={() => setDragOverDay((d) => (d === day ? null : d))}
+                onDrop={(e) => onDropOnDay(e, day)}
+                className="flex flex-col gap-2 rounded-[16px] border p-4 transition-colors"
+                style={{
+                  borderColor: isOver ? 'var(--accent)' : 'rgba(255,255,255,.1)',
+                  background: isOver
+                    ? 'color-mix(in srgb, var(--accent) 8%, transparent)'
+                    : 'rgba(255,255,255,.03)',
+                }}
+              >
                 <div className="flex items-baseline justify-between gap-2">
                   <span className="font-serif text-[16px] font-bold text-white">Day {i + 1}</span>
                   <span className="text-[11.5px] text-white/55">{fmtDay(day)}</span>
@@ -333,37 +409,100 @@ export default function PreferencesStep() {
                   className="text-[11.5px] font-bold"
                   style={{ color: packed ? '#E8A87C' : 'rgba(255,255,255,.45)' }}
                 >
-                  {hours > 0 ? `${hours.toFixed(1)}h planned` : 'Nothing planned yet'}
+                  {totalH > 0 ? `${totalH.toFixed(1)}h planned` : 'Nothing planned yet'}
                   {packed && ' · packed'}
                 </span>
-                {list.map((it) => (
-                  <div key={it.id} className="flex items-start gap-2">
-                    <span
-                      className="mt-[1px] w-[64px] flex-none rounded-md px-1.5 py-0.5 text-center text-[10.5px] font-black"
-                      style={{ background: 'color-mix(in srgb, var(--accent) 18%, transparent)', color: 'var(--accent)' }}
+
+                {/* Vertical timeline */}
+                <div className="flex flex-col">
+                  {list.map((it, idx) => (
+                    <div
+                      key={it.id}
+                      data-tl-item={it.id}
+                      draggable
+                      onDragStart={(e) =>
+                        e.dataTransfer.setData('application/x-timeline-item', it.id)
+                      }
+                      className="group relative flex cursor-grab gap-3 active:cursor-grabbing"
                     >
-                      {minutesLabel(it.startMin)}
-                    </span>
-                    <div className="flex min-w-0 flex-1 flex-col">
-                      <span className="text-[13px] leading-tight font-bold text-white">
-                        {it.name} <span className="font-medium text-white/45">{fmtH(it.durationH)}</span>
-                      </span>
-                      <span className="text-[11px] text-white/45">{it.meta}</span>
+                      {/* rail: dot + connector */}
+                      <div className="flex w-7 flex-none flex-col items-center">
+                        <span
+                          className="flex h-7 w-7 flex-none items-center justify-center rounded-full border-[1.5px]"
+                          style={{
+                            borderColor: 'color-mix(in srgb, var(--accent) 55%, transparent)',
+                            background: 'color-mix(in srgb, var(--accent) 14%, transparent)',
+                            color: 'var(--accent)',
+                          }}
+                        >
+                          <Icon
+                            name={
+                              it.kind === 'service'
+                                ? isNight(it.startMin)
+                                  ? 'moon'
+                                  : 'sparkles'
+                                : it.kind === 'adventure'
+                                  ? 'mountain'
+                                  : 'map-pin'
+                            }
+                            size={13}
+                          />
+                        </span>
+                        {idx < list.length - 1 && (
+                          <span className="my-1 w-px flex-1 bg-white/15" style={{ minHeight: 14 }} />
+                        )}
+                      </div>
+                      {/* content */}
+                      <div className="flex min-w-0 flex-1 flex-col pb-3.5">
+                        <span
+                          className="text-[10.5px] font-black tracking-[0.04em]"
+                          style={{ color: 'var(--accent)' }}
+                        >
+                          {minutesLabel(it.startMin)}
+                          {it.kind === 'service' && isNight(it.startMin) && ' · NIGHT'}
+                        </span>
+                        <span className="text-[13px] leading-tight font-bold text-white">
+                          {it.name}{' '}
+                          <span className="font-medium text-white/45">{fmtH(it.durationH)}</span>
+                        </span>
+                        <span className="truncate text-[11px] text-white/45">{it.meta}</span>
+                      </div>
+                      <div className="flex flex-none items-start gap-1.5 pt-1">
+                        <Icon
+                          name="grip-vertical"
+                          size={14}
+                          className="hidden text-white/25 md:block"
+                        />
+                        <button
+                          type="button"
+                          aria-label={`Remove ${it.name}`}
+                          onClick={() => dispatch(removeTimelineItem(it.id))}
+                          className="cursor-pointer border-none bg-transparent p-0 text-white/40 hover:text-[#E8A87C]"
+                        >
+                          <Icon name="x" size={14} />
+                        </button>
+                      </div>
                     </div>
-                    <button
-                      type="button"
-                      aria-label={`Remove ${it.name}`}
-                      onClick={() => dispatch(removeTimelineItem(it.id))}
-                      className="cursor-pointer border-none bg-transparent p-0 text-white/40 hover:text-[#E8A87C]"
-                    >
-                      <Icon name="x" size={14} />
-                    </button>
-                  </div>
-                ))}
+                  ))}
+                  {list.length === 0 && (
+                    <span className="rounded-[10px] border border-dashed border-white/20 px-3 py-4 text-center text-[12px] text-white/40">
+                      Drag items here, or use Add below
+                    </span>
+                  )}
+                </div>
+
                 {packed && (
-                  <span className="flex items-start gap-1.5 text-[11.5px] font-semibold" style={{ color: '#E8A87C' }}>
+                  <span
+                    className="flex items-start gap-1.5 text-[11.5px] font-semibold"
+                    style={{ color: '#E8A87C' }}
+                  >
                     <Icon name="alert-triangle" size={13} className="mt-[1px] flex-none" />
-                    Too many plans for one day — consider moving something to a day with room.
+                    Too many plans for one day — drag something to a day with room.
+                  </span>
+                )}
+                {dropNote?.day === day && (
+                  <span className="text-[11.5px] font-semibold" style={{ color: '#E8A87C' }}>
+                    {dropNote.text}
                   </span>
                 )}
               </div>
@@ -389,21 +528,32 @@ export default function PreferencesStep() {
                 color: filter === f ? '#08201F' : 'rgba(255,255,255,.75)',
               }}
             >
-              {f === 'all' ? `All (${catalog.length})` : KIND_META[f].label}
+              {f === 'all' ? `All (${catalog.length})` : KIND_LABEL[f]}
             </button>
           ))}
+          <span className="hidden items-center gap-1 text-[11.5px] text-white/40 md:flex">
+            <Icon name="hand-move" size={13} /> drag any row onto a day
+          </span>
         </div>
 
         <div className="flex max-h-[560px] flex-col gap-2 overflow-y-auto pr-1">
           {shown.map((entry) => {
-            const isAdding = adding?.kind === entry.kind && adding?.refId === entry.refId;
+            const key = entryKey(entry);
+            const isAdding = addingService ? entryKey(addingService) === key : false;
             return (
               <div
-                key={`${entry.kind}:${entry.refId}`}
-                className="flex flex-col rounded-[14px] border-[1.5px] border-[#EBE1CF] bg-[#FAF7F2] px-3.5 py-2.5"
+                key={key}
+                draggable={!noDates}
+                onDragStart={(e) => e.dataTransfer.setData('application/x-catalog-entry', key)}
+                className="flex cursor-grab flex-col rounded-[14px] border-[1.5px] border-[#EBE1CF] bg-[#FAF7F2] px-3.5 py-2.5 active:cursor-grabbing"
               >
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-                  <Icon name={entry.icon} size={18} style={{ color: 'var(--primary)' }} className="flex-none" />
+                  <Icon
+                    name={entry.icon}
+                    size={18}
+                    style={{ color: 'var(--primary)' }}
+                    className="flex-none"
+                  />
                   <div className="flex min-w-0 flex-1 flex-col">
                     <span className="text-ink text-[13.5px] leading-tight font-bold">{entry.name}</span>
                     <span className="text-muted text-[11.5px]">{entry.meta}</span>
@@ -416,11 +566,26 @@ export default function PreferencesStep() {
                     variant={isAdding ? 'outlined' : 'contained'}
                     color="primary"
                     disabled={noDates}
-                    onClick={() => (isAdding ? setAdding(null) : beginAdd(entry))}
+                    onClick={() =>
+                      entry.kind === 'service'
+                        ? isAdding
+                          ? setAddingService(null)
+                          : beginServiceAdd(entry)
+                        : addSequential(entry)
+                    }
                   >
                     {isAdding ? 'Cancel' : 'Add'}
                   </Button>
                 </div>
+
+                {feedback?.key === key && (
+                  <span
+                    className="mt-1.5 text-[12px] font-semibold"
+                    style={{ color: FEEDBACK_COLOR[feedback.kind] }}
+                  >
+                    {feedback.text}
+                  </span>
+                )}
 
                 {isAdding && (
                   <div className="mt-2.5 flex flex-col gap-2 border-t border-[#EBE1CF] pt-2.5">
@@ -429,12 +594,15 @@ export default function PreferencesStep() {
                         <span className="text-muted text-[10px] font-black tracking-[0.05em] uppercase">Day</span>
                         <select
                           value={selDay}
-                          onChange={(e) => pickDay(e.target.value)}
+                          onChange={(e) => {
+                            setSelDay(e.target.value);
+                            setSelTime(nextServiceStart(timeline, e.target.value));
+                          }}
                           className="text-ink rounded-[10px] border border-[#DAD6CC] bg-white px-2.5 py-2 text-[13px] font-semibold outline-none"
                         >
                           {days.map((d, i) => (
                             <option key={d} value={d}>
-                              Day {i + 1} · {fmtDay(d)} ({dayHours(timeline, d).toFixed(1)}h)
+                              Day {i + 1} · {fmtDay(d)}
                             </option>
                           ))}
                         </select>
@@ -446,7 +614,7 @@ export default function PreferencesStep() {
                           onChange={(e) => setSelTime(Number(e.target.value))}
                           className="text-ink rounded-[10px] border border-[#DAD6CC] bg-white px-2.5 py-2 text-[13px] font-semibold outline-none"
                         >
-                          {TIME_OPTIONS.map((t) => (
+                          {SERVICE_TIME_OPTIONS.map((t) => (
                             <option key={t} value={t}>
                               {minutesLabel(t)}
                             </option>
@@ -457,24 +625,15 @@ export default function PreferencesStep() {
                         size="small"
                         variant="contained"
                         color="primary"
-                        disabled={addStatus?.kind === 'error'}
-                        onClick={confirmAdd}
+                        onClick={confirmServiceAdd}
                         startIcon={<Icon name="calendar-plus" size={15} />}
                       >
-                        Add to Day {days.indexOf(selDay) + 1}
+                        Add to Day {dayNo(selDay)}
                       </Button>
                     </div>
-                    {addStatus && (
-                      <span
-                        className="text-[12px] font-semibold"
-                        style={{
-                          color:
-                            addStatus.kind === 'error' ? '#C0392B' : addStatus.kind === 'warn' ? '#B96212' : '#1E7A3A',
-                        }}
-                      >
-                        {addStatus.text}
-                      </span>
-                    )}
+                    <span className="text-muted text-[12px]">
+                      Celebrations can run at any hour — late night and early morning included.
+                    </span>
                   </div>
                 )}
               </div>
@@ -489,8 +648,8 @@ export default function PreferencesStep() {
         style={{ background: 'color-mix(in srgb, var(--bg2) 82%, transparent)' }}
       >
         <span className="flex items-center gap-2 text-[13px] text-white/65">
-          <Icon name="info-circle" size={16} /> All optional — the timeline keeps every day
-          comfortable (max {DAY_CAPACITY_H}h).
+          <Icon name="info-circle" size={16} /> All optional — sightseeing wraps by sunset,
+          celebrations can go late.
         </span>
         <div className="flex w-full items-center justify-between gap-3">
           <Button
