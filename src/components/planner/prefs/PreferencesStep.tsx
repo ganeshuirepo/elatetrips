@@ -28,6 +28,7 @@ import {
   type TimelineKind,
 } from '@/domain/timeline';
 import { OOTY_PLACES, PLACE_INTERESTS, SERVICE_PREFS } from '@/data/ootyPlaces';
+import { PLACE_IMAGES } from '@/data/placeImages';
 import { SHARED_CATEGORIES, SPECIAL_CATEGORIES, SURPRISE_GIFTS, detailsFor } from '@/data/services';
 import { CELEBRATIONS } from '@/data/celebrations';
 import { ADVENTURES, EXPERIENCES } from '@/data/activities';
@@ -113,6 +114,7 @@ function buildCatalog(): CatalogEntry[] {
     durationH: p.durationH,
     icon: 'map-pin',
     tags: p.tags,
+    images: PLACE_IMAGES[p.id],
     description: p.bestTime,
     detail: {
       highlights: p.highlights,
@@ -179,6 +181,63 @@ function buildCatalog(): CatalogEntry[] {
 const fmtH = (h: number) => (h >= 1 ? `~${+h.toFixed(1)}h` : `~${Math.round(h * 60)}min`);
 const entryKey = (e: CatalogEntry) => `${e.kind}:${e.refId}`;
 
+
+/** Tile thumbnail with the Surprises-style mini carousel (arrows + dots). */
+function TileThumb({ entry }: { entry: CatalogEntry }) {
+  const images = entry.images ?? [];
+  const [idx, setIdx] = useState(0);
+  const step = (delta: number) => (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setIdx((i) => (i + delta + images.length) % images.length);
+  };
+  if (images.length === 0)
+    return (
+      <span
+        className="flex h-[60px] w-[84px] flex-none items-center justify-center rounded-[10px] text-white/85"
+        style={{ background: tileGradient(entry.refId) }}
+      >
+        <Icon name={entry.icon} size={22} />
+      </span>
+    );
+  return (
+    <div className="group/thumb relative h-[60px] w-[84px] flex-none overflow-hidden rounded-[10px] bg-black/10">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={images[idx]} alt={entry.name} className="h-full w-full object-cover" />
+      {images.length > 1 && (
+        <>
+          <span
+            role="button"
+            tabIndex={-1}
+            aria-label="Previous image"
+            onClick={step(-1)}
+            className="absolute top-1/2 left-0.5 flex h-5 w-5 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/45 text-white opacity-0 transition-opacity group-hover/thumb:opacity-100"
+          >
+            <Icon name="chevron-left" size={11} />
+          </span>
+          <span
+            role="button"
+            tabIndex={-1}
+            aria-label="Next image"
+            onClick={step(1)}
+            className="absolute top-1/2 right-0.5 flex h-5 w-5 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/45 text-white opacity-0 transition-opacity group-hover/thumb:opacity-100"
+          >
+            <Icon name="chevron-right" size={11} />
+          </span>
+          <div className="absolute bottom-1 left-1/2 flex -translate-x-1/2 gap-0.5">
+            {images.map((src, i) => (
+              <span
+                key={src}
+                className="h-1 rounded-full transition-all"
+                style={{ width: i === idx ? 8 : 4, background: i === idx ? '#fff' : 'rgba(255,255,255,.6)' }}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
 
 /** A titled block inside the details modal. */
 function DetailBlock({ title, children }: { title: string; children: React.ReactNode }) {
@@ -443,51 +502,42 @@ function CatalogPanel({
               className="flex cursor-grab flex-col rounded-[12px] border-[1.5px] border-[#EBE1CF] bg-[#FAF7F2] px-3 py-2 active:cursor-grabbing"
             >
               <div className="flex items-center gap-3">
-                {/* Photo (services) or branded placeholder (places/adventures) */}
-                {entry.images?.[0] ? (
-                  /* eslint-disable-next-line @next/next/no-img-element */
-                  <img
-                    src={entry.images[0]}
-                    alt={entry.name}
-                    className="h-[56px] w-[72px] flex-none rounded-[10px] object-cover"
-                  />
-                ) : (
-                  <span
-                    className="flex h-[56px] w-[72px] flex-none items-center justify-center rounded-[10px] text-white/85"
-                    style={{ background: tileGradient(entry.refId) }}
-                  >
-                    <Icon name={entry.icon} size={22} />
-                  </span>
-                )}
+                {/* Photo carousel (Surprises-style) or branded placeholder */}
+                <TileThumb entry={entry} />
                 <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                   <span className="text-ink truncate text-[13px] leading-tight font-bold">{entry.name}</span>
                   <span className="text-muted truncate text-[11px]">
                     {entry.meta} · <Icon name="clock" size={10} /> {fmtH(entry.durationH)}
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => onShowDetails(entry)}
-                    className="text-primary flex w-fit cursor-pointer items-center gap-1 border-none bg-transparent p-0 text-[11.5px] font-bold"
-                  >
-                    <Icon name="list-details" size={12} /> Details
-                  </button>
                 </div>
-                <Button
-                  size="small"
-                  variant={isAdding ? 'outlined' : 'contained'}
-                  color="primary"
-                  disabled={noDates}
-                  sx={{ minWidth: 52, px: 1 }}
-                  onClick={() =>
-                    entry.kind === 'service'
-                      ? isAdding
-                        ? onCancelService()
-                        : onBeginService(entry)
-                      : onAddSequential(entry)
-                  }
-                >
-                  {isAdding ? 'Cancel' : 'Add'}
-                </Button>
+                <div className="flex flex-none items-center gap-1.5">
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    color="primary"
+                    sx={{ minWidth: 0, px: 1.2 }}
+                    onClick={() => onShowDetails(entry)}
+                    startIcon={<Icon name="list-details" size={13} />}
+                  >
+                    Details
+                  </Button>
+                  <Button
+                    size="small"
+                    variant={isAdding ? 'outlined' : 'contained'}
+                    color="primary"
+                    disabled={noDates}
+                    sx={{ minWidth: 52, px: 1 }}
+                    onClick={() =>
+                      entry.kind === 'service'
+                        ? isAdding
+                          ? onCancelService()
+                          : onBeginService(entry)
+                        : onAddSequential(entry)
+                    }
+                  >
+                    {isAdding ? 'Cancel' : 'Add'}
+                  </Button>
+                </div>
               </div>
 
               {isAdding && (
