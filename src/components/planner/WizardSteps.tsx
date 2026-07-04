@@ -33,8 +33,8 @@ export default function WizardSteps({
   // decided on the Hotels step, so Review additionally needs transport ready.
   const defs: StepDef[] = [
     { id: 'plan', label: 'Plan' },
-    { id: 'prefs', label: 'Itinerary' },
     { id: 'stay', label: 'Hotels' },
+    { id: 'prefs', label: 'Itinerary' },
     { id: 'services', label: 'Local specials' },
     { id: 'review', label: 'Review' },
     { id: 'payment', label: 'Payment' },

@@ -78,7 +78,7 @@ export default function PlanStep() {
             endIcon={<Icon name="arrow-right" size={18} />}
             sx={GOLD_BUTTON}
           >
-            Continue to itinerary
+            Continue to hotels
           </Button>
         </div>
       </div>
@@ -88,7 +88,7 @@ export default function PlanStep() {
           onClose={() => setPopupOpen(false)}
           onSave={() => {
             setPopupOpen(false);
-            dispatch(setStep('prefs'));
+            dispatch(setStep('stay'));
           }}
         />
       )}

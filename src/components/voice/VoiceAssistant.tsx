@@ -144,7 +144,7 @@ export default function VoiceAssistant() {
     const destOk = !!parsed.destination || plan.dest.length > 0;
     const datesOk = !!parsed.dates || (!!plan.start && !!plan.end);
     const celebOk = parsed.celebrations.length > 0 || plan.celebs.length > 0;
-    dispatch(setStep(destOk && datesOk && celebOk ? 'prefs' : 'plan'));
+    dispatch(setStep(destOk && datesOk && celebOk ? 'stay' : 'plan'));
 
     sr.stop();
     setOpen(false);

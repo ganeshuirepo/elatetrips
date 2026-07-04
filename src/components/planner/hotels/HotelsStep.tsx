@@ -37,7 +37,7 @@ export default function HotelsStep() {
         <HotelDetailView hotel={openHotel} />
         {/* Step actions stay in reach on the detail page too. */}
         <Card className="sticky bottom-2 z-30 flex flex-col gap-5">
-          <ContinueBar back={() => dispatch(setStep('prefs'))} />
+          <ContinueBar back={() => dispatch(setStep('plan'))} />
         </Card>
       </div>
     );
@@ -92,7 +92,7 @@ export default function HotelsStep() {
 
       {/* Step actions — sticky so Continue is always in reach. */}
       <Card className="sticky bottom-2 z-30 flex flex-col gap-5">
-        <ContinueBar back={() => dispatch(setStep('prefs'))} />
+        <ContinueBar back={() => dispatch(setStep('plan'))} />
       </Card>
     </div>
   );
@@ -123,10 +123,10 @@ function ContinueBar({ back }: { back: () => void }) {
           color="primary"
           size="large"
           disabled={!transportReady}
-          onClick={() => dispatch(setStep('services'))}
+          onClick={() => dispatch(setStep('prefs'))}
           endIcon={<Icon name="arrow-right" size={18} />}
         >
-          Continue to local specials
+          Continue to itinerary
         </Button>
       </div>
     </div>

@@ -957,7 +957,7 @@ export default function PreferencesStep() {
           <Button
             variant="contained"
             size="large"
-            onClick={() => dispatch(setStep('plan'))}
+            onClick={() => dispatch(setStep('stay'))}
             startIcon={<Icon name="arrow-left" size={18} />}
             sx={GOLD_BUTTON}
           >
@@ -966,11 +966,11 @@ export default function PreferencesStep() {
           <Button
             variant="contained"
             size="large"
-            onClick={() => dispatch(setStep('stay'))}
+            onClick={() => dispatch(setStep('services'))}
             endIcon={<Icon name="arrow-right" size={18} />}
             sx={GOLD_BUTTON}
           >
-            Continue to hotels
+            Continue to local specials
           </Button>
         </div>
       </div>
