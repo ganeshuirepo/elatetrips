@@ -1,26 +1,47 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setStep } from '@/store/slices/uiSlice';
 import { selectTransportFullReady, selectTransportHelp } from '@/store/selectors/planSelectors';
+import { HOTELS } from '@/data/hotels';
 import TransportSection from './TransportSection';
 import RoomsField from './RoomsField';
 import HotelFilters from './HotelFilters';
 import HotelList from './HotelList';
+import HotelDetailView from './HotelDetailView';
 import Card from '@/components/ui/Card';
 import Icon from '@/components/ui/Icon';
 
 /**
  * Step 3 — transport + hotels. Getting around (own vs cab, trip, vehicle,
- * pickup) is decided here, then the stay: each hotel expands inline (rooms,
- * packages, activities), so there is no separate detail page.
+ * pickup) is decided here, then the stay. "View details" on a listing swaps
+ * the whole listing for a detail page with a "Back to hotels" return.
  */
 export default function HotelsStep() {
   const dispatch = useAppDispatch();
   // Filters are always visible on desktop; on phones they open via the icon.
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const openId = useAppSelector((s) => s.hotel.hOpen);
+  const openHotel = HOTELS.find((h) => h.id === openId);
+
+  // Entering (or switching) the detail page starts at the top like a real page.
+  useEffect(() => {
+    if (openHotel) window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [openHotel]);
+
+  if (openHotel) {
+    return (
+      <div className="flex flex-col gap-6">
+        <HotelDetailView hotel={openHotel} />
+        {/* Step actions stay in reach on the detail page too. */}
+        <Card className="sticky bottom-2 z-30 flex flex-col gap-5">
+          <ContinueBar back={() => dispatch(setStep('prefs'))} />
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">

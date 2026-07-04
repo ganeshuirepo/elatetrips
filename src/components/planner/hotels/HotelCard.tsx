@@ -2,12 +2,11 @@
 
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { selectHotel, toggleHotelExpand } from '@/store/slices/hotelSlice';
+import { selectHotel, openHotelDetail } from '@/store/slices/hotelSlice';
 import { PROPERTY_TYPES, AMENITIES } from '@/data/hotelOptions';
 import { ROOM_META } from '@/data/hotels';
 import { inr } from '@/domain/format';
 import Icon from '@/components/ui/Icon';
-import HotelInlineDetail from './HotelInlineDetail';
 import type { Hotel } from '@/domain/types';
 
 const typeName = (id: string) => PROPERTY_TYPES.find((p) => p.id === id)?.name ?? id;
@@ -22,9 +21,9 @@ function ratingLabel(r: number): string {
 }
 
 /**
- * A single stay — collapsed summary (image · details · price) that expands
- * inline into the full detail (gallery, rooms, packages, activities). Reason
- * chips show why it fits the chosen celebration.
+ * A single stay — summary card (image · details · price). "View details"
+ * opens the full detail page in place of the listing. Reason chips show why
+ * it fits the chosen celebration.
  */
 export default function HotelCard({
   hotel,
@@ -37,7 +36,6 @@ export default function HotelCard({
 }) {
   const dispatch = useAppDispatch();
   const selected = useAppSelector((s) => s.hotel.hHotel === hotel.id);
-  const expanded = useAppSelector((s) => s.hotel.hOpen === hotel.id);
   const room = ROOM_META[hotel.roomSizes[0]];
   const wasPrice = Math.round((hotel.price * 1.18) / 10) * 10;
   const photos = 30 + (hotel.reviews % 70);
@@ -46,9 +44,8 @@ export default function HotelCard({
     <div
       className="flex flex-col rounded-[16px] border-[1.5px] p-3 transition-colors"
       style={{
-        borderColor: selected || expanded ? 'var(--accent)' : 'var(--line)',
-        background:
-          selected || expanded ? 'color-mix(in srgb, var(--accent) 6%, transparent)' : 'transparent',
+        borderColor: selected ? 'var(--accent)' : 'var(--line)',
+        background: selected ? 'color-mix(in srgb, var(--accent) 6%, transparent)' : 'transparent',
       }}
     >
       {/* Summary row */}
@@ -149,17 +146,14 @@ export default function HotelCard({
 
           <Button
             size="small"
-            variant={expanded ? 'contained' : 'outlined'}
-            onClick={() => dispatch(toggleHotelExpand(hotel.id))}
-            endIcon={<Icon name={expanded ? 'chevron-up' : 'chevron-down'} size={16} />}
+            variant="outlined"
+            onClick={() => dispatch(openHotelDetail(hotel.id))}
+            endIcon={<Icon name="arrow-right" size={16} />}
           >
-            {expanded ? 'Hide details' : 'View details'}
+            View details
           </Button>
         </div>
       </div>
-
-      {/* Expanded inline detail */}
-      {expanded && <HotelInlineDetail hotel={hotel} />}
     </div>
   );
 }
