@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { selectHotel, openHotelDetail } from '@/store/slices/hotelSlice';
 import { PROPERTY_TYPES, AMENITIES } from '@/data/hotelOptions';
 import { ROOM_META } from '@/data/hotels';
+import { hotelImagesFor } from '@/data/hotelImages';
 import { inr } from '@/domain/format';
 import Icon from '@/components/ui/Icon';
 import type { Hotel } from '@/domain/types';
@@ -39,6 +40,7 @@ export default function HotelCard({
   const room = ROOM_META[hotel.roomSizes[0]];
   const wasPrice = Math.round((hotel.price * 1.18) / 10) * 10;
   const photos = 30 + (hotel.reviews % 70);
+  const [hero] = hotelImagesFor(hotel.id, 1);
 
   return (
     <div
@@ -52,13 +54,8 @@ export default function HotelCard({
       <div className="flex flex-wrap gap-4">
         {/* Image */}
         <div className="relative h-[150px] min-w-[180px] flex-[1_1_180px] overflow-hidden rounded-[12px]">
-          <div
-            className="h-full w-full"
-            style={{
-              background:
-                'linear-gradient(135deg, color-mix(in srgb, var(--primary) 24%, #fff), color-mix(in srgb, var(--accent) 30%, #fff))',
-            }}
-          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={hero} alt={hotel.name} className="h-full w-full object-cover" />
           {recommended && (
             <span className="absolute top-2 left-2 flex items-center gap-1 rounded-full bg-[var(--primary)] px-2.5 py-1 text-[10.5px] font-extrabold text-white">
               <Icon name="sparkles" size={12} /> Recommended
