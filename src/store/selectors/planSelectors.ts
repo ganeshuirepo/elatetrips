@@ -61,7 +61,7 @@ export const selectPlanHelp = createSelector(selectPlan, (p) => {
   if (p.dest.length === 0) return 'Search and pick a destination to continue.';
   if (!p.start || !p.end) return 'Choose your tour start and end dates.';
   if (p.celebs.length === 0) return 'Pick at least one occasion to celebrate.';
-  return 'Everything looks good — next, tailor your surprises.';
+  return 'Everything looks good — next, transport & hotels.';
 });
 
 /** Contextual helper text for the transport question on the Hotels step. */
@@ -71,5 +71,5 @@ export const selectTransportHelp = createSelector(selectTransport, (t) => {
   if (t.tMode === 'cab' && !t.tVehicle) return 'Pick a vehicle type for your cab.';
   if (t.tMode === 'cab' && t.tTrip === 'endtoend' && !t.pickupAddr.trim())
     return 'Search or share your pickup location.';
-  return 'Add any extras, then review your celebration plan.';
+  return 'Add any extras, then plan your itinerary.';
 });

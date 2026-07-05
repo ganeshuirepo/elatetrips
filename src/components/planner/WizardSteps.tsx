@@ -33,17 +33,19 @@ export default function WizardSteps({
   // decided on the Hotels step, so Review additionally needs transport ready.
   const defs: StepDef[] = [
     { id: 'plan', label: 'Plan' },
-    { id: 'services', label: 'Surprises' },
     { id: 'stay', label: 'Hotels' },
+    { id: 'prefs', label: 'Itinerary' },
+    { id: 'services', label: 'Local specials' },
     { id: 'review', label: 'Review' },
     { id: 'payment', label: 'Payment' },
   ];
 
   const reach: Record<WizardStep, boolean> = {
     plan: true,
+    prefs: planStepReady,
+    stay: planStepReady,
     services: planStepReady,
-    // Hotels needs the Services step answered (picks made or explicitly skipped).
-    stay: planStepReady && servicesReady,
+    // Review needs Local specials answered (a gift picked or explicitly skipped).
     review: planReady && servicesReady,
     // Payment is entered via Review's "Proceed to payment", not the breadcrumb.
     payment: false,

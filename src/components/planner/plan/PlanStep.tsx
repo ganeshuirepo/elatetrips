@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setStep } from '@/store/slices/uiSlice';
@@ -8,6 +9,7 @@ import { GOLD_BUTTON } from '@/components/planner/goldButton';
 import DestinationSearch from './DestinationSearch';
 import DatesField from './DatesField';
 import CelebrationGrid from './CelebrationGrid';
+import InterestPopup from './InterestPopup';
 import Icon from '@/components/ui/Icon';
 
 /**
@@ -19,6 +21,9 @@ export default function PlanStep() {
   const dispatch = useAppDispatch();
   const stepReady = useAppSelector(selectPlanStepReady);
   const help = useAppSelector(selectPlanHelp);
+  // Continue first opens the combined occasion popup (day, time + interest
+  // filters for every selected tile); saving it moves on to Preferences.
+  const [popupOpen, setPopupOpen] = useState(false);
 
   return (
     // No card surface — the white widgets float directly on the dark canvas.
@@ -69,14 +74,24 @@ export default function PlanStep() {
             variant="contained"
             size="large"
             disabled={!stepReady}
-            onClick={() => dispatch(setStep('services'))}
+            onClick={() => setPopupOpen(true)}
             endIcon={<Icon name="arrow-right" size={18} />}
             sx={GOLD_BUTTON}
           >
-            Continue to surprises
+            Continue to hotels
           </Button>
         </div>
       </div>
+
+      {popupOpen && (
+        <InterestPopup
+          onClose={() => setPopupOpen(false)}
+          onSave={() => {
+            setPopupOpen(false);
+            dispatch(setStep('stay'));
+          }}
+        />
+      )}
     </div>
   );
 }

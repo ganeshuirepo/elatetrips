@@ -28,6 +28,7 @@ export const CELEBRATIONS: Celebration[] = [
     icon: 'ti-flower',
     img: '/assets/celeb-honeymoon.png',
     category: 'celebration',
+    noSchedule: true,
   },
   {
     id: 'bachelor',
@@ -66,7 +67,7 @@ export const CELEBRATIONS: Celebration[] = [
   },
   {
     id: 'nature',
-    name: 'Local experiences',
+    name: 'Experiences',
     icon: 'ti-map-pin',
     img: '/assets/celeb-adventure.png',
     category: 'rejuvenate',

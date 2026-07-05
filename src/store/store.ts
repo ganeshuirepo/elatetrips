@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import uiReducer from './slices/uiSlice';
 import cartReducer from './slices/cartSlice';
 import planReducer from './slices/planSlice';
+import prefsReducer from './slices/prefsSlice';
 import transportReducer from './slices/transportSlice';
 import servicesReducer from './slices/servicesSlice';
 import hotelReducer from './slices/hotelSlice';
@@ -23,6 +24,7 @@ export const makeStore = () =>
       ui: uiReducer,
       cart: cartReducer,
       plan: planReducer,
+      prefs: prefsReducer,
       transport: transportReducer,
       services: servicesReducer,
       hotel: hotelReducer,
