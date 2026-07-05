@@ -122,6 +122,39 @@ export function LabeledTextarea({
   );
 }
 
+/** Multi-choice chip group (checkbox semantics). */
+export function MultiChips({
+  label,
+  required,
+  error,
+  hint,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  required?: boolean;
+  error?: string;
+  hint?: string;
+  value: string[];
+  onChange: (v: string[]) => void;
+  options: string[];
+}) {
+  const toggle = (o: string) =>
+    onChange(value.includes(o) ? value.filter((x) => x !== o) : [...value, o]);
+  return (
+    <FieldShell label={label} required={required} error={error} hint={hint}>
+      <div className="flex flex-wrap gap-2">
+        {options.map((o) => (
+          <Chip key={o} active={value.includes(o)} onClick={() => toggle(o)} rounded="99px">
+            {o}
+          </Chip>
+        ))}
+      </div>
+    </FieldShell>
+  );
+}
+
 /** Single-choice chip group (radio semantics). */
 export function RadioChips({
   label,
