@@ -10,6 +10,8 @@ import Card from '@/components/ui/Card';
 import Icon from '@/components/ui/Icon';
 import { LabeledInput } from '@/components/partner/fields';
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 /**
  * Partner chooser — every vendor track gets its own tailored onboarding form,
  * so the first step is picking who you are. Existing partners can jump back
@@ -20,10 +22,25 @@ export default function PartnerPage() {
   const router = useRouter();
   const [refId, setRefId] = useState('');
   const [email, setEmail] = useState('');
-  const [loadEoi, { isFetching, isError }] = useLazyGetPartnerEoiQuery();
+  const [touched, setTouched] = useState<{ ref?: boolean; email?: boolean }>({});
+  const [attempted, setAttempted] = useState(false);
+  const [serverError, setServerError] = useState('');
+  const [loadEoi, { isFetching }] = useLazyGetPartnerEoiQuery();
+
+  const refError = !refId.trim() ? 'Enter your reference ID' : undefined;
+  const emailError = !email.trim()
+    ? 'Enter your registered email'
+    : !EMAIL_RE.test(email.trim())
+      ? 'Enter a valid email address'
+      : undefined;
+
+  const showRef = (attempted || touched.ref) && refError;
+  const showEmail = (attempted || touched.email) && emailError;
 
   const openExisting = async () => {
-    if (!refId.trim() || !email.trim()) return;
+    setAttempted(true);
+    setServerError('');
+    if (refError || emailError) return;
     try {
       const eoi = await loadEoi({ referenceId: refId.trim(), email: email.trim() }).unwrap();
       const slug = templateByType(eoi.partnerType)?.slug;
@@ -31,19 +48,24 @@ export default function PartnerPage() {
         const params = new URLSearchParams({ ref: eoi.referenceId, email: email.trim() });
         router.push(`/partner/${slug}?${params}`);
       }
-    } catch {
-      /* isError renders the inline message */
+    } catch (e) {
+      const status = (e as { status?: number | string })?.status;
+      setServerError(
+        status === 'FETCH_ERROR' || status === 'TIMEOUT_ERROR'
+          ? "Couldn't reach the server — please check your connection and try again."
+          : "We couldn't find a submission for that reference ID and email. Check both and try again.",
+      );
     }
   };
 
   return (
-    <div className="mx-auto flex max-w-[980px] flex-col gap-6 px-6 pt-4 pb-16">
+    <div className="mx-auto flex max-w-[980px] flex-col gap-6 px-4 pt-4 pb-16 sm:px-6">
       {/* Hero */}
       <div className="flex flex-col gap-2">
         <span className="text-[11px] font-black tracking-[0.18em] uppercase" style={{ color: 'var(--accent)' }}>
           Partner onboarding
         </span>
-        <h1 className="m-0 font-serif text-[30px] leading-tight font-bold text-white">
+        <h1 className="m-0 font-serif text-[26px] leading-tight font-bold text-white sm:text-[30px]">
           Choose your partner track
         </h1>
         <p className="m-0 max-w-[64ch] text-[14px] leading-relaxed text-white/80">
@@ -85,36 +107,52 @@ export default function PartnerPage() {
             </p>
           </div>
           <div
-            className="grid items-end gap-3"
+            className="grid items-start gap-3"
             style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 13rem), 1fr))' }}
           >
             <LabeledInput
               label="Reference ID"
+              required
               value={refId}
-              onChange={setRefId}
+              onChange={(v) => {
+                setRefId(v);
+                setServerError('');
+              }}
+              onBlur={() => setTouched((t) => ({ ...t, ref: true }))}
               placeholder="e.g. EOI-100042"
+              error={showRef ? refError : undefined}
             />
             <LabeledInput
               label="Registered email"
+              required
               type="email"
+              autoComplete="email"
               value={email}
-              onChange={setEmail}
+              onChange={(v) => {
+                setEmail(v);
+                setServerError('');
+              }}
+              onBlur={() => setTouched((t) => ({ ...t, email: true }))}
               placeholder="you@business.com"
+              error={showEmail ? emailError : undefined}
             />
             <Button
               variant="contained"
               color="primary"
-              disabled={isFetching || !refId.trim() || !email.trim()}
+              disabled={isFetching}
               onClick={openExisting}
-              sx={{ textTransform: 'none', fontWeight: 700, height: 42 }}
+              sx={{ textTransform: 'none', fontWeight: 700, height: 44, mt: '21px' }}
             >
               {isFetching ? 'Loading…' : 'Load my details'}
             </Button>
           </div>
-          {isError && (
-            <span className="text-[12.5px] font-semibold text-[#d14343]">
-              We couldn&apos;t find a submission for that reference ID and email. Check both and
-              try again.
+          {serverError && (
+            <span
+              role="alert"
+              className="flex items-start gap-1.5 text-[12.5px] font-semibold text-[#d14343]"
+            >
+              <Icon name="alert-circle" size={15} className="mt-[1px] flex-none" />
+              {serverError}
             </span>
           )}
         </div>

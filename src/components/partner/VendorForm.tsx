@@ -13,7 +13,7 @@ import {
 import Card from '@/components/ui/Card';
 import Icon from '@/components/ui/Icon';
 import { LabeledInput, LabeledSelect, LabeledTextarea, MultiChips, RadioChips } from './fields';
-import PortfolioEditor from './PortfolioEditor';
+import PortfolioEditor, { portfolioItemInvalid } from './PortfolioEditor';
 import type { FieldDef, SectionDef, VendorTemplate } from './templates';
 
 type Values = Record<string, string | string[]>;
@@ -25,6 +25,8 @@ const BUSINESS_KEYS = ['businessName', 'city', 'contactName', 'role', 'email', '
 const DOCUMENTS_KEY = 'documentsReady';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// 6–18 digits, optional +country code, spaces/dashes allowed (matches backend's 6–20 chars).
+const PHONE_RE = /^\+?[0-9][0-9\s-]{4,17}[0-9]$/;
 
 const gridStyle = { gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 13rem), 1fr))' };
 
@@ -50,23 +52,50 @@ function initialValues(template: VendorTemplate, existing?: VendorEoi): Values {
 const isEmpty = (v: string | string[] | undefined) =>
   v === undefined || (Array.isArray(v) ? v.length === 0 : !v.trim());
 
+/**
+ * Validation message for one field, or undefined when it's fine. Required
+ * fields must be filled; filled fields must also pass their format check
+ * (email, phone, positive number) even when optional.
+ */
+function fieldError(f: FieldDef, v: string | string[] | undefined): string | undefined {
+  if (f.required && isEmpty(v)) {
+    if (f.type === 'chips') return 'Pick at least one option';
+    if (f.type === 'radio' || f.type === 'select') return 'Please choose an option';
+    return 'This field is required';
+  }
+  if (v === undefined || Array.isArray(v) || isEmpty(v)) return undefined;
+  const s = v.trim();
+  if (f.type === 'email' && !EMAIL_RE.test(s)) return 'Enter a valid email address';
+  if (f.type === 'tel' && !PHONE_RE.test(s)) return 'Enter a valid phone number, e.g. +91 98765 43210';
+  if (f.type === 'number' && (!/^\d+$/.test(s) || Number(s) <= 0)) return 'Enter a whole number';
+  return undefined;
+}
+
 /** Section panel with a serif heading + hint, matching the planner cards. */
 function Section({
   n,
   title,
   hint,
+  errorCount = 0,
   children,
 }: {
   n: number;
   title: string;
   hint: string;
+  /** Invalid fields inside — shown as a badge once errors are revealed. */
+  errorCount?: number;
   children: React.ReactNode;
 }) {
   return (
     <Card>
       <div className="mb-3.5 flex flex-col gap-1">
-        <h2 className="text-primary m-0 font-serif text-[18px] font-bold">
+        <h2 className="text-primary m-0 flex flex-wrap items-center gap-2 font-serif text-[17px] font-bold sm:text-[18px]">
           {n}. {title}
+          {errorCount > 0 && (
+            <span className="rounded-full bg-[#FDECEC] px-2 py-0.5 text-[11px] font-bold text-[#B3261E]">
+              {errorCount} to fix
+            </span>
+          )}
         </h2>
         <p className="text-muted m-0 text-[13px]">{hint}</p>
       </div>
@@ -80,6 +109,11 @@ function Section({
  * track-specific capability sections, the documents-ready checklist, and the
  * editable portfolio. With `existing` it becomes the "update your portfolio"
  * editor for a previously submitted EOI (`ownerEmail` proves ownership).
+ *
+ * Validation: required fields are marked *, format checks run on email /
+ * phone / number fields; each field validates when you leave it, and Submit
+ * reveals everything, counts the problems in a notification bar and scrolls
+ * the first invalid field into view.
  */
 export default function VendorForm({
   template,
@@ -94,6 +128,7 @@ export default function VendorForm({
   const [portfolio, setPortfolio] = useState<PortfolioItem[]>(existing?.portfolio ?? []);
   const [notes, setNotes] = useState(existing?.notes ?? '');
   const [consent, setConsent] = useState(Boolean(existing));
+  const [touched, setTouched] = useState<Set<string>>(new Set());
   const [showErrors, setShowErrors] = useState(false);
   const [result, setResult] = useState<VendorEoi | null>(null);
   const [submitEoi, submitState] = useSubmitPartnerEoiMutation();
@@ -101,29 +136,39 @@ export default function VendorForm({
   const { isLoading, isError } = existing ? updateState : submitState;
 
   const set = (key: string, v: string | string[]) => setValues((s) => ({ ...s, [key]: v }));
+  const touch = (key: string) => setTouched((prev) => (prev.has(key) ? prev : new Set(prev).add(key)));
 
-  const requiredFields = useMemo(() => allFields(template).filter((f) => f.required), [template]);
+  const fields = useMemo(() => allFields(template), [template]);
+  const requiredFields = useMemo(() => fields.filter((f) => f.required), [fields]);
 
-  const missing = useMemo(() => {
-    const miss = new Set<string>();
-    for (const f of requiredFields) {
-      const v = values[f.key];
-      if (isEmpty(v)) miss.add(f.key);
-      else if (f.type === 'email' && !EMAIL_RE.test((v as string).trim())) miss.add(f.key);
+  /** Every field's current problem (required + format), keyed by field key. */
+  const errors = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const f of fields) {
+      const e = fieldError(f, values[f.key]);
+      if (e) map.set(f.key, e);
     }
-    if (!consent) miss.add('consent');
-    return miss;
-  }, [requiredFields, values, consent]);
+    return map;
+  }, [fields, values]);
 
-  const requiredTotal = requiredFields.length + 1; // + consent
-  const pct = Math.round(((requiredTotal - missing.size) / requiredTotal) * 100);
-  const valid = missing.size === 0;
+  /** Portfolio entries with content but no name would be dropped — flag them. */
+  const badPortfolio = useMemo(() => portfolio.filter(portfolioItemInvalid).length, [portfolio]);
 
-  const err = (f: FieldDef) => {
-    if (!showErrors || !missing.has(f.key)) return undefined;
-    if (f.type === 'email') return 'Enter a valid email';
-    return f.type === 'radio' || f.type === 'chips' ? 'Please choose an option' : 'Required';
-  };
+  const problemCount = errors.size + badPortfolio + (consent ? 0 : 1);
+  const valid = problemCount === 0;
+
+  // Progress tracks the mandatory items only (required fields + consent).
+  const requiredTotal = requiredFields.length + 1;
+  const requiredDone =
+    requiredFields.filter((f) => !errors.has(f.key)).length + (consent ? 1 : 0);
+  const pct = Math.round((requiredDone / requiredTotal) * 100);
+
+  /** A field shows its error once it was visited — or after a submit attempt. */
+  const err = (f: FieldDef) =>
+    showErrors || touched.has(f.key) ? errors.get(f.key) : undefined;
+
+  const sectionErrorCount = (s: SectionDef) =>
+    showErrors ? s.fields.filter((f) => errors.has(f.key)).length : 0;
 
   const toPayload = (): VendorEoiBody => {
     const str = (k: string) => ((values[k] as string) ?? '').trim();
@@ -159,10 +204,22 @@ export default function VendorForm({
     };
   };
 
+  /** Bring the first invalid control into view so the problem is never off-screen. */
+  const scrollToFirstProblem = () => {
+    const firstKey =
+      fields.find((f) => errors.has(f.key))?.key ??
+      (badPortfolio > 0 ? 'portfolio' : 'consent');
+    requestAnimationFrame(() => {
+      document
+        .querySelector(`[data-field-key="${firstKey}"]`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  };
+
   const onSubmit = async () => {
     setShowErrors(true);
     if (!valid) {
-      document.getElementById('eoi-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      scrollToFirstProblem();
       return;
     }
     try {
@@ -176,7 +233,7 @@ export default function VendorForm({
       setResult(res);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch {
-      /* error surfaced inline below the button */
+      /* error surfaced in the action bar below */
     }
   };
 
@@ -187,10 +244,12 @@ export default function VendorForm({
         return (
           <LabeledSelect
             key={f.key}
+            fieldKey={f.key}
             label={f.label}
             required={f.required}
             value={(v as string) ?? ''}
             onChange={(nv) => set(f.key, nv)}
+            onBlur={() => touch(f.key)}
             options={f.options ?? []}
             error={err(f)}
           />
@@ -199,11 +258,15 @@ export default function VendorForm({
         return (
           <RadioChips
             key={f.key}
+            fieldKey={f.key}
             label={f.label}
             required={f.required}
             column={f.column}
             value={(v as string) ?? ''}
-            onChange={(nv) => set(f.key, nv)}
+            onChange={(nv) => {
+              set(f.key, nv);
+              touch(f.key);
+            }}
             options={(f.options ?? []).map((o) => ({ value: o, label: o }))}
             error={err(f)}
           />
@@ -212,11 +275,15 @@ export default function VendorForm({
         return (
           <MultiChips
             key={f.key}
+            fieldKey={f.key}
             label={f.label}
             required={f.required}
             hint={f.hint}
             value={(v as string[]) ?? []}
-            onChange={(nv) => set(f.key, nv)}
+            onChange={(nv) => {
+              set(f.key, nv);
+              touch(f.key);
+            }}
             options={f.options ?? []}
             error={err(f)}
           />
@@ -225,9 +292,11 @@ export default function VendorForm({
         return (
           <LabeledTextarea
             key={f.key}
+            fieldKey={f.key}
             label={f.label}
             value={(v as string) ?? ''}
             onChange={(nv) => set(f.key, nv)}
+            onBlur={() => touch(f.key)}
             placeholder={f.placeholder}
           />
         );
@@ -235,12 +304,17 @@ export default function VendorForm({
         return (
           <LabeledInput
             key={f.key}
+            fieldKey={f.key}
             label={f.label}
             required={f.required}
             type={f.type === 'text' ? undefined : f.type}
-            inputMode={f.type === 'number' ? 'numeric' : undefined}
+            inputMode={f.type === 'number' ? 'numeric' : f.type === 'tel' ? 'tel' : undefined}
+            autoComplete={
+              f.type === 'email' ? 'email' : f.type === 'tel' ? 'tel' : undefined
+            }
             value={(v as string) ?? ''}
             onChange={(nv) => set(f.key, nv)}
+            onBlur={() => touch(f.key)}
             placeholder={f.placeholder}
             hint={f.hint}
             readOnly={f.readOnly}
@@ -283,7 +357,7 @@ export default function VendorForm({
   /* ---------- success screen ---------- */
   if (result) {
     return (
-      <div className="mx-auto flex max-w-[860px] flex-col gap-4 px-6 pt-4 pb-16">
+      <div className="mx-auto flex max-w-[860px] flex-col gap-4 px-4 pt-4 pb-16 sm:px-6">
         <Card>
           <div className="flex flex-col items-center gap-3 py-6 text-center">
             <span
@@ -312,7 +386,7 @@ export default function VendorForm({
                 portfolio and details anytime from the partner page.
               </p>
             )}
-            <div className="mt-2 flex flex-wrap justify-center gap-3">
+            <div className="mt-2 flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row">
               <Button component={Link} href="/partner" variant="contained" color="primary">
                 All partner tracks
               </Button>
@@ -331,7 +405,7 @@ export default function VendorForm({
   let n = 0;
 
   return (
-    <div id="eoi-form" className="mx-auto flex max-w-[860px] flex-col gap-4 px-6 pt-4 pb-16">
+    <div id="eoi-form" className="mx-auto flex max-w-[860px] flex-col gap-4 px-4 pt-4 pb-4 sm:px-6">
       <Link
         href="/partner"
         className="text-primary flex w-fit items-center gap-1.5 text-[13px] font-bold no-underline"
@@ -341,7 +415,7 @@ export default function VendorForm({
 
       {/* Hero */}
       <div
-        className="overflow-hidden rounded-[20px] p-6 text-white"
+        className="overflow-hidden rounded-[20px] p-5 text-white sm:p-6"
         style={{
           background: 'linear-gradient(120deg, var(--primary), var(--accent))',
           boxShadow: '0 20px 50px -26px rgba(28,60,143,.5)',
@@ -350,7 +424,7 @@ export default function VendorForm({
         <span className="mb-2 inline-flex items-center gap-2 text-[12px] font-bold tracking-[0.14em] uppercase opacity-90">
           <Icon name={template.icon} size={16} /> {template.label}
         </span>
-        <h1 className="m-0 mb-1.5 font-serif text-[26px] font-bold">
+        <h1 className="m-0 mb-1.5 font-serif text-[22px] leading-snug font-bold sm:text-[26px]">
           {existing ? `Update your details — ${existing.referenceId}` : template.heroTitle}
         </h1>
         <p className="m-0 max-w-[62ch] text-[13.5px] opacity-95">{template.heroBody}</p>
@@ -369,21 +443,19 @@ export default function VendorForm({
             style={{ width: `${pct}%`, background: 'linear-gradient(90deg, var(--primary), var(--accent))' }}
           />
         </div>
-        <span className="text-muted text-[12px] font-semibold">{pct}% complete</span>
+        <span className="text-[12px] font-semibold text-white/70">
+          {pct}% of mandatory fields complete
+        </span>
       </div>
 
       {sectionCards.map((s) => (
-        <Section key={s.key} n={++n} title={s.title} hint={s.hint}>
+        <Section key={s.key} n={++n} title={s.title} hint={s.hint} errorCount={sectionErrorCount(s)}>
           {renderSection(s)}
         </Section>
       ))}
 
       {/* Documents ready */}
-      <Section
-        n={++n}
-        title="Documents you have ready"
-        hint={template.documents.hint}
-      >
+      <Section n={++n} title="Documents you have ready" hint={template.documents.hint}>
         <MultiChips
           label="Tick what you can share today — the rest can follow during onboarding."
           value={(values[DOCUMENTS_KEY] as string[]) ?? []}
@@ -393,8 +465,20 @@ export default function VendorForm({
       </Section>
 
       {/* Portfolio */}
-      <Section n={++n} title={template.portfolio.title} hint={template.portfolio.hint}>
-        <PortfolioEditor config={template.portfolio} items={portfolio} onChange={setPortfolio} />
+      <Section
+        n={++n}
+        title={template.portfolio.title}
+        hint={template.portfolio.hint}
+        errorCount={showErrors ? badPortfolio : 0}
+      >
+        <div data-field-key="portfolio" className="scroll-mt-24">
+          <PortfolioEditor
+            config={template.portfolio}
+            items={portfolio}
+            onChange={setPortfolio}
+            showErrors={showErrors}
+          />
+        </div>
       </Section>
 
       {/* Wrap-up & consent */}
@@ -406,7 +490,10 @@ export default function VendorForm({
             onChange={setNotes}
             placeholder="Signature offerings, peak seasons, constraints, questions…"
           />
-          <label className="flex cursor-pointer items-start gap-2.5 text-[13.5px]">
+          <label
+            data-field-key="consent"
+            className="flex scroll-mt-24 cursor-pointer items-start gap-2.5 text-[13.5px]"
+          >
             <input
               type="checkbox"
               checked={consent}
@@ -418,39 +505,72 @@ export default function VendorForm({
               <span className="text-[#d14343]">*</span>
             </span>
           </label>
-          {showErrors && missing.has('consent') && (
-            <span className="text-[11.5px] font-semibold text-[#d14343]">Please tick to continue</span>
+          {showErrors && !consent && (
+            <span role="alert" className="text-[11.5px] font-semibold text-[#d14343]">
+              Please tick the consent box to continue
+            </span>
           )}
         </div>
       </Section>
 
-      <div className="flex flex-col gap-2">
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          disabled={isLoading}
-          onClick={onSubmit}
-          sx={{ alignSelf: 'flex-start', textTransform: 'none', fontWeight: 700 }}
-        >
-          {isLoading
-            ? existing
-              ? 'Saving…'
-              : 'Submitting…'
-            : existing
-              ? 'Save my updates'
-              : 'Submit expression of interest'}
-        </Button>
-        <span className="text-[12.5px]" style={{ color: valid ? 'var(--accent-ink)' : 'var(--muted)' }}>
-          {valid
-            ? 'All mandatory fields are filled — you can submit.'
-            : 'Fill the mandatory fields marked * to submit.'}
-        </span>
-        {isError && (
-          <span className="text-[12.5px] font-semibold text-[#d14343]">
-            Couldn&apos;t reach the server. Please ensure the backend is running and try again.
-          </span>
+      {/* Action bar — sticky so Submit stays in reach on phones. */}
+      <div
+        className="sticky bottom-0 z-30 -mx-4 flex flex-col gap-2.5 border-t border-white/15 px-4 py-3 backdrop-blur-md sm:mx-0 sm:px-0"
+        style={{ background: 'color-mix(in srgb, var(--bg2) 82%, transparent)' }}
+      >
+        {showErrors && !valid && (
+          <div
+            role="alert"
+            className="flex items-start gap-2 rounded-[12px] border px-3.5 py-2.5 text-[13px] font-semibold"
+            style={{ background: '#FDECEC', borderColor: '#F0B6B6', color: '#B3261E' }}
+          >
+            <Icon name="alert-circle" size={17} className="mt-[1px] flex-none" />
+            <span>
+              {problemCount === 1
+                ? '1 field needs attention'
+                : `${problemCount} fields need attention`}{' '}
+              — they&apos;re highlighted in red above.
+            </span>
+          </div>
         )}
+        {isError && (
+          <div
+            role="alert"
+            className="flex items-start gap-2 rounded-[12px] border px-3.5 py-2.5 text-[13px] font-semibold"
+            style={{ background: '#FDECEC', borderColor: '#F0B6B6', color: '#B3261E' }}
+          >
+            <Icon name="wifi-off" size={17} className="mt-[1px] flex-none" />
+            <span>Couldn&apos;t submit — the server didn&apos;t respond. Please try again in a moment.</span>
+          </div>
+        )}
+        <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <span className="order-2 text-[12.5px] sm:order-1" style={{ color: valid ? 'var(--accent)' : 'rgba(255,255,255,.65)' }}>
+            {valid
+              ? 'All mandatory fields are filled — you can submit.'
+              : 'Fields marked * are mandatory.'}
+          </span>
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            disabled={isLoading}
+            onClick={onSubmit}
+            sx={{
+              order: { xs: 1, sm: 2 },
+              width: { xs: '100%', sm: 'auto' },
+              textTransform: 'none',
+              fontWeight: 700,
+            }}
+          >
+            {isLoading
+              ? existing
+                ? 'Saving…'
+                : 'Submitting…'
+              : existing
+                ? 'Save my updates'
+                : 'Submit expression of interest'}
+          </Button>
+        </div>
       </div>
     </div>
   );
