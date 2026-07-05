@@ -4,7 +4,7 @@ import { useAppSelector } from '@/store/hooks';
 import Header from './Header';
 import PlannerView from '@/components/planner/PlannerView';
 import ShopView from '@/components/shop/ShopView';
-import PartnerView from '@/components/partner/PartnerView';
+import PartnerBenefits from '@/components/partner/PartnerBenefits';
 import WeddingEnquiry from '@/components/planner/wedding/WeddingEnquiry';
 import AuthDialog from '@/components/auth/AuthDialog';
 import VoiceAssistant from '@/components/voice/VoiceAssistant';
@@ -21,7 +21,7 @@ export default function AppShell() {
       <Header />
       {view === 'planner' && <PlannerView />}
       {view === 'gifts' && <ShopView shop="gifts" />}
-      {view === 'partner' && <PartnerView />}
+      {view === 'partner' && <PartnerBenefits />}
       {view === 'wedding' && <WeddingEnquiry />}
       <AuthDialog />
       <VoiceAssistant />

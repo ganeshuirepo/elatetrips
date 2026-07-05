@@ -80,44 +80,45 @@ export interface CreateOrderBody {
   summary: OrderSummary;
 }
 
-/** Hotelier "Expression of Interest" submission (Partner with us). */
-export interface PartnerEoiBody {
-  property: {
-    hotelName: string;
-    city: string;
-    category: string;
-    totalRooms: string;
-    contactName: string;
-    role: string;
-    email: string;
-    phone: string;
-  };
-  services: {
-    service: string;
-    packages?: string[];
-    fulfilment: string;
-    leadTime: string;
-    priceRange: string;
-    capacityPerDay: string;
-    notes: string;
-  }[];
-  surprise: { capable: string; setupWindow: string; photoProof: string };
-  inventory: {
-    updateMethod: string;
-    channelManagerOrPMS: string;
-    updateFrequency: string;
-    liveAvailability: string;
-    roomsAllocated: string;
-    rateModel: string;
-    confirmationSLA: string;
-  };
+/** Partner tracks a vendor can onboard under (one form template each). */
+export type PartnerType = 'hotel' | 'transport' | 'onground' | 'adventure' | 'guide' | 'gifting';
+
+/** Business identity + primary contact, common to every partner track. */
+export interface PartnerBusiness {
+  businessName: string;
+  city: string;
+  contactName: string;
+  role: string;
+  email: string;
+  phone: string;
+}
+
+/** One catalogue entry — a package, vehicle class, session, experience or SKU. */
+export interface PortfolioItem {
+  name: string;
+  description: string;
+  priceRange: string;
+  link: string;
+}
+
+/**
+ * Vendor "Expression of Interest" (Partner with us). `details` carries the
+ * track-specific template answers keyed by field, so new template fields need
+ * no API change; `portfolio` is the vendor's editable catalogue.
+ */
+export interface VendorEoiBody {
+  partnerType: PartnerType;
+  business: PartnerBusiness;
+  details: Record<string, string | string[]>;
+  portfolio: PortfolioItem[];
   notes: string;
   consent: true;
 }
 
-export interface PartnerEoi extends PartnerEoiBody {
+export interface VendorEoi extends VendorEoiBody {
   referenceId: string;
   createdAt: string;
+  updatedAt: string;
 }
 
 /** A wedding-related ceremony: its type and the date it falls on. */
@@ -208,9 +209,30 @@ export const elateApi = createApi({
       transformResponse: pick<Order>(),
       invalidatesTags: ['Orders'],
     }),
-    submitPartnerEoi: build.mutation<PartnerEoi, PartnerEoiBody>({
+    submitPartnerEoi: build.mutation<VendorEoi, VendorEoiBody>({
       query: (body) => ({ url: '/partners/eoi', method: 'POST', body }),
-      transformResponse: pick<PartnerEoi>(),
+      transformResponse: pick<VendorEoi>(),
+    }),
+    // Ownership of an existing submission is asserted with the registered
+    // email alongside the reference id (public form — no partner accounts yet).
+    getPartnerEoi: build.query<VendorEoi, { referenceId: string; email: string }>({
+      query: ({ referenceId, email }) => ({
+        url: `/partners/eoi/${encodeURIComponent(referenceId.trim())}`,
+        params: { email },
+      }),
+      transformResponse: pick<VendorEoi>(),
+    }),
+    updatePartnerEoi: build.mutation<
+      VendorEoi,
+      { referenceId: string; email: string; body: VendorEoiBody }
+    >({
+      query: ({ referenceId, email, body }) => ({
+        url: `/partners/eoi/${encodeURIComponent(referenceId.trim())}`,
+        method: 'PUT',
+        params: { email },
+        body,
+      }),
+      transformResponse: pick<VendorEoi>(),
     }),
     submitWeddingEnquiry: build.mutation<WeddingEnquiry, WeddingEnquiryBody>({
       query: (body) => ({ url: '/weddings/enquiry', method: 'POST', body }),
@@ -232,5 +254,8 @@ export const {
   useGetOrdersQuery,
   useCreateOrderMutation,
   useSubmitPartnerEoiMutation,
+  useGetPartnerEoiQuery,
+  useLazyGetPartnerEoiQuery,
+  useUpdatePartnerEoiMutation,
   useSubmitWeddingEnquiryMutation,
 } = elateApi;

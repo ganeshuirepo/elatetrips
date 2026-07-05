@@ -1,13 +1,12 @@
 import { Schema, model } from 'mongoose';
+import { PARTNER_TYPES } from './partner.types';
 import type { PartnerEoi } from './partner.types';
 
-const propertySchema = new Schema(
+const businessSchema = new Schema(
   {
-    hotelName: { type: String, required: true },
+    businessName: { type: String, required: true },
     city: { type: String, default: '' },
-    category: { type: String, default: '' },
-    totalRooms: { type: String, default: '' },
-    contactName: { type: String, required: true },
+    contactName: { type: String, default: '' },
     role: { type: String, default: '' },
     email: { type: String, required: true, index: true },
     phone: { type: String, required: true },
@@ -15,37 +14,12 @@ const propertySchema = new Schema(
   { _id: false },
 );
 
-const serviceSchema = new Schema(
+const portfolioItemSchema = new Schema(
   {
-    service: { type: String, required: true },
-    packages: { type: [String], default: undefined },
-    fulfilment: { type: String, default: '' },
-    leadTime: { type: String, default: '' },
+    name: { type: String, required: true },
+    description: { type: String, default: '' },
     priceRange: { type: String, default: '' },
-    capacityPerDay: { type: String, default: '' },
-    notes: { type: String, default: '' },
-  },
-  { _id: false },
-);
-
-const surpriseSchema = new Schema(
-  {
-    capable: { type: String, default: '' },
-    setupWindow: { type: String, default: '' },
-    photoProof: { type: String, default: '' },
-  },
-  { _id: false },
-);
-
-const inventorySchema = new Schema(
-  {
-    updateMethod: { type: String, default: '' },
-    channelManagerOrPMS: { type: String, default: '' },
-    updateFrequency: { type: String, default: '' },
-    liveAvailability: { type: String, default: '' },
-    roomsAllocated: { type: String, default: '' },
-    rateModel: { type: String, default: '' },
-    confirmationSLA: { type: String, default: '' },
+    link: { type: String, default: '' },
   },
   { _id: false },
 );
@@ -53,10 +27,12 @@ const inventorySchema = new Schema(
 const partnerEoiSchema = new Schema<PartnerEoi>(
   {
     referenceId: { type: String, required: true, unique: true, index: true },
-    property: { type: propertySchema, required: true },
-    services: { type: [serviceSchema], default: [] },
-    surprise: { type: surpriseSchema, default: {} },
-    inventory: { type: inventorySchema, default: {} },
+    partnerType: { type: String, enum: PARTNER_TYPES, required: true, index: true },
+    business: { type: businessSchema, required: true },
+    // Template answers vary per track and evolve with the frontend templates,
+    // so they are stored schemaless (validated at the edge by zod).
+    details: { type: Schema.Types.Mixed, default: {} },
+    portfolio: { type: [portfolioItemSchema], default: [] },
     notes: { type: String, default: '' },
     consent: { type: Boolean, default: false },
   },

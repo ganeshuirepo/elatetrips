@@ -1,49 +1,51 @@
 import { z } from 'zod';
+import { PARTNER_TYPES } from './partner.types';
 
-const propertySchema = z.object({
-  hotelName: z.string().trim().min(1, 'Hotel name is required').max(160),
+const businessSchema = z.object({
+  businessName: z.string().trim().min(1, 'Business name is required').max(160),
   city: z.string().max(120).default(''),
-  category: z.string().max(80).default(''),
-  totalRooms: z.string().max(12).default(''),
-  contactName: z.string().trim().min(1, 'Contact person is required').max(120),
+  contactName: z.string().max(120).default(''),
   role: z.string().max(120).default(''),
   email: z.string().trim().email('Enter a valid email').max(160),
   phone: z.string().trim().min(6, 'Enter a valid phone').max(20),
 });
 
-const serviceSchema = z.object({
-  service: z.string().min(1).max(60),
-  packages: z.array(z.string().max(120)).max(40).optional(),
-  fulfilment: z.string().max(80).default(''),
-  leadTime: z.string().max(80).default(''),
+/**
+ * Track-specific template answers. Kept deliberately loose (string or string[]
+ * per field) so the frontend can evolve its form templates without a backend
+ * release — but bounded, so the record can't be abused as a dumping ground.
+ */
+const detailsSchema = z
+  .record(z.union([z.string().max(2000), z.array(z.string().max(300)).max(60)]))
+  .default({})
+  .refine((r) => Object.keys(r).length <= 100, 'Too many detail fields');
+
+const portfolioItemSchema = z.object({
+  name: z.string().trim().min(1, 'Item name is required').max(160),
+  description: z.string().max(1000).default(''),
   priceRange: z.string().max(120).default(''),
-  capacityPerDay: z.string().max(12).default(''),
-  notes: z.string().max(500).default(''),
-});
-
-const surpriseSchema = z.object({
-  capable: z.string().min(1, 'Please choose an option').max(80),
-  setupWindow: z.string().max(80).default(''),
-  photoProof: z.string().max(40).default(''),
-});
-
-const inventorySchema = z.object({
-  updateMethod: z.string().min(1, 'Please choose an update method').max(80),
-  channelManagerOrPMS: z.string().max(160).default(''),
-  updateFrequency: z.string().max(80).default(''),
-  liveAvailability: z.string().max(80).default(''),
-  roomsAllocated: z.string().max(12).default(''),
-  rateModel: z.string().max(80).default(''),
-  confirmationSLA: z.string().max(80).default(''),
+  link: z.string().max(500).default(''),
 });
 
 export const createPartnerEoiSchema = z.object({
-  property: propertySchema,
-  services: z.array(serviceSchema).max(20).default([]),
-  surprise: surpriseSchema,
-  inventory: inventorySchema,
+  partnerType: z.enum(PARTNER_TYPES),
+  business: businessSchema,
+  details: detailsSchema,
+  portfolio: z.array(portfolioItemSchema).max(60).default([]),
   notes: z.string().max(2000).default(''),
   consent: z.literal(true, {
     errorMap: () => ({ message: 'Consent is required to submit' }),
   }),
+});
+
+/** Updates replace the editable content; ownership is checked in the service. */
+export const updatePartnerEoiSchema = createPartnerEoiSchema;
+
+export const eoiParamsSchema = z.object({
+  referenceId: z.string().trim().min(1).max(40),
+});
+
+/** Registered email doubles as the ownership proof for read/update. */
+export const eoiOwnerQuerySchema = z.object({
+  email: z.string().trim().email('Enter a valid email').max(160),
 });
