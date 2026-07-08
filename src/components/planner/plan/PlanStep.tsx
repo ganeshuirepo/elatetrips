@@ -11,6 +11,7 @@ import DatesField from './DatesField';
 import CelebrationGrid from './CelebrationGrid';
 import InterestPopup from './InterestPopup';
 import Icon from '@/components/ui/Icon';
+import Required from '@/components/ui/Required';
 
 /**
  * Step 1 — the full planning screen: where & when (destination, tour dates),
@@ -34,6 +35,7 @@ export default function PlanStep() {
         <div className="flex items-baseline justify-between gap-2">
           <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
             Where &amp; when
+            <Required />
           </span>
           <span className="text-[12.5px] text-white/55">Ooty is live — more soon</span>
         </div>
@@ -53,6 +55,7 @@ export default function PlanStep() {
         <div className="flex items-baseline justify-between gap-2">
           <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
             What are we celebrating?
+            <Required />
           </span>
           <span className="text-[12.5px] text-white/55">
             Pick one or more occasions — we&apos;ll tailor your services and stays to suit.

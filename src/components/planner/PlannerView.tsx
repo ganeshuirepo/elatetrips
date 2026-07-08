@@ -1,7 +1,11 @@
 'use client';
 
 import { useAppSelector } from '@/store/hooks';
-import { selectPlanReady, selectPlanStepReady } from '@/store/selectors/planSelectors';
+import {
+  selectPlanReady,
+  selectPlanStepReady,
+  selectTransportFullReady,
+} from '@/store/selectors/planSelectors';
 import { selectServicesReady } from '@/store/selectors/servicesSelectors';
 import Hero from '@/components/layout/Hero';
 import Card from '@/components/ui/Card';
@@ -19,6 +23,8 @@ export default function PlannerView() {
   const planReady = useAppSelector(selectPlanReady);
   const planStepReady = useAppSelector(selectPlanStepReady);
   const servicesReady = useAppSelector(selectServicesReady);
+  const transportReady = useAppSelector(selectTransportFullReady);
+  const roomSelected = useAppSelector((s) => !!(s.hotel.hHotel && s.hotel.hRoom));
 
   return (
     <>
@@ -29,6 +35,7 @@ export default function PlannerView() {
           planStepReady={planStepReady}
           planReady={planReady}
           servicesReady={servicesReady}
+          stayReady={transportReady && roomSelected}
         />
         {step === 'plan' ? (
           // The Plan screen carries where, when, travellers & the celebration picker.

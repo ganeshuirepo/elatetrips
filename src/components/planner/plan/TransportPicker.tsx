@@ -3,6 +3,7 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setTMode } from '@/store/slices/transportSlice';
 import Icon from '@/components/ui/Icon';
+import Required from '@/components/ui/Required';
 
 const MODES = [
   { id: 'own', name: 'Own transport', sub: "No cab needed — we'll skip transport", icon: 'ti-car' },
@@ -59,6 +60,7 @@ export default function TransportPicker() {
       <div className="flex items-baseline justify-between gap-2">
         <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
           Transport
+          <Required />
         </span>
         <span className="text-[12.5px] text-white/55">How you&apos;ll get around</span>
       </div>

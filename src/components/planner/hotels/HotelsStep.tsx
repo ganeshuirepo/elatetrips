@@ -101,7 +101,16 @@ export default function HotelsStep() {
 function ContinueBar({ back }: { back: () => void }) {
   const dispatch = useAppDispatch();
   const transportReady = useAppSelector(selectTransportFullReady);
-  const help = useAppSelector(selectTransportHelp);
+  const transportHelp = useAppSelector(selectTransportHelp);
+  // A stay is mandatory: continuing needs a hotel with a room picked.
+  const roomSelected = useAppSelector((s) => !!(s.hotel.hHotel && s.hotel.hRoom));
+
+  const canContinue = transportReady && roomSelected;
+  const help = !transportReady
+    ? transportHelp
+    : !roomSelected
+      ? 'Open a stay and select a room — it’s required to continue.'
+      : 'All set — next, plan your itinerary.';
 
   return (
     <div className="border-line flex flex-col gap-2 border-t pt-4">
@@ -122,7 +131,7 @@ function ContinueBar({ back }: { back: () => void }) {
           variant="contained"
           color="primary"
           size="large"
-          disabled={!transportReady}
+          disabled={!canContinue}
           onClick={() => dispatch(setStep('prefs'))}
           endIcon={<Icon name="arrow-right" size={18} />}
         >

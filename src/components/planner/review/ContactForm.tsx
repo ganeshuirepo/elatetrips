@@ -37,15 +37,22 @@ export default function ContactForm() {
         className="grid gap-3"
         style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 13rem), 1fr))' }}
       >
-        <Field label="Full name" error={errors.contactName?.message} {...register('contactName')} />
+        <Field
+          label="Full name"
+          required
+          error={errors.contactName?.message}
+          {...register('contactName')}
+        />
         <Field
           label="Phone"
+          required
           inputMode="numeric"
           error={errors.contactPhone?.message}
           {...register('contactPhone')}
         />
         <Field
           label="Email"
+          required
           type="email"
           error={errors.contactEmail?.message}
           {...register('contactEmail')}

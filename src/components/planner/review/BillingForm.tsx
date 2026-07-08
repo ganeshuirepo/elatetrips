@@ -40,17 +40,24 @@ export default function BillingForm() {
         className="grid gap-3"
         style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 13rem), 1fr))' }}
       >
-        <Field label="Name" error={errors.billName?.message} {...register('billName')} />
+        <Field label="Name" required error={errors.billName?.message} {...register('billName')} />
         <Field
           label="Email"
+          required
           type="email"
           error={errors.billEmail?.message}
           {...register('billEmail')}
         />
-        <Field label="Address" error={errors.billAddr?.message} {...register('billAddr')} />
-        <Field label="City" error={errors.billCity?.message} {...register('billCity')} />
+        <Field
+          label="Address"
+          required
+          error={errors.billAddr?.message}
+          {...register('billAddr')}
+        />
+        <Field label="City" required error={errors.billCity?.message} {...register('billCity')} />
         <Field
           label="PIN code"
+          required
           inputMode="numeric"
           error={errors.billPin?.message}
           {...register('billPin')}

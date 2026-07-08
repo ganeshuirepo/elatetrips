@@ -9,6 +9,7 @@ import { hotelImagesFor } from '@/data/hotelImages';
 import CelebrationServices from './CelebrationServices';
 import { inr } from '@/domain/format';
 import Icon from '@/components/ui/Icon';
+import Required from '@/components/ui/Required';
 import type { Hotel, RoomSizeId } from '@/domain/types';
 
 const amenityName = (id: string) => AMENITIES.find((a) => a.id === id)?.name ?? id;
@@ -81,10 +82,6 @@ function RoomSection({ hotel }: { hotel: Hotel }) {
   );
 }
 
-const sectionTitle = (text: string) => (
-  <span className="text-ink text-[14px] font-extrabold">{text}</span>
-);
-
 /**
  * Inline hotel detail shown when a listing is expanded — room photos clubbed on
  * the left, hotel details (amenities) and room selection on the right.
@@ -107,7 +104,10 @@ export default function HotelInlineDetail({ hotel }: { hotel: Hotel }) {
         </div>
 
         <section className="flex flex-col gap-3">
-          {sectionTitle('Choose a room')}
+          <span className="text-ink text-[14px] font-extrabold">
+            Choose a room
+            <Required />
+          </span>
           <RoomSection hotel={hotel} />
         </section>
 

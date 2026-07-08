@@ -21,10 +21,13 @@ export default function WizardSteps({
   planStepReady = false,
   planReady = false,
   servicesReady = false,
+  stayReady = false,
 }: {
   planStepReady?: boolean;
   planReady?: boolean;
   servicesReady?: boolean;
+  /** Transport answered AND a hotel room selected — both are mandatory. */
+  stayReady?: boolean;
 }) {
   const dispatch = useAppDispatch();
   const step = useAppSelector((s) => s.ui.step);
@@ -42,11 +45,12 @@ export default function WizardSteps({
 
   const reach: Record<WizardStep, boolean> = {
     plan: true,
-    prefs: planStepReady,
     stay: planStepReady,
-    services: planStepReady,
-    // Review needs Local specials answered (a gift picked or explicitly skipped).
-    review: planReady && servicesReady,
+    // Everything after Hotels needs the mandatory stay: transport + a room.
+    prefs: planStepReady && stayReady,
+    services: planStepReady && stayReady,
+    // Review additionally needs Local specials answered (picked or skipped).
+    review: planReady && stayReady && servicesReady,
     // Payment is entered via Review's "Proceed to payment", not the breadcrumb.
     payment: false,
   };
