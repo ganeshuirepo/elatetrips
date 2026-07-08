@@ -11,7 +11,8 @@ import {
 import { removeFromCart } from '@/store/slices/cartSlice';
 import { toggleSvcPick } from '@/store/slices/servicesSlice';
 import { selectRoom } from '@/store/slices/hotelSlice';
-import { setView, setStep } from '@/store/slices/uiSlice';
+import { removeCabFromTrip } from '@/store/slices/transportSlice';
+import { setView, setScreen } from '@/store/slices/uiSlice';
 import { inr } from '@/domain/format';
 import Icon from '@/components/ui/Icon';
 
@@ -19,6 +20,7 @@ const SOURCE_ICON: Record<CartLine['source'], string> = {
   shop: 'gift',
   service: 'sparkles',
   stay: 'building',
+  cab: 'car',
 };
 
 /**
@@ -49,13 +51,14 @@ export default function CartPill() {
     const r = line.remove;
     if (r.kind === 'shop') dispatch(removeFromCart(r.productId));
     else if (r.kind === 'service') dispatch(toggleSvcPick({ cat: r.cat, id: r.optionId }));
+    else if (r.kind === 'cab') dispatch(removeCabFromTrip());
     else dispatch(selectRoom({ id: '', room: '' }));
   };
 
   const goToReview = () => {
     setOpen(false);
     dispatch(setView('planner'));
-    dispatch(setStep('review'));
+    dispatch(setScreen('review'));
   };
 
   return (

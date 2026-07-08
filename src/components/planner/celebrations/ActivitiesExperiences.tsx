@@ -1,7 +1,7 @@
 'use client';
 
 import { ADVENTURES, EXPERIENCES } from '@/data/activities';
-import VoucherCard from './VoucherCard';
+import VoucherCard from '@/components/planner/hotels/VoucherCard';
 import type { Voucher } from '@/domain/types';
 
 export type ActivityKind = 'all' | 'adventure' | 'experience';

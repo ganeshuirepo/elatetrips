@@ -2,16 +2,19 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { DEFAULT_THEME, type ThemeId } from '@/theme/palettes';
 
 /**
- * Top-level view: the planner wizard, the two shop catalogues, partner EOI, or
- * the standalone Destination Wedding enquiry.
+ * Top-level view: the planner storefront, partner EOI, or the standalone
+ * Destination Wedding enquiry. (Surprise gifts is a planner tab now.)
  */
-export type AppView = 'planner' | 'gifts' | 'medical' | 'partner' | 'wedding';
+export type AppView = 'planner' | 'partner' | 'wedding';
 
 /**
- * Wizard steps within the planner view. 'plan' opens the flow (where, when,
- * travellers & the celebration picker); transport is decided on 'stay'.
+ * Product tabs within the planner — all independent, no order or gating.
+ * Customers shop any tab alone or combine them in the shared cart.
  */
-export type WizardStep = 'plan' | 'prefs' | 'services' | 'stay' | 'review' | 'payment';
+export type PlannerTab = 'hotels' | 'cabs' | 'celebrations' | 'gifts' | 'onground' | 'itinerary';
+
+/** Which planner screen is showing: the tab storefront, or checkout screens. */
+export type PlannerScreen = 'tabs' | 'review' | 'payment';
 
 /** Which form the global auth dialog opens to. */
 export type AuthMode = 'login' | 'signup' | 'forgot';
@@ -19,7 +22,8 @@ export type AuthMode = 'login' | 'signup' | 'forgot';
 export interface UiState {
   themeId: ThemeId;
   view: AppView;
-  step: WizardStep;
+  tab: PlannerTab;
+  screen: PlannerScreen;
   heroShown: boolean;
   /** Transient open/close flags for popovers (replaces the old document mousedown handler). */
   destOpen: boolean;
@@ -34,7 +38,8 @@ export interface UiState {
 const initialState: UiState = {
   themeId: DEFAULT_THEME,
   view: 'planner',
-  step: 'plan',
+  tab: 'hotels',
+  screen: 'tabs',
   heroShown: true,
   destOpen: false,
   calOpen: false,
@@ -54,8 +59,13 @@ const uiSlice = createSlice({
     setView(state, action: PayloadAction<AppView>) {
       state.view = action.payload;
     },
-    setStep(state, action: PayloadAction<WizardStep>) {
-      state.step = action.payload;
+    /** Switch product tab — also returns from review/payment to the tabs. */
+    setTab(state, action: PayloadAction<PlannerTab>) {
+      state.tab = action.payload;
+      state.screen = 'tabs';
+    },
+    setScreen(state, action: PayloadAction<PlannerScreen>) {
+      state.screen = action.payload;
     },
     setHeroShown(state, action: PayloadAction<boolean>) {
       state.heroShown = action.payload;
@@ -101,7 +111,8 @@ const uiSlice = createSlice({
 export const {
   setTheme,
   setView,
-  setStep,
+  setTab,
+  setScreen,
   setHeroShown,
   openAuth,
   closeAuth,

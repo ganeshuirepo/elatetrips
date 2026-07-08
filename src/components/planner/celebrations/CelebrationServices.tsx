@@ -18,9 +18,9 @@ const ICON_BY_ID = Object.fromEntries(CELEBRATIONS.map((c) => [c.id, c.icon]));
 const CATEGORY_OF = Object.fromEntries(CELEBRATIONS.map((c) => [c.id, c.category]));
 
 /**
- * All services for the occasions chosen on Plan, shown inside the expanded
- * hotel detail — one tile block per celebration plus a combined Escapes
- * block. Selection state is the trip-wide services picks.
+ * All services for the chosen occasions — one tile block per celebration
+ * plus a combined Escapes block, on the Celebrations & Experiences tab.
+ * Selection state is the trip-wide services picks (shared with the cart).
  */
 export default function CelebrationServices() {
   const dispatch = useAppDispatch();
@@ -35,7 +35,12 @@ export default function CelebrationServices() {
   // under the first celebration that declares it.
   const sectionsFor = (id: string): string[] => {
     const bucket = TILE_CATEGORIES[CATEGORY_OF[id] ?? 'celebration'] ?? [];
-    return [...templateFor(id).sections, ...bucket].filter((s, i, a) => a.indexOf(s) === i);
+    return (
+      [...templateFor(id).sections, ...bucket]
+        .filter((s, i, a) => a.indexOf(s) === i)
+        // On-ground services live on their own tab — one home per product.
+        .filter((s) => s !== 'onground')
+    );
   };
   const sectionOwner = new Map<string, string>();
   celebrationIds.forEach((id) =>
@@ -69,7 +74,7 @@ export default function CelebrationServices() {
       <div className="flex flex-col gap-0.5">
         <span className="text-ink text-[14px] font-extrabold">Celebration services</span>
         <span className="text-muted text-[12.5px]">
-          Add the touches you&apos;d like — we&apos;ll arrange them with this stay.
+          Add the touches you&apos;d like — we&apos;ll arrange them for your trip.
         </span>
       </div>
 

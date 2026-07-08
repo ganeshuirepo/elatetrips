@@ -3,17 +3,19 @@ import type { RootState } from '../store';
 import { ALL_PRODUCTS } from '@/data/shop';
 import { CATEGORY_BY_ID } from '@/data/services';
 import { HOTELS, ROOM_META } from '@/data/hotels';
+import { pickupEstimate, localTripEstimate } from '@/domain/pricing';
 import type { RoomSizeId } from '@/domain/types';
 
 /**
  * One entry in the shared cart. Lines are DERIVED from the owning slices
- * (shop cart, services picks, hotel room) rather than duplicated into cart
- * state — so tiles keep their toggle behaviour and the cart can never drift
- * out of sync. `remove` describes how to take the line out of its slice.
+ * (shop cart, services picks, hotel room, cab config) rather than duplicated
+ * into cart state — so tiles keep their toggle behaviour and the cart can
+ * never drift out of sync. `remove` describes how to take the line out of
+ * its slice.
  */
 export interface CartLine {
   key: string;
-  source: 'shop' | 'service' | 'stay';
+  source: 'shop' | 'service' | 'stay' | 'cab';
   label: string;
   detail: string;
   qty: number;
@@ -21,7 +23,8 @@ export interface CartLine {
   remove:
     | { kind: 'shop'; productId: string }
     | { kind: 'service'; cat: string; optionId: string }
-    | { kind: 'stay' };
+    | { kind: 'stay' }
+    | { kind: 'cab' };
 }
 
 const selectShopItems = (s: RootState) => s.cart.items;
@@ -31,6 +34,8 @@ const selectRoomId = (s: RootState) => s.hotel.hRoom;
 const selectStart = (s: RootState) => s.plan.start;
 const selectEnd = (s: RootState) => s.plan.end;
 const selectRooms = (s: RootState) => s.plan.rooms || 1;
+const selectTransport = (s: RootState) => s.transport;
+const selectDestId = (s: RootState) => s.plan.dest[0];
 
 const nightsBetween = (start: string, end: string): number => {
   if (!start || !end) return 1;
@@ -38,7 +43,7 @@ const nightsBetween = (start: string, end: string): number => {
   return Math.max(1, diff);
 };
 
-/** Every cart line across the shop, services step and stay step. */
+/** Every cart line across the shop, service, stay and cab tabs. */
 export const selectCartLines = createSelector(
   selectShopItems,
   selectServicePicks,
@@ -47,7 +52,9 @@ export const selectCartLines = createSelector(
   selectStart,
   selectEnd,
   selectRooms,
-  (shopItems, picks, hotelId, roomId, start, end, rooms): CartLine[] => {
+  selectTransport,
+  selectDestId,
+  (shopItems, picks, hotelId, roomId, start, end, rooms, transport, destId): CartLine[] => {
     const lines: CartLine[] = [];
 
     for (const [id, qty] of Object.entries(shopItems)) {
@@ -98,11 +105,51 @@ export const selectCartLines = createSelector(
       });
     }
 
+    // Cab — priced with the same domain functions FareEstimate shows, so the
+    // Cabs tab, the cart and the payable total always agree.
+    if (transport.cabAdded && transport.tMode === 'cab' && transport.tVehicle) {
+      if (transport.tTrip === 'local') {
+        // Cap the chosen days at the tour length once dates exist.
+        const tourDays = start && end ? nightsBetween(start, end) + 1 : null;
+        const days = tourDays ? Math.min(transport.tDays, tourDays) : transport.tDays;
+        const est = localTripEstimate({ vehicleId: transport.tVehicle, days });
+        if (est.total > 0) {
+          lines.push({
+            key: 'cab',
+            source: 'cab',
+            label: `${est.vehName} · Local sightseeing`,
+            detail: `₹${est.perDay.toLocaleString('en-IN')}/day × ${est.days} day${est.days > 1 ? 's' : ''}`,
+            qty: est.days,
+            amount: est.total,
+            remove: { kind: 'cab' },
+          });
+        }
+      } else if (transport.tTrip === 'endtoend') {
+        const est = pickupEstimate({
+          pickupLat: transport.pickupLat,
+          pickupLon: transport.pickupLon,
+          destId,
+          vehicleId: transport.tVehicle,
+        });
+        if (est && est.fare != null && est.fare > 0) {
+          lines.push({
+            key: 'cab',
+            source: 'cab',
+            label: `${est.vehName} · Complete trip`,
+            detail: `${transport.pickupCity || 'Pickup'} → ${est.destName} · ≈${est.roundTripKm} km round trip`,
+            qty: 1,
+            amount: est.fare,
+            remove: { kind: 'cab' },
+          });
+        }
+      }
+    }
+
     return lines;
   },
 );
 
-/** Rupee total of every cart line (shop + services + stay). */
+/** Rupee total of every cart line (shop + services + stay + cab). */
 export const selectCartSubtotal = createSelector(selectCartLines, (lines) =>
   lines.reduce((sum, l) => sum + l.amount, 0),
 );

@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setStep } from '@/store/slices/uiSlice';
 import {
   toggleInterest,
   addTimelineItem,
@@ -31,7 +30,6 @@ import { PLACE_IMAGES } from '@/data/placeImages';
 import { CELEBRATIONS } from '@/data/celebrations';
 import { ADVENTURES, EXPERIENCES } from '@/data/activities';
 import { fmtDay } from '@/domain/format';
-import { GOLD_BUTTON } from '@/components/planner/goldButton';
 import Icon from '@/components/ui/Icon';
 
 /** Sections shown in the details popup. */
@@ -537,7 +535,7 @@ function CatalogPanel({
  * celebration services on the right. Items already on the timeline leave the
  * lists; on phones the two lists merge into one filterable panel.
  */
-export default function PreferencesStep() {
+export default function ItineraryTab() {
   const dispatch = useAppDispatch();
   const { interests, timeline } = useAppSelector((s) => s.prefs);
   const days = useAppSelector(selectDays);
@@ -944,36 +942,6 @@ export default function PreferencesStep() {
         />
       )}
 
-      {/* Action bar */}
-      <div
-        className="sticky bottom-0 z-30 flex flex-col gap-2 border-t border-white/15 py-3 backdrop-blur-md"
-        style={{ background: 'color-mix(in srgb, var(--bg2) 82%, transparent)' }}
-      >
-        <span className="flex items-center gap-2 text-[13px] text-white/65">
-          <Icon name="info-circle" size={16} /> All optional — added items leave the lists and come
-          back if you remove them.
-        </span>
-        <div className="flex w-full items-center justify-between gap-3">
-          <Button
-            variant="contained"
-            size="large"
-            onClick={() => dispatch(setStep('stay'))}
-            startIcon={<Icon name="arrow-left" size={18} />}
-            sx={GOLD_BUTTON}
-          >
-            Back
-          </Button>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={() => dispatch(setStep('services'))}
-            endIcon={<Icon name="arrow-right" size={18} />}
-            sx={GOLD_BUTTON}
-          >
-            Continue to local specials
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }

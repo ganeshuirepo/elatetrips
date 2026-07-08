@@ -10,7 +10,7 @@ import {
   clearDates,
   pickDay,
 } from '@/store/slices/planSlice';
-import { setStep } from '@/store/slices/uiSlice';
+import { setView, setTab } from '@/store/slices/uiSlice';
 import { setTMode, setTTrip, setTVehicle } from '@/store/slices/transportSlice';
 import { setSvcField, setOccasionField, toggleSvcPick } from '@/store/slices/servicesSlice';
 import { setAppliedCoupon } from '@/store/slices/reviewSlice';
@@ -139,12 +139,9 @@ export default function VoiceAssistant() {
       }),
     );
 
-    // The merged Plan step needs destination + dates + an occasion before the
-    // wizard can move on; land wherever the journey actually is.
-    const destOk = !!parsed.destination || plan.dest.length > 0;
-    const datesOk = !!parsed.dates || (!!plan.start && !!plan.end);
-    const celebOk = parsed.celebrations.length > 0 || plan.celebs.length > 0;
-    dispatch(setStep(destOk && datesOk && celebOk ? 'stay' : 'plan'));
+    // Land on Hotels — the trip context is filled in and every tab is open.
+    dispatch(setView('planner'));
+    dispatch(setTab('hotels'));
 
     sr.stop();
     setOpen(false);

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setStep } from '@/store/slices/uiSlice';
+import { setScreen } from '@/store/slices/uiSlice';
 import { selectReviewSummary } from '@/store/selectors/reviewSelectors';
 import { selectCartLines } from '@/store/selectors/unifiedCartSelectors';
 import { selectOrderGross, selectDiscount, selectPayable } from '@/store/selectors/paymentSelectors';
@@ -164,7 +164,7 @@ export default function PaymentStep() {
             color="primary"
             size="large"
             disabled={paying}
-            onClick={() => dispatch(setStep('review'))}
+            onClick={() => dispatch(setScreen('review'))}
             startIcon={<Icon name="arrow-left" size={18} />}
           >
             Back

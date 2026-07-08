@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setView } from '@/store/slices/uiSlice';
+import { setView, setTab } from '@/store/slices/uiSlice';
 import CartPill from './CartPill';
 import UserProfile from './UserProfile';
 
@@ -10,6 +10,7 @@ import UserProfile from './UserProfile';
 export default function Header() {
   const dispatch = useAppDispatch();
   const view = useAppSelector((s) => s.ui.view);
+  const tab = useAppSelector((s) => s.ui.tab);
   const [scrolled, setScrolled] = useState(false);
 
   // Fade in the translucent bar only after the page has scrolled a little.
@@ -78,8 +79,11 @@ export default function Header() {
           </button>
           <button
             type="button"
-            onClick={() => dispatch(setView('gifts'))}
-            className={navLink(view === 'gifts')}
+            onClick={() => {
+              dispatch(setView('planner'));
+              dispatch(setTab('gifts'));
+            }}
+            className={navLink(view === 'planner' && tab === 'gifts')}
           >
             Surprise Gifts
           </button>

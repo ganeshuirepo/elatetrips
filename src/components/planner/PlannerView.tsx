@@ -1,59 +1,66 @@
 'use client';
 
 import { useAppSelector } from '@/store/hooks';
-import {
-  selectPlanReady,
-  selectPlanStepReady,
-  selectTransportFullReady,
-} from '@/store/selectors/planSelectors';
-import { selectServicesReady } from '@/store/selectors/servicesSelectors';
 import Hero from '@/components/layout/Hero';
 import Card from '@/components/ui/Card';
-import WizardSteps from './WizardSteps';
-import PlanStep from './plan/PlanStep';
-import PreferencesStep from './prefs/PreferencesStep';
-import ServicesStep from './services/ServicesStep';
-import HotelsStep from './hotels/HotelsStep';
+import TripBar from './TripBar';
+import TabBar from './TabBar';
+import HotelsTab from './hotels/HotelsTab';
+import CabTab from './cab/CabTab';
+import CelebrationsTab from './celebrations/CelebrationsTab';
+import OnGroundTab from './services/OnGroundTab';
+import ItineraryTab from './prefs/ItineraryTab';
+import ShopView from '@/components/shop/ShopView';
 import ReviewStep from './review/ReviewStep';
 import PaymentStep from './payment/PaymentStep';
 
-/** Planner wizard: step breadcrumb + the active step panel. */
+/**
+ * The planner storefront: a shared trip bar (destination · dates ·
+ * travellers) above six independent product tabs — Hotels, Cabs,
+ * Celebrations & Experiences, Surprise Gifts, On-ground Services and the
+ * Itinerary planner. No ordering, no gating: shop any tab alone or combine
+ * them; everything meets in the shared cart, reviewed and paid on the
+ * review/payment screens.
+ */
 export default function PlannerView() {
-  const step = useAppSelector((s) => s.ui.step);
-  const planReady = useAppSelector(selectPlanReady);
-  const planStepReady = useAppSelector(selectPlanStepReady);
-  const servicesReady = useAppSelector(selectServicesReady);
-  const transportReady = useAppSelector(selectTransportFullReady);
-  const roomSelected = useAppSelector((s) => !!(s.hotel.hHotel && s.hotel.hRoom));
+  const tab = useAppSelector((s) => s.ui.tab);
+  const screen = useAppSelector((s) => s.ui.screen);
+
+  if (screen === 'review') {
+    return (
+      <div className="mx-auto max-w-[1080px] px-6 pt-4">
+        <ReviewStep />
+      </div>
+    );
+  }
+  if (screen === 'payment') {
+    return (
+      <div className="mx-auto max-w-[1080px] px-6 pt-4">
+        <Card>
+          <PaymentStep />
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <>
       <Hero />
-      <div className="mx-auto max-w-[1080px] px-6 pt-2">
-        {/* Stepper sits on the canvas; each step then owns its card surface(s). */}
-        <WizardSteps
-          planStepReady={planStepReady}
-          planReady={planReady}
-          servicesReady={servicesReady}
-          stayReady={transportReady && roomSelected}
-        />
-        {step === 'plan' ? (
-          // The Plan screen carries where, when, travellers & the celebration picker.
-          <PlanStep />
-        ) : step === 'prefs' ? (
-          // Preferences: interests, local places and the AI-crafted itinerary.
-          <PreferencesStep />
-        ) : step === 'services' ? (
-          // Celebration-services questionnaire, between Plan and Hotels.
-          <ServicesStep />
-        ) : step === 'stay' ? (
-          // Hotels owns its surfaces too — filters + listing as separate cards.
-          <HotelsStep />
-        ) : step === 'review' ? (
-          // Review floats its white section cards directly on the canvas.
-          <ReviewStep />
+      <div className="mx-auto flex max-w-[1080px] flex-col gap-5 px-6 pt-2 pb-10">
+        <TripBar />
+        <TabBar />
+        {tab === 'hotels' ? (
+          <HotelsTab />
+        ) : tab === 'cabs' ? (
+          <CabTab />
+        ) : tab === 'celebrations' ? (
+          <CelebrationsTab />
+        ) : tab === 'gifts' ? (
+          <ShopView shop="gifts" embedded />
+        ) : tab === 'onground' ? (
+          <OnGroundTab />
         ) : (
-          <Card>{step === 'payment' && <PaymentStep />}</Card>
+          <ItineraryTab />
         )}
       </div>
     </>
