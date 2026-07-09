@@ -6,7 +6,7 @@ import { test, expect, type Page } from '@playwright/test';
  * on the review screen.
  */
 
-/** Fill destination + a future date range in the trip bar. */
+/** Fill destination + a future date range in the trip bar (no Search click). */
 async function fillTrip(page: Page) {
   const input = page.getByPlaceholder('Search a destination — try Ooty');
   await input.click();
@@ -20,6 +20,12 @@ async function fillTrip(page: Page) {
   const days2 = page.locator('button:not([disabled])').filter({ hasText: /^\d{1,2}$/ });
   await days2.nth(Math.max(0, (await days2.count()) - 7)).click();
   await page.keyboard.press('Escape');
+}
+
+/** Fill the trip and hit Search — reveals the hotel listing on the Hotels tab. */
+async function searchTrip(page: Page) {
+  await fillTrip(page);
+  await page.getByRole('button', { name: 'Search stays' }).click();
 }
 
 const tab = (page: Page, name: string | RegExp) => page.getByRole('tab', { name });
@@ -39,8 +45,10 @@ test.describe('tabbed storefront shell', () => {
       await expect(tab(page, name)).toBeVisible();
     }
     await expect(tab(page, 'Hotels')).toHaveAttribute('aria-selected', 'true');
-    // Hotels listing shows without any trip context.
-    await expect(page.getByText(/stays? in Ooty/)).toBeVisible();
+    // No listing until a trip is searched — the tab prompts for a search.
+    await expect(page.getByText('Search stays in Ooty')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Search stays' })).toBeDisabled();
+    await expect(page.getByText(/Pick your stay/)).toBeHidden();
   });
 
   test('every tab opens crash-free with a fresh store', async ({ page }) => {
@@ -95,27 +103,30 @@ test.describe('independent orders', () => {
     await expect(page.getByRole('button', { name: /Add cab to trip/ })).toBeVisible();
   });
 
-  test('hotel-only: pick a room, stay lands in the cart', async ({ page }) => {
+  test('hotel-only: search, pick a room, stay lands in the cart', async ({ page }) => {
     await page.goto('/');
-    await fillTrip(page);
+    await searchTrip(page);
     await page.getByRole('button', { name: /View details/ }).first().click();
     await expect(page.getByRole('button', { name: 'Back to hotels' })).toBeVisible();
     await page.getByRole('button', { name: 'Select room' }).first().click();
     await expect(page.getByText(/^1 · ₹/)).toBeVisible();
   });
 
-  test('room select stays disabled until trip dates are set', async ({ page }) => {
+  test('no listing and Search disabled until a destination and dates are set', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('button', { name: /View details/ }).first().click();
-    await expect(page.getByRole('button', { name: 'Select room' }).first()).toBeDisabled();
-    await expect(page.getByText(/Add your destination & travel dates/)).toBeVisible();
+    // Fresh store: the Hotels tab prompts to search and the button is disabled.
+    await expect(page.getByText('Search stays in Ooty')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Search stays' })).toBeDisabled();
+    // With a trip filled, Search enables and reveals the listing.
+    await searchTrip(page);
+    await expect(page.getByText(/Pick your stay/)).toBeVisible();
   });
 });
 
 test.describe('combined order', () => {
   test('hotel + cab + gift meet on the review screen', async ({ page }) => {
     await page.goto('/');
-    await fillTrip(page);
+    await searchTrip(page);
 
     // Stay
     await page.getByRole('button', { name: /View details/ }).first().click();

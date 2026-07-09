@@ -1,19 +1,28 @@
 'use client';
 
-import { useAppSelector } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { search } from '@/store/slices/planSlice';
+import { setTab } from '@/store/slices/uiSlice';
 import { selectPage1Ready } from '@/store/selectors/planSelectors';
 import DestinationSearch from './plan/DestinationSearch';
 import DatesField from './plan/DatesField';
 import Icon from '@/components/ui/Icon';
 
 /**
- * Shared trip context above the tabs: destination, tour dates and travellers
- * (rooms live in the dates widget). Every tab prices and schedules from this
- * one bar — edit it anywhere, any time. Nothing is gated; a hint nudges when
- * dates are missing since stays and cabs price by dates.
+ * Shared trip context above the tabs: destination, tour dates, travellers &
+ * rooms, and a Search button. Every tab prices from this bar; Search reveals
+ * the hotel listing (and jumps to the Hotels tab) once a destination and
+ * dates are set.
  */
 export default function TripBar() {
+  const dispatch = useAppDispatch();
   const ready = useAppSelector(selectPage1Ready);
+
+  const onSearch = () => {
+    if (!ready) return;
+    dispatch(search());
+    dispatch(setTab('hotels'));
+  };
 
   return (
     <div className="flex flex-col gap-2">
@@ -26,19 +35,34 @@ export default function TripBar() {
             'Ooty is live — more soon'
           ) : (
             <span className="flex items-center gap-1.5">
-              <Icon name="info-circle" size={14} /> Pick a destination &amp; dates to price stays
-              and cabs
+              <Icon name="info-circle" size={14} /> Pick a destination &amp; dates, then search
+              stays
             </span>
           )}
         </span>
       </div>
       <div className="flex flex-wrap items-stretch gap-3">
-        <div className="min-w-[240px] flex-[2_1_240px]">
+        <div className="min-w-[200px] flex-[2_1_200px]">
           <DestinationSearch />
         </div>
-        <div className="min-w-[240px] flex-[3_1_460px]">
+        <div className="min-w-[290px] flex-[3_1_380px]">
           <DatesField />
         </div>
+        <button
+          type="button"
+          onClick={onSearch}
+          disabled={!ready}
+          aria-label="Search stays"
+          className="flex w-full flex-none items-center justify-center gap-2 rounded-[14px] px-8 text-[15px] font-extrabold transition-opacity sm:w-auto"
+          style={{
+            background: ready ? 'linear-gradient(180deg,#e9c97f,#d4a94f)' : 'rgba(255,255,255,.12)',
+            color: ready ? '#08201F' : 'rgba(255,255,255,.45)',
+            cursor: ready ? 'pointer' : 'not-allowed',
+            minHeight: 56,
+          }}
+        >
+          <Icon name="search" size={18} /> Search
+        </button>
       </div>
     </div>
   );

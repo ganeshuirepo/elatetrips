@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAppSelector } from '@/store/hooks';
+import { selectShowHotels, selectPage1Ready } from '@/store/selectors/planSelectors';
 import { HOTELS } from '@/data/hotels';
 import HotelFilters from './HotelFilters';
 import HotelList from './HotelList';
@@ -10,15 +11,18 @@ import Card from '@/components/ui/Card';
 import Icon from '@/components/ui/Icon';
 
 /**
- * Hotels tab — browse, filter and pick a stay. "View details" on a listing
- * swaps the whole listing for a detail page with a "Back to hotels" return.
- * Selecting a room adds the stay to the shared cart; no step gating.
+ * Hotels tab — browse, filter and pick a stay. The listing appears once a
+ * complete trip has been searched from the trip bar. "View details" swaps
+ * the listing for a full detail page; selecting a room adds the stay to the
+ * shared cart.
  */
 export default function HotelsTab() {
   // Filters are always visible on desktop; on phones they open via the icon.
   const [filtersOpen, setFiltersOpen] = useState(false);
   const openId = useAppSelector((s) => s.hotel.hOpen);
   const openHotel = HOTELS.find((h) => h.id === openId);
+  const showHotels = useAppSelector(selectShowHotels);
+  const datesReady = useAppSelector(selectPage1Ready);
 
   // Entering (or switching) the detail page starts at the top like a real page.
   useEffect(() => {
@@ -27,6 +31,26 @@ export default function HotelsTab() {
 
   if (openHotel) {
     return <HotelDetailView hotel={openHotel} />;
+  }
+
+  // No listing until a complete trip has been searched.
+  if (!showHotels) {
+    return (
+      <Card className="flex flex-col items-center gap-3 py-14 text-center">
+        <span
+          className="flex h-14 w-14 items-center justify-center rounded-full"
+          style={{ background: 'color-mix(in srgb, var(--primary) 10%, #fff)' }}
+        >
+          <Icon name="building" size={26} style={{ color: 'var(--primary)' }} />
+        </span>
+        <span className="text-ink text-[16px] font-extrabold">Search stays in Ooty</span>
+        <span className="text-muted max-w-[22rem] text-[13px]">
+          {datesReady
+            ? 'Hit Search in the trip bar above to see hotels for your dates.'
+            : 'Add your destination and travel dates in the trip bar above, then hit Search to see available stays.'}
+        </span>
+      </Card>
+    );
   }
 
   return (

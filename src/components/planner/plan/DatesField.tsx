@@ -54,8 +54,9 @@ export default function DatesField() {
       <div className="my-[9px] w-px flex-none bg-[#ECE7DC]" />
       {dateCell('Tour end', end)}
       <div className="my-[9px] hidden w-px flex-none bg-[#ECE7DC] sm:block" />
-      {/* On phones the travellers cell wraps to its own full-width row. */}
-      <div className="flex w-full basis-full border-t border-[#ECE7DC] sm:w-auto sm:flex-1 sm:basis-auto sm:border-t-0">
+      {/* Travellers & rooms is the narrowest cell — it yields space to Search.
+          On phones it wraps to its own full-width row. */}
+      <div className="flex w-full basis-full border-t border-[#ECE7DC] sm:w-auto sm:flex-[0.7_1_0%] sm:basis-auto sm:border-t-0">
         <Travellers />
       </div>
 

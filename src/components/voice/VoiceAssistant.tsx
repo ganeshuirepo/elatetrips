@@ -9,6 +9,7 @@ import {
   toggleCeleb,
   clearDates,
   pickDay,
+  search,
 } from '@/store/slices/planSlice';
 import { setView, setTab } from '@/store/slices/uiSlice';
 import { setTMode, setTTrip, setTVehicle } from '@/store/slices/transportSlice';
@@ -139,8 +140,10 @@ export default function VoiceAssistant() {
       }),
     );
 
-    // Land on Hotels — the trip context is filled in and every tab is open.
+    // Land on Hotels with results shown — the trip context is filled in and
+    // every tab is open. (search() no-ops in the listing if dates are missing.)
     dispatch(setView('planner'));
+    dispatch(search());
     dispatch(setTab('hotels'));
 
     sr.stop();

@@ -13,10 +13,17 @@ export const selectDays = createSelector(selectPlan, (p) => dayList(p.start, p.e
 /** At least one occasion is chosen (gates the opening Celebration step). */
 export const selectCelebReady = createSelector(selectPlan, (p) => p.celebs.length > 0);
 
-/** Destination + dates are set. */
+/** Destination + dates are set — enables the trip-bar Search button. */
 export const selectPage1Ready = createSelector(
   selectPlan,
   (p) => p.dest.length > 0 && !!p.start && !!p.end,
+);
+
+/** The hotel listing shows only once a complete trip has been searched. */
+export const selectShowHotels = createSelector(
+  selectPage1Ready,
+  selectPlan,
+  (ready, p) => ready && p.searched,
 );
 
 /**
