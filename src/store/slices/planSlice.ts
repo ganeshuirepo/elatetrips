@@ -21,6 +21,10 @@ export interface PlanState {
   /** The trip has been searched — reveals the hotel listing. Resets when the
    *  destination or dates change so a new query needs a fresh search. */
   searched: boolean;
+  /** The storefront (tabs) has been opened. Sticky: the first search reveals
+   *  the tabs, which then stay put even while the query is edited. Before it,
+   *  the planner shows the About & Offers landing. */
+  storefrontOpen: boolean;
 }
 
 const initialState: PlanState = {
@@ -37,6 +41,7 @@ const initialState: PlanState = {
   viewMonth: '',
   maxCelebrations: MAX_CELEBRATIONS_DEFAULT,
   searched: false,
+  storefrontOpen: false,
 };
 
 const planSlice = createSlice({
@@ -80,9 +85,14 @@ const planSlice = createSlice({
       state.end = '';
       state.searched = false;
     },
-    /** "Search" — reveals the hotel listing for the current trip context. */
+    /** "Search" — opens the storefront and reveals the hotel listing. */
     search(state) {
       state.searched = true;
+      state.storefrontOpen = true;
+    },
+    /** Open the tabs without a hotel search (e.g. the header Surprise Gifts link). */
+    openStorefront(state) {
+      state.storefrontOpen = true;
     },
     stepTravellers(state, action: PayloadAction<{ key: 'adults' | 'children'; delta: number }>) {
       const { key, delta } = action.payload;
@@ -129,6 +139,7 @@ export const {
   pickDay,
   clearDates,
   search,
+  openStorefront,
   stepTravellers,
   setTravellers,
   setRooms,

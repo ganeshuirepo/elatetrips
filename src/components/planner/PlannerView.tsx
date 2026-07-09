@@ -10,6 +10,8 @@ import CabTab from './cab/CabTab';
 import CelebrationsTab from './celebrations/CelebrationsTab';
 import OnGroundTab from './services/OnGroundTab';
 import ItineraryTab from './prefs/ItineraryTab';
+import AboutElate from './landing/AboutElate';
+import Offers from './landing/Offers';
 import ShopView from '@/components/shop/ShopView';
 import ReviewStep from './review/ReviewStep';
 import PaymentStep from './payment/PaymentStep';
@@ -25,6 +27,7 @@ import PaymentStep from './payment/PaymentStep';
 export default function PlannerView() {
   const tab = useAppSelector((s) => s.ui.tab);
   const screen = useAppSelector((s) => s.ui.screen);
+  const storefrontOpen = useAppSelector((s) => s.plan.storefrontOpen);
 
   if (screen === 'review') {
     return (
@@ -48,19 +51,30 @@ export default function PlannerView() {
       <Hero />
       <div className="mx-auto flex max-w-[1080px] flex-col gap-5 px-6 pt-2 pb-10">
         <TripBar />
-        <TabBar />
-        {tab === 'hotels' ? (
-          <HotelsTab />
-        ) : tab === 'cabs' ? (
-          <CabTab />
-        ) : tab === 'celebrations' ? (
-          <CelebrationsTab />
-        ) : tab === 'gifts' ? (
-          <ShopView shop="gifts" embedded />
-        ) : tab === 'onground' ? (
-          <OnGroundTab />
+        {/* Before the first search: a landing (About + Offers). After it, the
+            storefront tabs stay open even while the trip is edited. */}
+        {!storefrontOpen ? (
+          <>
+            <AboutElate />
+            <Offers />
+          </>
         ) : (
-          <ItineraryTab />
+          <>
+            <TabBar />
+            {tab === 'hotels' ? (
+              <HotelsTab />
+            ) : tab === 'cabs' ? (
+              <CabTab />
+            ) : tab === 'celebrations' ? (
+              <CelebrationsTab />
+            ) : tab === 'gifts' ? (
+              <ShopView shop="gifts" embedded />
+            ) : tab === 'onground' ? (
+              <OnGroundTab />
+            ) : (
+              <ItineraryTab />
+            )}
+          </>
         )}
       </div>
     </>

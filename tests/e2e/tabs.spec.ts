@@ -31,9 +31,16 @@ async function searchTrip(page: Page) {
 const tab = (page: Page, name: string | RegExp) => page.getByRole('tab', { name });
 
 test.describe('tabbed storefront shell', () => {
-  test('renders the trip bar and all six tabs, hotels active', async ({ page }) => {
+  test('shows the About & Offers landing before a search, tabs after', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByText('Your trip')).toBeVisible();
+    await expect(page.getByText('Your trip', { exact: true })).toBeVisible();
+    // Landing content, no tabs yet.
+    await expect(page.getByText('About ElateTrips')).toBeVisible();
+    await expect(page.getByText('Offers & deals')).toBeVisible();
+    await expect(tab(page, 'Hotels')).toBeHidden();
+
+    // Search opens the storefront: all six tabs appear, Hotels active + listing.
+    await searchTrip(page);
     for (const name of [
       'Hotels',
       'Cabs',
@@ -45,14 +52,13 @@ test.describe('tabbed storefront shell', () => {
       await expect(tab(page, name)).toBeVisible();
     }
     await expect(tab(page, 'Hotels')).toHaveAttribute('aria-selected', 'true');
-    // No listing until a trip is searched — the tab prompts for a search.
-    await expect(page.getByText('Search stays in Ooty')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Search stays' })).toBeDisabled();
-    await expect(page.getByText(/Pick your stay/)).toBeHidden();
+    await expect(page.getByText('About ElateTrips')).toBeHidden();
+    await expect(page.getByText(/Pick your stay/)).toBeVisible();
   });
 
-  test('every tab opens crash-free with a fresh store', async ({ page }) => {
+  test('every tab opens crash-free once the storefront is open', async ({ page }) => {
     await page.goto('/');
+    await searchTrip(page);
     for (const name of [
       'Cabs',
       'Celebrations & Experiences',
@@ -68,9 +74,10 @@ test.describe('tabbed storefront shell', () => {
 });
 
 test.describe('independent orders', () => {
-  test('gifts-only: add from the Gifts tab and reach review', async ({ page }) => {
+  test('gifts-only: header Surprise Gifts opens the tab, reach review', async ({ page }) => {
     await page.goto('/');
-    await tab(page, 'Surprise Gifts').click();
+    // No trip search — the header link opens the storefront on the Gifts tab.
+    await page.getByRole('button', { name: 'Surprise Gifts' }).click();
     await page
       .locator('div', { hasText: 'Red Roses Bouquet' })
       .getByRole('button', { name: 'Add to cart' })
@@ -85,7 +92,7 @@ test.describe('independent orders', () => {
 
   test('cab-only: configure a local cab, add to trip, cart prices it', async ({ page }) => {
     await page.goto('/');
-    await fillTrip(page);
+    await searchTrip(page);
     await tab(page, 'Cabs').click();
 
     // No own-vs-cab question — the tab starts at the trip type.
@@ -112,13 +119,15 @@ test.describe('independent orders', () => {
     await expect(page.getByText(/^1 · ₹/)).toBeVisible();
   });
 
-  test('no listing and Search disabled until a destination and dates are set', async ({ page }) => {
+  test('Search stays disabled until a destination and dates are set', async ({ page }) => {
     await page.goto('/');
-    // Fresh store: the Hotels tab prompts to search and the button is disabled.
-    await expect(page.getByText('Search stays in Ooty')).toBeVisible();
+    // Fresh store: landing shown, Search disabled, no tabs.
     await expect(page.getByRole('button', { name: 'Search stays' })).toBeDisabled();
-    // With a trip filled, Search enables and reveals the listing.
-    await searchTrip(page);
+    await expect(tab(page, 'Hotels')).toBeHidden();
+    // Filling the trip enables Search; clicking it reveals the listing.
+    await fillTrip(page);
+    await expect(page.getByRole('button', { name: 'Search stays' })).toBeEnabled();
+    await page.getByRole('button', { name: 'Search stays' }).click();
     await expect(page.getByText(/Pick your stay/)).toBeVisible();
   });
 });

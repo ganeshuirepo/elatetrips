@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setView, setTab } from '@/store/slices/uiSlice';
+import { openStorefront } from '@/store/slices/planSlice';
 import CartPill from './CartPill';
 import UserProfile from './UserProfile';
 
@@ -81,6 +82,7 @@ export default function Header() {
             type="button"
             onClick={() => {
               dispatch(setView('planner'));
+              dispatch(openStorefront());
               dispatch(setTab('gifts'));
             }}
             className={navLink(view === 'planner' && tab === 'gifts')}
