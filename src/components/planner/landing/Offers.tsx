@@ -33,7 +33,7 @@ export default function Offers() {
           Offers &amp; deals
         </span>
         <p className="m-0 text-[13.5px] text-white/60">
-          A few ways to save on your celebration trip.
+          A few ways to save on your trip.
         </p>
       </div>
 

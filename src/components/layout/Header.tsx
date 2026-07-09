@@ -65,7 +65,7 @@ export default function Header() {
             paddingLeft: '12px',
           }}
         >
-          Celebration-first travel
+          All-in-one travel
         </span>
       </div>
 

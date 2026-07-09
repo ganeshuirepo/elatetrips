@@ -4,9 +4,9 @@ import Icon from '@/components/ui/Icon';
 
 const FEATURES: { icon: string; title: string; text: string }[] = [
   {
-    icon: 'confetti',
-    title: 'Celebration-first travel',
-    text: 'Birthdays, anniversaries, honeymoons and escapes — every trip is built around your moment, not just a booking.',
+    icon: 'building',
+    title: 'Your whole trip, sorted',
+    text: 'Hotels, cabs, celebrations, experiences and gifts — plan the entire trip in one place, not one piece at a time.',
   },
   {
     icon: 'shopping-cart',
@@ -34,7 +34,7 @@ export default function AboutElate() {
           About ElateTrips
         </span>
         <h2 className="m-0 font-serif text-[22px] font-bold text-white">
-          Celebrations, stays &amp; everything around them — planned as one.
+          Hotels, cabs, celebrations &amp; everything around them — planned as one.
         </h2>
         <p className="m-0 max-w-[46rem] text-[13.5px] text-white/60">
           Search your trip above to unlock hotels, cabs, celebrations, gifts and more — all sharing
