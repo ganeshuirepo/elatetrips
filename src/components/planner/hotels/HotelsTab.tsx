@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useAppSelector } from '@/store/hooks';
 import { HOTELS } from '@/data/hotels';
-import RoomsField from './RoomsField';
 import HotelFilters from './HotelFilters';
 import HotelList from './HotelList';
 import HotelDetailView from './HotelDetailView';
@@ -41,9 +40,8 @@ export default function HotelsTab() {
         </Card>
       </div>
       <Card className="min-w-[18rem] flex-[3_1_22rem]">
-        <div className="mb-4 flex items-end justify-between gap-3">
-          <RoomsField />
-          {/* Filter toggle — phones only */}
+        {/* Filter toggle — phones only; rooms & travellers live in the trip bar */}
+        <div className="mb-4 flex items-center justify-end md:hidden">
           <button
             type="button"
             aria-label="Toggle filters"
@@ -62,7 +60,7 @@ export default function HotelsTab() {
                 return next;
               })
             }
-            className="border-line text-ink flex cursor-pointer items-center gap-1.5 rounded-[12px] border-[1.5px] bg-white px-3 py-2.5 text-[13px] font-bold md:hidden"
+            className="border-line text-ink flex cursor-pointer items-center gap-1.5 rounded-[12px] border-[1.5px] bg-white px-3 py-2.5 text-[13px] font-bold"
             style={filtersOpen ? { borderColor: 'var(--primary)', color: 'var(--primary)' } : {}}
           >
             <Icon name="adjustments-horizontal" size={17} /> Filters
