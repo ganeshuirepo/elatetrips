@@ -80,7 +80,7 @@ test.describe('independent orders', () => {
     await fillTrip(page);
     await tab(page, 'Cabs').click();
 
-    await page.getByText('I need a cab').click();
+    // No own-vs-cab question — the tab starts at the trip type.
     await page.getByText('Local trips', { exact: false }).first().click();
     await page.getByText('Sedan', { exact: false }).first().click();
 
@@ -124,7 +124,6 @@ test.describe('combined order', () => {
 
     // Cab
     await tab(page, 'Cabs').click();
-    await page.getByText('I need a cab').click();
     await page.getByText('Local trips', { exact: false }).first().click();
     await page.getByText('Sedan', { exact: false }).first().click();
     await page.getByRole('button', { name: /Add cab to trip/ }).click();
