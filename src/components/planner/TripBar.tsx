@@ -58,7 +58,7 @@ export default function TripBar() {
             background: ready ? 'linear-gradient(180deg,#e9c97f,#d4a94f)' : 'rgba(255,255,255,.12)',
             color: ready ? '#08201F' : 'rgba(255,255,255,.45)',
             cursor: ready ? 'pointer' : 'not-allowed',
-            minHeight: 56,
+            minHeight: 44,
           }}
         >
           <Icon name="search" size={18} /> Search

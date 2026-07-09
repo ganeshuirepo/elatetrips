@@ -40,7 +40,7 @@ export default function DestinationSearch() {
             dispatch(setDestQuery(e.target.value));
             dispatch(openOnly('destOpen'));
           }}
-          className="text-ink h-full w-full rounded-[14px] border-[1.5px] bg-white py-[14px] pr-[42px] pl-[44px] text-[15px] font-semibold outline-none"
+          className="text-ink h-full w-full rounded-[14px] border-[1.5px] bg-white py-[8px] pr-[42px] pl-[44px] text-[15px] font-semibold outline-none"
           style={{
             borderColor: hasDest ? 'var(--primary)' : 'var(--line)',
             boxShadow: open

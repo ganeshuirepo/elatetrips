@@ -32,15 +32,15 @@ export default function DatesField() {
     <button
       type="button"
       onClick={openCal}
-      className="flex flex-1 flex-col items-start gap-[3px] border-none bg-transparent px-4 py-[11px] text-left"
+      className="flex flex-1 flex-col items-start gap-0 border-none bg-transparent px-4 py-[7px] text-left"
     >
-      <span className="text-muted text-[10.5px] font-black tracking-[0.05em] uppercase">
-        {label}
-      </span>
-      <span className="text-ink truncate text-[16px] leading-[1.1] font-bold">
+      <span className="text-muted text-[9.5px] font-black tracking-[0.05em] uppercase">{label}</span>
+      <span className="text-ink truncate text-[14px] leading-[1.15] font-bold">
         {iso ? fmtBig(iso) : 'Select date'}
       </span>
-      <span className="text-muted truncate text-[12px]">{iso ? fmtSub(iso) : 'Day of week'}</span>
+      <span className="text-muted truncate text-[11px] leading-tight">
+        {iso ? fmtSub(iso) : 'Day of week'}
+      </span>
     </button>
   );
 
@@ -51,9 +51,9 @@ export default function DatesField() {
       className="border-line relative flex h-full flex-wrap items-stretch rounded-[14px] border-[1.5px] bg-white"
     >
       {dateCell('Tour start', start)}
-      <div className="my-[9px] w-px flex-none bg-[#ECE7DC]" />
+      <div className="my-[7px] w-px flex-none bg-[#ECE7DC]" />
       {dateCell('Tour end', end)}
-      <div className="my-[9px] hidden w-px flex-none bg-[#ECE7DC] sm:block" />
+      <div className="my-[7px] hidden w-px flex-none bg-[#ECE7DC] sm:block" />
       {/* Travellers & rooms is the narrowest cell — it yields space to Search.
           On phones it wraps to its own full-width row. */}
       <div className="flex w-full basis-full border-t border-[#ECE7DC] sm:w-auto sm:flex-[0.7_1_0%] sm:basis-auto sm:border-t-0">

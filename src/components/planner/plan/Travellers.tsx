@@ -33,15 +33,15 @@ export default function Travellers() {
         onClick={() =>
           dispatch(travOpen ? setPopover({ key: 'travOpen', open: false }) : openOnly('travOpen'))
         }
-        className="relative flex min-w-0 flex-1 cursor-pointer flex-col items-start gap-[3px] py-[11px] pr-8 pl-4"
+        className="relative flex min-w-0 flex-1 cursor-pointer flex-col items-start gap-0 py-[7px] pr-8 pl-4"
       >
-        <span className="text-muted block text-[10.5px] font-black tracking-[0.05em] uppercase">
+        <span className="text-muted block text-[9.5px] font-black tracking-[0.05em] uppercase">
           Travellers &amp; rooms
         </span>
-        <span className="text-ink block w-full truncate text-[16px] leading-[1.1] font-bold">
+        <span className="text-ink block w-full truncate text-[14px] leading-[1.15] font-bold">
           {pax} Traveller{pax === 1 ? '' : 's'}
         </span>
-        <span className="text-muted block w-full truncate text-[12px]">{travSub}</span>
+        <span className="text-muted block w-full truncate text-[11px] leading-tight">{travSub}</span>
         <span className="text-muted absolute top-1/2 right-[14px] -translate-y-1/2 text-[16px]">
           <Icon name={travOpen ? 'chevron-up' : 'chevron-down'} />
         </span>
