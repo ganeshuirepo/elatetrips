@@ -118,7 +118,7 @@ export default function PartnerBenefits() {
       {/* Hero — light text directly on the canvas */}
       <div className="flex flex-col gap-4">
         <span className="text-[11px] font-black tracking-[0.18em] uppercase" style={{ color: 'var(--accent)' }}>
-          India&apos;s celebration-first travel platform
+          India&apos;s all-in-one travel platform
         </span>
         <h1 className="m-0 max-w-[22ch] font-serif text-[34px] leading-tight font-bold text-white">
           Turn celebrations into your highest-value bookings

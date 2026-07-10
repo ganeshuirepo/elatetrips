@@ -20,8 +20,9 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'ElateTrips — Plan your perfect celebration trip',
-  description: 'Celebration-first travel: where, when, who and what — booked together in one go.',
+  title: 'ElateTrips — Plan your whole trip, all in one place',
+  description:
+    'All-in-one travel: hotels, cabs, celebrations, experiences and gifts — booked together in one go.',
 };
 
 export default function RootLayout({

@@ -18,6 +18,13 @@ export interface PlanState {
   /** Calendar's currently displayed month (first-of-month ISO). */
   viewMonth: string;
   maxCelebrations: number;
+  /** The trip has been searched — reveals the hotel listing. Resets when the
+   *  destination or dates change so a new query needs a fresh search. */
+  searched: boolean;
+  /** The storefront (tabs) has been opened. Sticky: the first search reveals
+   *  the tabs, which then stay put even while the query is edited. Before it,
+   *  the planner shows the About & Offers landing. */
+  storefrontOpen: boolean;
 }
 
 const initialState: PlanState = {
@@ -33,6 +40,8 @@ const initialState: PlanState = {
   celebAge: {},
   viewMonth: '',
   maxCelebrations: MAX_CELEBRATIONS_DEFAULT,
+  searched: false,
+  storefrontOpen: false,
 };
 
 const planSlice = createSlice({
@@ -42,14 +51,17 @@ const planSlice = createSlice({
     selectDest(state, action: PayloadAction<{ id: string; name: string }>) {
       state.dest = [action.payload.id];
       state.destQuery = action.payload.name;
+      state.searched = false;
     },
     setDestQuery(state, action: PayloadAction<string>) {
       state.destQuery = action.payload;
       state.dest = [];
+      state.searched = false;
     },
     clearDest(state) {
       state.dest = [];
       state.destQuery = '';
+      state.searched = false;
     },
     setViewMonth(state, action: PayloadAction<string>) {
       state.viewMonth = action.payload;
@@ -66,10 +78,21 @@ const planSlice = createSlice({
       } else {
         state.end = iso;
       }
+      state.searched = false;
     },
     clearDates(state) {
       state.start = '';
       state.end = '';
+      state.searched = false;
+    },
+    /** "Search" — opens the storefront and reveals the hotel listing. */
+    search(state) {
+      state.searched = true;
+      state.storefrontOpen = true;
+    },
+    /** Open the tabs without a hotel search (e.g. the header Surprise Gifts link). */
+    openStorefront(state) {
+      state.storefrontOpen = true;
     },
     stepTravellers(state, action: PayloadAction<{ key: 'adults' | 'children'; delta: number }>) {
       const { key, delta } = action.payload;
@@ -115,6 +138,8 @@ export const {
   setViewMonth,
   pickDay,
   clearDates,
+  search,
+  openStorefront,
   stepTravellers,
   setTravellers,
   setRooms,

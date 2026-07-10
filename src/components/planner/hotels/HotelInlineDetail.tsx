@@ -3,12 +3,13 @@
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { selectRoom } from '@/store/slices/hotelSlice';
+import { selectPage1Ready } from '@/store/selectors/planSelectors';
 import { ROOM_META } from '@/data/hotels';
 import { AMENITIES } from '@/data/hotelOptions';
 import { hotelImagesFor } from '@/data/hotelImages';
-import CelebrationServices from './CelebrationServices';
 import { inr } from '@/domain/format';
 import Icon from '@/components/ui/Icon';
+import Required from '@/components/ui/Required';
 import type { Hotel, RoomSizeId } from '@/domain/types';
 
 const amenityName = (id: string) => AMENITIES.find((a) => a.id === id)?.name ?? id;
@@ -41,9 +42,18 @@ function RoomSection({ hotel }: { hotel: Hotel }) {
   const dispatch = useAppDispatch();
   const hRoom = useAppSelector((s) => s.hotel.hRoom);
   const selectedHotel = useAppSelector((s) => s.hotel.hHotel);
+  // Stays price by nights — the trip bar's destination & dates must be set
+  // before a room can be added to the cart.
+  const datesReady = useAppSelector(selectPage1Ready);
 
   return (
     <div className="flex flex-col gap-2">
+      {!datesReady && (
+        <span className="text-muted flex items-center gap-1.5 text-[12.5px]">
+          <Icon name="info-circle" size={15} /> Add your destination &amp; travel dates above to
+          book a room.
+        </span>
+      )}
       {hotel.roomSizes.map((rid: RoomSizeId) => {
         const meta = ROOM_META[rid];
         const price = Math.round(hotel.price * meta.mult);
@@ -69,6 +79,7 @@ function RoomSection({ hotel }: { hotel: Hotel }) {
                 size="small"
                 variant={active ? 'contained' : 'outlined'}
                 color="secondary"
+                disabled={!datesReady}
                 onClick={() => dispatch(selectRoom({ id: hotel.id, room: rid }))}
               >
                 {active ? 'Selected' : 'Select room'}
@@ -80,10 +91,6 @@ function RoomSection({ hotel }: { hotel: Hotel }) {
     </div>
   );
 }
-
-const sectionTitle = (text: string) => (
-  <span className="text-ink text-[14px] font-extrabold">{text}</span>
-);
 
 /**
  * Inline hotel detail shown when a listing is expanded — room photos clubbed on
@@ -107,12 +114,12 @@ export default function HotelInlineDetail({ hotel }: { hotel: Hotel }) {
         </div>
 
         <section className="flex flex-col gap-3">
-          {sectionTitle('Choose a room')}
+          <span className="text-ink text-[14px] font-extrabold">
+            Choose a room
+            <Required />
+          </span>
           <RoomSection hotel={hotel} />
         </section>
-
-        {/* Every chosen occasion's services are picked here, with the stay. */}
-        <CelebrationServices />
       </div>
     </div>
   );

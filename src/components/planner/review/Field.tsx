@@ -1,10 +1,13 @@
 'use client';
 
 import { forwardRef, type InputHTMLAttributes } from 'react';
+import Required from '@/components/ui/Required';
 
 interface FieldProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   error?: string;
+  /** Marks the label with the app-wide mandatory asterisk. */
+  required?: boolean;
 }
 
 /**
@@ -13,12 +16,15 @@ interface FieldProps extends InputHTMLAttributes<HTMLInputElement> {
  * collides with Tailwind's preflight reset.
  */
 const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
-  { label, error, ...rest },
+  { label, error, required, ...rest },
   ref,
 ) {
   return (
     <label className="text-muted flex flex-col gap-1 text-[12px] font-semibold">
-      {label}
+      <span>
+        {label}
+        {required && <Required />}
+      </span>
       <input
         ref={ref}
         {...rest}

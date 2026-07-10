@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Button from '@mui/material/Button';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setStep } from '@/store/slices/uiSlice';
+import { setScreen } from '@/store/slices/uiSlice';
 import { setAppliedCoupon, clearCoupon } from '@/store/slices/reviewSlice';
 import { selectOrderGross, selectDiscount, selectPayable } from '@/store/selectors/paymentSelectors';
 import { applyCoupon } from '@/domain/coupons';
@@ -119,7 +119,7 @@ export default function ReviewStep() {
           <Button
             variant="contained"
             size="large"
-            onClick={() => dispatch(setStep('services'))}
+            onClick={() => dispatch(setScreen('tabs'))}
             startIcon={<Icon name="arrow-left" size={18} />}
             sx={GOLD_BUTTON}
           >
@@ -129,7 +129,7 @@ export default function ReviewStep() {
             variant="contained"
             size="large"
             disabled={!loggedIn || payable <= 0}
-            onClick={() => dispatch(setStep('payment'))}
+            onClick={() => dispatch(setScreen('payment'))}
             endIcon={<Icon name="arrow-right" size={18} />}
             sx={GOLD_BUTTON}
           >

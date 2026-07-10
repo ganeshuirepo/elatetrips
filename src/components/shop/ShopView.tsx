@@ -45,8 +45,12 @@ function FilterGroup({ label, children }: { label: string; children: React.React
   );
 }
 
-/** Full shop catalogue page with a left filter sidebar (category, price, rating, offers). */
-export default function ShopView({ shop }: { shop: ShopKey }) {
+/**
+ * Shop catalogue with a left filter sidebar (category, price, rating,
+ * offers). `embedded` drops the page chrome (wrapper + back button) so the
+ * catalogue can sit inside the planner's Surprise Gifts tab.
+ */
+export default function ShopView({ shop, embedded = false }: { shop: ShopKey; embedded?: boolean }) {
   const dispatch = useAppDispatch();
   const cfg = SHOPS[shop];
 
@@ -94,18 +98,35 @@ export default function ShopView({ shop }: { shop: ShopKey }) {
   const hasFilters = cats.length > 0 || price.length > 0 || minRating > 0 || dealsOnly;
 
   return (
-    <div className="mx-auto flex max-w-[1080px] flex-col gap-4 px-6 pt-4">
-      <button
-        type="button"
-        onClick={() => dispatch(setView('planner'))}
-        className="text-primary flex w-fit items-center gap-1.5 border-none bg-transparent p-0 text-[13px] font-bold"
-      >
-        <Icon name="arrow-left" size={16} /> Back to planner
-      </button>
+    <div
+      className={
+        embedded ? 'flex flex-col gap-4' : 'mx-auto flex max-w-[1080px] flex-col gap-4 px-6 pt-4'
+      }
+    >
+      {!embedded && (
+        <button
+          type="button"
+          onClick={() => dispatch(setView('planner'))}
+          className="text-primary flex w-fit items-center gap-1.5 border-none bg-transparent p-0 text-[13px] font-bold"
+        >
+          <Icon name="arrow-left" size={16} /> Back to planner
+        </button>
+      )}
 
       <div className="flex flex-col gap-1">
-        <h1 className="text-primary m-0 font-serif text-2xl font-bold">{cfg.title}</h1>
-        <p className="text-muted m-0 text-[13.5px]">{cfg.subtitle}</p>
+        {embedded ? (
+          <>
+            <span className="text-accent text-[11px] font-black tracking-[0.06em] uppercase">
+              {cfg.title}
+            </span>
+            <p className="m-0 text-[13px] text-white/60">{cfg.subtitle}</p>
+          </>
+        ) : (
+          <>
+            <h1 className="text-primary m-0 font-serif text-2xl font-bold">{cfg.title}</h1>
+            <p className="text-muted m-0 text-[13.5px]">{cfg.subtitle}</p>
+          </>
+        )}
       </div>
 
       <div className="flex flex-wrap gap-6">

@@ -22,13 +22,11 @@ export const selectLocalEstimate = createSelector(selectTransport, selectDays, (
   return localTripEstimate({ vehicleId: t.tVehicle, days: Math.min(t.tDays, maxDays) });
 });
 
-/** Help text for the Cab step's continue gate. */
+/** Help text guiding the cab configuration on the Cabs tab. */
 export const selectCabHelp = createSelector(selectTransport, (t) => {
-  if (!t.tMode) return "Tell us how you'll get around.";
-  if (t.tMode === 'own') return 'Own transport — continue to hotels.';
-  if (t.tMode === 'cab' && !t.tTrip) return 'Choose a trip type for your cab.';
-  if (t.tMode === 'cab' && !t.tVehicle) return 'Pick a vehicle type for your cab.';
-  if (t.tMode === 'cab' && t.tTrip === 'endtoend' && !(t.pickupCity.trim() && t.pickupAddr.trim()))
+  if (!t.tTrip) return 'Choose a trip type for your cab.';
+  if (!t.tVehicle) return 'Pick a vehicle type for your cab.';
+  if (t.tTrip === 'endtoend' && !(t.pickupCity.trim() && t.pickupAddr.trim()))
     return 'Search or share your pickup location.';
-  return 'Cab details look good — continue to hotels.';
+  return 'Cab details look good.';
 });

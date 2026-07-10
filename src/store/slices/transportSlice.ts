@@ -4,12 +4,14 @@ import { validVehicleIds } from '@/domain/rules';
 export type TransportMode = '' | 'own' | 'cab';
 export type TripType = '' | 'local' | 'endtoend';
 
-/** Step 2 transport choices + OSM pickup search results. */
+/** Cabs-tab choices + OSM pickup search results. */
 export interface TransportState {
   tMode: TransportMode;
   tTrip: TripType;
   tVehicle: string;
   tDays: number;
+  /** The configured cab was added to the cart as a payable line. */
+  cabAdded: boolean;
   pickupCity: string;
   pickupAddr: string;
   pickupQuery: string;
@@ -23,6 +25,7 @@ const initialState: TransportState = {
   tTrip: '',
   tVehicle: '',
   tDays: 1,
+  cabAdded: false,
   pickupCity: '',
   pickupAddr: '',
   pickupQuery: '',
@@ -37,12 +40,15 @@ const transportSlice = createSlice({
   reducers: {
     setTMode(state, action: PayloadAction<TransportMode>) {
       state.tMode = action.payload;
+      // Switching away from a cab un-prices it — drop the cart line too.
+      if (action.payload !== 'cab') state.cabAdded = false;
     },
     setTTrip(state, action: PayloadAction<TripType>) {
       state.tTrip = action.payload;
     },
     setTVehicle(state, action: PayloadAction<string>) {
       state.tVehicle = action.payload;
+      if (!action.payload) state.cabAdded = false;
     },
     setTDays(state, action: PayloadAction<number>) {
       state.tDays = Math.max(1, action.payload || 1);
@@ -51,7 +57,15 @@ const transportSlice = createSlice({
     clearVehicleIfInvalid(state, action: PayloadAction<number>) {
       if (state.tVehicle && !validVehicleIds(action.payload).includes(state.tVehicle)) {
         state.tVehicle = '';
+        state.cabAdded = false;
       }
+    },
+    /** "Add cab to trip" — makes the configured cab a payable cart line. */
+    addCabToTrip(state) {
+      state.cabAdded = true;
+    },
+    removeCabFromTrip(state) {
+      state.cabAdded = false;
     },
     setPickupCity(state, action: PayloadAction<string>) {
       state.pickupCity = action.payload;
@@ -81,6 +95,8 @@ const transportSlice = createSlice({
       state.pickupLat = null;
       state.pickupLon = null;
       state.geoStatus = '';
+      // An end-to-end cab is priced from the pickup — losing it un-prices the line.
+      if (state.tTrip === 'endtoend') state.cabAdded = false;
     },
     setGeoStatus(state, action: PayloadAction<TransportState['geoStatus']>) {
       state.geoStatus = action.payload;
@@ -94,6 +110,8 @@ export const {
   setTVehicle,
   setTDays,
   clearVehicleIfInvalid,
+  addCabToTrip,
+  removeCabFromTrip,
   setPickupCity,
   setPickupAddr,
   setPickupQuery,

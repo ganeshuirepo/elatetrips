@@ -11,7 +11,7 @@ export default function Hero() {
   return (
     <section className="mx-auto flex max-w-[1080px] flex-col gap-2 px-6 pt-1 pb-2">
       <h1 className="m-0 font-serif text-[30px] leading-[1.05] font-medium tracking-[0.01em] text-white">
-        Plan your perfect{' '}
+        Plan your whole trip,{' '}
         <span
           style={{
             background: 'linear-gradient(90deg, #f0d693, #d4a94f)',
@@ -20,12 +20,11 @@ export default function Hero() {
             color: 'transparent',
           }}
         >
-          celebration
-        </span>{' '}
-        trip
+          all in one place
+        </span>
       </h1>
       {/* <span className="text-[14px] text-white/65">
-        Where, when, who and what — booked together in one go.
+        Hotels, cabs, celebrations, gifts & more — booked together in one go.
       </span> */}
     </section>
   );

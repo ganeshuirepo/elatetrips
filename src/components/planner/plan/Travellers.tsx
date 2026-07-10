@@ -2,21 +2,22 @@
 
 import { useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { stepTravellers } from '@/store/slices/planSlice';
+import { stepTravellers, setRooms } from '@/store/slices/planSlice';
 import { openOnly, setPopover, closeAllPopovers } from '@/store/slices/uiSlice';
 import { selectPax } from '@/store/selectors/planSelectors';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import Stepper from '@/components/ui/Stepper';
 import Icon from '@/components/ui/Icon';
-import { TRAVELLERS_MAX } from '@/data/constants';
+import { TRAVELLERS_MAX, ROOMS_MAX } from '@/data/constants';
 
 /**
- * Travellers segment (adults + children popover) — rendered as the third cell
- * inside the DatesField card, after Tour end. Rooms live on the Hotels step.
+ * Travellers & rooms segment — the third cell inside the DatesField card,
+ * after Tour end. The popover counts adults, children and rooms; the summary
+ * line reflects all three. Every tab reads this shared trip context.
  */
 export default function Travellers() {
   const dispatch = useAppDispatch();
-  const { adults, children } = useAppSelector((s) => s.plan);
+  const { adults, children, rooms } = useAppSelector((s) => s.plan);
   const pax = useAppSelector(selectPax);
   const travOpen = useAppSelector((s) => s.ui.travOpen);
   const ref = useRef<HTMLDivElement>(null);
@@ -24,7 +25,7 @@ export default function Travellers() {
 
   const travSub = `${adults} Adult${adults === 1 ? '' : 's'}, ${children} ${
     children === 1 ? 'Child' : 'Children'
-  }`;
+  } · ${rooms} Room${rooms === 1 ? '' : 's'}`;
 
   return (
     <div ref={ref} className="relative flex min-w-0 flex-1 items-stretch">
@@ -32,15 +33,15 @@ export default function Travellers() {
         onClick={() =>
           dispatch(travOpen ? setPopover({ key: 'travOpen', open: false }) : openOnly('travOpen'))
         }
-        className="relative flex min-w-0 flex-1 cursor-pointer flex-col items-start gap-[3px] py-[11px] pr-8 pl-4"
+        className="relative flex min-w-0 flex-1 cursor-pointer flex-col items-start gap-0 py-[7px] pr-8 pl-4"
       >
-        <span className="text-muted block text-[10.5px] font-black tracking-[0.05em] uppercase">
-          Travellers
+        <span className="text-muted block text-[9.5px] font-black tracking-[0.05em] uppercase">
+          Travellers &amp; rooms
         </span>
-        <span className="text-ink block w-full truncate text-[16px] leading-[1.1] font-bold">
+        <span className="text-ink block w-full truncate text-[14px] leading-[1.15] font-bold">
           {pax} Traveller{pax === 1 ? '' : 's'}
         </span>
-        <span className="text-muted block w-full truncate text-[12px]">{travSub}</span>
+        <span className="text-muted block w-full truncate text-[11px] leading-tight">{travSub}</span>
         <span className="text-muted absolute top-1/2 right-[14px] -translate-y-1/2 text-[16px]">
           <Icon name={travOpen ? 'chevron-up' : 'chevron-down'} />
         </span>
@@ -77,6 +78,21 @@ export default function Travellers() {
                 max={TRAVELLERS_MAX}
                 onDec={() => dispatch(stepTravellers({ key: 'children', delta: -1 }))}
                 onInc={() => dispatch(stepTravellers({ key: 'children', delta: 1 }))}
+              />
+            </div>
+            <div className="border-t border-[#EFEBE1]" />
+            <div className="flex items-center justify-between py-[11px]">
+              <span>
+                <span className="text-ink block text-[14px] font-bold">Rooms</span>
+                <span className="text-muted text-[12px]">For your stay</span>
+              </span>
+              <Stepper
+                ariaLabel="Rooms"
+                value={rooms}
+                min={1}
+                max={ROOMS_MAX}
+                onDec={() => dispatch(setRooms(rooms - 1))}
+                onInc={() => dispatch(setRooms(rooms + 1))}
               />
             </div>
             <button
