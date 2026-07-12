@@ -1,0 +1,31 @@
+name: Switch backend DB to elateexperiences
+
+# One-shot operational job: point the shared backend at the new
+# `elateexperiences` Atlas database (same cluster/credentials) and restart.
+# Runs when this file changes, or manually from the Actions tab.
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/switch-db.yml']
+  workflow_dispatch: {}
+
+jobs:
+  switch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH into EC2, swap DB name in backend .env, restart
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          command_timeout: 10m
+          script: |
+            set -e
+            ENV_FILE="$HOME/elatetrips/elatetrips-node/.env"
+            sed -i 's#:27017/elatetrips?#:27017/elateexperiences?#' "$ENV_FILE"
+            echo "backend now points at: $(grep -oE ':27017/[a-zA-Z-]+' "$ENV_FILE" | head -1)"
+            pm2 restart elate-backend --update-env
+            sleep 4
+            curl -fsS http://127.0.0.1:4000/api/v1/health && echo " health: OK"
+            echo "celebration-bundles served: $(curl -fsS http://127.0.0.1:4000/api/v1/catalog/celebration-bundles | grep -o '"id"' | wc -l)"
