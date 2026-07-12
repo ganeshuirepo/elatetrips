@@ -1,7 +1,10 @@
+import { randomUUID } from 'node:crypto';
 import type { IReadRepository } from '../../common/interfaces/IReadRepository';
 import type { IHotelRepository } from './hotel.repository';
 import { NotFoundError } from '../../common/errors/AppError';
 import type {
+  AvailabilityRequest,
+  AvailabilityResult,
   Destination,
   Vehicle,
   Room,
@@ -9,6 +12,7 @@ import type {
   OptionItem,
   Celebration,
   CelebrationPackage,
+  CelebrationBundle,
   Activity,
   Product,
   ShopCatalog,
@@ -25,6 +29,7 @@ export interface CatalogRepositories {
   options: IReadRepository<OptionItem>;
   celebrations: IReadRepository<Celebration>;
   packages: IReadRepository<CelebrationPackage>;
+  bundles: IReadRepository<CelebrationBundle>;
   activities: IReadRepository<Activity>;
   products: IReadRepository<Product>;
   shopCatalogs: IReadRepository<ShopCatalog>;
@@ -60,6 +65,32 @@ export class CatalogService {
     return hotel;
   }
 
+  /** Minutes a confirmed room is held for while the guest completes payment. */
+  static readonly HOLD_MINUTES = 5;
+
+  /**
+   * Live availability confirmation with the hotelier (partner-integration
+   * stand-in): the room must be one the hotel actually offers; a successful
+   * check holds it for HOLD_MINUTES so payment can complete at a locked rate.
+   */
+  async checkAvailability(hotelId: string, req: AvailabilityRequest): Promise<AvailabilityResult> {
+    const hotel = await this.getHotel(hotelId);
+    if (!hotel.roomSizes.includes(req.roomId)) {
+      return {
+        available: false,
+        message: `${hotel.name} no longer offers this room type for the selected dates — pick another room.`,
+      };
+    }
+    const holdMinutes = CatalogService.HOLD_MINUTES;
+    return {
+      available: true,
+      holdRef: `HOLD-${randomUUID().slice(0, 8).toUpperCase()}`,
+      expiresAt: new Date(Date.now() + holdMinutes * 60_000).toISOString(),
+      holdMinutes,
+      message: `${hotel.name} confirmed ${req.rooms} × this room for ${req.nights} night(s) — held for ${holdMinutes} minutes.`,
+    };
+  }
+
   /** All hotel filter options grouped the way the UI consumes them. */
   async listHotelOptions(): Promise<Record<string, OptionItem[]>> {
     const all = await this.repos.options.findAll();
@@ -75,6 +106,11 @@ export class CatalogService {
 
   listPackages(): Promise<CelebrationPackage[]> {
     return this.repos.packages.findAll();
+  }
+
+  /** Complete celebration bundles (stay + food + setup), optionally by destination. */
+  listCelebrationBundles(dest?: string): Promise<CelebrationBundle[]> {
+    return this.repos.bundles.findAll(dest ? { dest } : {});
   }
 
   listActivities(kind?: 'adventure' | 'experience'): Promise<Activity[]> {

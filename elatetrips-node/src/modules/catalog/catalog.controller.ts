@@ -38,6 +38,9 @@ export class CatalogController {
   hotelById = async (req: Request, res: Response): Promise<Response> =>
     ok(res, await this.service.getHotel(req.params.id));
 
+  hotelAvailability = async (req: Request, res: Response): Promise<Response> =>
+    ok(res, await this.service.checkAvailability(req.params.id, req.body));
+
   hotelOptions = async (_req: Request, res: Response): Promise<Response> =>
     ok(res, await this.service.listHotelOptions());
 
@@ -46,6 +49,12 @@ export class CatalogController {
 
   packages = async (_req: Request, res: Response): Promise<Response> =>
     ok(res, await this.service.listPackages());
+
+  celebrationBundles = async (req: Request, res: Response): Promise<Response> => {
+    const dest = req.query.dest as string | undefined;
+    const bundles = await this.service.listCelebrationBundles(dest);
+    return ok(res, bundles, { count: bundles.length });
+  };
 
   activities = async (req: Request, res: Response): Promise<Response> =>
     ok(res, await this.service.listActivities(req.query.kind as 'adventure' | 'experience' | undefined));

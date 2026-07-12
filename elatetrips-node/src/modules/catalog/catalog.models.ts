@@ -7,6 +7,7 @@ import type {
   OptionItem,
   Celebration,
   CelebrationPackage,
+  CelebrationBundle,
   Activity,
   Product,
   ShopCatalog,
@@ -26,6 +27,7 @@ const destinationSchema = new Schema<Destination>(
     name: String,
     tag: String,
     icon: String,
+    kind: { type: String, index: true, default: 'destination' },
     on: Boolean,
     lat: Number,
     lon: Number,
@@ -113,6 +115,27 @@ const packageSchema = new Schema<CelebrationPackage>(
   opts,
 );
 
+const celebrationBundleSchema = new Schema<CelebrationBundle>(
+  {
+    id: { type: String, required: true, unique: true, index: true },
+    name: String,
+    dest: { type: String, index: true },
+    occasion: { type: String, index: true },
+    occLabel: String,
+    durationLabel: String,
+    nights: Number,
+    premium: Boolean,
+    groupSize: { type: String, default: null },
+    availability: String,
+    fromPrice: Number,
+    unit: String,
+    inclusions: [String],
+    exclusions: [String],
+    legs: { type: [{ _id: false, dest: String, nights: Number }], default: undefined },
+  },
+  opts,
+);
+
 const activitySchema = new Schema<Activity>(
   {
     kind: { type: String, required: true, index: true },
@@ -162,6 +185,7 @@ export const HotelModel = model<Hotel>('Hotel', hotelSchema);
 export const OptionModel = model<OptionItem>('Option', optionSchema);
 export const CelebrationModel = model<Celebration>('Celebration', celebrationSchema);
 export const PackageModel = model<CelebrationPackage>('Package', packageSchema);
+export const CelebrationBundleModel = model<CelebrationBundle>('CelebrationBundle', celebrationBundleSchema);
 export const ActivityModel = model<Activity>('Activity', activitySchema);
 export const ProductModel = model<Product>('Product', productSchema);
 export const ShopCatalogModel = model<ShopCatalog>('ShopCatalog', shopCatalogSchema);

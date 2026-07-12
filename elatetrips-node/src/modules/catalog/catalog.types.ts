@@ -5,6 +5,8 @@ export interface Destination {
   name: string;
   tag: string;
   icon: string;
+  /** 'destination' = full app (trips + celebrations); 'city' = experiences only. */
+  kind: 'destination' | 'city';
   on: boolean;
   lat: number;
   lon: number;
@@ -73,6 +75,35 @@ export interface CelebrationPackage {
   age?: [number, number];
 }
 
+/**
+ * A complete celebration BUNDLE (stay + food + setup) booked as one. Cabs and
+ * adventure activities are offered as add-ons at booking time (from the vehicles
+ * + adventure catalogs), so they are not stored here.
+ */
+export interface CelebrationBundle {
+  id: string;
+  name: string;
+  /** Primary destination (first leg for combo itineraries). */
+  dest: string;
+  occasion: string;
+  occLabel: string;
+  durationLabel: string;
+  nights: number;
+  premium: boolean;
+  groupSize: string | null;
+  availability: 'daily' | 'weekend';
+  fromPrice: number;
+  unit: string;
+  inclusions: string[];
+  exclusions: string[];
+  /**
+   * Combo itineraries only: the night split across nearby destinations,
+   * e.g. [{dest:'ooty',nights:3},{dest:'coorg',nights:2}]. Absent = single-destination.
+   * Only geographically-near destinations are ever combined (seed-enforced).
+   */
+  legs?: { dest: string; nights: number }[];
+}
+
 export interface Activity {
   kind: 'adventure' | 'experience';
   id: string;
@@ -125,4 +156,21 @@ export interface HotelFilter {
   climate?: string[];
   types?: string[];
   maxPrice?: number;
+}
+
+/** A live availability check with the hotelier before payment. */
+export interface AvailabilityRequest {
+  roomId: string;
+  checkin: string;
+  nights: number;
+  rooms: number;
+}
+
+/** Hotelier confirmation: when available, the room is held until expiresAt. */
+export interface AvailabilityResult {
+  available: boolean;
+  holdRef?: string;
+  expiresAt?: string;
+  holdMinutes?: number;
+  message: string;
 }

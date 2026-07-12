@@ -8,6 +8,7 @@ import {
   OptionModel,
   CelebrationModel,
   PackageModel,
+  CelebrationBundleModel,
   ActivityModel,
   ProductModel,
   ShopCatalogModel,
@@ -15,6 +16,7 @@ import {
 import { HotelRepository } from './modules/catalog/hotel.repository';
 import { CatalogService } from './modules/catalog/catalog.service';
 import { CatalogController } from './modules/catalog/catalog.controller';
+import type { CelebrationBundle } from './modules/catalog/catalog.types';
 
 import { UserRepository } from './modules/users/user.repository';
 import { UserService } from './modules/users/user.service';
@@ -42,6 +44,10 @@ import { WeddingRepository } from './modules/wedding/wedding.repository';
 import { WeddingService } from './modules/wedding/wedding.service';
 import { WeddingController } from './modules/wedding/wedding.controller';
 
+import { ReviewRepository } from './modules/reviews/review.repository';
+import { ReviewService } from './modules/reviews/review.service';
+import { ReviewController } from './modules/reviews/review.controller';
+
 import { buildAuthGuard } from './common/middleware/authGuard';
 
 /**
@@ -60,6 +66,7 @@ export interface Container {
     pricing: PricingController;
     partners: PartnerController;
     weddings: WeddingController;
+    reviews: ReviewController;
   };
 }
 
@@ -71,6 +78,7 @@ export function createContainer(): Container {
   const optionsRepo = new MongoReadRepository<any>(OptionModel);
   const celebrationsRepo = new MongoReadRepository<any>(CelebrationModel);
   const packagesRepo = new MongoReadRepository<any>(PackageModel);
+  const bundlesRepo = new MongoReadRepository<CelebrationBundle>(CelebrationBundleModel);
   const activitiesRepo = new MongoReadRepository<any>(ActivityModel);
   const productsRepo = new MongoReadRepository<any>(ProductModel);
   const shopCatalogsRepo = new MongoReadRepository<any>(ShopCatalogModel);
@@ -79,6 +87,7 @@ export function createContainer(): Container {
   const ordersRepo = new OrderRepository();
   const partnersRepo = new PartnerRepository();
   const weddingsRepo = new WeddingRepository();
+  const reviewsRepo = new ReviewRepository();
 
   // Cross-cutting auth primitives
   const tokenService = new JwtTokenService();
@@ -95,6 +104,7 @@ export function createContainer(): Container {
     options: optionsRepo,
     celebrations: celebrationsRepo,
     packages: packagesRepo,
+    bundles: bundlesRepo,
     activities: activitiesRepo,
     products: productsRepo,
     shopCatalogs: shopCatalogsRepo,
@@ -105,6 +115,7 @@ export function createContainer(): Container {
   const pricingService = new PricingService(vehiclesRepo, destinationsRepo);
   const partnerService = new PartnerService(partnersRepo);
   const weddingService = new WeddingService(weddingsRepo);
+  const reviewService = new ReviewService(reviewsRepo, ordersRepo, usersRepo, hotelsRepo);
 
   return {
     authGuard: buildAuthGuard(tokenService),
@@ -116,6 +127,7 @@ export function createContainer(): Container {
       pricing: new PricingController(pricingService),
       partners: new PartnerController(partnerService),
       weddings: new WeddingController(weddingService),
+      reviews: new ReviewController(reviewService),
     },
   };
 }

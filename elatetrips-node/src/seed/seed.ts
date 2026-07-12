@@ -8,6 +8,7 @@ import {
   OptionModel,
   CelebrationModel,
   PackageModel,
+  CelebrationBundleModel,
   ActivityModel,
   ProductModel,
   ShopCatalogModel,
@@ -26,6 +27,7 @@ import {
   hotelActivities,
   celebrations,
   packages,
+  celebrationBundles,
   adventures,
   experiences,
   products,
@@ -84,6 +86,13 @@ async function seed(): Promise<void> {
       async () => (
         await PackageModel.deleteMany({}),
         PackageModel.insertMany(packages.map((p) => ({ ...p, category: categoryFor(p.name) })))
+      ),
+    ],
+    [
+      'celebrationBundles',
+      async () => (
+        await CelebrationBundleModel.deleteMany({}),
+        CelebrationBundleModel.insertMany(celebrationBundles)
       ),
     ],
     ['activities', async () => (await ActivityModel.deleteMany({}), ActivityModel.insertMany(buildActivities()))],

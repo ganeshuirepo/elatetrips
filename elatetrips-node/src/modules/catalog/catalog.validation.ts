@@ -33,6 +33,10 @@ export const activityQuerySchema = z.object({
   kind: z.enum(['adventure', 'experience']).optional(),
 });
 
+export const bundleQuerySchema = z.object({
+  dest: z.string().trim().min(1).max(40).optional(),
+});
+
 export const productQuerySchema = z.object({
   shop: z.enum(['gifts', 'medical']).optional(),
   cat: z.string().optional(),
@@ -42,3 +46,10 @@ export const productQuerySchema = z.object({
 });
 
 export const idParamSchema = z.object({ id: z.string().min(1) });
+
+export const availabilityBodySchema = z.object({
+  roomId: z.string().trim().min(1).max(40),
+  checkin: z.string().trim().regex(/^\d{4}-\d{2}-\d{2}$/, 'checkin must be YYYY-MM-DD'),
+  nights: z.coerce.number().int().min(1).max(30),
+  rooms: z.coerce.number().int().min(1).max(5),
+});

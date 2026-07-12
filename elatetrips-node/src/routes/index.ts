@@ -8,6 +8,7 @@ import { buildCatalogRouter } from '../modules/catalog/catalog.routes';
 import { buildPricingRouter } from '../modules/pricing/pricing.routes';
 import { buildPartnerRouter } from '../modules/partner/partner.routes';
 import { buildWeddingRouter } from '../modules/wedding/wedding.routes';
+import { buildReviewRouter } from '../modules/reviews/review.routes';
 
 /** Mounts every module router under the versioned API prefix. */
 export function buildApiRouter(c: Container): Router {
@@ -31,6 +32,7 @@ export function buildApiRouter(c: Container): Router {
   router.use('/pricing', buildPricingRouter(c.controllers.pricing));
   router.use('/partners', buildPartnerRouter(c.controllers.partners));
   router.use('/weddings', buildWeddingRouter(c.controllers.weddings));
+  router.use('/hotels', buildReviewRouter(c.controllers.reviews, c.authGuard));
 
   return router;
 }

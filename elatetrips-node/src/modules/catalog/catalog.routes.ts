@@ -5,8 +5,10 @@ import { validate } from '../../common/middleware/validate';
 import {
   hotelListQuerySchema,
   activityQuerySchema,
+  bundleQuerySchema,
   productQuerySchema,
   idParamSchema,
+  availabilityBodySchema,
 } from './catalog.validation';
 
 /**
@@ -91,6 +93,36 @@ export function buildCatalogRouter(controller: CatalogController): Router {
 
   /**
    * @openapi
+   * /api/v1/catalog/hotels/{id}/availability:
+   *   post:
+   *     tags: [Catalog]
+   *     summary: Confirm live room availability with the hotelier (holds the room briefly)
+   *     parameters:
+   *       - { in: path, name: id, required: true, schema: { type: string } }
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required: [roomId, checkin, nights, rooms]
+   *             properties:
+   *               roomId: { type: string }
+   *               checkin: { type: string, example: "2026-08-21" }
+   *               nights: { type: integer, minimum: 1 }
+   *               rooms: { type: integer, minimum: 1 }
+   *     responses:
+   *       200: { description: Availability result (holdRef + expiresAt when available) }
+   *       404: { description: Hotel not found }
+   */
+  router.post(
+    '/hotels/:id/availability',
+    validate({ params: idParamSchema, body: availabilityBodySchema }),
+    asyncHandler(controller.hotelAvailability),
+  );
+
+  /**
+   * @openapi
    * /api/v1/catalog/hotel-options:
    *   get:
    *     tags: [Catalog]
@@ -121,6 +153,23 @@ export function buildCatalogRouter(controller: CatalogController): Router {
    *       200: { description: Packages }
    */
   router.get('/packages', asyncHandler(controller.packages));
+
+  /**
+   * @openapi
+   * /api/v1/catalog/celebration-bundles:
+   *   get:
+   *     tags: [Catalog]
+   *     summary: List complete celebration bundles (stay + food + setup)
+   *     parameters:
+   *       - { in: query, name: dest, schema: { type: string }, description: "Filter by destination id" }
+   *     responses:
+   *       200: { description: Celebration bundles }
+   */
+  router.get(
+    '/celebration-bundles',
+    validate({ query: bundleQuerySchema }),
+    asyncHandler(controller.celebrationBundles),
+  );
 
   /**
    * @openapi
