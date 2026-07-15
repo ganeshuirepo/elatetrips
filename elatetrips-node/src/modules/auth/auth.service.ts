@@ -35,6 +35,9 @@ export class AuthService {
     private readonly tokenService: ITokenService,
     private readonly hasher: IPasswordHasher,
     private readonly users: IUserRepository,
+    /** When true, signup activates immediately and returns a session; email/
+     *  mobile stay UNVERIFIED for the future OTP verification rollout. */
+    private readonly autoActivate: boolean = false,
   ) {}
 
   private session(user: User): SessionResult {
@@ -76,7 +79,7 @@ export class AuthService {
 
   // ---- Signup + account verification ----------------------------------------
 
-  async signup(data: SignupData, verifyVia: VerifyChannel): Promise<OtpResult> {
+  async signup(data: SignupData, verifyVia: VerifyChannel): Promise<OtpResult | SessionResult> {
     const byPhone = await this.users.findByIdentifier(data.phone);
     if (byPhone && byPhone.status !== 'pending') {
       throw new AppError(409, 'An account with this mobile number already exists');
@@ -95,6 +98,11 @@ export class AuthService {
       await this.users.createPending(data, passwordHash);
     }
 
+    if (this.autoActivate) {
+      const activated = await this.users.activate(data.phone);
+      if (!activated) throw new NotFoundError('Signup could not be completed — try again');
+      return this.session(activated);
+    }
     const identifier = verifyVia === 'email' ? data.email : data.phone;
     return this.issueAndSend(identifier, verifyVia);
   }
@@ -129,7 +137,13 @@ export class AuthService {
       throw new UnauthorizedError('Invalid mobile/email or password');
     }
     if (creds.status !== 'active') {
-      throw new ForbiddenError('Account not verified. Please verify your email or mobile number.');
+      // Auto-activate rescues accounts stuck pending from the OTP-only era:
+      // a correct password is proof enough until channel verification ships.
+      if (this.autoActivate && creds.status === 'pending') {
+        await this.users.activate(identifier);
+      } else {
+        throw new ForbiddenError('Account not verified. Please verify your email or mobile number.');
+      }
     }
     const { passwordHash: _omit, ...user } = creds;
     return this.session(user as User);

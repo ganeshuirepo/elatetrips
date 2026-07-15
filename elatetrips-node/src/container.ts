@@ -1,4 +1,5 @@
 import type { RequestHandler } from 'express';
+import { env } from './config/env';
 
 import { MongoReadRepository } from './repositories/MongoReadRepository';
 import {
@@ -111,7 +112,7 @@ export function createContainer(): Container {
   });
   const userService = new UserService(usersRepo);
   const orderService = new OrderService(ordersRepo);
-  const authService = new AuthService(otpStore, otpSender, tokenService, passwordHasher, usersRepo);
+  const authService = new AuthService(otpStore, otpSender, tokenService, passwordHasher, usersRepo, env.authAutoActivate);
   const pricingService = new PricingService(vehiclesRepo, destinationsRepo);
   const partnerService = new PartnerService(partnersRepo);
   const weddingService = new WeddingService(weddingsRepo);

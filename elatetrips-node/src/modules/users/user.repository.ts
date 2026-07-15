@@ -22,6 +22,8 @@ export interface IUserRepository {
   updatePending(data: SignupData, passwordHash: string): Promise<User | null>;
   /** Mark a verification channel confirmed and activate the account. */
   markVerified(identifier: string, channel: VerifyChannel): Promise<User | null>;
+  /** Activate WITHOUT verifying any channel (auto-activate mode). */
+  activate(identifier: string): Promise<User | null>;
   setPassword(identifier: string, passwordHash: string): Promise<User | null>;
   updateProfile(phone: string, update: ProfileUpdate): Promise<User | null>;
 }
@@ -88,6 +90,17 @@ export class UserRepository implements IUserRepository {
           mobileVerified: false,
         },
       },
+      { new: true },
+    )
+      .select(publicProjection)
+      .lean<User>()
+      .exec();
+  }
+
+  async activate(identifier: string): Promise<User | null> {
+    return UserModel.findOneAndUpdate(
+      identifierQuery(identifier),
+      { $set: { status: 'active' } },
       { new: true },
     )
       .select(publicProjection)

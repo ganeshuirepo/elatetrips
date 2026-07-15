@@ -18,6 +18,10 @@ function required(key: string, fallback?: string): string {
  */
 export const env = {
   nodeEnv: process.env.NODE_ENV ?? 'development',
+  /** TEMP: activate accounts at signup without OTP (no SMS/email provider is
+   *  wired yet). Set AUTH_AUTO_ACTIVATE=false once verification goes live —
+   *  the whole OTP flow (issue/verify/resend) stays in place for that day. */
+  authAutoActivate: process.env.AUTH_AUTO_ACTIVATE !== 'false',
   port: Number(process.env.PORT ?? 4000),
   corsOrigins: (process.env.CORS_ORIGINS ?? 'http://localhost:3000')
     .split(',')
