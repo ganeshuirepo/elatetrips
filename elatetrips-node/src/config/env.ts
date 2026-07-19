@@ -29,6 +29,8 @@ export const env = {
     .filter(Boolean),
   mongoUri: required('MONGODB_URI', 'mongodb://127.0.0.1:27017/elatetrips'),
   jwtSecret: required('JWT_SECRET', 'change-me-in-production'),
+  /** Shared secret for the admin console (mock-first; real accounts later). */
+  adminKey: process.env.ADMIN_KEY ?? 'elate-admin-key',
   jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? '7d',
 
   // ---- OTP delivery providers (all optional — console fallback in dev) ------

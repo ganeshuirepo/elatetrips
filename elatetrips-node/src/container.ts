@@ -6,6 +6,7 @@ import {
   DestinationModel,
   VehicleModel,
   RoomModel,
+  HotelModel,
   OptionModel,
   CelebrationModel,
   PackageModel,
@@ -50,6 +51,13 @@ import { ReviewService } from './modules/reviews/review.service';
 import { ReviewController } from './modules/reviews/review.controller';
 
 import { buildAuthGuard } from './common/middleware/authGuard';
+import { buildAdminGuard } from './common/middleware/adminGuard';
+import { MongoCrudRepository } from './repositories/MongoCrudRepository';
+import { MongoReadRepository as OrdersReadRepository } from './repositories/MongoReadRepository';
+import { OrderModel } from './modules/orders/order.model';
+import { AdminService } from './modules/admin/admin.service';
+import { AdminController } from './modules/admin/admin.controller';
+import type { Activity, Hotel, Vehicle } from './modules/catalog/catalog.types';
 
 /**
  * Composition root — the ONLY place that knows concrete classes. Everything else
@@ -59,6 +67,7 @@ import { buildAuthGuard } from './common/middleware/authGuard';
  */
 export interface Container {
   authGuard: RequestHandler;
+  adminGuard: RequestHandler;
   controllers: {
     catalog: CatalogController;
     auth: AuthController;
@@ -68,6 +77,7 @@ export interface Container {
     partners: PartnerController;
     weddings: WeddingController;
     reviews: ReviewController;
+    admin: AdminController;
   };
 }
 
@@ -117,9 +127,18 @@ export function createContainer(): Container {
   const partnerService = new PartnerService(partnersRepo);
   const weddingService = new WeddingService(weddingsRepo);
   const reviewService = new ReviewService(reviewsRepo, ordersRepo, usersRepo, hotelsRepo);
+  // Admin console: write-capable repos over the same mocked catalog collections.
+  const adminService = new AdminService({
+    hotels: new MongoCrudRepository<Hotel>(HotelModel),
+    bundles: new MongoCrudRepository<CelebrationBundle>(CelebrationBundleModel),
+    vehicles: new MongoCrudRepository<Vehicle>(VehicleModel),
+    activities: new MongoCrudRepository<Activity>(ActivityModel),
+    orders: new OrdersReadRepository<Record<string, unknown>>(OrderModel),
+  });
 
   return {
     authGuard: buildAuthGuard(tokenService),
+    adminGuard: buildAdminGuard(env.adminKey),
     controllers: {
       catalog: new CatalogController(catalogService),
       auth: new AuthController(authService),
@@ -129,6 +148,7 @@ export function createContainer(): Container {
       partners: new PartnerController(partnerService),
       weddings: new WeddingController(weddingService),
       reviews: new ReviewController(reviewService),
+      admin: new AdminController(adminService),
     },
   };
 }
