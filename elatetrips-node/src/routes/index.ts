@@ -10,6 +10,7 @@ import { buildPartnerRouter } from '../modules/partner/partner.routes';
 import { buildWeddingRouter } from '../modules/wedding/wedding.routes';
 import { buildReviewRouter } from '../modules/reviews/review.routes';
 import { buildAdminRouter } from '../modules/admin/admin.routes';
+import { buildConsoleRouter, buildVendorRouter } from '../modules/admin/console.routes';
 
 /** Mounts every module router under the versioned API prefix. */
 export function buildApiRouter(c: Container): Router {
@@ -34,7 +35,9 @@ export function buildApiRouter(c: Container): Router {
   router.use('/partners', buildPartnerRouter(c.controllers.partners));
   router.use('/weddings', buildWeddingRouter(c.controllers.weddings));
   router.use('/hotels', buildReviewRouter(c.controllers.reviews, c.authGuard));
-  router.use('/admin', buildAdminRouter(c.controllers.admin, c.adminGuard));
+  router.use('/admin', buildAdminRouter(c.controllers.admin, c.controllers.console, c.adminGuard));
+  router.use('/console', buildConsoleRouter(c.controllers.console));
+  router.use('/vendor', buildVendorRouter(c.controllers.console));
 
   return router;
 }

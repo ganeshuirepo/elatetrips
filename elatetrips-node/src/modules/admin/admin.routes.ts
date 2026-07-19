@@ -1,9 +1,11 @@
 import { Router } from 'express';
 import type { RequestHandler } from 'express';
 import type { AdminController } from './admin.controller';
+import type { ConsoleController } from './console.controller';
 import { asyncHandler } from '../../common/http/asyncHandler';
 import { validate } from '../../common/middleware/validate';
 import {
+  vendorCreateSchema,
   activityCreateSchema,
   activityParamsSchema,
   activityUpdateSchema,
@@ -22,12 +24,24 @@ import {
  *   - name: Admin
  *     description: Admin console — create/update the mocked catalog (guarded by x-admin-key).
  */
-export function buildAdminRouter(controller: AdminController, guard: RequestHandler): Router {
+export function buildAdminRouter(
+  controller: AdminController,
+  consoleController: ConsoleController,
+  guard: RequestHandler,
+): Router {
   const router = Router();
   router.use(guard);
 
   router.get('/overview', asyncHandler(controller.overview));
   router.get('/orders', asyncHandler(controller.listOrders));
+
+  // Vendor onboarding: register the account bound to its one listing.
+  router.get('/vendors', asyncHandler(consoleController.listVendors));
+  router.post(
+    '/vendors',
+    validate({ body: vendorCreateSchema }),
+    asyncHandler(consoleController.createVendor),
+  );
 
   router.post('/hotels', validate({ body: hotelCreateSchema }), asyncHandler(controller.createHotel));
   router.put(

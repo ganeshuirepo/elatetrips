@@ -51,12 +51,15 @@ import { ReviewService } from './modules/reviews/review.service';
 import { ReviewController } from './modules/reviews/review.controller';
 
 import { buildAuthGuard } from './common/middleware/authGuard';
-import { buildAdminGuard } from './common/middleware/adminGuard';
+import { buildAdminGuard } from './modules/admin/console.guard';
 import { MongoCrudRepository } from './repositories/MongoCrudRepository';
 import { MongoReadRepository as OrdersReadRepository } from './repositories/MongoReadRepository';
 import { OrderModel } from './modules/orders/order.model';
 import { AdminService } from './modules/admin/admin.service';
 import { AdminController } from './modules/admin/admin.controller';
+import { ConsoleUserModel, type ConsoleUser } from './modules/admin/console.model';
+import { ConsoleService } from './modules/admin/console.service';
+import { ConsoleController } from './modules/admin/console.controller';
 import type { Activity, Hotel, Vehicle } from './modules/catalog/catalog.types';
 
 /**
@@ -78,6 +81,7 @@ export interface Container {
     weddings: WeddingController;
     reviews: ReviewController;
     admin: AdminController;
+    console: ConsoleController;
   };
 }
 
@@ -128,13 +132,29 @@ export function createContainer(): Container {
   const weddingService = new WeddingService(weddingsRepo);
   const reviewService = new ReviewService(reviewsRepo, ordersRepo, usersRepo, hotelsRepo);
   // Admin console: write-capable repos over the same mocked catalog collections.
+  const hotelsCrud = new MongoCrudRepository<Hotel>(HotelModel);
+  const bundlesCrud = new MongoCrudRepository<CelebrationBundle>(CelebrationBundleModel);
+  const vehiclesCrud = new MongoCrudRepository<Vehicle>(VehicleModel);
+  const activitiesCrud = new MongoCrudRepository<Activity>(ActivityModel);
+  const ordersRead = new OrdersReadRepository<Record<string, unknown>>(OrderModel);
   const adminService = new AdminService({
-    hotels: new MongoCrudRepository<Hotel>(HotelModel),
-    bundles: new MongoCrudRepository<CelebrationBundle>(CelebrationBundleModel),
-    vehicles: new MongoCrudRepository<Vehicle>(VehicleModel),
-    activities: new MongoCrudRepository<Activity>(ActivityModel),
-    orders: new OrdersReadRepository<Record<string, unknown>>(OrderModel),
+    hotels: hotelsCrud,
+    bundles: bundlesCrud,
+    vehicles: vehiclesCrud,
+    activities: activitiesCrud,
+    orders: ordersRead,
   });
+  const consoleService = new ConsoleService(
+    {
+      users: new MongoCrudRepository<ConsoleUser>(ConsoleUserModel),
+      hotels: hotelsCrud,
+      bundles: bundlesCrud,
+      vehicles: vehiclesCrud,
+      activities: activitiesCrud,
+      orders: ordersRead,
+    },
+    passwordHasher,
+  );
 
   return {
     authGuard: buildAuthGuard(tokenService),
@@ -149,6 +169,7 @@ export function createContainer(): Container {
       weddings: new WeddingController(weddingService),
       reviews: new ReviewController(reviewService),
       admin: new AdminController(adminService),
+      console: new ConsoleController(consoleService),
     },
   };
 }

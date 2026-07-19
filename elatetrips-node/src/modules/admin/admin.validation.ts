@@ -65,6 +65,31 @@ export const activityCreateSchema = z.object({
 });
 export const activityUpdateSchema = activityCreateSchema.omit({ id: true, kind: true }).partial();
 
+// ---- Console accounts (admin + vendor logins) -----------------------------
+export const consoleLoginSchema = z.object({
+  username: z.string().min(3),
+  password: z.string().min(6),
+});
+
+export const vendorCreateSchema = z
+  .object({
+    username: z
+      .string()
+      .min(3)
+      .regex(/^[a-z0-9_.-]+$/i, 'letters, numbers, dots, dashes only'),
+    password: z.string().min(6),
+    displayName: z.string().min(2),
+    vendorType: z.enum(['hotel', 'cab', 'experience', 'ground']),
+    refId: z.string().min(1).optional(),
+  })
+  .refine((v) => v.vendorType === 'ground' || !!v.refId, {
+    message: 'A listing reference is required for this vendor type',
+    path: ['refId'],
+  });
+
+/** Vendor listing patch — per-type field validation happens in the service. */
+export const listingUpdateSchema = z.record(z.string(), z.unknown());
+
 export const idParamsSchema = z.object({ id: z.string().min(1) });
 export const activityParamsSchema = z.object({
   kind: z.enum(['adventure', 'experience']),
@@ -79,3 +104,4 @@ export type VehicleCreate = z.infer<typeof vehicleCreateSchema>;
 export type VehicleUpdate = z.infer<typeof vehicleUpdateSchema>;
 export type ActivityCreate = z.infer<typeof activityCreateSchema>;
 export type ActivityUpdate = z.infer<typeof activityUpdateSchema>;
+export type VendorCreate = z.infer<typeof vendorCreateSchema>;
