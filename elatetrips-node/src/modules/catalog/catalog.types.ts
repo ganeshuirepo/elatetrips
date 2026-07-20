@@ -97,6 +97,12 @@ export interface CelebrationBundle {
   inclusions: string[];
   exclusions: string[];
   /**
+   * Experience-type classification (canonical tags: trek, tea, camp,
+   * bonfire, picnic, water, kids, culture, food, spa, photoshoot, dining).
+   * Powers the Local-experiences filters without text matching.
+   */
+  experiences?: string[];
+  /**
    * Combo itineraries only: the night split across nearby destinations,
    * e.g. [{dest:'ooty',nights:3},{dest:'coorg',nights:2}]. Absent = single-destination.
    * Only geographically-near destinations are ever combined (seed-enforced).

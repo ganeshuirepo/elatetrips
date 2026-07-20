@@ -131,6 +131,7 @@ const celebrationBundleSchema = new Schema<CelebrationBundle>(
     unit: String,
     inclusions: [String],
     exclusions: [String],
+    experiences: { type: [String], default: [], index: true },
     legs: { type: [{ _id: false, dest: String, nights: Number }], default: undefined },
   },
   opts,

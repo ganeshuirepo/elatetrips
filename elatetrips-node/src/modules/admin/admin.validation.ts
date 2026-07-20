@@ -37,6 +37,7 @@ export const bundleCreateSchema = z.object({
   unit: z.string().min(2),
   inclusions: z.array(z.string().min(2)).min(1),
   exclusions: strArr,
+  experiences: strArr,
   legs: z
     .array(z.object({ dest: z.string().min(2), nights: z.number().int().min(1) }))
     .optional(),
