@@ -25,6 +25,21 @@ const orderSchema = new Schema<Order>(
     contactName: { type: String, default: '' },
     contactPhone: { type: String, default: '' },
     contactEmail: { type: String, default: '' },
+    // Additive with defaults: elatetrips-node is shared, so older documents
+    // and the other apps' writes stay valid without a migration.
+    celebration: {
+      type: new Schema(
+        {
+          occasionDate: { type: String, default: '' },
+          cakeMessage: { type: String, default: '' },
+          dietary: { type: String, default: '' },
+          notes: { type: String, default: '' },
+          keepSecret: { type: Boolean, default: false },
+        },
+        { _id: false },
+      ),
+      required: false,
+    },
     coupon: { type: String, default: '' },
     discount: { type: Number, default: 0 },
     payment: {

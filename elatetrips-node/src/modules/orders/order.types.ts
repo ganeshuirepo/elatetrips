@@ -28,6 +28,16 @@ export interface PaymentInfo {
   status: 'paid';
 }
 
+/** The celebration brief captured at checkout. */
+export interface CelebrationBrief {
+  occasionDate: string;
+  cakeMessage: string;
+  dietary: string;
+  notes: string;
+  /** The surprise must not reach the person being celebrated. */
+  keepSecret: boolean;
+}
+
 /** A confirmed booking, owned by the account `phone`. */
 export interface Order {
   tripId: string;
@@ -37,6 +47,7 @@ export interface Order {
   contactName: string;
   contactPhone: string;
   contactEmail: string;
+  celebration?: CelebrationBrief;
   coupon?: string;
   discount?: number;
   payment?: PaymentInfo;
@@ -51,6 +62,7 @@ export interface CreateOrderInput {
   contactName: string;
   contactPhone: string;
   contactEmail: string;
+  celebration?: CelebrationBrief;
   coupon?: string;
   discount?: number;
   payment?: PaymentInfo;

@@ -28,6 +28,20 @@ export const createOrderSchema = z.object({
   contactName: z.string().max(120).default(''),
   contactPhone: z.string().max(15).default(''),
   contactEmail: z.string().max(160).default(''),
+  /**
+   * Celebration brief — the details that make a set-up land, and the secrecy
+   * flag. `keepSecret` means the surprise must not reach the person being
+   * celebrated: no confirmation to their address, discreet handling on site.
+   */
+  celebration: z
+    .object({
+      occasionDate: z.string().max(10).default(''),
+      cakeMessage: z.string().max(120).default(''),
+      dietary: z.string().max(240).default(''),
+      notes: z.string().max(500).default(''),
+      keepSecret: z.boolean().default(false),
+    })
+    .optional(),
   coupon: z.string().max(24).optional(),
   discount: z.number().nonnegative().optional(),
   payment: z
