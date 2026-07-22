@@ -2,6 +2,7 @@ import { Router } from 'express';
 import type { AuthController } from './auth.controller';
 import { asyncHandler } from '../../common/http/asyncHandler';
 import { validate } from '../../common/middleware/validate';
+import { bodyField, loginRateLimit, otpSendRateLimit } from '../../common/middleware/rateLimit';
 import {
   requestOtpSchema,
   verifyOtpSchema,
@@ -47,7 +48,12 @@ export function buildAuthRouter(controller: AuthController): Router {
    *       201: { description: "Account created (pending); OTP sent to chosen channel" }
    *       409: { description: Mobile/email already registered }
    */
-  router.post('/signup', validate({ body: signupSchema }), asyncHandler(controller.signup));
+  router.post(
+    '/signup',
+    otpSendRateLimit(bodyField('phone')),
+    validate({ body: signupSchema }),
+    asyncHandler(controller.signup),
+  );
 
   /**
    * @openapi
@@ -71,6 +77,7 @@ export function buildAuthRouter(controller: AuthController): Router {
    */
   router.post(
     '/verify-account',
+    loginRateLimit(bodyField('identifier')),
     validate({ body: verifyAccountSchema }),
     asyncHandler(controller.verifyAccount),
   );
@@ -96,7 +103,12 @@ export function buildAuthRouter(controller: AuthController): Router {
    *       401: { description: Invalid credentials }
    *       403: { description: Account not verified }
    */
-  router.post('/login', validate({ body: loginSchema }), asyncHandler(controller.login));
+  router.post(
+    '/login',
+    loginRateLimit(bodyField('identifier')),
+    validate({ body: loginSchema }),
+    asyncHandler(controller.login),
+  );
 
   /**
    * @openapi
@@ -118,6 +130,7 @@ export function buildAuthRouter(controller: AuthController): Router {
    */
   router.post(
     '/forgot-password',
+    otpSendRateLimit(bodyField('identifier')),
     validate({ body: forgotPasswordSchema }),
     asyncHandler(controller.forgotPassword),
   );
@@ -145,6 +158,7 @@ export function buildAuthRouter(controller: AuthController): Router {
    */
   router.post(
     '/reset-password',
+    loginRateLimit(bodyField('identifier')),
     validate({ body: resetPasswordSchema }),
     asyncHandler(controller.resetPassword),
   );
@@ -168,7 +182,12 @@ export function buildAuthRouter(controller: AuthController): Router {
    *       200: { description: OTP sent }
    *       404: { description: No account for this identifier }
    */
-  router.post('/request-otp', validate({ body: requestOtpSchema }), asyncHandler(controller.requestOtp));
+  router.post(
+    '/request-otp',
+    otpSendRateLimit(bodyField('identifier')),
+    validate({ body: requestOtpSchema }),
+    asyncHandler(controller.requestOtp),
+  );
 
   /**
    * @openapi
@@ -190,7 +209,12 @@ export function buildAuthRouter(controller: AuthController): Router {
    *       200: { description: "{ token, user }" }
    *       401: { description: Invalid or expired OTP }
    */
-  router.post('/verify-otp', validate({ body: verifyOtpSchema }), asyncHandler(controller.verifyOtp));
+  router.post(
+    '/verify-otp',
+    loginRateLimit(bodyField('identifier')),
+    validate({ body: verifyOtpSchema }),
+    asyncHandler(controller.verifyOtp),
+  );
 
   /**
    * @openapi
@@ -211,7 +235,12 @@ export function buildAuthRouter(controller: AuthController): Router {
    *       200: { description: "OTP re-sent if the account exists" }
    *       429: { description: Requested again too soon }
    */
-  router.post('/resend-otp', validate({ body: resendOtpSchema }), asyncHandler(controller.resendOtp));
+  router.post(
+    '/resend-otp',
+    otpSendRateLimit(bodyField('identifier')),
+    validate({ body: resendOtpSchema }),
+    asyncHandler(controller.resendOtp),
+  );
 
   return router;
 }

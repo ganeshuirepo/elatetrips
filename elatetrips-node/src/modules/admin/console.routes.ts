@@ -2,6 +2,7 @@ import { Router } from 'express';
 import type { ConsoleController } from './console.controller';
 import { asyncHandler } from '../../common/http/asyncHandler';
 import { validate } from '../../common/middleware/validate';
+import { bodyField, loginRateLimit } from '../../common/middleware/rateLimit';
 import { consoleGuard } from './console.guard';
 import { consoleLoginSchema, listingUpdateSchema } from './admin.validation';
 
@@ -13,7 +14,14 @@ import { consoleLoginSchema, listingUpdateSchema } from './admin.validation';
  */
 export function buildConsoleRouter(controller: ConsoleController): Router {
   const router = Router();
-  router.post('/login', validate({ body: consoleLoginSchema }), asyncHandler(controller.login));
+  // Staff console reachable from the public internet — brute force is the
+  // first thing it will meet.
+  router.post(
+    '/login',
+    loginRateLimit(bodyField('username')),
+    validate({ body: consoleLoginSchema }),
+    asyncHandler(controller.login),
+  );
   return router;
 }
 
