@@ -6,6 +6,7 @@ import type {
   Hotel,
   OptionItem,
   Celebration,
+  ExperienceFacet,
   CelebrationPackage,
   CelebrationBundle,
   Activity,
@@ -190,3 +191,19 @@ export const CelebrationBundleModel = model<CelebrationBundle>('CelebrationBundl
 export const ActivityModel = model<Activity>('Activity', activitySchema);
 export const ProductModel = model<Product>('Product', productSchema);
 export const ShopCatalogModel = model<ShopCatalog>('ShopCatalog', shopCatalogSchema);
+
+const experienceFacetSchema = new Schema<ExperienceFacet>(
+  {
+    id: { type: String, required: true, unique: true, index: true },
+    label: { type: String, required: true },
+    icon: { type: String, default: '' },
+    tags: { type: [String], default: [] },
+    order: { type: Number, default: 0, index: true },
+  },
+  opts,
+);
+
+export const ExperienceFacetModel = model<ExperienceFacet>(
+  'ExperienceFacet',
+  experienceFacetSchema,
+);

@@ -9,6 +9,7 @@ import {
   productQuerySchema,
   idParamSchema,
   availabilityBodySchema,
+  experienceFacetQuerySchema,
 } from './catalog.validation';
 
 /**
@@ -142,6 +143,27 @@ export function buildCatalogRouter(controller: CatalogController): Router {
    *       200: { description: Celebrations }
    */
   router.get('/celebrations', asyncHandler(controller.celebrations));
+
+  /**
+   * @openapi
+   * /api/v1/catalog/experience-facets:
+   *   get:
+   *     tags: [Catalog]
+   *     summary: Local-experience filters available for a place
+   *     description: >
+   *       Returns only the facets that packages at the given destinations
+   *       actually offer — Goa yields water sports, Ooty yields treks. Omit
+   *       `dest` for the full vocabulary.
+   *     parameters:
+   *       - { in: query, name: dest, schema: { type: string, example: "ooty,coorg" } }
+   *     responses:
+   *       200: { description: Facets with id, label, icon and tags }
+   */
+  router.get(
+    '/experience-facets',
+    validate({ query: experienceFacetQuerySchema }),
+    asyncHandler(controller.experienceFacets),
+  );
 
   /**
    * @openapi

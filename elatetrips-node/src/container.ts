@@ -1,6 +1,7 @@
 import type { RequestHandler } from 'express';
 import { env } from './config/env';
 
+import type { ExperienceFacet } from './modules/catalog/catalog.types';
 import { MongoReadRepository } from './repositories/MongoReadRepository';
 import {
   DestinationModel,
@@ -9,6 +10,7 @@ import {
   HotelModel,
   OptionModel,
   CelebrationModel,
+  ExperienceFacetModel,
   PackageModel,
   CelebrationBundleModel,
   ActivityModel,
@@ -92,6 +94,7 @@ export function createContainer(): Container {
   const roomsRepo = new MongoReadRepository<any>(RoomModel);
   const optionsRepo = new MongoReadRepository<any>(OptionModel);
   const celebrationsRepo = new MongoReadRepository<any>(CelebrationModel);
+  const experienceFacetsRepo = new MongoReadRepository<ExperienceFacet>(ExperienceFacetModel);
   const packagesRepo = new MongoReadRepository<any>(PackageModel);
   const bundlesRepo = new MongoReadRepository<CelebrationBundle>(CelebrationBundleModel);
   const activitiesRepo = new MongoReadRepository<any>(ActivityModel);
@@ -118,6 +121,7 @@ export function createContainer(): Container {
     hotels: hotelsRepo,
     options: optionsRepo,
     celebrations: celebrationsRepo,
+    experienceFacets: experienceFacetsRepo,
     packages: packagesRepo,
     bundles: bundlesRepo,
     activities: activitiesRepo,

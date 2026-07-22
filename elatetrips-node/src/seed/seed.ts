@@ -7,6 +7,7 @@ import {
   HotelModel,
   OptionModel,
   CelebrationModel,
+  ExperienceFacetModel,
   PackageModel,
   CelebrationBundleModel,
   ActivityModel,
@@ -26,6 +27,7 @@ import {
   propertyTypes,
   hotelActivities,
   celebrations,
+  experienceFacets,
   packages,
   celebrationBundles,
   adventures,
@@ -79,6 +81,13 @@ async function seed(): Promise<void> {
         CelebrationModel.insertMany(
           celebrations.map((c) => ({ ...c, category: celebCategoryFor(c.id) })),
         )
+      ),
+    ],
+    [
+      'experienceFacets',
+      async () => (
+        await ExperienceFacetModel.deleteMany({}),
+        ExperienceFacetModel.insertMany(experienceFacets)
       ),
     ],
     [

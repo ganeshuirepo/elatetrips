@@ -47,6 +47,13 @@ export class CatalogController {
   celebrations = async (_req: Request, res: Response): Promise<Response> =>
     ok(res, await this.service.listCelebrations());
 
+  /** GET /catalog/experience-facets?dest=ooty,coorg — place-aware filters. */
+  experienceFacets = async (req: Request, res: Response): Promise<Response> => {
+    const raw = typeof req.query.dest === 'string' ? req.query.dest : '';
+    const destIds = raw.split(',').map((d) => d.trim()).filter(Boolean);
+    return ok(res, await this.service.listExperienceFacets(destIds));
+  };
+
   packages = async (_req: Request, res: Response): Promise<Response> =>
     ok(res, await this.service.listPackages());
 

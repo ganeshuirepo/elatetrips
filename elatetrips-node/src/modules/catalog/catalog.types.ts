@@ -180,3 +180,19 @@ export interface AvailabilityResult {
   holdMinutes?: number;
   message: string;
 }
+
+/**
+ * A local-experience filter offered on the packages screen. Which ones appear
+ * depends on the place: Goa surfaces water sports, Ooty treks — derived by
+ * matching `tags` against the `experiences` tags of that place's packages,
+ * so adding a package with a new tag lights its facet up automatically.
+ */
+export interface ExperienceFacet {
+  id: string;
+  label: string;
+  icon: string;
+  /** Canonical package experience tags this facet covers. */
+  tags: string[];
+  /** Display order, low first. */
+  order: number;
+}

@@ -11,6 +11,7 @@ import type {
   Hotel,
   OptionItem,
   Celebration,
+  ExperienceFacet,
   CelebrationPackage,
   CelebrationBundle,
   Activity,
@@ -28,6 +29,7 @@ export interface CatalogRepositories {
   hotels: IHotelRepository;
   options: IReadRepository<OptionItem>;
   celebrations: IReadRepository<Celebration>;
+  experienceFacets: IReadRepository<ExperienceFacet>;
   packages: IReadRepository<CelebrationPackage>;
   bundles: IReadRepository<CelebrationBundle>;
   activities: IReadRepository<Activity>;
@@ -102,6 +104,28 @@ export class CatalogService {
 
   listCelebrations(): Promise<Celebration[]> {
     return this.repos.celebrations.findAll();
+  }
+
+  /**
+   * The experience filters worth offering for a set of destinations: a facet
+   * appears only when a package there carries one of its tags, so Goa returns
+   * water sports and Ooty returns treks without either being hard-coded.
+   *
+   * No destination ids = the whole vocabulary (admin and discovery views).
+   */
+  async listExperienceFacets(destIds: string[]): Promise<ExperienceFacet[]> {
+    const facets = (await this.repos.experienceFacets.findAll()).sort(
+      (a, b) => a.order - b.order,
+    );
+    if (destIds.length === 0) return facets;
+
+    const bundles = await this.repos.bundles.findAll();
+    const inScope = bundles.filter((b) => {
+      const dests = b.legs?.length ? b.legs.map((l) => l.dest) : [b.dest];
+      return dests.some((d) => destIds.includes(d));
+    });
+    const present = new Set(inScope.flatMap((b) => b.experiences ?? []));
+    return facets.filter((f) => f.tags.some((t) => present.has(t)));
   }
 
   listPackages(): Promise<CelebrationPackage[]> {

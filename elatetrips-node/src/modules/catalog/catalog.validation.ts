@@ -53,3 +53,8 @@ export const availabilityBodySchema = z.object({
   nights: z.coerce.number().int().min(1).max(30),
   rooms: z.coerce.number().int().min(1).max(5),
 });
+
+/** Comma-separated destination ids, e.g. ?dest=ooty,coorg. Optional. */
+export const experienceFacetQuerySchema = z.object({
+  dest: z.string().max(200).optional(),
+});
