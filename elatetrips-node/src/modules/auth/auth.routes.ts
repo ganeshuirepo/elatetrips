@@ -1,3 +1,22 @@
+/**
+ * Auth router — all PUBLIC (no authGuard; this is where user JWTs are minted).
+ *
+ * Every route runs the same chain: rate-limit -> validate(Zod body schema) ->
+ * asyncHandler(controller.method). The controller (auth.controller) is a thin
+ * transport shim that unpacks req.body and calls AuthService (auth.service),
+ * where all the logic lives.
+ *
+ * Two rate-limit families guard the sensitive routes — both keyed on client IP
+ * PLUS the submitted identifier (see common/middleware/rateLimit), so one
+ * attacker can't lock out every account and a shared office NAT isn't punished
+ * for one bad actor:
+ *   - otpSendRateLimit (5 / 15 min): routes that trigger an outbound SMS/email
+ *     (signup, forgot-password, request-otp, resend-otp). Every send is a real
+ *     provider bill, so the cap is tight — this is cost control, not just abuse.
+ *   - loginRateLimit  (10 / 15 min): routes that check a secret, i.e. a password
+ *     or an OTP (login, verify-account, verify-otp, reset-password). Slows
+ *     credential / OTP brute force.
+ */
 import { Router } from 'express';
 import type { AuthController } from './auth.controller';
 import { asyncHandler } from '../../common/http/asyncHandler';

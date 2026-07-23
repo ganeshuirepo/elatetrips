@@ -1,3 +1,14 @@
+/**
+ * CatalogController — the HTTP layer for /api/v1/catalog. One method per route
+ * (wired in catalog.routes). Each method: reads the already-validated request,
+ * delegates to CatalogService, and writes the result through ok() so every
+ * response shares the { success, data, meta? } envelope (see common/http/ApiResponse).
+ *
+ * Note on the `req.query as ...` casts below: the validate() middleware has
+ * already run the matching Zod schema and REPLACED req.query with the coerced
+ * result (CSV strings → arrays, numeric strings → numbers), so these casts
+ * describe the post-validation shape rather than re-checking it.
+ */
 import type { Request, Response } from 'express';
 import type { CatalogService } from './catalog.service';
 import { ok } from '../../common/http/ApiResponse';
@@ -32,6 +43,8 @@ export class CatalogController {
       maxPrice: q.maxPrice as number | undefined,
     };
     const hotels = await this.service.listHotels(filter);
+    // List endpoints attach meta.count so clients get the result size without
+    // walking the array (same pattern in celebrationBundles and products).
     return ok(res, hotels, { count: hotels.length });
   };
 

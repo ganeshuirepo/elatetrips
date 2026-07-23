@@ -1,3 +1,9 @@
+/**
+ * Mongoose model for the `console_users` collection — the login accounts behind
+ * the admin/vendor dashboards (distinct from app users). A vendor row is bound
+ * to exactly one catalog listing through vendorType + refId (see below); admin
+ * rows leave those blank. username is unique + indexed so logins hit the index.
+ */
 import { Schema, model } from 'mongoose';
 
 /** Console accounts: Elate admins and onboarded vendors. */

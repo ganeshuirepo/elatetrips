@@ -1,6 +1,13 @@
 import { z } from 'zod';
 
-/** Admin console payloads: create takes the full shape, update a partial. */
+/**
+ * Zod schemas + inferred types for the admin & console routes. Catalog payloads
+ * come in create/update pairs: create takes the full shape, update is
+ * `.omit({ id }).partial()` — same fields, all optional, id not patchable. The
+ * file also holds the console-login and vendor-onboarding schemas and the route
+ * param schemas. Note vendorCreateSchema.refine: refId is required for every
+ * vendorType except 'ground' (ground crew have no catalog listing to bind to).
+ */
 
 const strArr = z.array(z.string()).default([]);
 

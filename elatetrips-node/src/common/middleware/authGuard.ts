@@ -14,6 +14,9 @@ export function buildAuthGuard(tokenService: ITokenService): RequestHandler {
     }
     const token = header.slice('Bearer '.length).trim();
     try {
+      // On success the verified principal is attached to req.user for downstream
+      // controllers; verification failures (expired/invalid token) are handed to
+      // the central error handler rather than turned into a response here.
       req.user = tokenService.verify(token);
       next();
     } catch (err) {

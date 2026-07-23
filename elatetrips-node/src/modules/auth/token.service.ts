@@ -3,7 +3,14 @@ import { env } from '../../config/env';
 import { UnauthorizedError } from '../../common/errors/AppError';
 import type { ITokenService, TokenPayload } from './auth.types';
 
-/** JWT implementation of the token abstraction. */
+/**
+ * User JWT adapter (ITokenService) — signs/verifies the tokens app users carry.
+ * Claims are just { phone }; expiry comes from env.jwtExpiresIn. verify() maps
+ * ANY failure (bad signature, expiry, missing phone) to UnauthorizedError, so
+ * the authGuard uniformly answers 401. Note the console (admin/vendor) scope
+ * uses a SEPARATE token in console.token, tagged scope:'console' — a user token
+ * can therefore never satisfy the console guard even though both share jwtSecret.
+ */
 export class JwtTokenService implements ITokenService {
   sign(payload: TokenPayload): string {
     return jwt.sign(payload, env.jwtSecret, {

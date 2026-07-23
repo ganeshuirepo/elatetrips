@@ -19,6 +19,8 @@ export class HotelRepository extends MongoReadRepository<Hotel> implements IHote
     super(HotelModel);
   }
 
+  // Called by CatalogService.listHotels for GET /hotels. Only provided filters
+  // are added to the query; an empty filter returns every hotel.
   async findFiltered(filter: HotelFilter): Promise<Hotel[]> {
     const query: Record<string, unknown> = {};
 

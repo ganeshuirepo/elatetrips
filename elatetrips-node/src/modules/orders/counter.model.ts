@@ -1,3 +1,10 @@
+/**
+ * A tiny shared counters collection — one document per named sequence (e.g.
+ * "order"), each holding a monotonically increasing `seq`. It exists so trip ids
+ * can be minted uniquely without races; the orders repository calls nextSequence
+ * to build each ELT-<number>. Generic on purpose: any module can key its own
+ * sequence by name.
+ */
 import { Schema, model } from 'mongoose';
 
 interface Counter {

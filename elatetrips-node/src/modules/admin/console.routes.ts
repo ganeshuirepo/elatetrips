@@ -1,3 +1,14 @@
+/**
+ * Console routers for the admin/vendor dashboards (two separate mounts):
+ *   - buildConsoleRouter -> POST /console/login, PUBLIC. loginRateLimit guards
+ *     it (a public staff login is a prime brute-force target), then validate,
+ *     then ConsoleService.login issues a scope:'console' token.
+ *   - buildVendorRouter  -> /vendor/* behind consoleGuard('vendor','admin'):
+ *     the vendor's own profile + their ONE listing + their bookings. 'admin' is
+ *     accepted too so staff can inspect any vendor surface.
+ * consoleGuard verifies the Bearer token and drops its claims on
+ * res.locals.console for the controller to read.
+ */
 import { Router } from 'express';
 import type { ConsoleController } from './console.controller';
 import { asyncHandler } from '../../common/http/asyncHandler';

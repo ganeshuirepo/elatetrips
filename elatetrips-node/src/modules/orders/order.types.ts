@@ -1,3 +1,11 @@
+/**
+ * Domain types for the orders module — the vocabulary shared by the controller,
+ * service, repository and model. `Order` is the canonical shape read back from
+ * storage; `CreateOrderInput` is the trusted subset a client may send. The
+ * server assigns everything else — phone (from the JWT), tripId, status and the
+ * createdAt/updatedAt timestamps — so those are absent from CreateOrderInput.
+ */
+
 /** One cart line (surprise gift, service or stay) included in the order. */
 export interface OrderItem {
   label: string;

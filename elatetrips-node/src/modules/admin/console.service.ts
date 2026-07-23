@@ -115,10 +115,14 @@ export class ConsoleService {
 
   /** Admin onboarding: register the vendor and hand back their credentials. */
   async createVendor(input: VendorCreate): Promise<Omit<VendorProfile, 'listing'>> {
+    // Usernames are stored and looked up lowercase, so logins are case-insensitive.
     const username = input.username.toLowerCase();
     if (await this.repos.users.findOne({ username })) {
       throw new BadRequestError('Username already taken');
     }
+    // Bind only to a listing that actually exists — reject dangling refIds up
+    // front so the vendor never logs into an empty dashboard. 'ground' crew have
+    // no listing, so they skip the check.
     if (input.vendorType !== 'ground') {
       const listing = await this.resolveListing(input.vendorType, input.refId ?? '');
       if (!listing) throw new NotFoundError('No listing found for that reference');
@@ -151,6 +155,15 @@ export class ConsoleService {
     }));
   }
 
+  /**
+   * The vendor <-> ONE-listing binding, decoded from vendorType + refId:
+   *   hotel      -> hotels collection, id = refId
+   *   cab        -> vehicles collection, id = refId
+   *   experience -> activities collection, refId encodes "kind:id" (split here)
+   *   ground     -> transport crew, no catalog listing -> null
+   * This single lookup is what scopes every vendor view (me / updateListing /
+   * vendorOrders) to exactly one catalog row.
+   */
   private async resolveListing(
     type: VendorType | undefined,
     refId: string,

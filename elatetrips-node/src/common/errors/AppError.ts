@@ -13,7 +13,11 @@ export class AppError extends Error {
     this.statusCode = statusCode;
     this.isOperational = true;
     this.details = details;
+    // Restore the prototype chain: subclassing a built-in (Error) via transpiled
+    // output otherwise leaves instances as plain Error at runtime, which would
+    // break the `instanceof AppError` checks the error handler relies on.
     Object.setPrototypeOf(this, new.target.prototype);
+    // Drop this constructor frame from the captured stack for cleaner traces.
     Error.captureStackTrace(this, this.constructor);
   }
 }

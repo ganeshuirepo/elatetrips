@@ -1,3 +1,9 @@
+/**
+ * Zod schemas that guard the catalog endpoints. The validate() middleware runs
+ * these against req.params/query/body at the route edge and REPLACES those parts
+ * with the parsed + coerced result, so controllers get typed, clean data and
+ * never re-check shapes. catalog.routes maps each schema to its route.
+ */
 import { z } from 'zod';
 
 /** Comma-separated query param → string[] (e.g. ?amenities=pool,spa). */
@@ -6,6 +12,7 @@ const csv = z
   .optional()
   .transform((v) => (v ? v.split(',').map((s) => s.trim()).filter(Boolean) : undefined));
 
+// Comma-separated numeric query param → number[]; non-numeric entries are dropped.
 const csvNumbers = z
   .string()
   .optional()
@@ -18,6 +25,8 @@ const csvNumbers = z
       : undefined,
   );
 
+// Guards GET /hotels: mirrors the HotelFilter DTO. Multi-select facets arrive as
+// CSV and become arrays; maxPrice is coerced to a positive number.
 export const hotelListQuerySchema = z.object({
   stars: csvNumbers,
   types: csv,
@@ -29,14 +38,18 @@ export const hotelListQuerySchema = z.object({
   maxPrice: z.coerce.number().positive().optional(),
 });
 
+// Guards GET /activities: optional `kind` restricted to the two known values.
 export const activityQuerySchema = z.object({
   kind: z.enum(['adventure', 'experience']).optional(),
 });
 
+// Guards GET /celebration-bundles: optional single-destination filter, bounded.
 export const bundleQuerySchema = z.object({
   dest: z.string().trim().min(1).max(40).optional(),
 });
 
+// Guards GET /products: optional shop/category plus coerced numeric ranges
+// (minRating clamped to 0–5). Absent fields mean "no bound".
 export const productQuerySchema = z.object({
   shop: z.enum(['gifts', 'medical']).optional(),
   cat: z.string().optional(),
@@ -45,8 +58,11 @@ export const productQuerySchema = z.object({
   minRating: z.coerce.number().min(0).max(5).optional(),
 });
 
+// Guards any :id path param — must be a non-empty string.
 export const idParamSchema = z.object({ id: z.string().min(1) });
 
+// Guards the POST /hotels/:id/availability body. checkin must be an ISO date;
+// nights/rooms are bounded to sane ranges so a single request can't over-reserve.
 export const availabilityBodySchema = z.object({
   roomId: z.string().trim().min(1).max(40),
   checkin: z.string().trim().regex(/^\d{4}-\d{2}-\d{2}$/, 'checkin must be YYYY-MM-DD'),

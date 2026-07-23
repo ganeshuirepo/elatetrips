@@ -7,6 +7,8 @@ import { logger } from '../common/logger';
  * the transport layer and the data layer can evolve independently.
  */
 export async function connectDatabase(): Promise<typeof mongoose> {
+  // Pin strictQuery so filter fields not declared in the schema are stripped from
+  // queries, and so this behaviour doesn't flip across Mongoose major versions.
   mongoose.set('strictQuery', true);
   const conn = await mongoose.connect(env.mongoUri);
   logger.info(`MongoDB connected: ${conn.connection.host}/${conn.connection.name}`);

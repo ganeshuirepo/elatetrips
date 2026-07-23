@@ -1,3 +1,12 @@
+/**
+ * CatalogService — the business-logic layer of the catalog module, sitting
+ * between CatalogController and the repositories. Most methods are thin
+ * pass-throughs to a read repository; the ones that carry real logic are
+ * checkAvailability (hold simulation), listHotelOptions (group-by), and
+ * listExperienceFacets (place-aware facet derivation). It depends only on the
+ * IReadRepository / IHotelRepository contracts, never on Mongoose, so it can be
+ * unit-tested with in-memory fakes.
+ */
 import { randomUUID } from 'node:crypto';
 import type { IReadRepository } from '../../common/interfaces/IReadRepository';
 import type { IHotelRepository } from './hotel.repository';
@@ -141,6 +150,11 @@ export class CatalogService {
     return this.repos.activities.findAll(kind ? { kind } : {});
   }
 
+  /**
+   * Translate the UI product filters into a single Mongo query. Only provided
+   * fields are added (an absent filter matches everything); min/maxPrice are
+   * merged into one `price` range object so both bounds apply together.
+   */
   listProducts(filter: ProductFilter = {}): Promise<Product[]> {
     const query: Record<string, unknown> = {};
     if (filter.shop) query.shop = filter.shop;

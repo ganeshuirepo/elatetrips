@@ -1,3 +1,10 @@
+/**
+ * Auth ports — the interfaces AuthService depends on, so the use cases stay free
+ * of JWT / bcrypt / Brevo-Twilio / Mongoose (Dependency Inversion). Concrete
+ * adapters live beside this file: token.service (ITokenService), password.service
+ * (IPasswordHasher), otp.store (IOtpStore), otp.sender (IOtpSender).
+ */
+
 /** JWT claims carried for an authenticated user. */
 export interface TokenPayload {
   phone: string;

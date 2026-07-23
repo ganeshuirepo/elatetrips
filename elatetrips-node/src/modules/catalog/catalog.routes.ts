@@ -1,3 +1,19 @@
+/**
+ * Catalog router — read-only reference-data endpoints mounted under
+ * /api/v1/catalog. This is the entry point of the request path for the module.
+ *
+ * Wiring pattern for every route below:
+ *   router.<verb>(path, [validate({...})], asyncHandler(controller.method))
+ *   - validate(): parses + coerces params/query/body with the Zod schemas from
+ *     catalog.validation and REPLACES those req parts, so the controller reads
+ *     clean, typed data (see common/middleware/validate).
+ *   - asyncHandler(): forwards a rejected promise to Express error middleware
+ *     instead of crashing the process (see common/http/asyncHandler).
+ *   - controller.method: the matching CatalogController handler.
+ * The @openapi blocks document each endpoint's URL, params and responses; the
+ * short inline note on each route adds what the doc block omits — the exact
+ * controller method and which schema (if any) guards it.
+ */
 import { Router } from 'express';
 import type { CatalogController } from './catalog.controller';
 import { asyncHandler } from '../../common/http/asyncHandler';
@@ -30,6 +46,7 @@ export function buildCatalogRouter(controller: CatalogController): Router {
    *     responses:
    *       200: { description: Destinations }
    */
+  // → CatalogController.destinations — no input validation (no request params).
   router.get('/destinations', asyncHandler(controller.destinations));
 
   /**
@@ -41,6 +58,7 @@ export function buildCatalogRouter(controller: CatalogController): Router {
    *     responses:
    *       200: { description: Vehicles }
    */
+  // → CatalogController.vehicles — no input validation.
   router.get('/vehicles', asyncHandler(controller.vehicles));
 
   /**
@@ -52,6 +70,7 @@ export function buildCatalogRouter(controller: CatalogController): Router {
    *     responses:
    *       200: { description: Rooms }
    */
+  // → CatalogController.rooms — no input validation.
   router.get('/rooms', asyncHandler(controller.rooms));
 
   /**
@@ -72,6 +91,8 @@ export function buildCatalogRouter(controller: CatalogController): Router {
    *     responses:
    *       200: { description: Filtered hotel list }
    */
+  // → CatalogController.hotels — validates query with hotelListQuerySchema
+  //   (CSV params become string[]/number[], maxPrice coerced to a number).
   router.get('/hotels', validate({ query: hotelListQuerySchema }), asyncHandler(controller.hotels));
 
   /**
@@ -86,6 +107,8 @@ export function buildCatalogRouter(controller: CatalogController): Router {
    *       200: { description: Hotel }
    *       404: { description: Not found }
    */
+  // → CatalogController.hotelById — validates the :id path param (idParamSchema).
+  //   Service throws NotFoundError (→ 404) when no hotel has that id.
   router.get(
     '/hotels/:id',
     validate({ params: idParamSchema }),
@@ -116,6 +139,8 @@ export function buildCatalogRouter(controller: CatalogController): Router {
    *       200: { description: Availability result (holdRef + expiresAt when available) }
    *       404: { description: Hotel not found }
    */
+  // → CatalogController.hotelAvailability — validates BOTH the :id param and the
+  //   JSON body (availabilityBodySchema: roomId, checkin YYYY-MM-DD, nights, rooms).
   router.post(
     '/hotels/:id/availability',
     validate({ params: idParamSchema, body: availabilityBodySchema }),
@@ -131,6 +156,7 @@ export function buildCatalogRouter(controller: CatalogController): Router {
    *     responses:
    *       200: { description: Grouped option items }
    */
+  // → CatalogController.hotelOptions — no validation; service groups options by category.
   router.get('/hotel-options', asyncHandler(controller.hotelOptions));
 
   /**
@@ -142,6 +168,7 @@ export function buildCatalogRouter(controller: CatalogController): Router {
    *     responses:
    *       200: { description: Celebrations }
    */
+  // → CatalogController.celebrations — no input validation.
   router.get('/celebrations', asyncHandler(controller.celebrations));
 
   /**
@@ -159,6 +186,8 @@ export function buildCatalogRouter(controller: CatalogController): Router {
    *     responses:
    *       200: { description: Facets with id, label, icon and tags }
    */
+  // → CatalogController.experienceFacets — validates query (experienceFacetQuerySchema
+  //   only bounds `dest` length; the controller splits the CSV into ids itself).
   router.get(
     '/experience-facets',
     validate({ query: experienceFacetQuerySchema }),
@@ -174,6 +203,7 @@ export function buildCatalogRouter(controller: CatalogController): Router {
    *     responses:
    *       200: { description: Packages }
    */
+  // → CatalogController.packages — no input validation.
   router.get('/packages', asyncHandler(controller.packages));
 
   /**
@@ -187,6 +217,8 @@ export function buildCatalogRouter(controller: CatalogController): Router {
    *     responses:
    *       200: { description: Celebration bundles }
    */
+  // → CatalogController.celebrationBundles — validates query (bundleQuerySchema:
+  //   optional `dest` filter, trimmed, 1–40 chars).
   router.get(
     '/celebration-bundles',
     validate({ query: bundleQuerySchema }),
@@ -204,6 +236,8 @@ export function buildCatalogRouter(controller: CatalogController): Router {
    *     responses:
    *       200: { description: Activities }
    */
+  // → CatalogController.activities — validates query (activityQuerySchema:
+  //   optional kind ∈ {adventure, experience}).
   router.get(
     '/activities',
     validate({ query: activityQuerySchema }),
@@ -225,6 +259,8 @@ export function buildCatalogRouter(controller: CatalogController): Router {
    *     responses:
    *       200: { description: Filtered products }
    */
+  // → CatalogController.products — validates query (productQuerySchema: shop, cat,
+  //   min/maxPrice, minRating 0–5, all coerced and optional).
   router.get(
     '/products',
     validate({ query: productQuerySchema }),
@@ -240,6 +276,7 @@ export function buildCatalogRouter(controller: CatalogController): Router {
    *     responses:
    *       200: { description: Shop catalogs }
    */
+  // → CatalogController.shopCatalogs — no input validation.
   router.get('/shops', asyncHandler(controller.shopCatalogs));
 
   return router;

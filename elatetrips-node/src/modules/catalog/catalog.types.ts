@@ -1,5 +1,6 @@
 /** Catalog DTOs — mirror the frontend domain types so the API is a drop-in source. */
 
+/** A place users can book into; `id` (e.g. "ooty") is the stable lookup key. */
 export interface Destination {
   id: string;
   name: string;
@@ -12,6 +13,7 @@ export interface Destination {
   lon: number;
 }
 
+/** A cab type: `max` seats, `rate` per km outstation, `localRate` per km in-city. */
 export interface Vehicle {
   id: string;
   name: string;
@@ -21,6 +23,7 @@ export interface Vehicle {
   localRate: number;
 }
 
+/** A room type; `mult` is the nightly-price multiplier applied to the base rate. */
 export interface Room {
   id: string;
   name: string;
@@ -30,6 +33,7 @@ export interface Room {
   occ: string;
 }
 
+/** A hotel; the array fields (amenities, activities, …) are the filterable facets. */
 export interface Hotel {
   id: string;
   name: string;
@@ -47,6 +51,7 @@ export interface Hotel {
   climate: string[];
 }
 
+/** One selectable hotel-filter option, tagged with the `group` it belongs to. */
 export interface OptionItem {
   group: string;
   id: string;

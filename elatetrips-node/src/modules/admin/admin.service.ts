@@ -112,6 +112,8 @@ export class AdminService {
   }
 
   async createActivity(input: ActivityCreate): Promise<Activity> {
+    // Activities are keyed by (kind, id), so the slug only needs to be unique
+    // *within* its kind — pass kind as extra match criteria to uniqueId.
     const id =
       input.id ??
       (await this.uniqueId(this.repos.activities, slugify(input.name), { kind: input.kind }));

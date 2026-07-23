@@ -87,6 +87,21 @@ export interface Container {
   };
 }
 
+/**
+ * Wiring runs bottom-up, so every dependency exists before whatever consumes it:
+ *   1. Repositories (data layer) wrap Mongoose models behind the read/write
+ *      interfaces — the generic MongoReadRepository for plain catalog lookups,
+ *      bespoke repositories (HotelRepository, OrderRepository, …) where a module
+ *      needs custom queries.
+ *   2. Cross-cutting auth primitives (token / OTP / password) shared by several
+ *      services.
+ *   3. Services (use cases) receive their repositories + primitives by
+ *      constructor injection — they never `new` a dependency themselves, which is
+ *      what keeps them testable and swappable.
+ *   4. Controllers receive their service and are handed back in `controllers`,
+ *      alongside the pre-built guards. buildApiRouter (routes/index.ts) mounts
+ *      each controller under /api/v1 and applies the guards where routes need auth.
+ */
 export function createContainer(): Container {
   // Repositories (data layer)
   const destinationsRepo = new MongoReadRepository<any>(DestinationModel);

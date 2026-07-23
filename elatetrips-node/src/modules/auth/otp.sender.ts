@@ -1,3 +1,12 @@
+/**
+ * OTP delivery adapters (IOtpSender). One class per provider — console (dev),
+ * Brevo (email), Twilio & Fast2SMS (SMS) — plus ChannelRoutingOtpSender, which
+ * fans a code to the right provider by channel. buildOtpSender picks the
+ * providers ONCE at startup from env, falling back to the console sender for any
+ * channel with no provider configured, so the whole OTP flow works with zero
+ * third-party accounts. A failed send throws 502 so the caller sees a real
+ * error rather than a silently-undelivered code.
+ */
 import { env } from '../../config/env';
 import { logger } from '../../common/logger';
 import { AppError } from '../../common/errors/AppError';

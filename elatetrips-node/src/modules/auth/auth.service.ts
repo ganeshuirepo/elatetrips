@@ -40,6 +40,7 @@ export class AuthService {
     private readonly autoActivate: boolean = false,
   ) {}
 
+  /** Mint a user JWT (claims = the user's phone) and pair it with the user. */
   private session(user: User): SessionResult {
     return { token: this.tokenService.sign({ phone: user.phone }), user };
   }
@@ -80,10 +81,14 @@ export class AuthService {
   // ---- Signup + account verification ----------------------------------------
 
   async signup(data: SignupData, verifyVia: VerifyChannel): Promise<OtpResult | SessionResult> {
+    // A pending (never-verified) signup may be re-attempted; an active one may not.
     const byPhone = await this.users.findByIdentifier(data.phone);
     if (byPhone && byPhone.status !== 'pending') {
       throw new AppError(409, 'An account with this mobile number already exists');
     }
+    // Reject when the email is taken by an active account, OR by a *different*
+    // person's pending signup (same email, different phone) — that would let one
+    // user hijack an email another user is mid-signup with.
     const byEmail = await this.users.findByIdentifier(data.email);
     if (byEmail && (byEmail.status !== 'pending' || byEmail.phone !== data.phone)) {
       throw new AppError(409, 'An account with this email already exists');

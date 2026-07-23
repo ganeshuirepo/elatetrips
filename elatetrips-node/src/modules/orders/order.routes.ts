@@ -1,3 +1,17 @@
+/**
+ * Orders module — HTTP route table (mounted at /api/v1/orders by src/routes/index.ts).
+ *
+ * Maps each URL to an OrderController method and the middleware that runs before
+ * it. authGuard is applied router-wide, so EVERY order endpoint requires a valid
+ * JWT and operates only on the trips owned by the caller's mobile number.
+ *
+ * Per-route request pipeline:
+ *   authGuard (router-wide)  ->  validate(schema)  ->  asyncHandler(controller.method)
+ *   - validate() parses and REPLACES req.body/req.params with typed, defaulted
+ *     data (common/middleware/validate), so the controller never re-checks shapes.
+ *   - asyncHandler() routes any rejected promise to the central error middleware.
+ * The @openapi blocks below double as the Swagger source for these same routes.
+ */
 import { Router, type RequestHandler } from 'express';
 import type { OrderController } from './order.controller';
 import { asyncHandler } from '../../common/http/asyncHandler';
@@ -54,6 +68,8 @@ export function buildOrderRouter(controller: OrderController, authGuard: Request
    *       201: { description: Created order with its trip id }
    *       401: { description: Unauthorized }
    */
+  // POST /api/v1/orders -> controller.create. Body validated/defaulted by
+  // createOrderSchema; the new trip id and owner phone are assigned server-side.
   router.post('/', validate({ body: createOrderSchema }), asyncHandler(controller.create));
 
   /**
@@ -67,6 +83,8 @@ export function buildOrderRouter(controller: OrderController, authGuard: Request
    *       200: { description: Orders for this mobile number }
    *       401: { description: Unauthorized }
    */
+  // GET /api/v1/orders -> controller.listMine. No input to validate; the result
+  // is implicitly scoped to the phone on the JWT.
   router.get('/', asyncHandler(controller.listMine));
 
   /**
@@ -83,6 +101,9 @@ export function buildOrderRouter(controller: OrderController, authGuard: Request
    *       403: { description: Belongs to another account }
    *       404: { description: Not found }
    */
+  // GET /api/v1/orders/:tripId -> controller.getOne. tripIdParamSchema enforces
+  // the ELT-<number> format before lookup; the service then enforces ownership
+  // (403 if the trip exists but belongs to another account).
   router.get(
     '/:tripId',
     validate({ params: tripIdParamSchema }),

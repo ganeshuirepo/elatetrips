@@ -1,3 +1,14 @@
+/**
+ * Zod request schemas for the orders API — the validation contract at the HTTP
+ * edge. The validate() middleware (common/middleware/validate) parses req.body /
+ * req.params against these and REPLACES them with the typed, defaulted result, so
+ * the controller and service receive clean data and never re-check shapes.
+ *
+ * Defaults here (empty strings, empty arrays, qty=1) let downstream code treat
+ * optional fields as present. These schemas bound only the INPUT: the coupon
+ * discount is still recomputed and re-verified in OrderService (see coupons.ts),
+ * so passing validation here does NOT by itself authorise any discount.
+ */
 import { z } from 'zod';
 
 const summarySchema = z.object({
@@ -54,6 +65,8 @@ export const createOrderSchema = z.object({
   summary: summarySchema,
 });
 
+// Guards the :tripId route param: must be ELT-<digits> (the format minted in
+// order.repository), rejecting malformed ids before any DB lookup.
 export const tripIdParamSchema = z.object({
   tripId: z.string().regex(/^ELT-\d+$/, 'Invalid trip id'),
 });

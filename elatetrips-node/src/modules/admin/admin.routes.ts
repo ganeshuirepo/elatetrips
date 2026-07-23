@@ -1,3 +1,13 @@
+/**
+ * Admin console router — catalog CRUD plus vendor onboarding. EVERY route sits
+ * behind `guard` (applied once via router.use): buildAdminGuard from
+ * console.guard, which accepts either the shared x-admin-key header OR an
+ * admin-role console Bearer token. Two controllers back it: AdminController owns
+ * the mocked catalog (hotels / packages / vehicles / activities, plus the
+ * overview + orders feeds the dashboard reads); ConsoleController owns vendor
+ * accounts. Per route the chain is guard -> validate(Zod) ->
+ * asyncHandler(controller.method), with logic in the matching service.
+ */
 import { Router } from 'express';
 import type { RequestHandler } from 'express';
 import type { AdminController } from './admin.controller';

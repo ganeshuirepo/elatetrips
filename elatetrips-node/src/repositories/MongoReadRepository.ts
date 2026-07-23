@@ -22,6 +22,9 @@ export class MongoReadRepository<T> implements IReadRepository<T> {
   }
 
   async findById(id: string): Promise<T | null> {
+    // Looks up the domain `id` field, not Mongo's `_id`. Every collection here
+    // carries a stable business id (e.g. "hotel-123") — that is what clients pass
+    // and what the `-_id` projection exposes, so `_id` is never used for lookup.
     return this.model.findOne({ id }).select(this.projection).lean<T>().exec();
   }
 

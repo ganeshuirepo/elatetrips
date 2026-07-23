@@ -1,3 +1,10 @@
+/**
+ * Zod schemas for the auth routes. The validate middleware parses req.body
+ * against these BEFORE the controller runs and replaces req.body with the typed,
+ * coerced result — so the controller/service can trust the shape and never
+ * re-check it. Small reusable primitives (phone, otp, password, identifier) are
+ * shared across schemas to keep the rules in one place.
+ */
 import { z } from 'zod';
 
 const phone = z.string().regex(/^\d{10}$/, 'Mobile number must be exactly 10 digits');

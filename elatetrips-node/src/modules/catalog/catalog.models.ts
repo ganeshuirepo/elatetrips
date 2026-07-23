@@ -20,8 +20,11 @@ import type {
  * stable string `id` (e.g. "h1", "ooty") used for lookups instead of _id.
  */
 
+// Shared schema options: drop Mongoose's `__v` version key from stored docs.
 const opts = { versionKey: false } as const;
 
+// Destinations/cities shown in pickers. `kind` is indexed so queries can split
+// full-app destinations from experiences-only cities.
 const destinationSchema = new Schema<Destination>(
   {
     id: { type: String, required: true, unique: true, index: true },
@@ -36,6 +39,7 @@ const destinationSchema = new Schema<Destination>(
   opts,
 );
 
+// Cab vehicle types with seating (`max`) and per-km rates (outstation + local).
 const vehicleSchema = new Schema<Vehicle>(
   {
     id: { type: String, required: true, unique: true, index: true },
@@ -48,6 +52,7 @@ const vehicleSchema = new Schema<Vehicle>(
   opts,
 );
 
+// Room types + metadata: `mult` is the price multiplier, plus size, bed, occupancy.
 const roomSchema = new Schema<Room>(
   {
     id: { type: String, required: true, unique: true, index: true },
@@ -60,6 +65,8 @@ const roomSchema = new Schema<Room>(
   opts,
 );
 
+// Hotels. `type`, `stars` and `price` are indexed because they back the
+// filtered listing query in HotelRepository.findFiltered.
 const hotelSchema = new Schema<Hotel>(
   {
     id: { type: String, required: true, unique: true, index: true },
@@ -80,6 +87,8 @@ const hotelSchema = new Schema<Hotel>(
   opts,
 );
 
+// Hotel-filter options, each tagged with a `group` (amenities, views, …).
+// `group` is indexed for the group-by in CatalogService.listHotelOptions.
 const optionSchema = new Schema<OptionItem>(
   {
     group: { type: String, required: true, index: true },
@@ -89,8 +98,10 @@ const optionSchema = new Schema<OptionItem>(
   },
   opts,
 );
+// Compound unique key: an option `id` need only be unique within its group.
 optionSchema.index({ group: 1, id: 1 }, { unique: true });
 
+// Celebrations (birthday, anniversary, …) and the package names each offers.
 const celebrationSchema = new Schema<Celebration>(
   {
     id: { type: String, required: true, unique: true, index: true },
@@ -103,6 +114,9 @@ const celebrationSchema = new Schema<Celebration>(
   opts,
 );
 
+// Celebration add-on packages. `name` is the natural key (unique) — celebrations
+// reference packages by name. `age` defaults to undefined so an absent range is
+// omitted rather than stored as an empty array.
 const packageSchema = new Schema<CelebrationPackage>(
   {
     name: { type: String, required: true, unique: true, index: true },
@@ -116,6 +130,10 @@ const packageSchema = new Schema<CelebrationPackage>(
   opts,
 );
 
+// Complete celebration bundles (stay + food + setup). `dest`/`occasion` indexed
+// for listing filters; `experiences` indexed because it drives the place-aware
+// facet derivation in CatalogService.listExperienceFacets. `legs` defaults to
+// undefined — present only for multi-destination combo itineraries.
 const celebrationBundleSchema = new Schema<CelebrationBundle>(
   {
     id: { type: String, required: true, unique: true, index: true },
@@ -138,6 +156,8 @@ const celebrationBundleSchema = new Schema<CelebrationBundle>(
   opts,
 );
 
+// Activities split by `kind` (adventure vs experience); `kind`/`category` indexed
+// for the /activities filter.
 const activitySchema = new Schema<Activity>(
   {
     kind: { type: String, required: true, index: true },
@@ -151,8 +171,11 @@ const activitySchema = new Schema<Activity>(
   },
   opts,
 );
+// Compound unique key: an activity `id` need only be unique within its kind.
 activitySchema.index({ kind: 1, id: 1 }, { unique: true });
 
+// Shop products. `cat` and `shop` are indexed to back the /products filters
+// (price/rating ranges are applied by CatalogService.listProducts).
 const productSchema = new Schema<Product>(
   {
     id: { type: String, required: true, unique: true, index: true },
@@ -170,6 +193,7 @@ const productSchema = new Schema<Product>(
   opts,
 );
 
+// Per-shop catalogue metadata (title, subtitle, category list), keyed by `shop`.
 const shopCatalogSchema = new Schema<ShopCatalog>(
   {
     shop: { type: String, required: true, unique: true, index: true },
@@ -180,6 +204,7 @@ const shopCatalogSchema = new Schema<ShopCatalog>(
   opts,
 );
 
+// Compile and register each schema as a Mongoose model; repositories import these.
 export const DestinationModel = model<Destination>('Destination', destinationSchema);
 export const VehicleModel = model<Vehicle>('Vehicle', vehicleSchema);
 export const RoomModel = model<Room>('Room', roomSchema);
@@ -192,6 +217,9 @@ export const ActivityModel = model<Activity>('Activity', activitySchema);
 export const ProductModel = model<Product>('Product', productSchema);
 export const ShopCatalogModel = model<ShopCatalog>('ShopCatalog', shopCatalogSchema);
 
+// The local-experience filter vocabulary. `tags` are matched against a bundle's
+// `experiences` to decide which facets a place offers; `order` is indexed for
+// stable, sorted display.
 const experienceFacetSchema = new Schema<ExperienceFacet>(
   {
     id: { type: String, required: true, unique: true, index: true },

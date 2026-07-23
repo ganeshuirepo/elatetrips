@@ -1,3 +1,10 @@
+/**
+ * Guards for the console surfaces. consoleGuard protects the /vendor routes
+ * (used in console.routes); buildAdminGuard protects the /admin routes (wired in
+ * container.ts and applied in admin.routes). Both verify a scope:'console' JWT
+ * and, on success, expose its claims on res.locals.console for the controllers.
+ * A missing/invalid token -> 401; a valid token with the wrong role -> 403.
+ */
 import type { RequestHandler } from 'express';
 import { ForbiddenError, UnauthorizedError } from '../../common/errors/AppError';
 import { verifyConsoleToken } from './console.token';

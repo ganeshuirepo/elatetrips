@@ -3,7 +3,13 @@ import { created, ok } from '../../common/http/ApiResponse';
 import type { ConsoleService } from './console.service';
 import type { ConsoleClaims } from './console.token';
 
-/** Transport for console accounts: login, vendor onboarding, vendor self-view. */
+/**
+ * Transport for console accounts: login, vendor onboarding, vendor self-view.
+ * Thin over ConsoleService. On the guarded routes the authenticated identity is
+ * read from res.locals.console (the ConsoleClaims that consoleGuard/buildAdminGuard
+ * put there) and passed to the service — so the service never trusts client input
+ * for who the caller is.
+ */
 export class ConsoleController {
   constructor(private readonly service: ConsoleService) {}
 
