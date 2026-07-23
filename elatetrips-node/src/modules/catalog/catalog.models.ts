@@ -223,6 +223,8 @@ export const ShopCatalogModel = model<ShopCatalog>('ShopCatalog', shopCatalogSch
 const experienceFacetSchema = new Schema<ExperienceFacet>(
   {
     id: { type: String, required: true, unique: true, index: true },
+    // Which filter axis this facet feeds: 'activity' or 'experience'.
+    group: { type: String, enum: ['activity', 'experience'], default: 'experience', index: true },
     label: { type: String, required: true },
     icon: { type: String, default: '' },
     tags: { type: [String], default: [] },

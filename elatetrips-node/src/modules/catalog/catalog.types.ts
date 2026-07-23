@@ -194,10 +194,16 @@ export interface AvailabilityResult {
  */
 export interface ExperienceFacet {
   id: string;
+  /**
+   * Which filter axis this facet belongs to: 'activity' = active/operator-run
+   * (adventure, water, kids), 'experience' = curated local inclusions (tea,
+   * food, culture, spa). The frontend renders one filter dropdown per group.
+   */
+  group: 'activity' | 'experience';
   label: string;
   icon: string;
   /** Canonical package experience tags this facet covers. */
   tags: string[];
-  /** Display order, low first. */
+  /** Display order within its group, low first. */
   order: number;
 }
