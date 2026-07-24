@@ -37,7 +37,7 @@ export const celebrationBundles = [
     availability: 'daily',
     fromPrice: 48999,
     unit: 'for two, all-in',
-    experiences: ['photoshoot', 'dining'],
+    experiences: ['photoshoot', 'dining', 'trek'],
     inclusions: [
       '2 nights, valley-view suite',
       'All meals — day 1 dinner to day 3 breakfast',
@@ -92,7 +92,7 @@ export const celebrationBundles = [
     availability: 'weekend',
     fromPrice: 9499,
     unit: 'per person',
-    experiences: ['camp', 'bonfire', 'trek'],
+    experiences: ['camp', 'bonfire', 'trek', 'dining'],
     inclusions: [
       'Hilltop camp, private for your group',
       'All camp meals included',
@@ -176,7 +176,7 @@ export const celebrationBundles = [
     availability: 'daily',
     fromPrice: 29999,
     unit: 'for two, all-in',
-    experiences: ['tea', 'dining', 'spa'],
+    experiences: ['tea', 'dining', 'spa', 'trek'],
     inclusions: [
       '2 nights, coffee-estate homestay',
       'Guided plantation walk at golden hour',
@@ -203,7 +203,7 @@ export const celebrationBundles = [
     availability: 'weekend',
     fromPrice: 8999,
     unit: 'per person',
-    experiences: ['camp', 'bonfire', 'trek', 'water'],
+    experiences: ['camp', 'bonfire', 'trek', 'water', 'dining'],
     inclusions: [
       'Riverside camp, private for your group',
       'All camp meals + barbecue night',
@@ -230,7 +230,7 @@ export const celebrationBundles = [
     availability: 'daily',
     fromPrice: 42999,
     unit: 'for two, all-in',
-    experiences: ['tea', 'spa', 'photoshoot', 'dining'],
+    experiences: ['tea', 'spa', 'photoshoot', 'dining', 'trek'],
     inclusions: [
       '3 nights, estate pool villa',
       'All breakfasts + two candlelight dinners',
@@ -260,7 +260,7 @@ export const celebrationBundles = [
     availability: 'daily',
     fromPrice: 32499,
     unit: 'for two, all-in',
-    experiences: ['tea', 'spa', 'dining'],
+    experiences: ['tea', 'spa', 'dining', 'trek'],
     inclusions: [
       '2 nights, tea-estate cottage',
       'Daily breakfast + candlelight plantation dinner',
@@ -287,7 +287,7 @@ export const celebrationBundles = [
     availability: 'daily',
     fromPrice: 45999,
     unit: 'for two, all-in',
-    experiences: ['tea', 'photoshoot', 'dining'],
+    experiences: ['tea', 'photoshoot', 'dining', 'trek'],
     inclusions: [
       '2 nights, cloud-line suite',
       'Ring-reveal gazebo in a private tea garden',
@@ -455,7 +455,7 @@ export const celebrationBundles = [
     availability: 'daily',
     fromPrice: 64999,
     unit: 'for two, all-in',
-    experiences: ['tea', 'photoshoot', 'dining'],
+    experiences: ['tea', 'photoshoot', 'dining', 'trek'],
     legs: [
       { dest: 'ooty', nights: 3 },
       { dest: 'coorg', nights: 2 },
@@ -487,7 +487,7 @@ export const celebrationBundles = [
     availability: 'daily',
     fromPrice: 54999,
     unit: 'for two, all-in',
-    experiences: ['tea', 'dining'],
+    experiences: ['tea', 'dining', 'trek'],
     legs: [
       { dest: 'ooty', nights: 2 },
       { dest: 'munnar', nights: 2 },
