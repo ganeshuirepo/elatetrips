@@ -207,3 +207,20 @@ export interface ExperienceFacet {
   /** Display order within its group, low first. */
   order: number;
 }
+
+/**
+ * A priced customization tier for a celebration package (plan-page filters).
+ * Grouped single-select: decoration | star | room | cab. The first tier per
+ * group is the included baseline (priceDelta 0); higher tiers add a flat
+ * amount to the package total.
+ */
+export interface PackageOption {
+  id: string;
+  group: 'decoration' | 'star' | 'room' | 'cab';
+  label: string;
+  note: string;
+  /** Flat amount added to the package total when this tier is chosen. */
+  priceDelta: number;
+  /** Display order within its group, low first. */
+  order: number;
+}

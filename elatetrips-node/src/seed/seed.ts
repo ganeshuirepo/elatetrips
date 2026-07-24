@@ -8,6 +8,7 @@ import {
   OptionModel,
   CelebrationModel,
   ExperienceFacetModel,
+  PackageOptionModel,
   PackageModel,
   CelebrationBundleModel,
   ActivityModel,
@@ -28,6 +29,7 @@ import {
   hotelActivities,
   celebrations,
   experienceFacets,
+  packageOptions,
   packages,
   celebrationBundles,
   adventures,
@@ -88,6 +90,13 @@ async function seed(): Promise<void> {
       async () => (
         await ExperienceFacetModel.deleteMany({}),
         ExperienceFacetModel.insertMany(experienceFacets)
+      ),
+    ],
+    [
+      'packageOptions',
+      async () => (
+        await PackageOptionModel.deleteMany({}),
+        PackageOptionModel.insertMany(packageOptions)
       ),
     ],
     [

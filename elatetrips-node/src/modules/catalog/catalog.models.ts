@@ -7,6 +7,7 @@ import type {
   OptionItem,
   Celebration,
   ExperienceFacet,
+  PackageOption,
   CelebrationPackage,
   CelebrationBundle,
   Activity,
@@ -237,3 +238,17 @@ export const ExperienceFacetModel = model<ExperienceFacet>(
   'ExperienceFacet',
   experienceFacetSchema,
 );
+
+const packageOptionSchema = new Schema<PackageOption>(
+  {
+    id: { type: String, required: true, unique: true, index: true },
+    group: { type: String, enum: ['decoration', 'star', 'room', 'cab'], required: true, index: true },
+    label: { type: String, required: true },
+    note: { type: String, default: '' },
+    priceDelta: { type: Number, default: 0 },
+    order: { type: Number, default: 0, index: true },
+  },
+  opts,
+);
+
+export const PackageOptionModel = model<PackageOption>('PackageOption', packageOptionSchema);

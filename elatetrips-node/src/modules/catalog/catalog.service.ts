@@ -21,6 +21,7 @@ import type {
   OptionItem,
   Celebration,
   ExperienceFacet,
+  PackageOption,
   CelebrationPackage,
   CelebrationBundle,
   Activity,
@@ -39,6 +40,7 @@ export interface CatalogRepositories {
   options: IReadRepository<OptionItem>;
   celebrations: IReadRepository<Celebration>;
   experienceFacets: IReadRepository<ExperienceFacet>;
+  packageOptions: IReadRepository<PackageOption>;
   packages: IReadRepository<CelebrationPackage>;
   bundles: IReadRepository<CelebrationBundle>;
   activities: IReadRepository<Activity>;
@@ -135,6 +137,14 @@ export class CatalogService {
     });
     const present = new Set(inScope.flatMap((b) => b.experiences ?? []));
     return facets.filter((f) => f.tags.some((t) => present.has(t)));
+  }
+
+  /**
+   * The priced customization tiers for the plan page — decoration, star, room
+   * and cab groups. Global (not per-place/per-package); sorted by group order.
+   */
+  async listPackageOptions(): Promise<PackageOption[]> {
+    return (await this.repos.packageOptions.findAll()).sort((a, b) => a.order - b.order);
   }
 
   listPackages(): Promise<CelebrationPackage[]> {

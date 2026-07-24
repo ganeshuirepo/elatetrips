@@ -188,6 +188,18 @@ export function buildCatalogRouter(controller: CatalogController): Router {
    */
   // → CatalogController.experienceFacets — validates query (experienceFacetQuerySchema
   //   only bounds `dest` length; the controller splits the CSV into ids itself).
+  /**
+   * @openapi
+   * /api/v1/catalog/package-options:
+   *   get:
+   *     tags: [Catalog]
+   *     summary: Priced customization tiers for the plan page
+   *     description: Decoration, star, room and cab groups; each tier carries a priceDelta.
+   *     responses:
+   *       200: { description: Tiers with id, group, label, note, priceDelta }
+   */
+  router.get('/package-options', asyncHandler(controller.packageOptions));
+
   router.get(
     '/experience-facets',
     validate({ query: experienceFacetQuerySchema }),

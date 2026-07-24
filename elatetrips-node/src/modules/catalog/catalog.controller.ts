@@ -60,6 +60,10 @@ export class CatalogController {
   celebrations = async (_req: Request, res: Response): Promise<Response> =>
     ok(res, await this.service.listCelebrations());
 
+  /** GET /catalog/package-options — priced plan-page customization tiers. */
+  packageOptions = async (_req: Request, res: Response): Promise<Response> =>
+    ok(res, await this.service.listPackageOptions());
+
   /** GET /catalog/experience-facets?dest=ooty,coorg — place-aware filters. */
   experienceFacets = async (req: Request, res: Response): Promise<Response> => {
     const raw = typeof req.query.dest === 'string' ? req.query.dest : '';

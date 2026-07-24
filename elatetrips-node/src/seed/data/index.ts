@@ -5,6 +5,7 @@ export * from './hotels';
 export * from './hotelOptions';
 export * from './celebrations';
 export * from './experienceFacets';
+export * from './packageOptions';
 export * from './packages';
 export * from './celebrationBundles';
 export * from './activities';
