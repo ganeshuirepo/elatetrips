@@ -208,6 +208,30 @@ export function buildCatalogRouter(controller: CatalogController): Router {
 
   /**
    * @openapi
+   * /api/v1/catalog/package-filters:
+   *   get:
+   *     tags: [Catalog]
+   *     summary: The whole filter bar for the packages screen
+   *     description: >
+   *       Every filter group with its chips, labels, icons, order and whether it
+   *       is multi-select — so the client hardcodes none of them. Scoped by
+   *       destination like experience-facets: a chip is offered only when a
+   *       package there can satisfy it, and a group with nothing to offer is
+   *       omitted. Each group carries a `match` kind ('occasion' | 'tags' |
+   *       'cab') telling the client how to test a package against its chips.
+   *     parameters:
+   *       - { in: query, name: dest, schema: { type: string }, description: "CSV destination ids; omit for the full vocabulary" }
+   *     responses:
+   *       200: { description: Filter groups, each with chips }
+   */
+  router.get(
+    '/package-filters',
+    validate({ query: experienceFacetQuerySchema }),
+    asyncHandler(controller.packageFilters),
+  );
+
+  /**
+   * @openapi
    * /api/v1/catalog/packages:
    *   get:
    *     tags: [Catalog]

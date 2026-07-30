@@ -14,6 +14,15 @@ import type { CatalogService } from './catalog.service';
 import { ok } from '../../common/http/ApiResponse';
 import type { HotelFilter } from './catalog.types';
 
+/** `?dest=ooty,coorg` → ['ooty','coorg']; absent or blank → [] (unscoped). */
+function destIdsFrom(req: Request): string[] {
+  const raw = typeof req.query.dest === 'string' ? req.query.dest : '';
+  return raw
+    .split(',')
+    .map((d) => d.trim())
+    .filter(Boolean);
+}
+
 /**
  * Thin HTTP adapter: parses the (already-validated) request, calls the service,
  * and writes the response. No business logic lives here.
@@ -66,9 +75,13 @@ export class CatalogController {
 
   /** GET /catalog/experience-facets?dest=ooty,coorg — place-aware filters. */
   experienceFacets = async (req: Request, res: Response): Promise<Response> => {
-    const raw = typeof req.query.dest === 'string' ? req.query.dest : '';
-    const destIds = raw.split(',').map((d) => d.trim()).filter(Boolean);
-    return ok(res, await this.service.listExperienceFacets(destIds));
+    return ok(res, await this.service.listExperienceFacets(destIdsFrom(req)));
+  };
+
+  /** GET /catalog/package-filters?dest=ooty,coorg — the whole filter bar. */
+  packageFilters = async (req: Request, res: Response): Promise<Response> => {
+    const groups = await this.service.listPackageFilters(destIdsFrom(req));
+    return ok(res, groups, { count: groups.length });
   };
 
   packages = async (_req: Request, res: Response): Promise<Response> =>

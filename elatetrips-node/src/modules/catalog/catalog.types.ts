@@ -204,6 +204,50 @@ export interface AvailabilityResult {
  * matching `tags` against the `experiences` tags of that place's packages,
  * so adding a package with a new tag lights its facet up automatically.
  */
+/**
+ * ── PACKAGE FILTERS ─────────────────────────────────────────────────────────
+ * The whole filter bar on the packages screen, described by the server so the
+ * client hardcodes no group, chip, label or order. Adding a group here changes
+ * the UI with no frontend release.
+ *
+ * The client stays generic by knowing only the three MATCH KINDS below, never
+ * which groups exist. `dest`-scoped like experience-facets: a chip is offered
+ * only when a package at that place can satisfy it, so no chip is dead on
+ * arrival.
+ */
+export type PackageFilterMatch =
+  /** Chip id is an occasion, or '__group' for group-sized packages. */
+  | 'occasion'
+  /** Chip carries `tags`; a package matches if it holds any of them. */
+  | 'tags'
+  /** Chip id is a cab class, compared against the package's cabIncluded. */
+  | 'cab';
+
+/** One selectable chip inside a filter group. */
+export interface PackageFilterChip {
+  id: string;
+  label: string;
+  icon?: string;
+  /** Only for `match: 'tags'` groups — the package tags this chip covers. */
+  tags?: string[];
+}
+
+export interface PackageFilterGroup {
+  id: string;
+  label: string;
+  icon: string;
+  /**
+   * True when several chips can be active at once, OR'd together. The client
+   * also reads this as a layout hint: multi groups are shown open, single-choice
+   * groups collapse behind their title.
+   */
+  multi: boolean;
+  match: PackageFilterMatch;
+  /** Display order across the bar, low first. */
+  order: number;
+  chips: PackageFilterChip[];
+}
+
 export interface ExperienceFacet {
   id: string;
   /**

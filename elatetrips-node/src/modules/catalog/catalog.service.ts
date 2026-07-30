@@ -21,6 +21,8 @@ import type {
   OptionItem,
   Celebration,
   ExperienceFacet,
+  PackageFilterChip,
+  PackageFilterGroup,
   PackageOption,
   CelebrationPackage,
   CelebrationBundle,
@@ -137,6 +139,67 @@ export class CatalogService {
     });
     const present = new Set(inScope.flatMap((b) => b.experiences ?? []));
     return facets.filter((f) => f.tags.some((t) => present.has(t)));
+  }
+
+  /**
+   * The whole filter bar for the packages screen, assembled server-side so the
+   * client hardcodes no group, chip or order.
+   *
+   * Every chip is earned: a group only offers what the packages at these
+   * destinations can actually satisfy, so nothing is offered that would return
+   * an empty strip. That is the same rule listExperienceFacets applies, extended
+   * to occasions and cab classes.
+   *
+   * No destination ids = the full vocabulary, unscoped.
+   */
+  async listPackageFilters(destIds: string[]): Promise<PackageFilterGroup[]> {
+    const [facets, bundles] = await Promise.all([
+      this.listExperienceFacets(destIds),
+      this.repos.bundles.findAll(),
+    ]);
+
+    const inScope =
+      destIds.length === 0
+        ? bundles
+        : bundles.filter((b) => {
+            const dests = b.legs?.length ? b.legs.map((l) => l.dest) : [b.dest];
+            return dests.some((d) => destIds.includes(d));
+          });
+
+    // Occasions actually on sale here. 'milestone' is a catch-all rather than
+    // something anyone shops for, so it never becomes a chip.
+    const occasions = new Map<string, string>();
+    inScope.forEach((b) => {
+      if (b.occasion !== 'milestone') occasions.set(b.occasion, b.occLabel);
+    });
+    const occChips: PackageFilterChip[] = Array.from(occasions, ([id, label]) => ({ id, label }));
+    // Group size is not an occasion, but travellers shop by it, so it rides
+    // along in this group as a pseudo-chip.
+    if (inScope.some((b) => b.groupSize)) occChips.push({ id: '__group', label: 'Group' });
+
+    const facetChips = (group: 'activity' | 'experience'): PackageFilterChip[] =>
+      facets
+        .filter((f) => f.group === group)
+        .map((f) => ({ id: f.id, label: f.label, icon: f.icon, tags: f.tags }));
+
+    const CAB_LABELS: { id: 'local' | 'full'; label: string; icon: string }[] = [
+      { id: 'local', label: 'Local rides', icon: '🚕' },
+      { id: 'full', label: 'Full trip', icon: '✈️' },
+    ];
+    const cabChips: PackageFilterChip[] = CAB_LABELS.filter((c) =>
+      inScope.some((b) => b.cabIncluded === c.id),
+    );
+
+    const groups: PackageFilterGroup[] = [
+      { id: 'occ', label: 'Celebration', icon: '🎉', multi: true, match: 'occasion', order: 10, chips: occChips },
+      { id: 'act', label: 'Activities', icon: '🎯', multi: true, match: 'tags', order: 20, chips: facetChips('activity') },
+      { id: 'exp', label: 'Experiences', icon: '✨', multi: true, match: 'tags', order: 30, chips: facetChips('experience') },
+      // Single-choice: a traveller wants one level of transport, not both.
+      { id: 'cab', label: 'Cab', icon: '🚕', multi: false, match: 'cab', order: 40, chips: cabChips },
+    ];
+
+    // A group with nothing to offer here is dropped rather than shipped empty.
+    return groups.filter((g) => g.chips.length > 0).sort((a, b) => a.order - b.order);
   }
 
   /**
