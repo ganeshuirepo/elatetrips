@@ -113,6 +113,13 @@ export interface CelebrationBundle {
    * Only geographically-near destinations are ever combined (seed-enforced).
    */
   legs?: { dest: string; nights: number }[];
+  /**
+   * True when the package price already covers transport, so the Cab filter on
+   * the packages screen can narrow to them and the plan page stops offering a
+   * cab tier. Premium packages and combo itineraries carry one; the rest list
+   * "add a cab" under exclusions. Absent = false (no cab).
+   */
+  cabIncluded?: boolean;
 }
 
 export interface Activity {
