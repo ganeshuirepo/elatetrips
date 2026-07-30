@@ -177,15 +177,12 @@ export class CatalogService {
     // along in this group as a pseudo-chip.
     if (inScope.some((b) => b.groupSize)) occChips.push({ id: '__group', label: 'Group' });
 
-    // Activities and Experiences share ONE group: both are "what you'd do there"
-    // and travellers do not sort their wishes into operator-run versus curated.
-    // listExperienceFacets returns them in order, activities first.
-    const facetChips: PackageFilterChip[] = facets.map((f) => ({
-      id: f.id,
-      label: f.label,
-      icon: f.icon,
-      tags: f.tags,
-    }));
+    // Activities and Experiences stay separate axes: one is what you go and do,
+    // the other is what the package already includes.
+    const facetChips = (group: 'activity' | 'experience'): PackageFilterChip[] =>
+      facets
+        .filter((f) => f.group === group)
+        .map((f) => ({ id: f.id, label: f.label, icon: f.icon, tags: f.tags }));
 
     const CAB_LABELS: { id: 'local' | 'full'; label: string; icon: string }[] = [
       { id: 'local', label: 'Local rides', icon: '🚕' },
@@ -197,9 +194,10 @@ export class CatalogService {
 
     const groups: PackageFilterGroup[] = [
       { id: 'occ', label: 'Celebration', icon: '🎉', multi: true, match: 'occasion', order: 10, chips: occChips },
-      { id: 'xp', label: 'Activities & Experiences', icon: '🎯', multi: true, match: 'tags', order: 20, chips: facetChips },
+      { id: 'act', label: 'Activities', icon: '🎯', multi: true, match: 'tags', order: 20, chips: facetChips('activity') },
+      { id: 'exp', label: 'Experiences', icon: '✨', multi: true, match: 'tags', order: 30, chips: facetChips('experience') },
       // Single-choice: a traveller wants one level of transport, not both.
-      { id: 'cab', label: 'Cab', icon: '🚕', multi: false, match: 'cab', order: 30, chips: cabChips },
+      { id: 'cab', label: 'Cab', icon: '🚕', multi: false, match: 'cab', order: 40, chips: cabChips },
     ];
 
     // A group with nothing to offer here is dropped rather than shipped empty.
