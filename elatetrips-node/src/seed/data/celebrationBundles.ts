@@ -3,12 +3,18 @@
  * setup) booked as one. Adventure activities are offered as ADD-ONS at booking
  * time, so they are not stored on the bundle itself.
  *
- * TRANSPORT — `cabIncluded` says the price already covers a cab, which the Cab
- * filter on the packages screen narrows by. The rule: premium packages and
- * combo itineraries include one (a combo has to move between hills), everyone
- * else lists "add a cab" under exclusions. Keep the two in step — a package
- * flagged cabIncluded must carry a transport line in `inclusions` and must NOT
- * list a cab under `exclusions`, or the card contradicts the filter.
+ * TRANSPORT — `cabIncluded` says what the price already covers, in the same two
+ * classes as the priced cab tiers in seed/data/packageOptions:
+ *
+ *   'full'   airport pickup and every transfer, door to door
+ *   'local'  a cab for local runs once you are there, arrival not included
+ *   absent   no cab; the package lists "add a cab" under exclusions
+ *
+ * Premium packages and combo itineraries include one (a combo has to move
+ * between hills). Keep copy and class in step — a package with a class must
+ * carry a matching transport line in `inclusions` and must NOT list a cab under
+ * `exclusions`, or the card contradicts the filter. A 'local' package says
+ * "local cab", never "airport".
  *
  * ── PACKAGE TEMPLATE ────────────────────────────────────────────────────────
  * Every bundle is classified on TWO axes so filters never rely on text:
@@ -45,7 +51,7 @@ export const celebrationBundles = [
     fromPrice: 48999,
     unit: 'for two, all-in',
     experiences: ['photoshoot', 'dining', 'trek'],
-    cabIncluded: true,
+    cabIncluded: 'full',
     inclusions: [
       '2 nights, valley-view suite',
       'All meals — day 1 dinner to day 3 breakfast',
@@ -101,13 +107,13 @@ export const celebrationBundles = [
     fromPrice: 9499,
     unit: 'per person',
     experiences: ['camp', 'bonfire', 'trek', 'dining'],
-    cabIncluded: true,
+    cabIncluded: 'local',
     inclusions: [
       'Hilltop camp, private for your group',
       'All camp meals included',
       'Bonfire dinner party + live guitarist',
       'Guided trek at sunrise',
-      'Cabs to the base point & local transfers',
+      'Local cab for base-point and viewpoint runs',
     ],
     exclusions: [
       'Personal trek gear (on rent)',
@@ -240,7 +246,7 @@ export const celebrationBundles = [
     fromPrice: 42999,
     unit: 'for two, all-in',
     experiences: ['tea', 'spa', 'photoshoot', 'dining', 'trek'],
-    cabIncluded: true,
+    cabIncluded: 'full',
     inclusions: [
       '3 nights, estate pool villa',
       'All breakfasts + two candlelight dinners',
@@ -298,7 +304,7 @@ export const celebrationBundles = [
     fromPrice: 45999,
     unit: 'for two, all-in',
     experiences: ['tea', 'photoshoot', 'dining', 'trek'],
-    cabIncluded: true,
+    cabIncluded: 'full',
     inclusions: [
       '2 nights, cloud-line suite',
       'Ring-reveal gazebo in a private tea garden',
@@ -327,13 +333,13 @@ export const celebrationBundles = [
     fromPrice: 46999,
     unit: 'for two, all-in',
     experiences: ['tea', 'trek', 'dining'],
-    cabIncluded: true,
+    cabIncluded: 'local',
     inclusions: [
       '3 nights, valley-view chalet',
       'All breakfasts + two candlelight dinners',
       'Sunrise viewpoint trek with a guide',
       'Tea-museum & estate trail day',
-      'Cab from Kochi airport & all local transfers',
+      'Local cab for estate and viewpoint runs',
     ],
     exclusions: [
       'Lunches & personal orders',
@@ -384,7 +390,7 @@ export const celebrationBundles = [
     fromPrice: 52999,
     unit: 'for two, all-in',
     experiences: ['water', 'photoshoot', 'dining'],
-    cabIncluded: true,
+    cabIncluded: 'full',
     inclusions: [
       '2 nights, beachfront suite',
       'Daily breakfast + private beach dinner',
@@ -440,13 +446,13 @@ export const celebrationBundles = [
     fromPrice: 55999,
     unit: 'for two, all-in',
     experiences: ['water', 'spa', 'dining'],
-    cabIncluded: true,
+    cabIncluded: 'local',
     inclusions: [
       '3 nights, lagoon-view suite',
       'All breakfasts + two beach dinners',
       'Private sunset cruise',
       'Couple’s spa afternoon',
-      'Airport pickup & all transfers',
+      'Local cab for beach and market runs',
     ],
     exclusions: [
       'Flights to Goa',
@@ -474,7 +480,7 @@ export const celebrationBundles = [
       { dest: 'ooty', nights: 3 },
       { dest: 'coorg', nights: 2 },
     ],
-    cabIncluded: true,
+    cabIncluded: 'full',
     inclusions: [
       '3 nights Ooty valley resort + 2 nights Coorg estate stay',
       'All breakfasts + three candlelight dinners',
@@ -506,7 +512,7 @@ export const celebrationBundles = [
       { dest: 'ooty', nights: 2 },
       { dest: 'munnar', nights: 2 },
     ],
-    cabIncluded: true,
+    cabIncluded: 'full',
     inclusions: [
       '2 nights Ooty + 2 nights Munnar tea-estate stays',
       'Daily breakfast + anniversary dinner in the plantation',

@@ -114,12 +114,17 @@ export interface CelebrationBundle {
    */
   legs?: { dest: string; nights: number }[];
   /**
-   * True when the package price already covers transport, so the Cab filter on
-   * the packages screen can narrow to them and the plan page stops offering a
-   * cab tier. Premium packages and combo itineraries carry one; the rest list
-   * "add a cab" under exclusions. Absent = false (no cab).
+   * What transport the package price already covers, using the same two classes
+   * the priced cab tiers use (see seed/data/packageOptions):
+   *
+   *   'local' — a cab for local sightseeing runs while you are there
+   *   'full'  — airport pickup and every transfer, door to door
+   *
+   * Absent means no cab, and the package lists "add a cab" under exclusions.
+   * Drives the Cab filter on the packages screen and stops the plan page
+   * selling a cab tier on top of one already included.
    */
-  cabIncluded?: boolean;
+  cabIncluded?: 'local' | 'full';
 }
 
 export interface Activity {

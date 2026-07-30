@@ -153,8 +153,9 @@ const celebrationBundleSchema = new Schema<CelebrationBundle>(
     exclusions: [String],
     experiences: { type: [String], default: [], index: true },
     legs: { type: [{ _id: false, dest: String, nights: Number }], default: undefined },
-    // Indexed: the packages screen filters on it directly.
-    cabIncluded: { type: Boolean, default: false, index: true },
+    // Indexed: the packages screen filters on it directly. Absent = no cab, so
+    // there is no default — a missing field must not read as a cab class.
+    cabIncluded: { type: String, enum: ['local', 'full'], default: undefined, index: true },
   },
   opts,
 );

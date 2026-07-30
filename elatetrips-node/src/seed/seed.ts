@@ -66,10 +66,13 @@ function buildActivities() {
 /**
  * Idempotent seed: wipes the reference collections and reloads them from the
  * ported frontend data. User and Order collections are left untouched.
+ *
+ * Name one or more collections as arguments to reload only those — e.g.
+ * `npm run seed -- celebrationBundles`. Worth reaching for when the database is
+ * shared: a one-field change to one collection has no business wiping the other
+ * twelve. No arguments reloads everything, as before.
  */
 async function seed(): Promise<void> {
-  await connectDatabase();
-
   const tasks: Array<[string, () => Promise<unknown>]> = [
     ['destinations', async () => (await DestinationModel.deleteMany({}), DestinationModel.insertMany(destinations))],
     ['vehicles', async () => (await VehicleModel.deleteMany({}), VehicleModel.insertMany(vehicles))],
@@ -118,7 +121,22 @@ async function seed(): Promise<void> {
     ['shopCatalogs', async () => (await ShopCatalogModel.deleteMany({}), ShopCatalogModel.insertMany(shopCatalogs))],
   ];
 
-  for (const [name, run] of tasks) {
+  // Argument checking happens BEFORE connecting: a typo should cost nothing and
+  // must never reach the database.
+  const only = process.argv.slice(2).filter((a) => !a.startsWith('-'));
+  const unknown = only.filter((n) => !tasks.some(([name]) => name === n));
+  if (unknown.length > 0) {
+    throw new Error(
+      `Unknown collection(s): ${unknown.join(', ')}. Known: ${tasks.map(([n]) => n).join(', ')}`,
+    );
+  }
+
+  const selected = only.length > 0 ? tasks.filter(([name]) => only.includes(name)) : tasks;
+  if (only.length > 0) logger.info(`Seeding only: ${selected.map(([n]) => n).join(', ')}`);
+
+  await connectDatabase();
+
+  for (const [name, run] of selected) {
     await run();
     logger.info(`seeded ${name}`);
   }
