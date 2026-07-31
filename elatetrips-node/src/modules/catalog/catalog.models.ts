@@ -73,6 +73,7 @@ const hotelSchema = new Schema<Hotel>(
     id: { type: String, required: true, unique: true, index: true },
     name: String,
     area: String,
+    dest: { type: String, index: true },
     type: { type: String, index: true },
     stars: { type: Number, index: true },
     price: { type: Number, index: true },

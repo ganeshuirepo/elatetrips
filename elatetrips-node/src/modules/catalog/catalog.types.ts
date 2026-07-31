@@ -38,6 +38,12 @@ export interface Hotel {
   id: string;
   name: string;
   area: string;
+  /**
+   * Destination id this property sits in (ooty | coorg | munnar | goa). `area`
+   * is a human neighbourhood string and cannot be filtered on reliably, so the
+   * link to a destination is explicit.
+   */
+  dest: string;
   type: string;
   stars: number;
   price: number;
@@ -179,6 +185,8 @@ export interface ProductFilter {
 
 /** Filters accepted by the hotel listing endpoint (mirrors the UI filters). */
 export interface HotelFilter {
+  /** Restrict to one destination — the packages screen never mixes places. */
+  dest?: string;
   stars?: number[];
   amenities?: string[];
   activities?: string[];

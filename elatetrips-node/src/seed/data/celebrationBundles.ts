@@ -138,7 +138,7 @@ export const celebrationBundles = [
     unit: 'per person',
     experiences: ['picnic', 'bonfire', 'photoshoot'],
     // Whole-property stays — the group takes the place over.
-    venues: ['h4', 'h7'],
+    venues: ['h4', 'h5'],
     inclusions: [
       '2 nights, private pine-edge villa',
       'Brunch spreads + one themed dinner',
@@ -168,6 +168,8 @@ export const celebrationBundles = [
     fromPrice: 27999,
     unit: 'family of four',
     experiences: ['kids', 'photoshoot'],
+    // Needs a kids' play area and room for a party.
+    venues: ['h12', 'h10'],
     inclusions: [
       '2 nights, family cottage',
       'Breakfast + party snacks',
@@ -196,6 +198,8 @@ export const celebrationBundles = [
     fromPrice: 29999,
     unit: 'for two, all-in',
     experiences: ['tea', 'dining', 'spa', 'trek'],
+    // Estate stays that can lay a candlelight dinner and run a spa hour.
+    venues: ['h9', 'h12'],
     inclusions: [
       '2 nights, coffee-estate homestay',
       'Guided plantation walk at golden hour',
@@ -223,6 +227,8 @@ export const celebrationBundles = [
     fromPrice: 8999,
     unit: 'per person',
     experiences: ['camp', 'bonfire', 'trek', 'water', 'dining'],
+    // Riverside camp, taken over by the group.
+    venues: ['h11'],
     inclusions: [
       'Riverside camp, private for your group',
       'All camp meals + barbecue night',
@@ -250,6 +256,8 @@ export const celebrationBundles = [
     fromPrice: 42999,
     unit: 'for two, all-in',
     experiences: ['tea', 'spa', 'photoshoot', 'dining', 'trek'],
+    // Five-star estate property with a spa.
+    venues: ['h9'],
     cabIncluded: true,
     inclusions: [
       '3 nights, estate pool villa',
@@ -281,6 +289,8 @@ export const celebrationBundles = [
     fromPrice: 32499,
     unit: 'for two, all-in',
     experiences: ['tea', 'spa', 'dining', 'trek'],
+    // Tea-estate stays with a spa and in-house dining.
+    venues: ['h13', 'h14'],
     inclusions: [
       '2 nights, tea-estate cottage',
       'Daily breakfast + candlelight plantation dinner',
@@ -309,6 +319,8 @@ export const celebrationBundles = [
     unit: 'for two, all-in',
     experiences: ['tea', 'photoshoot', 'dining', 'trek'],
     cabIncluded: true,
+    // The ring-reveal gazebo needs the resort's own tea garden.
+    venues: ['h13'],
     inclusions: [
       '2 nights, cloud-line suite',
       'Ring-reveal gazebo in a private tea garden',
@@ -337,6 +349,8 @@ export const celebrationBundles = [
     fromPrice: 46999,
     unit: 'for two, all-in',
     experiences: ['tea', 'trek', 'dining'],
+    // Valley-view chalets and the estate bungalow.
+    venues: ['h13', 'h14'],
     inclusions: [
       '3 nights, valley-view chalet',
       'All breakfasts + two candlelight dinners',
@@ -366,6 +380,8 @@ export const celebrationBundles = [
     fromPrice: 13999,
     unit: 'per person',
     experiences: ['water', 'photoshoot', 'dining'],
+    // Whole-property stays — the group takes the place over.
+    venues: ['h17', 'h18'],
     inclusions: [
       '3 nights, private pool villa',
       'Daily breakfast + one barbecue night',
@@ -394,6 +410,8 @@ export const celebrationBundles = [
     unit: 'for two, all-in',
     experiences: ['water', 'photoshoot', 'dining'],
     cabIncluded: true,
+    // Beachfront suites where the sunset set-up can be staged.
+    venues: ['h16', 'h17'],
     inclusions: [
       '2 nights, beachfront suite',
       'Daily breakfast + private beach dinner',
@@ -422,6 +440,8 @@ export const celebrationBundles = [
     fromPrice: 26999,
     unit: 'for two, all-in',
     experiences: ['water', 'bonfire', 'dining'],
+    // Beach bonfire on the property.
+    venues: ['h19', 'h17'],
     inclusions: [
       '2 nights, beach-lane boutique stay',
       'Daily breakfast + shack crawl lunch',
@@ -449,6 +469,8 @@ export const celebrationBundles = [
     fromPrice: 55999,
     unit: 'for two, all-in',
     experiences: ['water', 'spa', 'dining'],
+    // Lagoon-view suites with a spa.
+    venues: ['h16'],
     inclusions: [
       '3 nights, lagoon-view suite',
       'All breakfasts + two beach dinners',

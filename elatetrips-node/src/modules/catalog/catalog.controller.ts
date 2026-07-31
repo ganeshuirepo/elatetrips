@@ -42,6 +42,7 @@ export class CatalogController {
   hotels = async (req: Request, res: Response): Promise<Response> => {
     const q = req.query as Record<string, unknown>;
     const filter: HotelFilter = {
+      dest: q.dest as string | undefined,
       stars: q.stars as number[] | undefined,
       types: q.types as string[] | undefined,
       amenities: q.amenities as string[] | undefined,

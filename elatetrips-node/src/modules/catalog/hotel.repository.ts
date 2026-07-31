@@ -24,6 +24,7 @@ export class HotelRepository extends MongoReadRepository<Hotel> implements IHote
   async findFiltered(filter: HotelFilter): Promise<Hotel[]> {
     const query: Record<string, unknown> = {};
 
+    if (filter.dest) query.dest = filter.dest;
     if (filter.stars?.length) query.stars = { $in: filter.stars };
     if (filter.types?.length) query.type = { $in: filter.types };
     if (filter.amenities?.length) query.amenities = { $all: filter.amenities };

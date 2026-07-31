@@ -28,6 +28,9 @@ const csvNumbers = z
 // Guards GET /hotels: mirrors the HotelFilter DTO. Multi-select facets arrive as
 // CSV and become arrays; maxPrice is coerced to a positive number.
 export const hotelListQuerySchema = z.object({
+  // Single destination id; this schema strips unknown keys, so a filter absent
+  // here never reaches the service however carefully the controller reads it.
+  dest: z.string().trim().min(1).max(40).optional(),
   stars: csvNumbers,
   types: csv,
   amenities: csv,
