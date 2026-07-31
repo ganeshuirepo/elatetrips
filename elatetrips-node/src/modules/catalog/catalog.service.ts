@@ -184,13 +184,11 @@ export class CatalogService {
         .filter((f) => f.group === group)
         .map((f) => ({ id: f.id, label: f.label, icon: f.icon, tags: f.tags }));
 
-    const CAB_LABELS: { id: 'local' | 'full'; label: string; icon: string }[] = [
-      { id: 'local', label: 'Local rides', icon: '🚕' },
-      { id: 'full', label: 'Full trip', icon: '✈️' },
-    ];
-    const cabChips: PackageFilterChip[] = CAB_LABELS.filter((c) =>
-      inScope.some((b) => b.cabIncluded === c.id),
-    );
+    // One state worth filtering on: the price covers a full-trip cab. Local
+    // rides are an add-on, so no package "has" them to filter by.
+    const cabChips: PackageFilterChip[] = inScope.some((b) => b.cabIncluded)
+      ? [{ id: 'included', label: 'Cab included', icon: '🚕' }]
+      : [];
 
     const groups: PackageFilterGroup[] = [
       { id: 'occ', label: 'Celebration', icon: '🎉', multi: true, match: 'occasion', order: 10, chips: occChips },

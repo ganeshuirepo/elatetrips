@@ -114,17 +114,16 @@ export interface CelebrationBundle {
    */
   legs?: { dest: string; nights: number }[];
   /**
-   * What transport the package price already covers, using the same two classes
-   * the priced cab tiers use (see seed/data/packageOptions):
+   * True when the price already covers a FULL-TRIP cab — airport pickup and
+   * every transfer, the `cab-full` tier in seed/data/packageOptions.
    *
-   *   'local' — a cab for local sightseeing runs while you are there
-   *   'full'  — airport pickup and every transfer, door to door
+   * Only full trips are ever bundled. Local rides are an add-on the traveller
+   * chooses on the plan page, never something a package includes, so this is a
+   * flag rather than a class.
    *
    * Absent means no cab, and the package lists "add a cab" under exclusions.
-   * Drives the Cab filter on the packages screen and stops the plan page
-   * selling a cab tier on top of one already included.
    */
-  cabIncluded?: 'local' | 'full';
+  cabIncluded?: boolean;
 }
 
 export interface Activity {
