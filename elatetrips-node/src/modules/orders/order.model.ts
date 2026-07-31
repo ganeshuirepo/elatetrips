@@ -22,6 +22,9 @@ const summarySchema = new Schema(
     travellers: String,
     transportLabel: String,
     hotelLabel: String,
+    // Without a path here Mongoose would drop the shortlist on save, and the
+    // manager would never see which properties were asked for.
+    preferredHotels: { type: [String], default: [] },
     packages: [{ _id: false, celeb: String, names: [String] }],
     adventures: [String],
     experiences: [String],

@@ -21,6 +21,13 @@ export interface OrderSummary {
   travellers: string;
   transportLabel: string;
   hotelLabel: string;
+  /**
+   * Properties the traveller asked for at checkout, best first, up to three.
+   * A preference rather than a booking — the celebration manager works down the
+   * list. Kept as names so the order stays readable if a hotel is later retired
+   * from the catalogue.
+   */
+  preferredHotels: string[];
   packages: { celeb: string; names: string[] }[];
   adventures: string[];
   experiences: string[];

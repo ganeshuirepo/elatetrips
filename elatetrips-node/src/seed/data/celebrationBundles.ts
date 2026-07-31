@@ -50,6 +50,9 @@ export const celebrationBundles = [
     unit: 'for two, all-in',
     experiences: ['photoshoot', 'dining', 'trek'],
     cabIncluded: true,
+    // Five-star properties only: the proposal set-up needs a suite with a view
+    // and staff who will stage it.
+    venues: ['h1', 'h4', 'h6'],
     inclusions: [
       '2 nights, valley-view suite',
       'All meals — day 1 dinner to day 3 breakfast',
@@ -78,6 +81,8 @@ export const celebrationBundles = [
     fromPrice: 24999,
     unit: 'for two, all-in',
     experiences: ['picnic', 'bonfire', 'dining'],
+    // Cottage-style properties with grounds for the bonfire.
+    venues: ['h3', 'h5'],
     inclusions: [
       '2 nights, forest-edge cottage',
       'Daily breakfast + shola picnic',
@@ -132,6 +137,8 @@ export const celebrationBundles = [
     fromPrice: 11999,
     unit: 'per person',
     experiences: ['picnic', 'bonfire', 'photoshoot'],
+    // Whole-property stays — the group takes the place over.
+    venues: ['h4', 'h7'],
     inclusions: [
       '2 nights, private pine-edge villa',
       'Brunch spreads + one themed dinner',

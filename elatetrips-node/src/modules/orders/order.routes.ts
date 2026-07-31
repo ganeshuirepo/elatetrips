@@ -55,6 +55,7 @@ export function buildOrderRouter(controller: OrderController, authGuard: Request
    *                   travellers: { type: string }
    *                   transportLabel: { type: string }
    *                   hotelLabel: { type: string }
+   *                   preferredHotels: { type: array, items: { type: string }, maxItems: 3, description: "Properties the traveller asked for, best first" }
    *                   adventures: { type: array, items: { type: string } }
    *                   experiences: { type: array, items: { type: string } }
    *                   packages:

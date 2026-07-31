@@ -17,6 +17,8 @@ const summarySchema = z.object({
   travellers: z.string(),
   transportLabel: z.string(),
   hotelLabel: z.string(),
+  // Capped server-side too: the client limit is a UI affordance, not a control.
+  preferredHotels: z.array(z.string()).max(3).default([]),
   packages: z
     .array(z.object({ celeb: z.string(), names: z.array(z.string()) }))
     .default([]),

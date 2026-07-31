@@ -124,6 +124,15 @@ export interface CelebrationBundle {
    * Absent means no cab, and the package lists "add a cab" under exclusions.
    */
   cabIncluded?: boolean;
+  /**
+   * Hotel ids this package can actually run at, curated by ops.
+   *
+   * A celebration set-up depends on what a property allows and what its staff
+   * can host, which amenity tags cannot be trusted to answer — hence a list
+   * rather than a rule. Empty means "not curated yet": checkout says the manager
+   * will confirm, rather than refusing a hotel on no evidence.
+   */
+  venues?: string[];
 }
 
 export interface Activity {
