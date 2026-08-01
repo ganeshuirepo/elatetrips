@@ -58,8 +58,23 @@ export interface CatalogRepositories {
 export class CatalogService {
   constructor(private readonly repos: CatalogRepositories) {}
 
-  listDestinations(): Promise<Destination[]> {
-    return this.repos.destinations.findAll();
+  /**
+   * Places in a STABLE order: bookable destinations first, live ones ahead of
+   * coming-soon, then alphabetically.
+   *
+   * Sorted here rather than left to Mongo. Natural order depends on insertion
+   * and storage, so the same code served the picker in a different order in
+   * every environment — the kind of difference that reads as a bug and cannot
+   * be reproduced locally.
+   */
+  async listDestinations(): Promise<Destination[]> {
+    const rank = (d: Destination) => (d.kind === 'city' ? 1 : 0);
+    return (await this.repos.destinations.findAll()).sort(
+      (a, b) =>
+        rank(a) - rank(b) ||
+        Number(b.on) - Number(a.on) ||
+        a.name.localeCompare(b.name),
+    );
   }
 
   listVehicles(): Promise<Vehicle[]> {
