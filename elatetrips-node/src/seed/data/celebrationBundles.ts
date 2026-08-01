@@ -83,6 +83,7 @@ export const celebrationBundles = [
     experiences: ['picnic', 'bonfire', 'dining'],
     // Cottage-style properties with grounds for the bonfire.
     venues: ['h3', 'h5'],
+    events: ['music'],
     inclusions: [
       '2 nights, forest-edge cottage',
       'Daily breakfast + shola picnic',
@@ -110,6 +111,7 @@ export const celebrationBundles = [
     fromPrice: 9499,
     unit: 'per person',
     experiences: ['camp', 'bonfire', 'trek', 'dining'],
+    events: ['music', 'corporate', 'sporting'],
     inclusions: [
       'Hilltop camp, private for your group',
       'All camp meals included',
@@ -139,6 +141,7 @@ export const celebrationBundles = [
     experiences: ['picnic', 'bonfire', 'photoshoot'],
     // Whole-property stays — the group takes the place over.
     venues: ['h4', 'h5'],
+    events: ['music'],
     inclusions: [
       '2 nights, private pine-edge villa',
       'Brunch spreads + one themed dinner',
@@ -170,6 +173,7 @@ export const celebrationBundles = [
     experiences: ['kids', 'photoshoot'],
     // Needs a kids' play area and room for a party.
     venues: ['h12', 'h10'],
+    events: ['music'],
     inclusions: [
       '2 nights, family cottage',
       'Breakfast + party snacks',
@@ -200,6 +204,7 @@ export const celebrationBundles = [
     experiences: ['tea', 'dining', 'spa', 'trek'],
     // Estate stays that can lay a candlelight dinner and run a spa hour.
     venues: ['h9', 'h12'],
+    events: ['culture'],
     inclusions: [
       '2 nights, coffee-estate homestay',
       'Guided plantation walk at golden hour',
@@ -229,6 +234,7 @@ export const celebrationBundles = [
     experiences: ['camp', 'bonfire', 'trek', 'water', 'dining'],
     // Riverside camp, taken over by the group.
     venues: ['h11'],
+    events: ['music', 'corporate', 'sporting'],
     inclusions: [
       'Riverside camp, private for your group',
       'All camp meals + barbecue night',
@@ -259,6 +265,7 @@ export const celebrationBundles = [
     // Five-star estate property with a spa.
     venues: ['h9'],
     cabIncluded: true,
+    events: ['culture'],
     inclusions: [
       '3 nights, estate pool villa',
       'All breakfasts + two candlelight dinners',
@@ -291,6 +298,7 @@ export const celebrationBundles = [
     experiences: ['tea', 'spa', 'dining', 'trek'],
     // Tea-estate stays with a spa and in-house dining.
     venues: ['h13', 'h14'],
+    events: ['culture'],
     inclusions: [
       '2 nights, tea-estate cottage',
       'Daily breakfast + candlelight plantation dinner',
@@ -351,6 +359,7 @@ export const celebrationBundles = [
     experiences: ['tea', 'trek', 'dining'],
     // Valley-view chalets and the estate bungalow.
     venues: ['h13', 'h14'],
+    events: ['culture'],
     inclusions: [
       '3 nights, valley-view chalet',
       'All breakfasts + two candlelight dinners',
@@ -382,6 +391,7 @@ export const celebrationBundles = [
     experiences: ['water', 'photoshoot', 'dining'],
     // Whole-property stays — the group takes the place over.
     venues: ['h17', 'h18'],
+    events: ['music', 'sporting'],
     inclusions: [
       '3 nights, private pool villa',
       'Daily breakfast + one barbecue night',
@@ -442,6 +452,7 @@ export const celebrationBundles = [
     experiences: ['water', 'bonfire', 'dining'],
     // Beach bonfire on the property.
     venues: ['h19', 'h17'],
+    events: ['music'],
     inclusions: [
       '2 nights, beach-lane boutique stay',
       'Daily breakfast + shack crawl lunch',
@@ -505,6 +516,7 @@ export const celebrationBundles = [
       { dest: 'coorg', nights: 2 },
     ],
     cabIncluded: true,
+    events: ['culture'],
     inclusions: [
       '3 nights Ooty valley resort + 2 nights Coorg estate stay',
       'All breakfasts + three candlelight dinners',
@@ -537,6 +549,7 @@ export const celebrationBundles = [
       { dest: 'munnar', nights: 2 },
     ],
     cabIncluded: true,
+    events: ['culture'],
     inclusions: [
       '2 nights Ooty + 2 nights Munnar tea-estate stays',
       'Daily breakfast + anniversary dinner in the plantation',

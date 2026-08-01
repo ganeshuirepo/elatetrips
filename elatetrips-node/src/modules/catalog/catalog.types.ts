@@ -131,6 +131,13 @@ export interface CelebrationBundle {
    */
   cabIncluded?: boolean;
   /**
+   * Event types this package is suited to — culture, music, corporate,
+   * sporting. A separate axis from `experiences`: those describe what the trip
+   * includes, these describe the kind of occasion it can carry, and a corporate
+   * offsite is not an "experience" a package contains.
+   */
+  events?: string[];
+  /**
    * Hotel ids this package can actually run at, curated by ops.
    *
    * A celebration set-up depends on what a property allows and what its staff
@@ -236,8 +243,8 @@ export type PackageFilterMatch =
   | 'occasion'
   /** Chip carries `tags`; a package matches if it holds any of them. */
   | 'tags'
-  /** Chip id is a cab class, compared against the package's cabIncluded. */
-  | 'cab';
+  /** Chip id is an event type, matched against the package's `events`. */
+  | 'events';
 
 /** One selectable chip inside a filter group. */
 export interface PackageFilterChip {

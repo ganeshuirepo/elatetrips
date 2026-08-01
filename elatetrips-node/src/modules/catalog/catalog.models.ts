@@ -156,6 +156,7 @@ const celebrationBundleSchema = new Schema<CelebrationBundle>(
     legs: { type: [{ _id: false, dest: String, nights: Number }], default: undefined },
     // Indexed: the packages screen filters on it directly.
     cabIncluded: { type: Boolean, default: false, index: true },
+    events: { type: [String], default: [], index: true },
     // Hotel ids this package can run at; empty = not curated yet.
     venues: { type: [String], default: [] },
   },

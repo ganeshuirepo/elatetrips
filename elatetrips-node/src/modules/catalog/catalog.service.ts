@@ -184,18 +184,23 @@ export class CatalogService {
         .filter((f) => f.group === group)
         .map((f) => ({ id: f.id, label: f.label, icon: f.icon, tags: f.tags }));
 
-    // One state worth filtering on: the price covers a full-trip cab. Local
-    // rides are an add-on, so no package "has" them to filter by.
-    const cabChips: PackageFilterChip[] = inScope.some((b) => b.cabIncluded)
-      ? [{ id: 'included', label: 'Cab included', icon: '🚕' }]
-      : [];
+    // Event types, offered only where a package here carries one — the same rule
+    // as every other chip, so nothing is listed that would return an empty strip.
+    const EVENT_LABELS: { id: string; label: string; icon: string }[] = [
+      { id: 'culture', label: 'Culture', icon: '🎭' },
+      { id: 'music', label: 'Music', icon: '🎶' },
+      { id: 'corporate', label: 'Corporate', icon: '💼' },
+      { id: 'sporting', label: 'Sporting', icon: '🏅' },
+    ];
+    const eventChips: PackageFilterChip[] = EVENT_LABELS.filter((e) =>
+      inScope.some((b) => b.events?.includes(e.id)),
+    );
 
     const groups: PackageFilterGroup[] = [
       { id: 'occ', label: 'Celebration', icon: '🎉', multi: true, match: 'occasion', order: 10, chips: occChips },
       { id: 'act', label: 'Activities', icon: '🎯', multi: true, match: 'tags', order: 20, chips: facetChips('activity') },
       { id: 'exp', label: 'Experiences', icon: '✨', multi: true, match: 'tags', order: 30, chips: facetChips('experience') },
-      // Single-choice: a traveller wants one level of transport, not both.
-      { id: 'cab', label: 'Cab', icon: '🚕', multi: false, match: 'cab', order: 40, chips: cabChips },
+      { id: 'events', label: 'Events', icon: '🎪', multi: true, match: 'events', order: 40, chips: eventChips },
     ];
 
     // A group with nothing to offer here is dropped rather than shipped empty.
