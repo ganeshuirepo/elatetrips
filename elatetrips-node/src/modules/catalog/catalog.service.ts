@@ -168,10 +168,7 @@ export class CatalogService {
    * No destination ids = the full vocabulary, unscoped.
    */
   async listPackageFilters(destIds: string[]): Promise<PackageFilterGroup[]> {
-    const [facets, bundles] = await Promise.all([
-      this.listExperienceFacets(destIds),
-      this.repos.bundles.findAll(),
-    ]);
+    const bundles = await this.repos.bundles.findAll();
 
     const inScope =
       destIds.length === 0
@@ -192,12 +189,6 @@ export class CatalogService {
     // along in this group as a pseudo-chip.
     if (inScope.some((b) => b.groupSize)) occChips.push({ id: '__group', label: 'Group' });
 
-    // Activities and Experiences stay separate axes: one is what you go and do,
-    // the other is what the package already includes.
-    const facetChips = (group: 'activity' | 'experience'): PackageFilterChip[] =>
-      facets
-        .filter((f) => f.group === group)
-        .map((f) => ({ id: f.id, label: f.label, icon: f.icon, tags: f.tags }));
 
     // Event types, offered only where a package here carries one — the same rule
     // as every other chip, so nothing is listed that would return an empty strip.
@@ -229,19 +220,16 @@ export class CatalogService {
       inScope.some((p) => inBand(p.fromPrice, b.range)),
     ).map((b) => ({ id: b.id, label: b.label, range: b.range }));
 
+    /*
+     * Three groups, all of which narrow. Activities and Experiences are not
+     * here: they are chosen on the package's own customization page, where the
+     * traveller can see what a package already includes and add to it. As
+     * filters they only ever hid the packages those choices could be added to.
+     */
     const groups: PackageFilterGroup[] = [
       { id: 'occ', label: 'Celebration', icon: '🎉', multi: true, match: 'occasion', order: 10, chips: occChips },
       { id: 'budget', label: 'Budget', icon: '💰', multi: true, match: 'budget', order: 20, chips: budgetChips },
       { id: 'events', label: 'Events', icon: '🎪', multi: true, match: 'events', order: 30, chips: eventChips },
-      /*
-       * Activities and Experiences come last because they do NOT narrow: a pick
-       * is added to whichever package is booked, so filtering out the packages
-       * that lack it would hide the very ones it could be added to. The groups
-       * that decide WHICH packages you see lead; the ones that shape what you
-       * get follow.
-       */
-      { id: 'act', label: 'Activities', icon: '🎯', multi: true, match: 'tags', narrows: false, order: 40, chips: facetChips('activity') },
-      { id: 'exp', label: 'Experiences', icon: '✨', multi: true, match: 'tags', narrows: false, order: 50, chips: facetChips('experience') },
     ];
 
     // A group with nothing to offer here is dropped rather than shipped empty.
