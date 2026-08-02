@@ -211,11 +211,37 @@ export class CatalogService {
       inScope.some((b) => b.events?.includes(e.id)),
     );
 
+    /*
+     * Budget bands over fromPrice. Fixed rather than derived from the data: a
+     * band that moves as the catalogue changes gives the traveller a different
+     * answer each visit, and "under 15k" has to keep meaning under 15k. Only
+     * bands a package in scope falls into are offered.
+     */
+    const BUDGET_BANDS: { id: string; label: string; range: { min?: number; max?: number } }[] = [
+      { id: 'under-15k', label: 'Under ₹15,000', range: { max: 14999 } },
+      { id: '15k-30k', label: '₹15,000 – ₹30,000', range: { min: 15000, max: 29999 } },
+      { id: '30k-50k', label: '₹30,000 – ₹50,000', range: { min: 30000, max: 49999 } },
+      { id: 'over-50k', label: '₹50,000+', range: { min: 50000 } },
+    ];
+    const inBand = (price: number, r: { min?: number; max?: number }) =>
+      (r.min === undefined || price >= r.min) && (r.max === undefined || price <= r.max);
+    const budgetChips: PackageFilterChip[] = BUDGET_BANDS.filter((b) =>
+      inScope.some((p) => inBand(p.fromPrice, b.range)),
+    ).map((b) => ({ id: b.id, label: b.label, range: b.range }));
+
     const groups: PackageFilterGroup[] = [
-      { id: 'occ', label: 'Celebration', icon: '🎉', multi: true, match: 'occasion', order: 10, chips: occChips },
-      { id: 'act', label: 'Activities', icon: '🎯', multi: true, match: 'tags', order: 20, chips: facetChips('activity') },
-      { id: 'exp', label: 'Experiences', icon: '✨', multi: true, match: 'tags', order: 30, chips: facetChips('experience') },
-      { id: 'events', label: 'Events', icon: '🎪', multi: true, match: 'events', order: 40, chips: eventChips },
+      // "Moments", not "Celebration": a proposal, an offsite and a milestone are
+      // all moments, and only some of them are celebrations.
+      { id: 'occ', label: 'Moments', icon: '🎉', multi: true, match: 'occasion', order: 10, chips: occChips },
+      { id: 'budget', label: 'Budget', icon: '💰', multi: true, match: 'budget', order: 20, chips: budgetChips },
+      /*
+       * Activities and Experiences do NOT narrow. A pick here is added to
+       * whichever package is booked, so filtering out the packages that lack it
+       * would hide the very ones it could be added to.
+       */
+      { id: 'act', label: 'Activities', icon: '🎯', multi: true, match: 'tags', narrows: false, order: 30, chips: facetChips('activity') },
+      { id: 'exp', label: 'Experiences', icon: '✨', multi: true, match: 'tags', narrows: false, order: 40, chips: facetChips('experience') },
+      { id: 'events', label: 'Events', icon: '🎪', multi: true, match: 'events', order: 50, chips: eventChips },
     ];
 
     // A group with nothing to offer here is dropped rather than shipped empty.

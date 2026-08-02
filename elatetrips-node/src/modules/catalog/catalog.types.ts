@@ -244,7 +244,9 @@ export type PackageFilterMatch =
   /** Chip carries `tags`; a package matches if it holds any of them. */
   | 'tags'
   /** Chip id is an event type, matched against the package's `events`. */
-  | 'events';
+  | 'events'
+  /** Chip carries a `range`; a package matches when fromPrice falls inside it. */
+  | 'budget';
 
 /** One selectable chip inside a filter group. */
 export interface PackageFilterChip {
@@ -253,6 +255,8 @@ export interface PackageFilterChip {
   icon?: string;
   /** Only for `match: 'tags'` groups — the package tags this chip covers. */
   tags?: string[];
+  /** Only for `match: 'budget'` — an open-ended price band, both bounds inclusive. */
+  range?: { min?: number; max?: number };
 }
 
 export interface PackageFilterGroup {
@@ -266,6 +270,14 @@ export interface PackageFilterGroup {
    */
   multi: boolean;
   match: PackageFilterMatch;
+  /**
+   * Whether choosing a chip NARROWS the package list. False for groups that
+   * express a wish rather than a filter — Activities and Experiences are added
+   * to whichever package is booked instead of hiding the ones that lack them,
+   * so filtering them away would remove the very packages the traveller could
+   * add them to. Absent counts as true.
+   */
+  narrows?: boolean;
   /** Display order across the bar, low first. */
   order: number;
   chips: PackageFilterChip[];
