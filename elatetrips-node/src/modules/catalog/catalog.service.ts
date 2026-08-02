@@ -230,18 +230,18 @@ export class CatalogService {
     ).map((b) => ({ id: b.id, label: b.label, range: b.range }));
 
     const groups: PackageFilterGroup[] = [
-      // "Moments", not "Celebration": a proposal, an offsite and a milestone are
-      // all moments, and only some of them are celebrations.
-      { id: 'occ', label: 'Moments', icon: '🎉', multi: true, match: 'occasion', order: 10, chips: occChips },
+      { id: 'occ', label: 'Celebration', icon: '🎉', multi: true, match: 'occasion', order: 10, chips: occChips },
       { id: 'budget', label: 'Budget', icon: '💰', multi: true, match: 'budget', order: 20, chips: budgetChips },
+      { id: 'events', label: 'Events', icon: '🎪', multi: true, match: 'events', order: 30, chips: eventChips },
       /*
-       * Activities and Experiences do NOT narrow. A pick here is added to
-       * whichever package is booked, so filtering out the packages that lack it
-       * would hide the very ones it could be added to.
+       * Activities and Experiences come last because they do NOT narrow: a pick
+       * is added to whichever package is booked, so filtering out the packages
+       * that lack it would hide the very ones it could be added to. The groups
+       * that decide WHICH packages you see lead; the ones that shape what you
+       * get follow.
        */
-      { id: 'act', label: 'Activities', icon: '🎯', multi: true, match: 'tags', narrows: false, order: 30, chips: facetChips('activity') },
-      { id: 'exp', label: 'Experiences', icon: '✨', multi: true, match: 'tags', narrows: false, order: 40, chips: facetChips('experience') },
-      { id: 'events', label: 'Events', icon: '🎪', multi: true, match: 'events', order: 50, chips: eventChips },
+      { id: 'act', label: 'Activities', icon: '🎯', multi: true, match: 'tags', narrows: false, order: 40, chips: facetChips('activity') },
+      { id: 'exp', label: 'Experiences', icon: '✨', multi: true, match: 'tags', narrows: false, order: 50, chips: facetChips('experience') },
     ];
 
     // A group with nothing to offer here is dropped rather than shipped empty.
