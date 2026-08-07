@@ -1,0 +1,45 @@
+name: Seed reference data
+
+# Manual only. Seeding REPLACES the reference collections (destinations, hotels,
+# packages, bundles, options…) from the repo, which is the source of truth for
+# them. It never touches users, orders or counters — see elatetrips-node/src/seed/seed.ts.
+#
+# Deliberately not part of deploy.sh: a deploy should be safe to re-run at any
+# time, and silently rewriting catalogue data on every push is not.
+#
+# Run AFTER a deploy — it executes the compiled dist/ the deploy just built.
+on:
+  workflow_dispatch:
+    inputs:
+      collections:
+        description: >-
+          Space-separated collections to reseed (e.g. "celebrationBundles hotels").
+          Leave empty to reseed all reference collections.
+        required: false
+        default: ''
+
+concurrency:
+  group: seed-production
+  cancel-in-progress: false
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: SSH into EC2 and seed
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          command_timeout: 15m
+          envs: COLLECTIONS
+          script: |
+            set -euo pipefail
+            cd ~/elatetrips/elatetrips-node
+            # seed:built runs the compiled dist/ with plain node, so it works on a
+            # box installed without dev dependencies (ts-node-dev is a devDep).
+            npm run seed:built -- $COLLECTIONS
+        env:
+          COLLECTIONS: ${{ inputs.collections }}
