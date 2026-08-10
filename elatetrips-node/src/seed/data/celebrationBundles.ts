@@ -52,6 +52,7 @@ export const celebrationBundles = [
     cabIncluded: true,
     // Five-star properties only: the proposal set-up needs a suite with a view
     // and staff who will stage it.
+    surprises: ['photoshoot', 'decor'],
     venues: ['h1', 'h4', 'h6'],
     inclusions: [
       '2 nights, valley-view suite',
@@ -82,8 +83,8 @@ export const celebrationBundles = [
     unit: 'for two, all-in',
     experiences: ['picnic', 'bonfire', 'dining'],
     // Cottage-style properties with grounds for the bonfire.
+    surprises: ['cake', 'decor', 'photoshoot', 'hamper'],
     venues: ['h3', 'h5'],
-    events: ['music'],
     inclusions: [
       '2 nights, forest-edge cottage',
       'Daily breakfast + shola picnic',
@@ -141,7 +142,6 @@ export const celebrationBundles = [
     experiences: ['picnic', 'bonfire', 'photoshoot'],
     // Whole-property stays — the group takes the place over.
     venues: ['h4', 'h5'],
-    events: ['music'],
     inclusions: [
       '2 nights, private pine-edge villa',
       'Brunch spreads + one themed dinner',
@@ -172,8 +172,8 @@ export const celebrationBundles = [
     unit: 'family of four',
     experiences: ['kids', 'photoshoot'],
     // Needs a kids' play area and room for a party.
+    surprises: ['cake', 'decor', 'hamper'],
     venues: ['h12', 'h10'],
-    events: ['music'],
     inclusions: [
       '2 nights, family cottage',
       'Breakfast + party snacks',
@@ -204,7 +204,6 @@ export const celebrationBundles = [
     experiences: ['tea', 'dining', 'spa', 'trek'],
     // Estate stays that can lay a candlelight dinner and run a spa hour.
     venues: ['h9', 'h12'],
-    events: ['culture'],
     inclusions: [
       '2 nights, coffee-estate homestay',
       'Guided plantation walk at golden hour',
@@ -265,7 +264,6 @@ export const celebrationBundles = [
     // Five-star estate property with a spa.
     venues: ['h9'],
     cabIncluded: true,
-    events: ['culture'],
     inclusions: [
       '3 nights, estate pool villa',
       'All breakfasts + two candlelight dinners',
@@ -358,8 +356,8 @@ export const celebrationBundles = [
     unit: 'for two, all-in',
     experiences: ['tea', 'trek', 'dining'],
     // Valley-view chalets and the estate bungalow.
+    surprises: ['photoshoot', 'hamper', 'decor'],
     venues: ['h13', 'h14'],
-    events: ['culture'],
     inclusions: [
       '3 nights, valley-view chalet',
       'All breakfasts + two candlelight dinners',
@@ -451,8 +449,8 @@ export const celebrationBundles = [
     unit: 'for two, all-in',
     experiences: ['water', 'bonfire', 'dining'],
     // Beach bonfire on the property.
+    surprises: ['cake', 'decor', 'photoshoot'],
     venues: ['h19', 'h17'],
-    events: ['music'],
     inclusions: [
       '2 nights, beach-lane boutique stay',
       'Daily breakfast + shack crawl lunch',
@@ -516,7 +514,6 @@ export const celebrationBundles = [
       { dest: 'coorg', nights: 2 },
     ],
     cabIncluded: true,
-    events: ['culture'],
     inclusions: [
       '3 nights Ooty valley resort + 2 nights Coorg estate stay',
       'All breakfasts + three candlelight dinners',
@@ -549,7 +546,6 @@ export const celebrationBundles = [
       { dest: 'munnar', nights: 2 },
     ],
     cabIncluded: true,
-    events: ['culture'],
     inclusions: [
       '2 nights Ooty + 2 nights Munnar tea-estate stays',
       'Daily breakfast + anniversary dinner in the plantation',

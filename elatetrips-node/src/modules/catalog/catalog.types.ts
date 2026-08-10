@@ -138,6 +138,14 @@ export interface CelebrationBundle {
    */
   events?: string[];
   /**
+   * Surprises this package can stage — photoshoot, gift hamper, décor, cake.
+   *
+   * A third axis alongside `experiences` and `events`: what the package springs
+   * on someone, as opposed to what it includes or what kind of occasion it can
+   * carry. Drives the Surprises filter group.
+   */
+  surprises?: string[];
+  /**
    * Hotel ids this package can actually run at, curated by ops.
    *
    * A celebration set-up depends on what a property allows and what its staff
@@ -245,8 +253,19 @@ export type PackageFilterMatch =
   | 'tags'
   /** Chip id is an event type, matched against the package's `events`. */
   | 'events'
+  /** Chip id is a surprise, matched against the package's `surprises`. */
+  | 'surprises'
+  /** Chip carries `tags`; matches when `events` OR `experiences` hold any. */
+  | 'happenings'
   /** Chip carries a `range`; a package matches when fromPrice falls inside it. */
   | 'budget';
+
+/**
+ * What a trip is for, answered in the client's hero before any package is
+ * shown. Groups declare which one they answer to; the client shows only the
+ * matching group.
+ */
+export type PlanningIntent = 'celebration' | 'surprise' | 'event' | 'none';
 
 /** One selectable chip inside a filter group. */
 export interface PackageFilterChip {
@@ -278,6 +297,11 @@ export interface PackageFilterGroup {
    * add them to. Absent counts as true.
    */
   narrows?: boolean;
+  /**
+   * Which planning intent this group answers to. A group with none — Budget —
+   * belongs on the bar whatever the trip is for.
+   */
+  intent?: PlanningIntent;
   /** Display order across the bar, low first. */
   order: number;
   chips: PackageFilterChip[];

@@ -190,17 +190,32 @@ export class CatalogService {
     if (inScope.some((b) => b.groupSize)) occChips.push({ id: '__group', label: 'Group' });
 
 
-    // Event types, offered only where a package here carries one — the same rule
-    // as every other chip, so nothing is listed that would return an empty strip.
-    const EVENT_LABELS: { id: string; label: string; icon: string }[] = [
-      { id: 'culture', label: 'Culture', icon: '🎭' },
-      { id: 'music', label: 'Music', icon: '🎶' },
-      { id: 'corporate', label: 'Corporate', icon: '💼' },
-      { id: 'sporting', label: 'Sporting', icon: '🏅' },
+    /*
+     * Events & Experiences — one classification across both axes. Each chip's
+     * tags are the values it covers in a package's `events` OR `experiences`;
+     * offered only where a package here carries any, like every other chip.
+     */
+    const HAPPENING_LABELS: { id: string; label: string; icon: string; tags: string[] }[] = [
+      { id: 'culture', label: 'Culture', icon: '🎭', tags: ['culture'] },
+      { id: 'music', label: 'Music', icon: '🎶', tags: ['music'] },
+      { id: 'corporate', label: 'Corporate', icon: '💼', tags: ['corporate'] },
+      { id: 'sporting', label: 'Sporting', icon: '🏅', tags: ['sporting'] },
+      { id: 'tea', label: 'Tea trails', icon: '🍃', tags: ['tea'] },
+      { id: 'trek', label: 'Treks & hikes', icon: '🥾', tags: ['trek'] },
+      { id: 'water', label: 'Water & beach', icon: '🏄', tags: ['water'] },
+      { id: 'camp', label: 'Camp & bonfire', icon: '⛺', tags: ['camp', 'bonfire'] },
+      { id: 'picnic', label: 'Picnics', icon: '🧺', tags: ['picnic'] },
+      { id: 'dining', label: 'Food & dining', icon: '🍜', tags: ['food', 'dining'] },
+      { id: 'spa', label: 'Spa & wellness', icon: '🧘', tags: ['spa'] },
+      { id: 'photoshoot', label: 'Photoshoots', icon: '📸', tags: ['photoshoot'] },
+      { id: 'kids', label: 'Kids & family', icon: '🎈', tags: ['kids'] },
     ];
-    const eventChips: PackageFilterChip[] = EVENT_LABELS.filter((e) =>
-      inScope.some((b) => b.events?.includes(e.id)),
-    );
+    const happeningChips: PackageFilterChip[] = HAPPENING_LABELS.filter((h) =>
+      inScope.some((b) => {
+        const carried = new Set([...(b.events ?? []), ...(b.experiences ?? [])]);
+        return h.tags.some((t) => carried.has(t));
+      }),
+    ).map((h) => ({ id: h.id, label: h.label, icon: h.icon, tags: h.tags }));
 
     /*
      * Budget bands over fromPrice. Fixed rather than derived from the data: a
@@ -221,15 +236,19 @@ export class CatalogService {
     ).map((b) => ({ id: b.id, label: b.label, range: b.range }));
 
     /*
-     * Three groups, all of which narrow. Activities and Experiences are not
+     * Four groups, all of which narrow. Activities and Experiences are not
      * here: they are chosen on the package's own customization page, where the
      * traveller can see what a package already includes and add to it. As
      * filters they only ever hid the packages those choices could be added to.
+     *
+     * `intent` ties a group to the hero's "what are you planning?" answer — the
+     * client shows only the group that answer belongs to. Budget carries none,
+     * so it stays on the bar whatever the trip is for.
      */
     const groups: PackageFilterGroup[] = [
-      { id: 'occ', label: 'Celebration', icon: '🎉', multi: true, match: 'occasion', order: 10, chips: occChips },
+      { id: 'occ', label: 'Celebration', icon: '🎉', multi: true, match: 'occasion', intent: 'celebration', order: 10, chips: occChips },
       { id: 'budget', label: 'Budget', icon: '💰', multi: true, match: 'budget', order: 20, chips: budgetChips },
-      { id: 'events', label: 'Events', icon: '🎪', multi: true, match: 'events', order: 30, chips: eventChips },
+      { id: 'happenings', label: 'Events & Experiences', icon: '🎪', multi: true, match: 'happenings', intent: 'event', order: 30, chips: happeningChips },
     ];
 
     // A group with nothing to offer here is dropped rather than shipped empty.

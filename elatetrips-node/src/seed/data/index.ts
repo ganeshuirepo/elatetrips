@@ -13,3 +13,4 @@ export * from './products';
 export * from './packageCategories';
 export * from './activityCategories';
 export * from './celebrationCategories';
+export * from './supportTeam';

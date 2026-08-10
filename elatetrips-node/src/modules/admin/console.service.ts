@@ -8,7 +8,7 @@ import {
 import type { IPasswordHasher } from '../auth/auth.types';
 import { logger } from '../../common/logger';
 import type { Activity, CelebrationBundle, Hotel, Vehicle } from '../catalog/catalog.types';
-import type { ConsoleUser, VendorType } from './console.model';
+import type { ConsoleRole, ConsoleUser, VendorType } from './console.model';
 import { signConsoleToken, type ConsoleClaims } from './console.token';
 import {
   activityUpdateSchema,
@@ -30,7 +30,7 @@ export interface ConsoleSession {
   token: string;
   username: string;
   displayName: string;
-  role: 'admin' | 'vendor';
+  role: ConsoleRole;
   vendorType?: VendorType;
   refId?: string;
 }

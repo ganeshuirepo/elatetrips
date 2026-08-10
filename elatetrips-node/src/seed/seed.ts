@@ -15,6 +15,9 @@ import {
   ProductModel,
   ShopCatalogModel,
 } from '../modules/catalog/catalog.models';
+import { SupportStaffModel, SupportVendorModel } from '../modules/support/support.models';
+import { ConsoleUserModel } from '../modules/admin/console.model';
+import bcrypt from 'bcryptjs';
 
 import {
   destinations,
@@ -36,6 +39,8 @@ import {
   experiences,
   products,
   shopCatalogs,
+  supportStaff,
+  supportVendors,
   categoryFor,
   activityCategoryFor,
   celebCategoryFor,
@@ -119,6 +124,33 @@ async function seed(): Promise<void> {
     ['activities', async () => (await ActivityModel.deleteMany({}), ActivityModel.insertMany(buildActivities()))],
     ['products', async () => (await ProductModel.deleteMany({}), ProductModel.insertMany(products))],
     ['shopCatalogs', async () => (await ShopCatalogModel.deleteMany({}), ShopCatalogModel.insertMany(shopCatalogs))],
+    ['supportStaff', async () => (await SupportStaffModel.deleteMany({}), SupportStaffModel.insertMany(supportStaff))],
+    ['supportVendors', async () => (await SupportVendorModel.deleteMany({}), SupportVendorModel.insertMany(supportVendors))],
+    /**
+     * Console logins for the support roles: username = the row id (cm-meera,
+     * v-oo-cake1…), shared mock password Elate@123. Upserted rather than wiped
+     * so reseeding support data never logs the whole ops team out — and the
+     * admin/vendor accounts in the same collection are never touched.
+     */
+    ['supportLogins', async () => {
+      const hash = bcrypt.hashSync('Elate@123', 10);
+      const rows = [
+        ...supportStaff.map((s) => ({
+          username: s.id, displayName: s.name, role: s.role, refId: s.id,
+        })),
+        ...supportVendors.map((v) => ({
+          username: v.id, displayName: v.name, role: 'crew' as const, refId: v.id,
+        })),
+      ];
+      for (const r of rows) {
+        await ConsoleUserModel.updateOne(
+          { username: r.username },
+          { $set: { ...r, passwordHash: hash }, $setOnInsert: { createdAt: new Date().toISOString() } },
+          { upsert: true },
+        );
+      }
+      return rows.length;
+    }],
   ];
 
   // Argument checking happens BEFORE connecting: a typo should cost nothing and

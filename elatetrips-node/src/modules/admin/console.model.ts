@@ -6,8 +6,13 @@
  */
 import { Schema, model } from 'mongoose';
 
-/** Console accounts: Elate admins and onboarded vendors. */
-export type ConsoleRole = 'admin' | 'vendor';
+/**
+ * Console accounts: Elate admins, onboarded listing vendors, and the
+ * post-booking support roles — celebration crew vendors ('crew'), remote
+ * Celebration Managers ('cm') and local Operational Managers ('om'). Support
+ * roles bind to their support directory row through refId (staff or vendor id).
+ */
+export type ConsoleRole = 'admin' | 'vendor' | 'crew' | 'cm' | 'om';
 /** What a vendor account is bound to — exactly one listing (or ground crew). */
 export type VendorType = 'hotel' | 'cab' | 'experience' | 'ground';
 
