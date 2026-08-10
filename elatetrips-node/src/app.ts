@@ -37,6 +37,10 @@ export function createApp(): Express {
   app.use(express.urlencoded({ extended: true, limit: '100kb' }));
   if (!env.isProd) app.use(morgan('dev'));
 
+  // Uploaded photos are served straight off disk (mock-first storage) —
+  // long cache, immutable names.
+  app.use('/uploads', express.static(env.uploadsDir, { maxAge: '365d', immutable: true }));
+
   mountSwagger(app);
 
   const container = createContainer();

@@ -36,6 +36,9 @@ export class AuthController {
   forgotPassword = async (req: Request, res: Response): Promise<Response> =>
     ok(res, await this.service.forgotPassword(req.body.identifier));
 
+  refresh = async (req: Request, res: Response): Promise<Response> =>
+    ok(res, await this.service.refreshSession(req.body.refreshToken));
+
   resetPassword = async (req: Request, res: Response): Promise<Response> =>
     ok(res, await this.service.resetPassword(req.body.identifier, req.body.otp, req.body.password));
 }

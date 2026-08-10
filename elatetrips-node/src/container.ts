@@ -49,11 +49,19 @@ import { WeddingRepository } from './modules/wedding/wedding.repository';
 import { WeddingService } from './modules/wedding/wedding.service';
 import { WeddingController } from './modules/wedding/wedding.controller';
 
+import { SupportService } from './modules/support/support.service';
+import { SupportController } from './modules/support/support.controller';
+
 import { ReviewRepository } from './modules/reviews/review.repository';
 import { ReviewService } from './modules/reviews/review.service';
 import { ReviewController } from './modules/reviews/review.controller';
 
 import { buildAuthGuard } from './common/middleware/authGuard';
+import { buildIdentityGuard } from './common/middleware/identityGuard';
+import { RefreshService } from './modules/auth/refresh.service';
+import { PushService } from './modules/push/push.service';
+import { ConsolePushSender } from './modules/push/push.sender';
+import { DiskPhotoStorage, type IPhotoStorage } from './modules/uploads/upload.storage';
 import { buildAdminGuard } from './modules/admin/console.guard';
 import { MongoCrudRepository } from './repositories/MongoCrudRepository';
 import { MongoReadRepository as OrdersReadRepository } from './repositories/MongoReadRepository';
@@ -74,6 +82,10 @@ import type { Activity, Hotel, Vehicle } from './modules/catalog/catalog.types';
 export interface Container {
   authGuard: RequestHandler;
   adminGuard: RequestHandler;
+  /** User JWT OR console token — uploads and push registration. */
+  identityGuard: RequestHandler;
+  push: PushService;
+  photoStorage: IPhotoStorage;
   controllers: {
     catalog: CatalogController;
     auth: AuthController;
@@ -83,6 +95,7 @@ export interface Container {
     partners: PartnerController;
     weddings: WeddingController;
     reviews: ReviewController;
+    support: SupportController;
     admin: AdminController;
     console: ConsoleController;
   };
@@ -148,11 +161,22 @@ export function createContainer(): Container {
   });
   const userService = new UserService(usersRepo);
   const orderService = new OrderService(ordersRepo);
-  const authService = new AuthService(otpStore, otpSender, tokenService, passwordHasher, usersRepo, env.authAutoActivate);
+  // Rotating refresh tokens (mobile gap #3) — additive beside the 7-day JWT.
+  const refreshService = new RefreshService();
+  const authService = new AuthService(otpStore, otpSender, tokenService, passwordHasher, usersRepo, env.authAutoActivate, refreshService);
+  // Push delivery (mobile gap #2): tokens per identity + the supportBus hook.
+  // Console sender until a Firebase service account exists.
+  const pushService = new PushService(ordersRepo, new ConsolePushSender());
+  pushService.attach();
+  // Photo uploads (mobile gap #1): disk mock-first, S3/Cloudinary later.
+  const photoStorage = new DiskPhotoStorage(env.uploadsDir, `${env.publicBaseUrl}/uploads`);
   const pricingService = new PricingService(vehiclesRepo, destinationsRepo);
   const partnerService = new PartnerService(partnersRepo);
   const weddingService = new WeddingService(weddingsRepo);
   const reviewService = new ReviewService(reviewsRepo, ordersRepo, usersRepo, hotelsRepo);
+  // Post-booking support: reads orders through the same repository the orders
+  // module uses, so a booking and its support thread can never disagree.
+  const supportService = new SupportService(ordersRepo);
   // Admin console: write-capable repos over the same mocked catalog collections.
   const hotelsCrud = new MongoCrudRepository<Hotel>(HotelModel);
   const bundlesCrud = new MongoCrudRepository<CelebrationBundle>(CelebrationBundleModel);
@@ -181,6 +205,9 @@ export function createContainer(): Container {
   return {
     authGuard: buildAuthGuard(tokenService),
     adminGuard: buildAdminGuard(env.adminKey),
+    identityGuard: buildIdentityGuard(tokenService),
+    push: pushService,
+    photoStorage,
     controllers: {
       catalog: new CatalogController(catalogService),
       auth: new AuthController(authService),
@@ -190,6 +217,7 @@ export function createContainer(): Container {
       partners: new PartnerController(partnerService),
       weddings: new WeddingController(weddingService),
       reviews: new ReviewController(reviewService),
+      support: new SupportController(supportService),
       admin: new AdminController(adminService),
       console: new ConsoleController(consoleService),
     },

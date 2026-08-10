@@ -4,6 +4,7 @@ import { ok } from '../common/http/ApiResponse';
 import { buildAuthRouter } from '../modules/auth/auth.routes';
 import { buildUserRouter } from '../modules/users/user.routes';
 import { buildOrderRouter } from '../modules/orders/order.routes';
+import { buildSupportRouter } from '../modules/support/support.routes';
 import { buildCatalogRouter } from '../modules/catalog/catalog.routes';
 import { buildPricingRouter } from '../modules/pricing/pricing.routes';
 import { buildPartnerRouter } from '../modules/partner/partner.routes';
@@ -11,6 +12,8 @@ import { buildWeddingRouter } from '../modules/wedding/wedding.routes';
 import { buildReviewRouter } from '../modules/reviews/review.routes';
 import { buildAdminRouter } from '../modules/admin/admin.routes';
 import { buildConsoleRouter, buildVendorRouter } from '../modules/admin/console.routes';
+import { buildUploadRouter } from '../modules/uploads/upload.routes';
+import { buildPushRouter } from '../modules/push/push.routes';
 
 /**
  * Builds the API sub-router. The `/api/v1` prefix itself is applied by app.ts
@@ -36,6 +39,9 @@ export function buildApiRouter(c: Container): Router {
   router.use('/auth', buildAuthRouter(c.controllers.auth));
   router.use('/users', buildUserRouter(c.controllers.users, c.authGuard));
   router.use('/orders', buildOrderRouter(c.controllers.orders, c.authGuard));
+  // Post-booking support: guest thread (auth), vendor app + ops console (mock
+  // header identity), and the shared SSE stream.
+  router.use('/support', buildSupportRouter(c.controllers.support, c.authGuard));
   router.use('/catalog', buildCatalogRouter(c.controllers.catalog));
   router.use('/pricing', buildPricingRouter(c.controllers.pricing));
   router.use('/partners', buildPartnerRouter(c.controllers.partners));
@@ -46,6 +52,9 @@ export function buildApiRouter(c: Container): Router {
   // /admin is gated by adminGuard; /console and /vendor are both served by the
   // same console controller (their own routers handle any further auth).
   router.use('/admin', buildAdminRouter(c.controllers.admin, c.controllers.console, c.adminGuard));
+  // Photo uploads + push-token registration: either identity may call these.
+  router.use('/uploads', buildUploadRouter(c.photoStorage, c.identityGuard));
+  router.use('/push', buildPushRouter(c.push, c.identityGuard));
   router.use('/console', buildConsoleRouter(c.controllers.console));
   router.use('/vendor', buildVendorRouter(c.controllers.console));
 

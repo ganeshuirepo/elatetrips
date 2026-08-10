@@ -32,6 +32,10 @@ export const env = {
   /** Shared secret for the admin console (mock-first; real accounts later). */
   adminKey: process.env.ADMIN_KEY ?? 'elate-admin-key',
   jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? '7d',
+  /** Where uploaded photos are written (disk mock-first storage). */
+  uploadsDir: process.env.UPLOADS_DIR ?? 'uploads',
+  /** Absolute base for URLs the API hands out (uploaded photo links). */
+  publicBaseUrl: process.env.PUBLIC_BASE_URL ?? `http://localhost:${process.env.PORT ?? 4000}`,
 
   // ---- OTP delivery providers (all optional — console fallback in dev) ------
   // Email OTP: Brevo (free tier: 300 emails/day, no credit card) — brevo.com

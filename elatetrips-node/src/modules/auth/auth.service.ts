@@ -7,6 +7,7 @@ import {
   AppError,
 } from '../../common/errors/AppError';
 import type { IOtpStore, IOtpSender, ITokenService, IPasswordHasher } from './auth.types';
+import { RefreshService } from './refresh.service';
 import type { IUserRepository } from '../users/user.repository';
 import type { User, SignupData, VerifyChannel } from '../users/user.types';
 
@@ -21,6 +22,9 @@ export interface OtpResult {
 export interface SessionResult {
   token: string;
   user: User;
+  /** Rotating refresh credential (see refresh.service.ts) — additive; clients
+   *  that ignore it keep the plain 7-day-token behaviour. */
+  refreshToken?: string;
 }
 
 /**
@@ -38,11 +42,24 @@ export class AuthService {
     /** When true, signup activates immediately and returns a session; email/
      *  mobile stay UNVERIFIED for the future OTP verification rollout. */
     private readonly autoActivate: boolean = false,
+    /** Optional: when wired, every session also carries a rotating refresh token. */
+    private readonly refreshTokens?: RefreshService,
   ) {}
 
   /** Mint a user JWT (claims = the user's phone) and pair it with the user. */
-  private session(user: User): SessionResult {
-    return { token: this.tokenService.sign({ phone: user.phone }), user };
+  private async session(user: User): Promise<SessionResult> {
+    const token = this.tokenService.sign({ phone: user.phone });
+    if (!this.refreshTokens) return { token, user };
+    return { token, user, refreshToken: await this.refreshTokens.issue(user.phone) };
+  }
+
+  /** Trade a refresh token for a fresh session (single-use rotation). */
+  async refreshSession(rawToken: string): Promise<SessionResult> {
+    if (!this.refreshTokens) throw new UnauthorizedError('Refresh is not enabled');
+    const { phone, refreshToken } = await this.refreshTokens.rotate(rawToken);
+    const user = await this.users.findByPhone(phone);
+    if (!user) throw new UnauthorizedError('Account no longer exists');
+    return { token: this.tokenService.sign({ phone }), user, refreshToken };
   }
 
   /** Which channel an identifier belongs to for a given user. */

@@ -11,7 +11,13 @@
     "seed:built": "node dist/seed/seed.js",
     "typecheck": "tsc --noEmit"
   },
-  "keywords": ["express", "mongodb", "mongoose", "swagger", "rest-api"],
+  "keywords": [
+    "express",
+    "mongodb",
+    "mongoose",
+    "swagger",
+    "rest-api"
+  ],
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -23,6 +29,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.1",
     "morgan": "^1.10.0",
+    "multer": "^2.2.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "zod": "^3.23.8"
@@ -34,6 +41,7 @@
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/morgan": "^1.9.9",
+    "@types/multer": "^2.2.0",
     "@types/node": "^20.14.11",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.6",

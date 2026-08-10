@@ -29,6 +29,7 @@ import {
   signupSchema,
   verifyAccountSchema,
   loginSchema,
+  refreshSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
 } from './auth.validation';
@@ -127,6 +128,21 @@ export function buildAuthRouter(controller: AuthController): Router {
     loginRateLimit(bodyField('identifier')),
     validate({ body: loginSchema }),
     asyncHandler(controller.login),
+  );
+
+  /**
+   * @openapi
+   * /api/v1/auth/refresh:
+   *   post:
+   *     tags: [Auth]
+   *     summary: Trade a rotating refresh token for a fresh session
+   *     responses:
+   *       200: { description: "{ token, user, refreshToken }" }
+   */
+  router.post(
+    '/refresh',
+    validate({ body: refreshSchema }),
+    asyncHandler(controller.refresh),
   );
 
   /**
