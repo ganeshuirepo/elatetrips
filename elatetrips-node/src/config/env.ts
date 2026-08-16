@@ -11,6 +11,27 @@ function required(key: string, fallback?: string): string {
   return value;
 }
 
+const INSECURE_JWT_DEFAULT = 'change-me-in-production';
+
+/**
+ * The JWT signing secret. Best practice: an empty or default secret is fatal in
+ * production (forgeable tokens), so we fail closed there; in dev we fall back to
+ * a placeholder so local work keeps running.
+ */
+function resolveJwtSecret(): string {
+  const raw = (process.env.JWT_SECRET ?? '').trim();
+  const isProd = (process.env.NODE_ENV ?? 'development') === 'production';
+  if (!raw || raw === INSECURE_JWT_DEFAULT) {
+    if (isProd) {
+      throw new Error('JWT_SECRET must be set to a strong, non-default value in production');
+    }
+    return raw || INSECURE_JWT_DEFAULT;
+  }
+  return raw;
+}
+
+const corsRaw = (process.env.CORS_ORIGINS ?? 'http://localhost:3000').trim();
+
 /**
  * Centralised, validated configuration. Nothing else in the codebase reads
  * `process.env` directly — this keeps configuration a single, typed source of
@@ -23,15 +44,21 @@ export const env = {
    *  the whole OTP flow (issue/verify/resend) stays in place for that day. */
   authAutoActivate: process.env.AUTH_AUTO_ACTIVATE !== 'false',
   port: Number(process.env.PORT ?? 4000),
-  corsOrigins: (process.env.CORS_ORIGINS ?? 'http://localhost:3000')
-    .split(',')
-    .map((o) => o.trim())
-    .filter(Boolean),
+  /** `CORS_ORIGINS=*` allows any origin (fine for a token-auth API with no
+   *  cookies); otherwise a comma-separated allowlist. */
+  corsAllowAll: corsRaw === '*',
+  corsOrigins: corsRaw === '*'
+    ? []
+    : corsRaw.split(',').map((o) => o.trim()).filter(Boolean),
   mongoUri: required('MONGODB_URI', 'mongodb://127.0.0.1:27017/elatetrips'),
-  jwtSecret: required('JWT_SECRET', 'change-me-in-production'),
+  jwtSecret: resolveJwtSecret(),
   /** Shared secret for the admin console (mock-first; real accounts later). */
   adminKey: process.env.ADMIN_KEY ?? 'elate-admin-key',
-  jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? '7d',
+  /** Access-token lifetime — fully env-driven (e.g. 15m, 1h, 7d). Short is
+   *  best-practice; the mobile client transparently rotates on expiry. */
+  jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? '1h',
+  /** Refresh-token lifetime in days — env-driven, no code change to tune. */
+  refreshExpiresDays: Number(process.env.REFRESH_EXPIRES_DAYS ?? 30),
   /** Where uploaded photos are written (disk mock-first storage). */
   uploadsDir: process.env.UPLOADS_DIR ?? 'uploads',
   /** Absolute base for URLs the API hands out (uploaded photo links). */

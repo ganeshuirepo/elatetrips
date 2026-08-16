@@ -24,12 +24,13 @@ export function createApp(): Express {
   app.set('trust proxy', 1);
 
   app.use(helmet());
-  // No wildcard fallback in production — an unset CORS_ORIGINS must fail closed,
-  // not quietly open the API to every origin.
-  if (env.isProd && env.corsOrigins.length === 0) {
-    throw new Error('CORS_ORIGINS must be set in production');
+  // CORS_ORIGINS=* explicitly allows any origin (safe here: the API is
+  // token-authenticated with no cookies). Otherwise use the allowlist, and in
+  // production refuse to boot on an unset value rather than quietly open up.
+  if (env.isProd && !env.corsAllowAll && env.corsOrigins.length === 0) {
+    throw new Error('CORS_ORIGINS must be set in production (use "*" to allow all)');
   }
-  app.use(cors({ origin: env.corsOrigins.length ? env.corsOrigins : true }));
+  app.use(cors({ origin: env.corsAllowAll || env.corsOrigins.length === 0 ? true : env.corsOrigins }));
   app.use(compression());
   // Bounded bodies: the largest legitimate payload here is an order with its
   // lines, comfortably under 100kb.

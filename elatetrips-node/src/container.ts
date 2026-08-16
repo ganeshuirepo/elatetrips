@@ -161,8 +161,8 @@ export function createContainer(): Container {
   });
   const userService = new UserService(usersRepo);
   const orderService = new OrderService(ordersRepo);
-  // Rotating refresh tokens (mobile gap #3) — additive beside the 7-day JWT.
-  const refreshService = new RefreshService();
+  // Rotating refresh tokens — additive beside the access JWT; TTL is env-driven.
+  const refreshService = new RefreshService(env.refreshExpiresDays);
   const authService = new AuthService(otpStore, otpSender, tokenService, passwordHasher, usersRepo, env.authAutoActivate, refreshService);
   // Push delivery (mobile gap #2): tokens per identity + the supportBus hook.
   // Console sender until a Firebase service account exists.
