@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elatetrips.com/contracts/rfq.schema.json",
+  "title": "RFQ — canonical 8-slot requirement (contracts-v1.1, Δ-001 applied)",
+  "type": "object",
+  "properties": {
+    "rfq_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "version": { "type": "integer", "minimum": 1 },
+    "itinerary_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "package_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "review", "submitted", "quoting", "quoted", "confirmed", "booked", "closed"]
+    },
+    "occasion": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["celebration", "surprise", "event", "adventure", "leisure"] },
+        "details": {
+          "type": "object",
+          "properties": {
+            "celebrations": {
+              "type": "array",
+              "description": "Δ-001: 0..4 combined celebrations; combination + age rules validated in engine (src/domain/rules), not schema.",
+              "maxItems": 4,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "kind": { "type": "string", "enum": ["birthday", "anniversary", "honeymoon", "wedding", "bachelor", "milestone", "wellness", "proposal"] },
+                  "day": { "$ref": "defs/common.schema.json#/$defs/iso_date" },
+                  "age": { "type": "integer", "minimum": 0, "maximum": 130 },
+                  "decor": { "type": "boolean" },
+                  "cake": { "type": "boolean" }
+                },
+                "required": ["kind"],
+                "additionalProperties": false
+              }
+            },
+            "what": { "type": "string" },
+            "decor": { "type": "boolean" },
+            "privacy": { "type": "boolean" },
+            "notes": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["type"],
+      "additionalProperties": false
+    },
+    "destination": {
+      "type": "object",
+      "properties": {
+        "mode": { "type": "string", "enum": ["place", "suggest_for_me"] },
+        "place": { "type": "string" },
+        "region_pref": { "type": "string" }
+      },
+      "required": ["mode"],
+      "additionalProperties": false
+    },
+    "dates": {
+      "type": "object",
+      "properties": {
+        "start": { "$ref": "defs/common.schema.json#/$defs/iso_date" },
+        "end": { "$ref": "defs/common.schema.json#/$defs/iso_date" },
+        "flex_days": { "type": "integer", "minimum": 0 }
+      },
+      "required": ["start", "end", "flex_days"],
+      "additionalProperties": false
+    },
+    "travellers": {
+      "type": "object",
+      "properties": {
+        "adults": { "type": "integer", "minimum": 1 },
+        "kids": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": { "age": { "type": "integer", "minimum": 0, "maximum": 17 } },
+            "required": ["age"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["adults", "kids"],
+      "additionalProperties": false
+    },
+    "hotel": {
+      "type": "object",
+      "properties": {
+        "budget_per_night": { "$ref": "defs/common.schema.json#/$defs/money" },
+        "category": { "type": "integer", "enum": [3, 4, 5] },
+        "notes": { "type": "string" }
+      },
+      "required": ["budget_per_night", "category"],
+      "additionalProperties": false
+    },
+    "inclusions": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["meals", "transfers", "activities", "experiences"] },
+      "uniqueItems": true
+    },
+    "occasion_specifics": { "type": "object", "additionalProperties": true },
+    "notes": { "type": "string" }
+  },
+  "required": ["rfq_id", "version", "status", "occasion", "destination", "dates", "travellers", "hotel", "inclusions"],
+  "additionalProperties": false
+}

@@ -14,6 +14,7 @@ import { buildAdminRouter } from '../modules/admin/admin.routes';
 import { buildConsoleRouter, buildVendorRouter } from '../modules/admin/console.routes';
 import { buildUploadRouter } from '../modules/uploads/upload.routes';
 import { buildPushRouter } from '../modules/push/push.routes';
+import { buildContractsRouter } from '../modules/contracts/contracts.routes';
 
 /**
  * Builds the API sub-router. The `/api/v1` prefix itself is applied by app.ts
@@ -57,6 +58,10 @@ export function buildApiRouter(c: Container): Router {
   router.use('/push', buildPushRouter(c.push, c.identityGuard));
   router.use('/console', buildConsoleRouter(c.controllers.console));
   router.use('/vendor', buildVendorRouter(c.controllers.console));
+  // contracts-v1.1 surface (spec 006): mounted at the /api/v1 root so paths match
+  // /contracts/api.md exactly (/rfq, /itinerary, /suppliers, /link, /quote, …).
+  // New prefixes only — no collision with the module routers above.
+  router.use('/', buildContractsRouter(c.controllers.contracts));
 
   return router;
 }

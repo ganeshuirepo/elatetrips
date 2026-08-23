@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elatetrips.com/contracts/supplier.schema.json",
+  "title": "Supplier — DMC / direct hotel / provider (M3)",
+  "type": "object",
+  "properties": {
+    "supplier_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "type": { "type": "string", "enum": ["dmc", "hotel", "adventure", "experience", "transport"] },
+    "name": { "type": "string", "minLength": 1 },
+    "destinations": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "track": { "type": "string", "enum": ["A", "B"], "description": "A = DMC route, B = direct-hotel route (BR-10/BR-11)." },
+    "tier": { "type": "string", "enum": ["primary", "bench", "reserve"] },
+    "declared_tat_hours": { "type": "number", "minimum": 2, "description": "Platform floor 2h (A10); drives nudge cadence (BR-12)." },
+    "contract_accepted": { "type": "boolean", "description": "Signed rules of engagement (BR-14)." },
+    "comms_consent": {
+      "type": "object",
+      "properties": {
+        "sms": { "type": "boolean" },
+        "email": { "type": "boolean" },
+        "whatsapp": { "type": "boolean" },
+        "voice": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": ["supplier_id", "type", "name", "destinations", "track", "declared_tat_hours", "contract_accepted"],
+  "additionalProperties": false
+}

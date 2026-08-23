@@ -1,0 +1,13 @@
+{
+  "itinerary_id": "itin-005",
+  "version": 1,
+  "rfq_id": "rfq-005",
+  "days": [
+    {
+      "day_index": 1,
+      "items": [
+        { "item_id": "r1", "type": "activity", "title": "Nilgiri hills route pack", "time_block": "full_day", "est_cost_band": "mid", "locked": false, "source": "ai", "route_pack_id": "rp-001" }
+      ]
+    }
+  ]
+}

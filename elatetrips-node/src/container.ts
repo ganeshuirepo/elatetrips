@@ -72,6 +72,8 @@ import { ConsoleUserModel, type ConsoleUser } from './modules/admin/console.mode
 import { ConsoleService } from './modules/admin/console.service';
 import { ConsoleController } from './modules/admin/console.controller';
 import type { Activity, Hotel, Vehicle } from './modules/catalog/catalog.types';
+import { ContractsEngine } from './modules/contracts/contracts.engine';
+import { ContractsController } from './modules/contracts/contracts.controller';
 
 /**
  * Composition root — the ONLY place that knows concrete classes. Everything else
@@ -98,6 +100,8 @@ export interface Container {
     support: SupportController;
     admin: AdminController;
     console: ConsoleController;
+    /** contracts-v1.1 API host (spec 006) — additive, in-memory, fixture-seeded. */
+    contracts: ContractsController;
   };
 }
 
@@ -201,6 +205,10 @@ export function createContainer(): Container {
     },
     passwordHasher,
   );
+  // contracts-v1.1 host (spec 006): a self-contained, fixture-seeded engine that
+  // reads all business values from config (BR-17). Additive — it wraps no
+  // existing Mongoose model, so every current route keeps working.
+  const contractsEngine = new ContractsEngine();
 
   return {
     authGuard: buildAuthGuard(tokenService),
@@ -220,6 +228,7 @@ export function createContainer(): Container {
       support: new SupportController(supportService),
       admin: new AdminController(adminService),
       console: new ConsoleController(consoleService),
+      contracts: new ContractsController(contractsEngine),
     },
   };
 }

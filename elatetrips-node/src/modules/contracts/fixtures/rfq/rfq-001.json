@@ -1,0 +1,21 @@
+{
+  "rfq_id": "rfq-001",
+  "version": 1,
+  "itinerary_id": "itin-001",
+  "status": "draft",
+  "occasion": {
+    "type": "celebration",
+    "details": {
+      "celebrations": [
+        { "kind": "anniversary", "day": "2026-10-13", "decor": true, "cake": true }
+      ],
+      "privacy": true
+    }
+  },
+  "destination": { "mode": "place", "place": "Udaipur" },
+  "dates": { "start": "2026-10-11", "end": "2026-10-15", "flex_days": 2 },
+  "travellers": { "adults": 2, "kids": [] },
+  "hotel": { "budget_per_night": { "amount": 1200000, "currency": "INR" }, "category": 5, "notes": "lake view" },
+  "inclusions": ["meals", "transfers", "experiences"],
+  "notes": "10th anniversary; candlelight dinner important"
+}

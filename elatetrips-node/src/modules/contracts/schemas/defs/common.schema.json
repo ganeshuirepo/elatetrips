@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elatetrips.com/contracts/defs/common.schema.json",
+  "title": "Common shared definitions",
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "currency": { "type": "string", "enum": ["INR", "USD", "EUR", "GBP", "AED"] },
+    "money": {
+      "type": "object",
+      "description": "Money in integer MINOR units (paise/cents) + explicit currency (NFR).",
+      "properties": {
+        "amount": { "type": "integer", "minimum": 0 },
+        "currency": { "$ref": "#/$defs/currency" }
+      },
+      "required": ["amount", "currency"],
+      "additionalProperties": false
+    },
+    "iso_date": { "type": "string", "format": "date" },
+    "iso_datetime": { "type": "string", "format": "date-time" },
+    "cost_band": {
+      "type": "string",
+      "description": "Labeled estimate only, never a price promise (BR-1).",
+      "enum": ["budget", "mid", "premium", "luxury"]
+    }
+  }
+}

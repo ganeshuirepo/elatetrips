@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elatetrips.com/contracts/itinerary.schema.json",
+  "title": "Itinerary — days[] of items[] (M2)",
+  "type": "object",
+  "properties": {
+    "itinerary_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "version": { "type": "integer", "minimum": 1 },
+    "rfq_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "package_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "days": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "day_index": { "type": "integer", "minimum": 1 },
+          "date": { "$ref": "defs/common.schema.json#/$defs/iso_date" },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "item_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+                "type": { "type": "string", "enum": ["hotel", "activity", "transfer", "meal", "experience"] },
+                "title": { "type": "string", "minLength": 1 },
+                "time_block": { "type": "string", "enum": ["morning", "afternoon", "evening", "night", "full_day"] },
+                "est_cost_band": { "$ref": "defs/common.schema.json#/$defs/cost_band" },
+                "locked": { "type": "boolean" },
+                "source": { "type": "string", "enum": ["ai", "master_db", "customer"] },
+                "route_pack_id": { "$ref": "defs/common.schema.json#/$defs/id" }
+              },
+              "required": ["item_id", "type", "title", "locked", "source"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["day_index", "items"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["itinerary_id", "version", "days"],
+  "additionalProperties": false
+}

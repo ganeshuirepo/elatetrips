@@ -45,3 +45,14 @@ export class NotFoundError extends AppError {
     super(404, message);
   }
 }
+
+/**
+ * Body failed contract (ajv) validation. 422 rather than 400 so a schema-invalid
+ * payload is distinguishable from a malformed request, carrying the ajv error
+ * paths in `details` (contracts-v1.1 adoption, spec 006 — never a 500).
+ */
+export class UnprocessableEntityError extends AppError {
+  constructor(message = 'Contract validation failed', details?: unknown) {
+    super(422, message, details);
+  }
+}

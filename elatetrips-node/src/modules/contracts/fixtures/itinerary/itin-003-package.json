@@ -1,0 +1,15 @@
+{
+  "itinerary_id": "itin-003",
+  "version": 1,
+  "rfq_id": "rfq-003",
+  "package_id": "pkg-001",
+  "days": [
+    {
+      "day_index": 1,
+      "items": [
+        { "item_id": "p1", "type": "hotel", "title": "Beach resort (package base)", "est_cost_band": "mid", "locked": false, "source": "master_db" },
+        { "item_id": "p2", "type": "activity", "title": "Sunset cruise", "time_block": "evening", "est_cost_band": "mid", "locked": false, "source": "master_db" }
+      ]
+    }
+  ]
+}

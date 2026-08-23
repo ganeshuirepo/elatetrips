@@ -1,0 +1,14 @@
+{
+  "quote_id": "q-partial",
+  "rfq_id": "rfq-005",
+  "itinerary_version": 1,
+  "supplier_id": "sup-002",
+  "line_items": [
+    { "item_id": "r1", "response": "cannot", "notes": "route corridor not serviced by us" }
+  ],
+  "total": { "amount": 0, "currency": "INR" },
+  "validity_ts": "2026-09-20T12:00:00Z",
+  "partial": true,
+  "channel": "parsed_email",
+  "status": "submitted"
+}

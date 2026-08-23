@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elatetrips.com/contracts/route-pack.schema.json",
+  "title": "Route pack — curated ordered POIs along one corridor, sold as a day-item (M15)",
+  "type": "object",
+  "properties": {
+    "route_pack_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "destination": { "type": "string", "minLength": 1 },
+    "corridor": { "type": "string", "minLength": 1 },
+    "ordered_pois": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "defs/common.schema.json#/$defs/id" }
+    },
+    "day_span": { "type": "integer", "minimum": 1 },
+    "cost_band": { "$ref": "defs/common.schema.json#/$defs/cost_band" },
+    "sellable_as_day_item": { "type": "boolean" }
+  },
+  "required": ["route_pack_id", "destination", "corridor", "ordered_pois", "day_span", "sellable_as_day_item"],
+  "additionalProperties": false
+}

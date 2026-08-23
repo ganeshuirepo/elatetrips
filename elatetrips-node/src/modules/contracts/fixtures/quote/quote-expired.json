@@ -1,0 +1,14 @@
+{
+  "quote_id": "q-expired",
+  "rfq_id": "rfq-001",
+  "itinerary_version": 1,
+  "supplier_id": "sup-003",
+  "line_items": [
+    { "item_id": "i1", "response": "can", "price": { "amount": 5000000, "currency": "INR" } }
+  ],
+  "total": { "amount": 5000000, "currency": "INR" },
+  "validity_ts": "2026-08-01T00:00:00Z",
+  "partial": false,
+  "channel": "card",
+  "status": "expired"
+}

@@ -1,0 +1,13 @@
+{
+  "rfq_id": "rfq-003",
+  "version": 1,
+  "itinerary_id": "itin-003",
+  "package_id": "pkg-001",
+  "status": "quoting",
+  "occasion": { "type": "leisure" },
+  "destination": { "mode": "place", "place": "Goa" },
+  "dates": { "start": "2026-11-20", "end": "2026-11-23", "flex_days": 0 },
+  "travellers": { "adults": 2, "kids": [{ "age": 6 }, { "age": 9 }] },
+  "hotel": { "budget_per_night": { "amount": 700000, "currency": "INR" }, "category": 4 },
+  "inclusions": ["meals", "transfers"]
+}

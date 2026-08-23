@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elatetrips.com/contracts/poi.schema.json",
+  "title": "Point of interest — destination content model (M15)",
+  "type": "object",
+  "properties": {
+    "poi_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "name": { "type": "string", "minLength": 1 },
+    "destination": { "type": "string", "minLength": 1 },
+    "category": { "type": "string", "enum": ["sight", "activity", "experience", "dining", "nature", "adventure", "wellness"] },
+    "geo": {
+      "type": "object",
+      "properties": {
+        "lat": { "type": "number", "minimum": -90, "maximum": 90 },
+        "lng": { "type": "number", "minimum": -180, "maximum": 180 }
+      },
+      "required": ["lat", "lng"],
+      "additionalProperties": false
+    },
+    "typical_duration_min": { "type": "integer", "minimum": 0 },
+    "cost_band": { "$ref": "defs/common.schema.json#/$defs/cost_band" },
+    "tags": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+  },
+  "required": ["poi_id", "name", "destination", "category"],
+  "additionalProperties": false
+}

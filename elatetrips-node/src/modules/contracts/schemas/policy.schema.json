@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elatetrips.com/contracts/policy.schema.json",
+  "title": "Booking & cancellation policy (M14, BR-18) — data not code",
+  "type": "object",
+  "properties": {
+    "policy_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "version": { "type": "integer", "minimum": 1 },
+    "scope": { "type": "string", "enum": ["platform_default", "partner", "quote"] },
+    "partner_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "quote_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "effective_from": { "$ref": "defs/common.schema.json#/$defs/iso_date" },
+    "effective_to": { "$ref": "defs/common.schema.json#/$defs/iso_date" },
+    "booking_terms": {
+      "type": "object",
+      "properties": {
+        "deposit_pct": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "balance_due_days_before": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "refund_bands": {
+      "type": "array",
+      "description": "Ordered bands; refund_pct applies when cancelling at least days_before the trip.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "days_before": { "type": "integer", "minimum": 0 },
+          "refund_pct": { "type": "integer", "minimum": 0, "maximum": 100 }
+        },
+        "required": ["days_before", "refund_pct"],
+        "additionalProperties": false
+      }
+    },
+    "peak_overrides": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from": { "$ref": "defs/common.schema.json#/$defs/iso_date" },
+          "to": { "$ref": "defs/common.schema.json#/$defs/iso_date" },
+          "refund_bands": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "days_before": { "type": "integer", "minimum": 0 },
+                "refund_pct": { "type": "integer", "minimum": 0, "maximum": 100 }
+              },
+              "required": ["days_before", "refund_pct"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["from", "to", "refund_bands"],
+        "additionalProperties": false
+      }
+    },
+    "flexibility_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Normalized comparability rating derived from refund bands (M7/M14)."
+    }
+  },
+  "required": ["policy_id", "version", "scope", "effective_from", "refund_bands"],
+  "additionalProperties": false
+}

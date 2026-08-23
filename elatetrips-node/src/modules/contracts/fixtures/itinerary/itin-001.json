@@ -1,0 +1,22 @@
+{
+  "itinerary_id": "itin-001",
+  "version": 1,
+  "rfq_id": "rfq-001",
+  "days": [
+    {
+      "day_index": 1,
+      "date": "2026-10-11",
+      "items": [
+        { "item_id": "i1", "type": "hotel", "title": "Lake-view suite, 4 nights", "time_block": "night", "est_cost_band": "luxury", "locked": true, "source": "customer" },
+        { "item_id": "i2", "type": "transfer", "title": "Airport pickup", "time_block": "afternoon", "est_cost_band": "mid", "locked": false, "source": "ai" }
+      ]
+    },
+    {
+      "day_index": 2,
+      "date": "2026-10-13",
+      "items": [
+        { "item_id": "i3", "type": "experience", "title": "Anniversary candlelight dinner", "time_block": "evening", "est_cost_band": "premium", "locked": true, "source": "customer" }
+      ]
+    }
+  ]
+}

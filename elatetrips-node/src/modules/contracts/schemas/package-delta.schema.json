@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elatetrips.com/contracts/package-delta.schema.json",
+  "title": "Package customization delta — priced difference routed to owning partner (M16, D3)",
+  "type": "object",
+  "properties": {
+    "delta_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "package_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "rfq_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "routed_to_partner_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+          "op": { "type": "string", "enum": ["add", "remove", "modify"] },
+          "detail": { "type": "string" },
+          "price_delta": { "$ref": "defs/common.schema.json#/$defs/money" }
+        },
+        "required": ["op"],
+        "additionalProperties": false
+      }
+    },
+    "total_delta": { "$ref": "defs/common.schema.json#/$defs/money" },
+    "status": { "type": "string", "enum": ["draft", "sent", "quoted", "accepted", "rejected", "broadcast"] }
+  },
+  "required": ["delta_id", "package_id", "routed_to_partner_id", "changes", "status"],
+  "additionalProperties": false
+}

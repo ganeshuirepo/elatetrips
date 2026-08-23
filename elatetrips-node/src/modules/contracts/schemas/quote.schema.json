@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elatetrips.com/contracts/quote.schema.json",
+  "title": "Quote — supplier response to an RFQ+itinerary (M6/M7)",
+  "type": "object",
+  "properties": {
+    "quote_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "rfq_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "itinerary_version": { "type": "integer", "minimum": 1 },
+    "supplier_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "policy_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "line_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+          "response": { "type": "string", "enum": ["can", "cannot", "alternate"] },
+          "alternate": { "type": "string" },
+          "price": { "$ref": "defs/common.schema.json#/$defs/money" },
+          "notes": { "type": "string" }
+        },
+        "required": ["item_id", "response"],
+        "additionalProperties": false
+      }
+    },
+    "total": { "$ref": "defs/common.schema.json#/$defs/money" },
+    "validity_ts": { "$ref": "defs/common.schema.json#/$defs/iso_datetime" },
+    "payment_terms": { "type": "string" },
+    "partial": { "type": "boolean" },
+    "channel": { "type": "string", "enum": ["card", "parsed_email"] },
+    "match_score": {
+      "type": "object",
+      "properties": {
+        "value": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "breakdown": {
+          "type": "object",
+          "properties": {
+            "budget_fit": { "type": "integer", "minimum": 0, "maximum": 100 },
+            "coverage": { "type": "integer", "minimum": 0, "maximum": 100 },
+            "locked_compliance": { "type": "integer", "minimum": 0, "maximum": 100 },
+            "supplier_reliability": { "type": "integer", "minimum": 0, "maximum": 100 },
+            "validity_buffer": { "type": "integer", "minimum": 0, "maximum": 100 }
+          },
+          "required": ["budget_fit", "coverage", "locked_compliance", "supplier_reliability", "validity_buffer"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["value", "breakdown"],
+      "additionalProperties": false
+    },
+    "status": { "type": "string", "enum": ["draft", "submitted", "scored", "shortlisted", "expired", "selected", "reconfirmed", "rejected"] },
+    "enrichment": {
+      "type": "object",
+      "properties": {
+        "requests": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": { "item": { "type": "string" }, "asked_ts": { "$ref": "defs/common.schema.json#/$defs/iso_datetime" } },
+            "required": ["item", "asked_ts"],
+            "additionalProperties": false
+          }
+        },
+        "responses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "item": { "type": "string" },
+              "media": { "type": "array", "items": { "type": "string" } },
+              "text": { "type": "string" },
+              "ts": { "$ref": "defs/common.schema.json#/$defs/iso_datetime" }
+            },
+            "required": ["item", "ts"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "negotiation": {
+      "type": "object",
+      "properties": {
+        "target_total": { "$ref": "defs/common.schema.json#/$defs/money" },
+        "rounds": {
+          "type": "array",
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "properties": {
+              "by": { "type": "string", "enum": ["ai", "supplier", "ops"] },
+              "amount": { "$ref": "defs/common.schema.json#/$defs/money" },
+              "message": { "type": "string" },
+              "ts": { "$ref": "defs/common.schema.json#/$defs/iso_datetime" }
+            },
+            "required": ["by", "amount", "ts"],
+            "additionalProperties": false
+          }
+        },
+        "max_rounds": { "type": "integer", "const": 2 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": ["quote_id", "rfq_id", "itinerary_version", "supplier_id", "line_items", "total", "validity_ts", "partial", "channel", "status"],
+  "additionalProperties": false
+}

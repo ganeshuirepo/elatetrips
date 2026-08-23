@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elatetrips.com/contracts/package.schema.json",
+  "title": "Partner package — published base itinerary (M16)",
+  "type": "object",
+  "properties": {
+    "package_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "partner_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "title": { "type": "string", "minLength": 1 },
+    "destination": { "type": "string", "minLength": 1 },
+    "occasion_tags": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["celebration", "surprise", "event", "adventure", "leisure"] },
+      "uniqueItems": true
+    },
+    "base_itinerary_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "base_price": { "$ref": "defs/common.schema.json#/$defs/money" },
+    "policy_id": { "$ref": "defs/common.schema.json#/$defs/id" },
+    "category": { "type": "integer", "enum": [3, 4, 5] },
+    "published": { "type": "boolean" }
+  },
+  "required": ["package_id", "partner_id", "title", "destination", "base_itinerary_id", "base_price", "published"],
+  "additionalProperties": false
+}

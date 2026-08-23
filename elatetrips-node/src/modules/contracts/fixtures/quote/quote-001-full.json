@@ -1,0 +1,22 @@
+{
+  "quote_id": "q-001",
+  "rfq_id": "rfq-001",
+  "itinerary_version": 1,
+  "supplier_id": "sup-001",
+  "policy_id": "pol-001",
+  "line_items": [
+    { "item_id": "i1", "response": "can", "price": { "amount": 4800000, "currency": "INR" } },
+    { "item_id": "i2", "response": "can", "price": { "amount": 300000, "currency": "INR" } },
+    { "item_id": "i3", "response": "can", "price": { "amount": 1500000, "currency": "INR" } }
+  ],
+  "total": { "amount": 6600000, "currency": "INR" },
+  "validity_ts": "2026-09-30T18:00:00Z",
+  "payment_terms": "50% advance, balance 7 days before check-in",
+  "partial": false,
+  "channel": "card",
+  "match_score": {
+    "value": 88,
+    "breakdown": { "budget_fit": 90, "coverage": 100, "locked_compliance": 100, "supplier_reliability": 80, "validity_buffer": 70 }
+  },
+  "status": "scored"
+}
