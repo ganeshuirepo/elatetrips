@@ -75,6 +75,34 @@ import type { Activity, Hotel, Vehicle } from './modules/catalog/catalog.types';
 import { ContractsEngine } from './modules/contracts/contracts.engine';
 import { ContractsController } from './modules/contracts/contracts.controller';
 
+// BRD v1.16 backend engines (M3/M4/M5/M12/M13/M17) — additive, config-driven.
+import { SupplierRepository } from './modules/supplier/supplier.repository';
+import { SupplierService } from './modules/supplier/supplier.service';
+import { SupplierController } from './modules/supplier/supplier.controller';
+import { SupplierAuditStore } from './modules/supplier/supplier.audit';
+import { loadSupplierConfig } from './modules/supplier/supplier.config';
+import { loadCommsConfig } from './modules/comms/comms.config';
+import { InMemoryCommsAuditSink } from './modules/comms/comms.audit';
+import { StubChannelProvider } from './modules/comms/comms.provider';
+import { CommsService } from './modules/comms/comms.service';
+import { CommsController } from './modules/comms/comms.controller';
+import { InMemoryRateRowRepository } from './modules/ratecard/ratecard.repository';
+import { ManualUploadSheetProvider } from './modules/ratecard/ratecard.sheets';
+import { RatecardAuditStore } from './modules/ratecard/ratecard.audit';
+import { loadRatecardConfig } from './modules/ratecard/ratecard.config';
+import { RateCardService } from './modules/ratecard/ratecard.service';
+import { RateCardController } from './modules/ratecard/ratecard.controller';
+import { BroadcastService } from './modules/broadcast/broadcast.service';
+import { BroadcastController } from './modules/broadcast/broadcast.controller';
+import { StubComms, StubSupplierDirectory } from './modules/broadcast/broadcast.ports';
+import { ClassifierService } from './modules/classifier/classifier.service';
+import { ClassifierController } from './modules/classifier/classifier.controller';
+import { loadNegotiationConfig } from './modules/negotiation/negotiation.config';
+import { NegotiationAuditStore } from './modules/negotiation/negotiation.audit';
+import { RuleSetStore } from './modules/negotiation/negotiation.store';
+import { NegotiationService } from './modules/negotiation/negotiation.service';
+import { NegotiationController } from './modules/negotiation/negotiation.controller';
+
 /**
  * Composition root — the ONLY place that knows concrete classes. Everything else
  * depends on interfaces, so swapping an implementation (e.g. a Redis OTP store)
@@ -102,6 +130,13 @@ export interface Container {
     console: ConsoleController;
     /** contracts-v1.1 API host (spec 006) — additive, in-memory, fixture-seeded. */
     contracts: ContractsController;
+    /** BRD v1.16 backend engines (M3/M4/M5/M12/M13/M17). */
+    suppliers: SupplierController;
+    comms: CommsController;
+    ratecard: RateCardController;
+    broadcast: BroadcastController;
+    classifier: ClassifierController;
+    negotiation: NegotiationController;
   };
 }
 
@@ -210,6 +245,35 @@ export function createContainer(): Container {
   // existing Mongoose model, so every current route keeps working.
   const contractsEngine = new ContractsEngine();
 
+  // BRD v1.16 engines (M3/M4/M5/M12/M13/M17) — additive, config-driven (BR-17);
+  // providers/ports behind interfaces (stubs until real adapters/creds land).
+  const supplierService = new SupplierService(
+    new SupplierRepository(),
+    loadSupplierConfig(),
+    new SupplierAuditStore(),
+  );
+  const commsService = new CommsService({
+    provider: new StubChannelProvider(),
+    sink: new InMemoryCommsAuditSink(),
+    config: loadCommsConfig(),
+  });
+  const ratecardService = new RateCardService({
+    repo: new InMemoryRateRowRepository(),
+    sheets: new ManualUploadSheetProvider(),
+    audit: new RatecardAuditStore(),
+    config: loadRatecardConfig(),
+  });
+  const broadcastService = new BroadcastService({
+    directory: new StubSupplierDirectory(),
+    comms: new StubComms(),
+  });
+  const classifierService = new ClassifierService();
+  const negotiationService = new NegotiationService({
+    config: loadNegotiationConfig(),
+    store: new RuleSetStore(),
+    audit: new NegotiationAuditStore(),
+  });
+
   return {
     authGuard: buildAuthGuard(tokenService),
     adminGuard: buildAdminGuard(env.adminKey),
@@ -229,6 +293,12 @@ export function createContainer(): Container {
       admin: new AdminController(adminService),
       console: new ConsoleController(consoleService),
       contracts: new ContractsController(contractsEngine),
+      suppliers: new SupplierController(supplierService),
+      comms: new CommsController(commsService),
+      ratecard: new RateCardController(ratecardService),
+      broadcast: new BroadcastController(broadcastService),
+      classifier: new ClassifierController(classifierService),
+      negotiation: new NegotiationController(negotiationService),
     },
   };
 }

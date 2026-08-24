@@ -46,6 +46,13 @@ export class NotFoundError extends AppError {
   }
 }
 
+/** The request conflicts with existing state (e.g. a duplicate unique id). */
+export class ConflictError extends AppError {
+  constructor(message = 'Conflict', details?: unknown) {
+    super(409, message, details);
+  }
+}
+
 /**
  * Body failed contract (ajv) validation. 422 rather than 400 so a schema-invalid
  * payload is distinguishable from a malformed request, carrying the ajv error
