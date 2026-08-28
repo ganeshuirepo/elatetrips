@@ -54,7 +54,19 @@ export class BrevoEmailOtpSender implements IOtpSender {
       }),
     });
     if (!res.ok) {
-      logger.error(`Brevo send failed (${res.status}): ${await res.text()}`);
+      const body = await res.text();
+      logger.error(`Brevo send failed (${res.status}): ${body}`);
+      // Brevo answers 401 for BOTH a bad key and a key used from an
+      // un-authorised IP, and the second is what bites on every new server: the
+      // key is perfectly valid, it just has not been told about this machine.
+      // Without naming it, the only clue is a generic "could not send".
+      if (res.status === 401 && body.includes('unrecognised IP address')) {
+        logger.error(
+          "The Brevo key is valid but this server's IP is not authorised. Add it at " +
+          'https://app.brevo.com/security/authorised_ips (or disable the IP restriction) ' +
+          'before turning AUTH_AUTO_ACTIVATE off.',
+        );
+      }
       throw new AppError(502, 'Could not send the OTP email. Please try again.');
     }
   }
