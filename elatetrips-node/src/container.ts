@@ -55,6 +55,8 @@ import { SupportController } from './modules/support/support.controller';
 import { ReviewRepository } from './modules/reviews/review.repository';
 import { ReviewService } from './modules/reviews/review.service';
 import { ReviewController } from './modules/reviews/review.controller';
+import { ExperiencesController } from './modules/experiences/experiences.controller';
+import { ExperiencesService } from './modules/experiences/experiences.service';
 
 import { buildAuthGuard } from './common/middleware/authGuard';
 import { buildIdentityGuard } from './common/middleware/identityGuard';
@@ -95,6 +97,7 @@ export interface Container {
     partners: PartnerController;
     weddings: WeddingController;
     reviews: ReviewController;
+    experiences: ExperiencesController;
     support: SupportController;
     admin: AdminController;
     console: ConsoleController;
@@ -217,6 +220,7 @@ export function createContainer(): Container {
       partners: new PartnerController(partnerService),
       weddings: new WeddingController(weddingService),
       reviews: new ReviewController(reviewService),
+      experiences: new ExperiencesController(new ExperiencesService()),
       support: new SupportController(supportService),
       admin: new AdminController(adminService),
       console: new ConsoleController(consoleService),
