@@ -85,9 +85,12 @@ import { SupplierAuditStore } from './modules/supplier/supplier.audit';
 import { loadSupplierConfig } from './modules/supplier/supplier.config';
 import { loadCommsConfig } from './modules/comms/comms.config';
 import { InMemoryCommsAuditSink } from './modules/comms/comms.audit';
-import { StubChannelProvider } from './modules/comms/comms.provider';
+import { buildChannelProvider } from './modules/comms/comms.factory';
+import { ConfigRecipientDirectory } from './modules/comms/comms.recipients';
 import { CommsService } from './modules/comms/comms.service';
 import { CommsController } from './modules/comms/comms.controller';
+import { loadRfqFlowConfig } from './modules/rfqflow/rfqflow.config';
+import { RfqFlowService } from './modules/rfqflow/rfqflow.service';
 import { InMemoryRateRowRepository } from './modules/ratecard/ratecard.repository';
 import { ManualUploadSheetProvider } from './modules/ratecard/ratecard.sheets';
 import { RatecardAuditStore } from './modules/ratecard/ratecard.audit';
@@ -256,7 +259,9 @@ export function createContainer(): Container {
     new SupplierAuditStore(),
   );
   const commsService = new CommsService({
-    provider: new StubChannelProvider(),
+    // Real SMTP when the mailbox is configured, the logging stub otherwise —
+    // the choice is made once, here, and nothing downstream can tell.
+    provider: buildChannelProvider().provider,
     sink: new InMemoryCommsAuditSink(),
     config: loadCommsConfig(),
   });
@@ -270,6 +275,35 @@ export function createContainer(): Container {
     directory: new StubSupplierDirectory(),
     comms: new StubComms(),
   });
+  // The RFQ dispatcher (customer confirms → partners are mailed → customer is
+  // told). Inert unless RFQFLOW_ENABLED is set; see rfqflow.config.ts. Its four
+  // ports are adapted here so the service imports none of these modules.
+  const rfqFlowService = new RfqFlowService({
+    config: loadRfqFlowConfig(),
+    candidates: {
+      candidatesFor: async (destination, opts) =>
+        (await supplierService.findCandidates({ destination, track: opts.track as 'A' | 'B' | undefined })).map((c) => ({
+          supplier_id: c.supplier_id,
+          name: c.name,
+          declared_tat_hours: c.declared_tat_hours,
+          comms_consent: c.comms_consent,
+          contract_accepted: c.contract_accepted,
+          reacceptance_required: c.reacceptance_required,
+        })),
+    },
+    wave: {
+      dispatchWave: (rfqId, body) => {
+        const { wave_no, links } = contractsEngine.dispatchWave(rfqId, body);
+        return { wave_no, links: links.map((l) => ({ supplier_id: l.supplier_id, token: l.token })) };
+      },
+    },
+    mail: { sendTemplated: (input) => commsService.sendTemplated(input) },
+    directory: new ConfigRecipientDirectory({
+      lookup: { quoteContact: (id) => supplierService.quoteContact(id) },
+    }),
+    names: { nameFor: async (id) => (await supplierService.getOne(id).catch(() => null))?.name ?? null },
+  });
+
   const classifierService = new ClassifierService();
   const negotiationService = new NegotiationService({
     config: loadNegotiationConfig(),
@@ -296,7 +330,7 @@ export function createContainer(): Container {
       support: new SupportController(supportService),
       admin: new AdminController(adminService),
       console: new ConsoleController(consoleService),
-      contracts: new ContractsController(contractsEngine),
+      contracts: new ContractsController(contractsEngine, rfqFlowService),
       suppliers: new SupplierController(supplierService),
       comms: new CommsController(commsService),
       ratecard: new RateCardController(ratecardService),

@@ -14,6 +14,8 @@ import type { Channel, RenderedMessage } from './comms.types';
 /** Every template id the platform can address (matches FR4.6 SMS set + FR4.3 WA). */
 export type TemplateId =
   | 'rfq_dispatch'
+  | 'rfq_ack'
+  | 'quote_summary'
   | 'rfq_reminder'
   | 'enrichment_request'
   | 'reconfirmation'
@@ -38,6 +40,27 @@ export type TemplateKey = `${TemplateId}:${Channel}`;
 const key = (id: TemplateId, channel: Channel): TemplateKey => `${id}:${channel}`;
 
 /**
+ * One brand shell around every email body. Inline styles only — every mail
+ * client strips <style> blocks, and half of them strip <head> with it. Nothing
+ * here is business content: the shell is chrome, the `inner` is the message.
+ */
+const shell = (inner: string): string =>
+  '<div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;' +
+  'max-width:560px;margin:0 auto;padding:24px;color:#1c2b2a;line-height:1.55">' +
+  '<div style="font-size:20px;font-weight:800;color:#0b3d3a;letter-spacing:-.3px">Elate Trips</div>' +
+  '<div style="height:3px;width:42px;background:#0b3d3a;margin:10px 0 20px"></div>' +
+  inner +
+  '<p style="margin-top:28px;padding-top:16px;border-top:1px solid #e6ebea;font-size:12px;color:#7b8b89">' +
+  'Elate Trips · custom trips, quoted by people who run them.<br>' +
+  'Reply to this email and it reaches the trip desk directly.</p></div>';
+
+/** A call-to-action that survives clients which drop background colours. */
+const cta = (label: string): string =>
+  `<p style="margin:24px 0"><a href="{{short_link}}" ` +
+  'style="background:#0b3d3a;color:#fff;text-decoration:none;padding:12px 22px;' +
+  `border-radius:8px;display:inline-block;font-weight:700">${label}</a></p>`;
+
+/**
  * The registry. Kept intentionally spare — real approved copy (DLT-registered
  * SMS, BSP-approved WA templates, branded email HTML) replaces these bodies as
  * config/content without any code change. Versions start at 1.
@@ -45,11 +68,53 @@ const key = (id: TemplateId, channel: Channel): TemplateKey => `${id}:${channel}
 const REGISTRY: Partial<Record<TemplateKey, TemplateDef>> = {
   [key('rfq_dispatch', 'email')]: {
     id: 'rfq_dispatch',
+    version: 2,
+    channel: 'email',
+    subject: 'Quote request: {{destination}} for {{pax}} — {{dates_short}}',
+    body: shell(
+      '<p>Hello {{supplier_name}},</p>' +
+        '<p>A confirmed enquiry has come in that matches what you cover. The full brief is on the quote card — open it, price what you can, and skip what you cannot.</p>' +
+        '<table style="border-collapse:collapse;margin:18px 0;font-size:14px">' +
+        '<tr><td style="padding:4px 16px 4px 0;color:#7b8b89">Destination</td><td style="font-weight:700">{{destination}}</td></tr>' +
+        '<tr><td style="padding:4px 16px 4px 0;color:#7b8b89">Guests</td><td style="font-weight:700">{{pax}}</td></tr>' +
+        '<tr><td style="padding:4px 16px 4px 0;color:#7b8b89">Dates</td><td style="font-weight:700">{{dates}}</td></tr>' +
+        '<tr><td style="padding:4px 16px 4px 0;color:#7b8b89">Occasion</td><td style="font-weight:700">{{occasion}}</td></tr>' +
+        '<tr><td style="padding:4px 16px 4px 0;color:#7b8b89">Reference</td><td style="font-weight:700">{{rfq_id}}</td></tr>' +
+        '</table>' +
+        cta('Open the quote card') +
+        '<p style="font-size:14px;color:#5b6b69">We would like your response within {{tat}}. A partial quote is welcome — the card lets you mark any line as one you cannot service.</p>',
+    ),
+    carries_link: true,
+  },
+  [key('rfq_ack', 'email')]: {
+    id: 'rfq_ack',
     version: 1,
     channel: 'email',
-    subject: 'New RFQ for {{destination}} — respond by {{tat}}',
-    body: '<p>New request for {{destination}} ({{pax}} pax, {{dates}}).</p><p><a href="{{short_link}}">Open the quote card</a></p>',
-    carries_link: true,
+    subject: 'Your {{destination}} trip is with our partners — {{rfq_id}}',
+    body: shell(
+      '<p>Thanks {{customer_name}},</p>' +
+        '<p>Your request is confirmed and has just gone out to {{supplier_count}} operators who run trips in {{destination}}. They quote against exactly the brief you approved — nothing gets substituted behind your back.</p>' +
+        '<table style="border-collapse:collapse;margin:18px 0;font-size:14px">' +
+        '<tr><td style="padding:4px 16px 4px 0;color:#7b8b89">Destination</td><td style="font-weight:700">{{destination}}</td></tr>' +
+        '<tr><td style="padding:4px 16px 4px 0;color:#7b8b89">Guests</td><td style="font-weight:700">{{pax}}</td></tr>' +
+        '<tr><td style="padding:4px 16px 4px 0;color:#7b8b89">Dates</td><td style="font-weight:700">{{dates}}</td></tr>' +
+        '<tr><td style="padding:4px 16px 4px 0;color:#7b8b89">Occasion</td><td style="font-weight:700">{{occasion}}</td></tr>' +
+        '<tr><td style="padding:4px 16px 4px 0;color:#7b8b89">Reference</td><td style="font-weight:700">{{rfq_id}}</td></tr>' +
+        '</table>' +
+        '<p>Quotes usually start arriving within {{tat}}. We will send you the comparison as soon as there is something worth comparing — you will not get a mail per quote.</p>',
+    ),
+  },
+  [key('quote_summary', 'email')]: {
+    id: 'quote_summary',
+    version: 1,
+    channel: 'email',
+    subject: 'Your {{destination}} quotes are in — {{quote_count}} to compare',
+    body: shell(
+      '<p>Hi {{customer_name}},</p>' +
+        '<p>{{quote_count}} operators have quoted on {{rfq_id}}. Here they are, best match first:</p>' +
+        '{{quote_rows}}' +
+        '<p style="font-size:14px;color:#5b6b69">Prices hold until the validity date shown against each. Reply with the one you want and we will reconfirm availability before anything is charged.</p>',
+    ),
   },
   [key('rfq_dispatch', 'sms')]: {
     id: 'rfq_dispatch',

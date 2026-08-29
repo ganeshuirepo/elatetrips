@@ -317,6 +317,25 @@ export class SupplierService {
     return SupplierService.toContractView(await this.getOrThrow(supplierId));
   }
 
+  /**
+   * How to address this supplier when sending them an RFQ (FR3.7).
+   *
+   * Deliberately narrow: it returns a name and an address and nothing else, so
+   * M4 can put a mail in front of the right person without the contact block —
+   * phones, roles, OTP state — leaving this module. `quoter` is the role that
+   * exists to receive these; `owner` is the fallback at a one-person operation.
+   * Returns null rather than throwing for an unknown supplier: a dispatcher
+   * asking about a stale id should skip it, not fail the whole wave.
+   */
+  async quoteContact(supplierId: string): Promise<{ name?: string; email?: string } | null> {
+    const found = await this.repo.findBySupplierId(supplierId);
+    if (!found) return null;
+    const contacts = found.contacts ?? [];
+    const contact = contacts.find((c) => c.role === 'quoter' && c.email) ?? contacts.find((c) => c.email);
+    if (!contact?.email) return null;
+    return { name: contact.name, email: contact.email };
+  }
+
   /** Expose the audit trail for a supplier (ops/debug). */
   auditTrail(supplierId: string) {
     return this.audit.bySubject({ supplier_id: supplierId });

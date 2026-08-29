@@ -43,7 +43,7 @@ const seedRfqs = [rfq001, rfq002, rfq003, rfq004, rfq005] as unknown as Rfq[];
 const seedItineraries = [itin001, itin003, itin005] as unknown as Itinerary[];
 const seedQuotes = [quote001, quoteExpired, quotePartial] as unknown as Quote[];
 
-interface LinkToken {
+export interface LinkToken {
   token: string;
   rfq_id: string;
   supplier_id: string;
@@ -195,15 +195,24 @@ export class ContractsEngine {
 
   // ---- Broadcast (M5) ------------------------------------------------------
 
-  broadcast(rfq_id: string, body: { wave_no?: number; supplier_ids?: string[]; channel?: string }): {
-    wave_no: number;
-    supplier_ids: string[];
-  } {
+  /**
+   * The wave, with the tokens it minted.
+   *
+   * `broadcast()` below is the HTTP shape and `/contracts/api.md` fixes it to
+   * `{ wave_no, supplier_ids[] }` exactly — but a dispatcher that has to put a
+   * link in an email needs the tokens those ids were just bound to. Minting a
+   * second time to get them would hand the supplier a token the audit trail
+   * never saw. So the work happens here, and the endpoint projects down.
+   */
+  dispatchWave(
+    rfq_id: string,
+    body: { wave_no?: number; supplier_ids?: string[]; channel?: string },
+  ): { wave_no: number; supplier_ids: string[]; links: LinkToken[] } {
     this.requireRfq(rfq_id);
     const supplier_ids = body.supplier_ids ?? [];
     const wave_no = body.wave_no ?? 1;
     const channel = body.channel ?? 'in_app';
-    for (const supplier_id of supplier_ids) this.mintLink(rfq_id, supplier_id);
+    const links = supplier_ids.map((supplier_id) => this.mintLink(rfq_id, supplier_id));
     this.audit.append({
       type: 'wave.sent',
       actor: 'ops',
@@ -212,6 +221,14 @@ export class ContractsEngine {
       subject: { rfq_id },
       payload: { rfq_id, wave_no, supplier_ids, channel },
     });
+    return { wave_no, supplier_ids, links };
+  }
+
+  broadcast(rfq_id: string, body: { wave_no?: number; supplier_ids?: string[]; channel?: string }): {
+    wave_no: number;
+    supplier_ids: string[];
+  } {
+    const { wave_no, supplier_ids } = this.dispatchWave(rfq_id, body);
     return { wave_no, supplier_ids };
   }
 
