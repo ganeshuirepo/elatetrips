@@ -10,6 +10,7 @@ import { buildPricingRouter } from '../modules/pricing/pricing.routes';
 import { buildPartnerRouter } from '../modules/partner/partner.routes';
 import { buildWeddingRouter } from '../modules/wedding/wedding.routes';
 import { buildReviewRouter } from '../modules/reviews/review.routes';
+import { buildExperiencesRouter } from '../modules/experiences/experiences.routes';
 import { buildAdminRouter } from '../modules/admin/admin.routes';
 import { buildConsoleRouter, buildVendorRouter } from '../modules/admin/console.routes';
 import { buildUploadRouter } from '../modules/uploads/upload.routes';
@@ -57,6 +58,11 @@ export function buildApiRouter(c: Container): Router {
   // Reviews hang off the hotel resource (…/hotels/:id/reviews), so the review
   // router is mounted under /hotels rather than a /reviews prefix.
   router.use('/hotels', buildReviewRouter(c.controllers.reviews, c.authGuard));
+  // The Experiences catalog, imported from the web repo's export. Public
+  // content, so no guard — and mounted beside /catalog rather than inside it,
+  // because it is a different catalog with its own versioning, not more of the
+  // older one.
+  router.use('/experiences', buildExperiencesRouter(c.controllers.experiences));
   // /admin is gated by adminGuard; /console and /vendor are both served by the
   // same console controller (their own routers handle any further auth).
   router.use('/admin', buildAdminRouter(c.controllers.admin, c.controllers.console, c.adminGuard));
