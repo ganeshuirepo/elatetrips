@@ -57,6 +57,29 @@ function readInt(src: ConfigSource, key: string): number | undefined {
   return Number.isFinite(n) && n > 0 ? n : undefined;
 }
 
+/**
+ * One line for the boot log saying whether a customer confirmation will send
+ * anything, and to whom.
+ *
+ * This exists because "it defaults to off" is a claim about code, and what
+ * matters on a server is the state of THAT box. The deploy never writes .env —
+ * it is a file that lives on the machine — so a key can be present for reasons
+ * no one remembers. Printing the answer at boot turns an assumption into
+ * something you can read in `pm2 logs`.
+ */
+export function describeRfqFlow(config: RfqFlowConfig): string {
+  if (!config.enabled) {
+    return '[rfqflow] OFF — a confirmed RFQ notifies nobody. Set RFQFLOW_ENABLED=true to dispatch.';
+  }
+  const cap = config.max_suppliers_per_wave ?? 'uncapped';
+  return (
+    `[rfqflow] ON — a confirmed RFQ mails suppliers (max ${cap}/wave)` +
+    `, customer ${config.notify_customer ? 'yes' : 'no'}` +
+    `, ops copy ${config.copy_ops ? 'yes' : 'no'}` +
+    (config.link_base ? '' : ' — WARNING: no RFQFLOW_LINK_BASE, quote-card links will be unusable')
+  );
+}
+
 export function loadRfqFlowConfig(source?: ConfigSource): RfqFlowConfig {
   const src: ConfigSource = source ?? process.env;
   return {

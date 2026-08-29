@@ -19,7 +19,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { loadRfqFlowConfig } from './rfqflow.config';
+import { describeRfqFlow, loadRfqFlowConfig } from './rfqflow.config';
 import { RfqFlowService } from './rfqflow.service';
 import type { CandidatePort, DispatchCandidate, MailPort, WavePort } from './rfqflow.types';
 import {
@@ -138,6 +138,44 @@ test('sends nothing at all until the workflow is switched on', async () => {
   assert.match(report.skipped ?? '', /RFQFLOW_ENABLED/);
   assert.equal(mail.sent.length, 0, 'a disabled workflow must not send');
   assert.equal(wave.calls, 0, 'and must not mint tokens either');
+});
+
+test('a server with none of the keys set is inert, and says so at boot', async () => {
+  // This is production's actual shape. The deploy never writes .env, so none of
+  // the RFQFLOW_/COMM_/SMTP_ keys exist there — and the point of this test is
+  // that "off by default" is verified rather than asserted in a comment.
+  const config = loadRfqFlowConfig({});
+  assert.equal(config.enabled, false);
+  assert.match(describeRfqFlow(config), /^\[rfqflow\] OFF/);
+
+  const mail = fakeMail();
+  const wave = fakeWave();
+  const service = new RfqFlowService({
+    config,
+    candidates: fakeCandidates([candidate('sup-1'), candidate('sup-2')]),
+    wave: wave.port,
+    mail: mail.port,
+    directory: new ConfigRecipientDirectory({ source: {} }),
+  });
+
+  const submitted = await service.onRfqSubmitted(rfq());
+  const shortlisted = await service.onQuotesShortlisted(rfq(), [quote('q1', 'sup-1', 100000)]);
+
+  assert.equal(mail.sent.length, 0, 'no mail may leave a server that was never switched on');
+  assert.equal(wave.calls, 0);
+  assert.ok(submitted.skipped);
+  assert.ok(shortlisted.skipped);
+});
+
+test('the boot line names the risk when dispatch is on without a link base', () => {
+  // A wave whose links are bare tokens is worse than no wave: the supplier gets
+  // a mail they cannot act on, and we have spent the first impression.
+  const on = loadRfqFlowConfig({ RFQFLOW_ENABLED: 'true' });
+  assert.match(describeRfqFlow(on), /^\[rfqflow\] ON/);
+  assert.match(describeRfqFlow(on), /WARNING: no RFQFLOW_LINK_BASE/);
+
+  const complete = loadRfqFlowConfig({ ...ENV_ON });
+  assert.doesNotMatch(describeRfqFlow(complete), /WARNING/);
 });
 
 // ---- who may be written to -------------------------------------------------

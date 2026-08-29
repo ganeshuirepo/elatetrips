@@ -1,5 +1,6 @@
 import type { RequestHandler } from 'express';
 import { env } from './config/env';
+import { logger } from './common/logger';
 
 import type { ExperienceFacet, PackageOption } from './modules/catalog/catalog.types';
 import { MongoReadRepository } from './repositories/MongoReadRepository';
@@ -89,7 +90,7 @@ import { buildChannelProvider } from './modules/comms/comms.factory';
 import { ConfigRecipientDirectory } from './modules/comms/comms.recipients';
 import { CommsService } from './modules/comms/comms.service';
 import { CommsController } from './modules/comms/comms.controller';
-import { loadRfqFlowConfig } from './modules/rfqflow/rfqflow.config';
+import { describeRfqFlow, loadRfqFlowConfig } from './modules/rfqflow/rfqflow.config';
 import { RfqFlowService } from './modules/rfqflow/rfqflow.service';
 import { InMemoryRateRowRepository } from './modules/ratecard/ratecard.repository';
 import { ManualUploadSheetProvider } from './modules/ratecard/ratecard.sheets';
@@ -278,8 +279,10 @@ export function createContainer(): Container {
   // The RFQ dispatcher (customer confirms → partners are mailed → customer is
   // told). Inert unless RFQFLOW_ENABLED is set; see rfqflow.config.ts. Its four
   // ports are adapted here so the service imports none of these modules.
+  const rfqFlowConfig = loadRfqFlowConfig();
+  logger.info(describeRfqFlow(rfqFlowConfig));
   const rfqFlowService = new RfqFlowService({
-    config: loadRfqFlowConfig(),
+    config: rfqFlowConfig,
     candidates: {
       candidatesFor: async (destination, opts) =>
         (await supplierService.findCandidates({ destination, track: opts.track as 'A' | 'B' | undefined })).map((c) => ({
