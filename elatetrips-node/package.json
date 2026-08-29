@@ -10,6 +10,7 @@
     "seed": "ts-node-dev --transpile-only src/seed/seed.ts",
     "seed:built": "node dist/seed/seed.js",
     "typecheck": "tsc --noEmit",
+    "docs:check": "node scripts/swagger-coverage.mjs",
     "import:experiences": "ts-node-dev --transpile-only src/seed/import-experiences.ts",
     "import:experiences:built": "node dist/seed/import-experiences.js"
   },

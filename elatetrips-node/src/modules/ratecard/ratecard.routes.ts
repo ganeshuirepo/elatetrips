@@ -27,11 +27,49 @@ export function buildRatecardRouter(c: RateCardController): Router {
   const router = Router();
 
   // Ingestion
+  /**
+   * @openapi
+   * /api/v1/ratecard/partners/{partnerId}/ingest:
+   *   post:
+   *     tags: [Ratecards]
+   *     summary: Take in a partner's rate card
+   *     description: Rates land STAGED, not live — nothing a partner sends prices a trip until somebody approves it.
+   *     parameters:
+   *       - in: path
+   *         name: partnerId
+   *         required: true
+   *         schema: { type: string }
+   *         description: The partner whose rates these are.
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema: { type: object, description: "The rate rows." }
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   */
   router.post(
     '/partners/:partnerId/ingest',
     validate({ params: partnerParamSchema, body: ingestBodySchema }),
     asyncHandler(c.ingest),
   );
+  /**
+   * @openapi
+   * /api/v1/ratecard/partners/{partnerId}/sync:
+   *   post:
+   *     tags: [Ratecards]
+   *     summary: Re-pull a partner's rates from their feed
+   *     parameters:
+   *       - in: path
+   *         name: partnerId
+   *         required: true
+   *         schema: { type: string }
+   *         description: The partner.
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   */
   router.post(
     '/partners/:partnerId/sync',
     validate({ params: partnerParamSchema }),
@@ -39,12 +77,64 @@ export function buildRatecardRouter(c: RateCardController): Router {
   );
 
   // Staged review
+  /**
+   * @openapi
+   * /api/v1/ratecard/staged:
+   *   get:
+   *     tags: [Ratecards]
+   *     summary: Rate changes waiting for review
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   */
   router.get('/staged', validate({ query: stagedQuerySchema }), asyncHandler(c.listStaged));
+  /**
+   * @openapi
+   * /api/v1/ratecard/staged/{proposalId}/approve:
+   *   post:
+   *     tags: [Ratecards]
+   *     summary: Approve a staged rate change — this is what makes it live
+   *     parameters:
+   *       - in: path
+   *         name: proposalId
+   *         required: true
+   *         schema: { type: string }
+   *         description: The staged proposal.
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema: { type: object, description: "Who approved it, and any note." }
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   */
   router.post(
     '/staged/:proposalId/approve',
     validate({ params: proposalParamSchema, body: approveBodySchema }),
     asyncHandler(c.approveStaged),
   );
+  /**
+   * @openapi
+   * /api/v1/ratecard/staged/{proposalId}/reject:
+   *   post:
+   *     tags: [Ratecards]
+   *     summary: Reject a staged rate change
+   *     parameters:
+   *       - in: path
+   *         name: proposalId
+   *         required: true
+   *         schema: { type: string }
+   *         description: The staged proposal.
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema: { type: object, description: "The reason — it goes back to the partner." }
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   */
   router.post(
     '/staged/:proposalId/reject',
     validate({ params: proposalParamSchema, body: rejectBodySchema }),
@@ -52,6 +142,23 @@ export function buildRatecardRouter(c: RateCardController): Router {
   );
 
   // Freshness
+  /**
+   * @openapi
+   * /api/v1/ratecard/partners/{partnerId}/freshness:
+   *   get:
+   *     tags: [Ratecards]
+   *     summary: How old this partner's rates are
+   *     description: Stale rates are the quiet way a quote goes out wrong, so freshness is a first-class question.
+   *     parameters:
+   *       - in: path
+   *         name: partnerId
+   *         required: true
+   *         schema: { type: string }
+   *         description: The partner.
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   */
   router.get(
     '/partners/:partnerId/freshness',
     validate({ params: partnerParamSchema }),
@@ -59,11 +166,52 @@ export function buildRatecardRouter(c: RateCardController): Router {
   );
 
   // Booking-time snapshot + ledger inspection
+  /**
+   * @openapi
+   * /api/v1/ratecard/partners/{partnerId}/rate:
+   *   get:
+   *     tags: [Ratecards]
+   *     summary: The rate for one SKU, as it stands right now
+   *     description: This is the figure a booking snapshots, so it is answered from the ledger rather than recomputed later.
+   *     parameters:
+   *       - in: path
+   *         name: partnerId
+   *         required: true
+   *         schema: { type: string }
+   *         description: The partner.
+   *       - in: query
+   *         name: sku
+   *         schema: { type: string }
+   *         description: The item being priced.
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   */
   router.get(
     '/partners/:partnerId/rate',
     validate({ params: partnerParamSchema, query: skuQuerySchema }),
     asyncHandler(c.rate),
   );
+  /**
+   * @openapi
+   * /api/v1/ratecard/partners/{partnerId}/rows:
+   *   get:
+   *     tags: [Ratecards]
+   *     summary: Every ledger row behind a SKU's rate — the audit view
+   *     parameters:
+   *       - in: path
+   *         name: partnerId
+   *         required: true
+   *         schema: { type: string }
+   *         description: The partner.
+   *       - in: query
+   *         name: sku
+   *         schema: { type: string }
+   *         description: The item. Required.
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   */
   router.get(
     '/partners/:partnerId/rows',
     validate({ params: partnerParamSchema, query: skuRequiredQuerySchema }),

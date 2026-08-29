@@ -41,6 +41,29 @@ export function buildPushRouter(service: PushService, identityGuard: RequestHand
     }),
   );
 
+  /**
+   * @openapi
+   * /api/v1/push/tokens:
+   *   delete:
+   *     tags: [Push]
+   *     summary: Forget a device token
+   *     description: >-
+   *       Called on sign-out, so the next person holding the phone is not sent somebody
+   *       else's trip. The token travels in the BODY, not the path — a device token in a
+   *       URL ends up in access logs.
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required: [token]
+   *             properties:
+   *               token: { type: string, description: "The device token to drop." }
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   */
   router.delete(
     '/tokens',
     identityGuard,
