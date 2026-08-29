@@ -17,7 +17,7 @@
  *     or an OTP (login, verify-account, verify-otp, reset-password). Slows
  *     credential / OTP brute force.
  */
-import { Router } from 'express';
+import { Router, type RequestHandler } from 'express';
 import type { AuthController } from './auth.controller';
 import { asyncHandler } from '../../common/http/asyncHandler';
 import { validate } from '../../common/middleware/validate';
@@ -32,6 +32,8 @@ import {
   refreshSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
+  requestChannelVerificationSchema,
+  confirmChannelVerificationSchema,
 } from './auth.validation';
 
 /**
@@ -40,7 +42,15 @@ import {
  *   - name: Auth
  *     description: Signup, account verification, password login, OTP login, and password reset.
  */
-export function buildAuthRouter(controller: AuthController): Router {
+/**
+ * Rate-limit key for the two AUTHENTICATED routes. Keying on a body field would
+ * be wrong here: every caller sends the same `channel`, so one user hitting the
+ * limit would lock out everyone behind the same egress IP. The account is the
+ * right unit, and it is read from the verified token, not from client input.
+ */
+const callerKey = (req: { user?: { phone?: string } }): string => req.user?.phone ?? '';
+
+export function buildAuthRouter(controller: AuthController, authGuard: RequestHandler): Router {
   const router = Router();
 
   /**
@@ -275,6 +285,69 @@ export function buildAuthRouter(controller: AuthController): Router {
     otpSendRateLimit(bodyField('identifier')),
     validate({ body: resendOtpSchema }),
     asyncHandler(controller.resendOtp),
+  );
+
+  /**
+   * @openapi
+   * /api/v1/auth/verify-channel/request:
+   *   post:
+   *     tags: [Auth]
+   *     summary: "Send a code to verify the signed-in user's own email or mobile"
+   *     description: >
+   *       Signup proves ONE channel — whichever the code went to. This proves the
+   *       other one. The code is always sent to the address held on the
+   *       authenticated account; no destination is accepted from the caller.
+   *     security: [{ bearerAuth: [] }]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required: [channel]
+   *             properties:
+   *               channel: { type: string, enum: [email, mobile] }
+   *     responses:
+   *       200: { description: Code sent to the address on file }
+   *       400: { description: Already verified, or no address on file for that channel }
+   *       401: { $ref: '#/components/responses/Unauthorized' }
+   *       429: { description: Too many codes requested }
+   */
+  router.post(
+    '/verify-channel/request',
+    authGuard,
+    otpSendRateLimit(callerKey),
+    validate({ body: requestChannelVerificationSchema }),
+    asyncHandler(controller.requestChannelVerification),
+  );
+
+  /**
+   * @openapi
+   * /api/v1/auth/verify-channel/confirm:
+   *   post:
+   *     tags: [Auth]
+   *     summary: "Confirm the code and mark that channel verified"
+   *     security: [{ bearerAuth: [] }]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required: [channel, otp]
+   *             properties:
+   *               channel: { type: string, enum: [email, mobile] }
+   *               otp: { type: string, example: "123456" }
+   *     responses:
+   *       200: { description: "The updated user (emailVerified / mobileVerified)" }
+   *       401: { description: Invalid or expired OTP, or no valid session }
+   */
+  router.post(
+    '/verify-channel/confirm',
+    authGuard,
+    loginRateLimit(callerKey),
+    validate({ body: confirmChannelVerificationSchema }),
+    asyncHandler(controller.confirmChannelVerification),
   );
 
   return router;

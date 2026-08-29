@@ -1,6 +1,19 @@
 import type { Request, Response } from 'express';
 import type { AuthService } from './auth.service';
 import { ok, created } from '../../common/http/ApiResponse';
+import { UnauthorizedError } from '../../common/errors/AppError';
+
+/**
+ * The signed-in caller's phone, taken from the verified JWT claims that
+ * authGuard put on the request — never from the body or query. This is what
+ * keeps the channel-verification routes from being pointed at another
+ * account. A token without a phone claim cannot identify anybody, so it fails
+ * closed rather than falling back to client input.
+ */
+function callerPhone(req: Request): string {
+  if (!req.user?.phone) throw new UnauthorizedError();
+  return req.user.phone;
+}
 
 /**
  * Auth controller — thin HTTP transport over AuthService. Each handler reads the
@@ -41,4 +54,17 @@ export class AuthController {
 
   resetPassword = async (req: Request, res: Response): Promise<Response> =>
     ok(res, await this.service.resetPassword(req.body.identifier, req.body.otp, req.body.password));
+
+  requestChannelVerification = async (req: Request, res: Response): Promise<Response> =>
+    ok(res, await this.service.requestChannelVerification(callerPhone(req), req.body.channel));
+
+  confirmChannelVerification = async (req: Request, res: Response): Promise<Response> =>
+    ok(
+      res,
+      await this.service.confirmChannelVerification(
+        callerPhone(req),
+        req.body.channel,
+        req.body.otp,
+      ),
+    );
 }

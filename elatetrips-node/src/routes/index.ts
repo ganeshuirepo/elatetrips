@@ -45,7 +45,7 @@ export function buildApiRouter(c: Container): Router {
    */
   router.get('/health', (_req, res) => ok(res, { status: 'ok', uptime: process.uptime() }));
 
-  router.use('/auth', buildAuthRouter(c.controllers.auth));
+  router.use('/auth', buildAuthRouter(c.controllers.auth, c.authGuard));
   router.use('/users', buildUserRouter(c.controllers.users, c.authGuard));
   router.use('/orders', buildOrderRouter(c.controllers.orders, c.authGuard));
   // Post-booking support: guest thread (auth), vendor app + ops console (mock

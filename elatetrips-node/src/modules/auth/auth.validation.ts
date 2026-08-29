@@ -89,3 +89,15 @@ export const resetPasswordSchema = z.object({ identifier, otp, password });
 export const refreshSchema = z.object({
   refreshToken: z.string().trim().min(20, 'Provide the refresh token'),
 });
+
+/**
+ * Verifying the second channel while signed in. Note what is ABSENT: no
+ * identifier. The address the code goes to is read from the authenticated
+ * user's own record (see AuthService.ownChannel), so a caller cannot point
+ * this at an address they do not own.
+ */
+const channel = z.enum(['email', 'mobile']);
+
+export const requestChannelVerificationSchema = z.object({ channel });
+
+export const confirmChannelVerificationSchema = z.object({ channel, otp });

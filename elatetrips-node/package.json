@@ -1,7 +1,7 @@
 {
   "name": "elatetrips-node",
   "version": "1.0.0",
-  "description": "ElateTrips backend — Node/Express/MongoDB REST API for the celebration trip planner.",
+  "description": "ElateTrips backend \u2014 Node/Express/MongoDB REST API for the celebration trip planner.",
   "main": "dist/server.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
@@ -10,6 +10,7 @@
     "seed": "ts-node-dev --transpile-only src/seed/seed.ts",
     "seed:built": "node dist/seed/seed.js",
     "typecheck": "tsc --noEmit",
+    "test": "node -r ./scripts/register-ts.js --test \"src/**/*.test.ts\"",
     "docs:check": "node scripts/swagger-coverage.mjs",
     "import:experiences": "ts-node-dev --transpile-only src/seed/import-experiences.ts",
     "import:experiences:built": "node dist/seed/import-experiences.js"

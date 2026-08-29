@@ -95,6 +95,58 @@ export class AuthService {
     return this.session(verified ?? user);
   }
 
+  // ---- Verifying the OTHER channel, while signed in --------------------------
+
+  /**
+   * Signup verifies ONE channel — whichever the OTP went to — so an account that
+   * signed up by email keeps `mobileVerified: false` forever, and vice versa.
+   * These two calls are how the second channel ever gets proved.
+   *
+   * The security property that matters: the address the code is sent to is read
+   * from the AUTHENTICATED user's own record, never from the request body. A
+   * caller therefore cannot use this to have a code delivered to an address they
+   * do not already own, nor to mark somebody else's channel verified. `phone`
+   * comes from the JWT claims (see authGuard), not from client input.
+   */
+  private async ownChannel(
+    phone: string,
+    channel: VerifyChannel,
+  ): Promise<{ user: User; identifier: string }> {
+    const user = await this.users.findByPhone(phone);
+    if (!user) throw new UnauthorizedError('Account no longer exists');
+    const identifier = channel === 'email' ? user.email : user.phone;
+    if (!identifier) {
+      throw new BadRequestError(
+        `There is no ${channel === 'email' ? 'email address' : 'mobile number'} on your account yet.`,
+      );
+    }
+    return { user, identifier };
+  }
+
+  async requestChannelVerification(phone: string, channel: VerifyChannel): Promise<OtpResult> {
+    const { user, identifier } = await this.ownChannel(phone, channel);
+    // Already proved — re-sending would spend a real SMS/email on nothing.
+    if (channel === 'email' ? user.emailVerified : user.mobileVerified) {
+      throw new BadRequestError(
+        `Your ${channel === 'email' ? 'email address' : 'mobile number'} is already verified.`,
+      );
+    }
+    return this.issueAndSend(identifier, channel);
+  }
+
+  async confirmChannelVerification(
+    phone: string,
+    channel: VerifyChannel,
+    code: string,
+  ): Promise<User> {
+    const { user, identifier } = await this.ownChannel(phone, channel);
+    if (!this.otpStore.verify(identifier, code)) {
+      throw new UnauthorizedError('Invalid or expired OTP');
+    }
+    const verified = await this.users.markVerified(identifier, channel);
+    return verified ?? user;
+  }
+
   // ---- Signup + account verification ----------------------------------------
 
   async signup(data: SignupData, verifyVia: VerifyChannel): Promise<OtpResult | SessionResult> {
