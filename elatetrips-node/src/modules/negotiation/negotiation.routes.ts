@@ -80,7 +80,7 @@ export function buildNegotiationRouter(controller: NegotiationController): Route
    *     tags: [Negotiation]
    *     summary: Full version history (append-only)
    *     responses:
-   *       200: { description: RuleSetVersion[] }
+   *       200: { description: "RuleSetVersion[]" }
    */
   router.get('/rules/versions', asyncHandler(controller.listVersions));
 
