@@ -8,7 +8,7 @@
  * row (→ reported rejections), emits audit events (BR-6), and reads all business
  * values from config (BR-17).
  */
-import { Router } from 'express';
+import { Router, type RequestHandler } from 'express';
 import type { RateCardController } from './ratecard.controller';
 import { asyncHandler } from '../../common/http/asyncHandler';
 import { validate } from '../../common/middleware/validate';
@@ -23,8 +23,26 @@ import {
   stagedQuerySchema,
 } from './ratecard.validation';
 
-export function buildRatecardRouter(c: RateCardController): Router {
+/**
+ * Every route sits behind `guard` (applied once via router.use) — the admin
+ * guard, matching the supplier directory this pipeline feeds.
+ *
+ * It used to have no authentication at all, which made it the most sensitive
+ * open surface in the API: `GET /partners/:id/rows` and `/rate` return a
+ * partner's negotiated rates (the cost base an entire margin is built on),
+ * `POST /partners/:id/ingest` submits rates in their name, and
+ * `POST /staged/:id/approve` promotes a staged proposal to live pricing —
+ * which is the human review step, so an open approve endpoint means the review
+ * can approve itself. Validation was present on all eight routes and answered
+ * "is this well-formed", never "who is asking".
+ *
+ * No client calls /ratecard today, so closing it breaks no caller. When the
+ * partner-facing rate-card screen is built, ingest is the route that will need
+ * a partner-scoped credential of its own rather than this ops-wide key.
+ */
+export function buildRatecardRouter(c: RateCardController, guard: RequestHandler): Router {
   const router = Router();
+  router.use(guard);
 
   // Ingestion
   /**

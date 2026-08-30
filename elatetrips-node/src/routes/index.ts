@@ -75,7 +75,7 @@ export function buildApiRouter(c: Container): Router {
   // catch-all so the richer M3 /suppliers wins; the rest are new prefixes.
   router.use('/suppliers', buildSupplierRouter(c.controllers.suppliers, c.adminGuard));
   router.use('/comm', buildCommsRouter(c.controllers.comms));
-  router.use('/ratecard', buildRatecardRouter(c.controllers.ratecard));
+  router.use('/ratecard', buildRatecardRouter(c.controllers.ratecard, c.adminGuard));
   router.use('/broadcast', buildBroadcastRouter(c.controllers.broadcast));
   router.use('/classifier', buildClassifierRouter(c.controllers.classifier));
   router.use('/negotiation', buildNegotiationRouter(c.controllers.negotiation));
