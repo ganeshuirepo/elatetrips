@@ -16,15 +16,27 @@
  * implementation returns.
  */
 import { Schema, model } from 'mongoose';
+import {
+  CURRENCIES,
+  PROPOSAL_STATUSES,
+  RATE_SOURCES,
+  STAGE_REASONS,
+  TOLERANCE_DECISIONS,
+} from './ratecard.types';
 import type { RateRow, StagedProposal } from './ratecard.types';
+
+/** ISO calendar date. The effective-window query compares these as STRINGS. */
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 const opts = { versionKey: false } as const;
 
 /** Money stays {minor amount + currency} — never a bare number (NFR). */
 const moneySchema = new Schema(
   {
-    amount: { type: Number, required: true },
-    currency: { type: String, required: true },
+    // Integer MINOR units (paise/cents), never a float: a rate stored as
+    // 7500.005 would round differently in two places and stop reconciling.
+    amount: { type: Number, required: true, min: 0 },
+    currency: { type: String, required: true, enum: CURRENCIES },
   },
   { _id: false },
 );
@@ -45,10 +57,17 @@ const rateRowSchema = new Schema<RateRow>(
     destination: { type: String, required: true },
     sku: { type: String, required: true },
     price: { type: moneySchema, required: true },
-    effective_from: { type: String, required: true },
-    effective_to: String,
+    /*
+     * Both dates are format-checked because the ledger's window query compares
+     * them lexicographically — that only equals chronological order for
+     * zero-padded ISO dates. A '2026-3-1' would sort after '2026-12-01' and
+     * silently drop out of the window it belongs in, which surfaces as a
+     * missing price rather than as an error.
+     */
+    effective_from: { type: String, required: true, match: ISO_DATE },
+    effective_to: { type: String, match: ISO_DATE },
     schema_version: { type: Number, required: true },
-    source: { type: String, required: true },
+    source: { type: String, required: true, enum: RATE_SOURCES },
     ingested_ts: { type: String, required: true },
     cell: cellSchema,
     supersedes_row_id: String,
@@ -77,7 +96,7 @@ const bandSchema = new Schema(
 // review queue shows the difference. Stored as null rather than omitted.
 const toleranceSchema = new Schema(
   {
-    decision: { type: String, required: true },
+    decision: { type: String, required: true, enum: TOLERANCE_DECISIONS },
     within_band: { type: Boolean, required: true },
     band: { type: bandSchema, default: null },
     delta_pct: { type: Number, default: null },
@@ -103,8 +122,8 @@ const normalizedRowSchema = new Schema(
     destination: { type: String, required: true },
     sku: { type: String, required: true },
     price: { type: moneySchema, required: true },
-    effective_from: { type: String, required: true },
-    effective_to: String,
+    effective_from: { type: String, required: true, match: ISO_DATE },
+    effective_to: { type: String, match: ISO_DATE },
     schema_version: { type: Number, required: true },
     cell: { type: cellSchema, required: true },
   },
@@ -119,10 +138,10 @@ const stagedProposalSchema = new Schema<StagedProposal>(
     sku: { type: String, required: true },
     incoming: { type: normalizedRowSchema, required: true },
     baseline_row_id: String,
-    reason: { type: String, required: true },
+    reason: { type: String, required: true, enum: STAGE_REASONS },
     tolerance: { type: toleranceSchema, required: true },
     drift: { type: driftSchema, required: true },
-    status: { type: String, required: true, enum: ['pending', 'approved', 'rejected'] },
+    status: { type: String, required: true, enum: PROPOSAL_STATUSES },
     created_ts: { type: String, required: true },
     resolved_ts: String,
     resolved_by: String,

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { VENDOR_TYPES } from './console.model';
 
 /**
  * Zod schemas + inferred types for the admin & console routes. Catalog payloads
@@ -87,7 +88,7 @@ export const vendorCreateSchema = z
       .regex(/^[a-z0-9_.-]+$/i, 'letters, numbers, dots, dashes only'),
     password: z.string().min(6),
     displayName: z.string().min(2),
-    vendorType: z.enum(['hotel', 'cab', 'experience', 'ground']),
+    vendorType: z.enum(VENDOR_TYPES),
     refId: z.string().min(1).optional(),
     /** Supply partner this account may maintain rate cards for. */
     partnerId: z.string().min(1).optional(),

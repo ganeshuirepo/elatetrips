@@ -12,9 +12,12 @@ import { Schema, model } from 'mongoose';
  * Celebration Managers ('cm') and local Operational Managers ('om'). Support
  * roles bind to their support directory row through refId (staff or vendor id).
  */
-export type ConsoleRole = 'admin' | 'vendor' | 'crew' | 'cm' | 'om';
+export const CONSOLE_ROLES = ['admin', 'vendor', 'crew', 'cm', 'om'] as const;
+export type ConsoleRole = (typeof CONSOLE_ROLES)[number];
+
 /** What a vendor account is bound to — exactly one listing (or ground crew). */
-export type VendorType = 'hotel' | 'cab' | 'experience' | 'ground';
+export const VENDOR_TYPES = ['hotel', 'cab', 'experience', 'ground'] as const;
+export type VendorType = (typeof VENDOR_TYPES)[number];
 
 export interface ConsoleUser {
   username: string;
@@ -42,11 +45,15 @@ const consoleUserSchema = new Schema<ConsoleUser>(
     username: { type: String, required: true, unique: true, index: true },
     passwordHash: { type: String, required: true },
     displayName: { type: String, required: true },
-    role: { type: String, required: true, index: true },
+    // `role` decides which console a person reaches, so an unconstrained string
+    // here is an authorization bug waiting for a typo: a row saved as 'Admin'
+    // or 'ops' matches no guard and no switch, and fails in whichever direction
+    // the reading code happens to default to.
+    role: { type: String, required: true, enum: CONSOLE_ROLES, index: true },
     partnerId: { type: String, index: true },
-    vendorType: String,
+    vendorType: { type: String, enum: VENDOR_TYPES },
     refId: String,
-    createdAt: String,
+    createdAt: { type: String, required: true },
   },
   { versionKey: false, collection: 'console_users' },
 );

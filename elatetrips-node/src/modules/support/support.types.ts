@@ -7,7 +7,16 @@
  * from windows and states rather than stored, so it can never go stale.
  */
 
-export type StaffRole = 'cm' | 'om';
+/*
+ * Every closed set below is declared ONCE, as a frozen array, and the TypeScript
+ * union is derived from it. The array is what the Mongoose schema uses as its
+ * `enum`, so the type the compiler checks and the values the database will
+ * accept cannot drift apart — adding a member is one edit, and forgetting the
+ * other half is no longer possible. Mirrors PARTNER_TYPES in partner.types.ts.
+ */
+
+export const STAFF_ROLES = ['cm', 'om'] as const;
+export type StaffRole = (typeof STAFF_ROLES)[number];
 
 export interface SupportStaff {
   id: string;
@@ -20,7 +29,8 @@ export interface SupportStaff {
   shift: string;
 }
 
-export type VendorCategory = 'decor' | 'cake' | 'flowers' | 'photo' | 'cab' | 'experience';
+export const VENDOR_CATEGORIES = ['decor', 'cake', 'flowers', 'photo', 'cab', 'experience'] as const;
+export type VendorCategory = (typeof VENDOR_CATEGORIES)[number];
 
 export interface SupportVendor {
   id: string;
@@ -33,16 +43,23 @@ export interface SupportVendor {
   backup: boolean;
 }
 
-export type MilestoneState =
-  | 'pending' // task assigned, vendor has not accepted yet
-  | 'scheduled' // vendor accepted the window
-  | 'enroute'
-  | 'inprogress'
-  | 'complete'
-  | 'delayed';
+export const MILESTONE_STATES = [
+  'pending', // task assigned, vendor has not accepted yet
+  'scheduled', // vendor accepted the window
+  'enroute',
+  'inprogress',
+  'complete',
+  'delayed',
+] as const;
+export type MilestoneState = (typeof MILESTONE_STATES)[number];
 
 /** Derived traffic-light health for one milestone (and, rolled up, a booking). */
-export type Health = 'green' | 'amber' | 'red';
+export const HEALTHS = ['green', 'amber', 'red'] as const;
+export type Health = (typeof HEALTHS)[number];
+
+/** Who rules on proof-of-completion: the CM (standard tier) or the guest (premium). */
+export const PHOTO_APPROVALS = ['pending', 'approved', 'change_requested'] as const;
+export type PhotoApproval = (typeof PHOTO_APPROVALS)[number];
 
 export interface Milestone {
   id: string;
@@ -58,13 +75,16 @@ export interface Milestone {
   requiresPhoto: boolean;
   photoUrl?: string;
   /** 'pending' until the CM (standard tier) or the guest (premium) rules on it. */
-  photoApproval?: 'pending' | 'approved' | 'change_requested';
+  photoApproval?: PhotoApproval;
   note?: string;
   updatedAt: string;
 }
 
-export type MessageFrom = 'user' | 'assistant' | 'cm' | 'om' | 'vendor';
-export type MessageKind = 'chat' | 'status' | 'photo' | 'handoff';
+export const MESSAGE_FROMS = ['user', 'assistant', 'cm', 'om', 'vendor'] as const;
+export type MessageFrom = (typeof MESSAGE_FROMS)[number];
+
+export const MESSAGE_KINDS = ['chat', 'status', 'photo', 'handoff'] as const;
+export type MessageKind = (typeof MESSAGE_KINDS)[number];
 
 export interface ThreadMessage {
   id: string;
@@ -84,13 +104,17 @@ export interface ThreadMessage {
   author?: string;
 }
 
-export type TicketState = 'open' | 'ack' | 'resolved';
+export const TICKET_STATES = ['open', 'ack', 'resolved'] as const;
+export type TicketState = (typeof TICKET_STATES)[number];
+
+/** 1 = CM (chase, review, comfort); 2 = OM (physical fix, replace vendor). */
+export const TICKET_LEVELS = [1, 2] as const;
+export type TicketLevel = (typeof TICKET_LEVELS)[number];
 
 export interface Ticket {
   id: string;
   tripId: string;
-  /** 1 = CM (chase, review, comfort); 2 = OM (physical fix, replace vendor). */
-  level: 1 | 2;
+  level: TicketLevel;
   state: TicketState;
   city: string;
   cause: string;
@@ -100,7 +124,8 @@ export interface Ticket {
 }
 
 /** "Keep me posted on everything" vs "just handle it". Governs §5 thresholds. */
-export type NotifyPref = 'everything' | 'handled';
+export const NOTIFY_PREFS = ['everything', 'handled'] as const;
+export type NotifyPref = (typeof NOTIFY_PREFS)[number];
 
 export interface TripSupport {
   tripId: string;

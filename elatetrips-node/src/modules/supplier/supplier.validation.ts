@@ -9,11 +9,26 @@
  * service (BR-17), never as literals here.
  */
 import { z } from 'zod';
+import {
+  CAP_TIERS,
+  CHANNEL_PREFS,
+  CONTACT_ROLES,
+  QUALITY_TIERS,
+  SUPPLIER_STATUSES,
+  SUPPLIER_TYPES,
+  TRACKS,
+} from './supplier.types';
 
-const track = z.enum(['A', 'B']);
-const supplierType = z.enum(['dmc', 'hotel', 'adventure', 'experience', 'transport']);
-const capTier = z.enum(['primary', 'bench', 'reserve']);
-const status = z.enum(['invited', 'vetting', 'active', 'bench', 'probation', 'paused']);
+/*
+ * Built from the same arrays as the TypeScript unions and the Mongoose enums,
+ * so the three layers that each get to say "no" — the request edge, the
+ * compiler, and the database — cannot disagree about what the valid values are.
+ * Previously each held its own copy of the list.
+ */
+const track = z.enum(TRACKS);
+const supplierType = z.enum(SUPPLIER_TYPES);
+const capTier = z.enum(CAP_TIERS);
+const status = z.enum(SUPPLIER_STATUSES);
 
 const commsConsent = z
   .object({
@@ -26,7 +41,7 @@ const commsConsent = z
 
 const contact = z
   .object({
-    role: z.enum(['owner', 'quoter', 'banquet_sales', 'emergency']),
+    role: z.enum(CONTACT_ROLES),
     name: z.string().trim().min(1),
     email: z.string().trim().email().optional(),
     phone: z.string().trim().min(1).optional(),
@@ -64,7 +79,7 @@ export const createSupplierBodySchema = z
     destinations: z.array(z.string().trim().min(1)).min(1),
     track,
     declared_tat_hours: z.number().positive(),
-    channel_pref: z.enum(['email', 'whatsapp']).optional(),
+    channel_pref: z.enum(CHANNEL_PREFS).optional(),
     comms_consent: commsConsent.optional(),
     contacts: z.array(contact).optional(),
     vetting: vetting.optional(),
@@ -85,7 +100,7 @@ export const provisionSupplierBodySchema = z
     destinations: z.array(z.string().trim().min(1)).min(1),
     track,
     declared_tat_hours: z.number().positive(),
-    channel_pref: z.enum(['email', 'whatsapp']).optional(),
+    channel_pref: z.enum(CHANNEL_PREFS).optional(),
     comms_consent: commsConsent.optional(),
     contacts: z.array(contact).optional(),
   })
@@ -99,11 +114,11 @@ export const updateSupplierBodySchema = z
     destinations: z.array(z.string().trim().min(1)).min(1).optional(),
     track: track.optional(),
     declared_tat_hours: z.number().positive().optional(),
-    channel_pref: z.enum(['email', 'whatsapp']).optional(),
+    channel_pref: z.enum(CHANNEL_PREFS).optional(),
     comms_consent: commsConsent.optional(),
     contacts: z.array(contact).optional(),
     vetting: vetting.optional(),
-    quality_tier: z.enum(['preferred', 'standard', 'probation']).optional(),
+    quality_tier: z.enum(QUALITY_TIERS).optional(),
     scorecard: scorecard.optional(),
   })
   .strict();

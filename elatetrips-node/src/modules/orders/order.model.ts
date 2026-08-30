@@ -11,6 +11,7 @@
  * the createdAt used to sort "My orders" newest-first.
  */
 import { Schema, model } from 'mongoose';
+import { ORDER_STATUSES, PAYMENT_STATUSES } from './order.types';
 import type { Order } from './order.types';
 
 // Embedded, display-ready snapshot of the booked plan. _id:false on the subdocs
@@ -39,8 +40,10 @@ const orderSchema = new Schema<Order>(
     phone: { type: String, required: true, index: true },
     // Constrained to the two lifecycle states; the repository always writes
     // 'confirmed' on create, so the client can't set an arbitrary status.
-    status: { type: String, enum: ['confirmed', 'cancelled'], default: 'confirmed' },
-    total: { type: Number, default: 0 },
+    status: { type: String, enum: ORDER_STATUSES, default: 'confirmed' },
+    // Money never goes negative here: a refund is a cancellation, not a
+    // negative total, and a negative would quietly invert every revenue sum.
+    total: { type: Number, default: 0, min: 0 },
     contactName: { type: String, default: '' },
     contactPhone: { type: String, default: '' },
     contactEmail: { type: String, default: '' },
@@ -62,10 +65,10 @@ const orderSchema = new Schema<Order>(
       required: false,
     },
     coupon: { type: String, default: '' },
-    discount: { type: Number, default: 0 },
+    discount: { type: Number, default: 0, min: 0 },
     payment: {
       type: new Schema(
-        { method: String, txnId: String, status: String },
+        { method: String, txnId: String, status: { type: String, enum: PAYMENT_STATUSES } },
         { _id: false },
       ),
       required: false,

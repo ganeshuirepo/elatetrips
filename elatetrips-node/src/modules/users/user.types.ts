@@ -1,6 +1,18 @@
-export type Gender = 'male' | 'female' | 'other' | 'prefer_not_to_say' | '';
+/**
+ * What a person may pick, and separately what may be STORED.
+ *
+ * They are not the same set, and saying so explicitly is the point: '' means
+ * "never answered", which is the default on every account created before the
+ * question was asked — but it is not something anyone can choose, so the signup
+ * schema builds on GENDER_CHOICES while the column allows GENDERS. Two lists
+ * that were previously unrelated literals in three files, disagreeing quietly.
+ */
+export const GENDER_CHOICES = ['male', 'female', 'other', 'prefer_not_to_say'] as const;
+export const GENDERS = [...GENDER_CHOICES, ''] as const;
+export type Gender = (typeof GENDERS)[number];
 
-export type AccountStatus = 'pending' | 'active';
+export const ACCOUNT_STATUSES = ['pending', 'active'] as const;
+export type AccountStatus = (typeof ACCOUNT_STATUSES)[number];
 
 export interface BillingDetails {
   name: string;

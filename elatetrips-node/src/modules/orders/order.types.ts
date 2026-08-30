@@ -26,21 +26,34 @@ export interface OrderSummary {
    * A preference rather than a booking — the celebration manager works down the
    * list. Kept as names so the order stays readable if a hotel is later retired
    * from the catalogue.
+   *
+   * Optional because orders written before the field existed simply do not have
+   * it: the schema default fills it on write, never on read, so claiming it is
+   * always present would be a type that lies about older documents.
    */
-  preferredHotels: string[];
+  preferredHotels?: string[];
   packages: { celeb: string; names: string[] }[];
   adventures: string[];
   experiences: string[];
   items?: OrderItem[];
 }
 
-export type OrderStatus = 'confirmed' | 'cancelled';
+export const ORDER_STATUSES = ['confirmed', 'cancelled'] as const;
+export type OrderStatus = (typeof ORDER_STATUSES)[number];
+
+/**
+ * Only settled payments are ever written. An order is created after the gateway
+ * has confirmed, so there is no 'pending' — a payment that did not complete
+ * leaves no order behind at all.
+ */
+export const PAYMENT_STATUSES = ['paid'] as const;
+export type PaymentStatus = (typeof PAYMENT_STATUSES)[number];
 
 /** How the order was paid (mock gateway for now, Razorpay-shaped later). */
 export interface PaymentInfo {
   method: string;
   txnId: string;
-  status: 'paid';
+  status: PaymentStatus;
 }
 
 /** The celebration brief captured at checkout. */
