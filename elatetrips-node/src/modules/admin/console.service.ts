@@ -34,6 +34,8 @@ export interface ConsoleSession {
   role: ConsoleRole;
   vendorType?: VendorType;
   refId?: string;
+  /** Supply partner this account maintains rate cards for, when bound. */
+  partnerId?: string;
 }
 
 export interface VendorProfile {
@@ -127,6 +129,7 @@ export class ConsoleService {
       role: user.role,
       vendorType: user.vendorType,
       refId: user.refId,
+      partnerId: user.partnerId,
     };
   }
 

@@ -92,7 +92,7 @@ import { CommsService } from './modules/comms/comms.service';
 import { CommsController } from './modules/comms/comms.controller';
 import { describeRfqFlow, loadRfqFlowConfig } from './modules/rfqflow/rfqflow.config';
 import { RfqFlowService } from './modules/rfqflow/rfqflow.service';
-import { InMemoryRateRowRepository } from './modules/ratecard/ratecard.repository';
+import { MongoRateRowRepository } from './modules/ratecard/ratecard.repository.mongo';
 import { ManualUploadSheetProvider } from './modules/ratecard/ratecard.sheets';
 import { RatecardAuditStore } from './modules/ratecard/ratecard.audit';
 import { loadRatecardConfig } from './modules/ratecard/ratecard.config';
@@ -267,7 +267,9 @@ export function createContainer(): Container {
     config: loadCommsConfig(),
   });
   const ratecardService = new RateCardService({
-    repo: new InMemoryRateRowRepository(),
+    // Durable: a partner's submitted rates are an effective-dated ledger a
+    // booking snapshots from, so they must outlive a restart.
+    repo: new MongoRateRowRepository(),
     sheets: new ManualUploadSheetProvider(),
     audit: new RatecardAuditStore(),
     config: loadRatecardConfig(),
