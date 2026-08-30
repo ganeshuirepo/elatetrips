@@ -97,6 +97,10 @@ export const vendorCreateSchema = z
     path: ['refId'],
   });
 
+/** POST /admin/vendors/:username/partner — bind an account to a supply partner. */
+export const vendorUsernameParamsSchema = z.object({ username: z.string().min(1) });
+export const bindPartnerBodySchema = z.object({ partnerId: z.string().min(1) }).strict();
+
 /** Vendor listing patch — per-type field validation happens in the service. */
 export const listingUpdateSchema = z.record(z.string(), z.unknown());
 

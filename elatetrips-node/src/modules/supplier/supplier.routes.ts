@@ -22,6 +22,7 @@ import {
   declareTatBodySchema,
   directoryQuerySchema,
   idParamSchema,
+  provisionSupplierBodySchema,
   updateSupplierBodySchema,
 } from './supplier.validation';
 
@@ -126,6 +127,28 @@ export function buildSupplierRouter(c: SupplierController, guard: RequestHandler
    *       '422': { $ref: '#/components/responses/BadRequest' }
    */
   router.post('/', validate({ body: createSupplierBodySchema }), asyncHandler(c.create));
+  /**
+   * @openapi
+   * /api/v1/suppliers/provision:
+   *   post:
+   *     tags: [Suppliers]
+   *     summary: Turn a completed partner registration into a supplier
+   *     description: >-
+   *       Mints the canonical supplier_id — the caller does not supply one. Idempotent
+   *       on external_ref (the onboarding system's own id for the same partner), so a
+   *       retried registration resolves to the same supplier instead of a duplicate:
+   *       201 when this call created it, 200 when it matched an existing one.
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema: { type: object, description: "external_ref, name, type, track, destinations, declared turnaround." }
+   *     responses:
+   *       '201': { $ref: '#/components/responses/Ok' }
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   */
+  router.post('/provision', validate({ body: provisionSupplierBodySchema }), asyncHandler(c.provision));
   /**
    * @openapi
    * /api/v1/suppliers/{id}:

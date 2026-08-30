@@ -125,6 +125,14 @@ export interface Supplier {
   /** The accepted contract; absent until the clickwrap step (FR3.10). */
   contract_acceptance?: ContractAcceptance;
   scorecard?: ScorecardRef;
+  /**
+   * The id this partner carries in the system that onboarded them — the partner
+   * portal's `Vendor.leadId`. It is what makes provisioning idempotent: a
+   * registration that is submitted twice, or retried after a timeout, resolves
+   * to the SAME supplier rather than a second one. Unique where present; absent
+   * on suppliers ops added directly.
+   */
+  external_ref?: string;
   created_ts?: string;
   updated_ts?: string;
 }
@@ -154,6 +162,33 @@ export interface CreateSupplierInput {
   comms_consent?: CommsConsent;
   contacts?: SupplierContact[];
   vetting?: VettingArtifacts;
+}
+
+/**
+ * Body to provision a supplier from a completed partner registration.
+ *
+ * Unlike CreateSupplierInput there is no `supplier_id`: the platform mints it,
+ * because the whole point is to establish ONE canonical partner identity rather
+ * than let each caller invent its own. `external_ref` is the caller's own id for
+ * the same partner, and is what makes the call idempotent.
+ */
+export interface ProvisionPartnerInput {
+  external_ref: string;
+  type: SupplierType;
+  name: string;
+  destinations: string[];
+  track: Track;
+  declared_tat_hours: number;
+  channel_pref?: 'email' | 'whatsapp';
+  comms_consent?: CommsConsent;
+  contacts?: SupplierContact[];
+}
+
+/** What provisioning returns — and whether this call is what created it. */
+export interface ProvisionResult {
+  supplier: SupplierContractView;
+  /** False when an existing supplier was matched on `external_ref`. */
+  created: boolean;
 }
 
 /** Partial patch for manual add/edit (FR3.1). */

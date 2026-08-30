@@ -71,6 +71,26 @@ export const createSupplierBodySchema = z
   })
   .strict();
 
+/**
+ * POST /suppliers/provision — mint a supplier from a completed partner
+ * registration. Deliberately has NO `supplier_id`: the platform mints the
+ * canonical id, and `.strict()` means a caller that tries to supply one is
+ * rejected rather than quietly ignored.
+ */
+export const provisionSupplierBodySchema = z
+  .object({
+    external_ref: z.string().trim().min(1).max(128),
+    type: supplierType,
+    name: z.string().trim().min(1),
+    destinations: z.array(z.string().trim().min(1)).min(1),
+    track,
+    declared_tat_hours: z.number().positive(),
+    channel_pref: z.enum(['email', 'whatsapp']).optional(),
+    comms_consent: commsConsent.optional(),
+    contacts: z.array(contact).optional(),
+  })
+  .strict();
+
 /** PATCH /suppliers/:id — manual edit. */
 export const updateSupplierBodySchema = z
   .object({

@@ -16,6 +16,8 @@ import { asyncHandler } from '../../common/http/asyncHandler';
 import { validate } from '../../common/middleware/validate';
 import {
   vendorCreateSchema,
+  vendorUsernameParamsSchema,
+  bindPartnerBodySchema,
   activityCreateSchema,
   activityParamsSchema,
   activityUpdateSchema,
@@ -107,6 +109,40 @@ export function buildAdminRouter(
     '/vendors',
     validate({ body: vendorCreateSchema }),
     asyncHandler(consoleController.createVendor),
+  );
+
+  /**
+   * @openapi
+   * /api/v1/admin/vendors/{username}/partner:
+   *   post:
+   *     tags: [Admin]
+   *     summary: Bind a vendor account to a supply partner
+   *     description: >-
+   *       What the account's rate-card access is scoped to. Accounts created before
+   *       partner bindings existed have none, and an unbound account is refused every
+   *       rate card by design — this is how ops repairs that without recreating it.
+   *     security: [{ consoleAuth: [] }]
+   *     parameters:
+   *       - in: path
+   *         name: username
+   *         required: true
+   *         schema: { type: string }
+   *         description: The vendor account.
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema: { type: object, description: "The supplier id to bind." }
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '404': { $ref: '#/components/responses/NotFound' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   *       '401': { $ref: '#/components/responses/Unauthorized' }
+   */
+  router.post(
+    '/vendors/:username/partner',
+    validate({ params: vendorUsernameParamsSchema, body: bindPartnerBodySchema }),
+    asyncHandler(consoleController.bindPartner),
   );
 
   /**

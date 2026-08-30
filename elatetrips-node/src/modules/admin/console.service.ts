@@ -6,6 +6,7 @@ import {
   UnauthorizedError,
 } from '../../common/errors/AppError';
 import type { IPasswordHasher } from '../auth/auth.types';
+import type { IPartnerDirectory } from '../../common/ports/partnerDirectory';
 import { logger } from '../../common/logger';
 import { env } from '../../config/env';
 import type { Activity, CelebrationBundle, Hotel, Vehicle } from '../catalog/catalog.types';
@@ -43,6 +44,8 @@ export interface VendorProfile {
   displayName: string;
   vendorType?: VendorType;
   refId?: string;
+  /** Supply partner this account maintains rate cards for, when bound. */
+  partnerId?: string;
   listing: Record<string, unknown> | null;
 }
 
@@ -72,6 +75,11 @@ export class ConsoleService {
   constructor(
     private readonly repos: ConsoleRepos,
     private readonly hasher: IPasswordHasher,
+    /**
+     * Who counts as a real supply partner. Injected rather than imported so the
+     * console never depends on the supplier module — it only needs the answer.
+     */
+    private readonly partners: IPartnerDirectory,
   ) {}
 
   /**
@@ -147,6 +155,13 @@ export class ConsoleService {
       const listing = await this.resolveListing(input.vendorType, input.refId ?? '');
       if (!listing) throw new NotFoundError('No listing found for that reference');
     }
+    // Same rule for the partner binding, and for a sharper reason: partnerId is
+    // what partnerScopedGuard compares the URL against, so an id bound here that
+    // matches no supplier grants access to a rate card nobody owns. Checked at
+    // the moment it is set, because that is the only moment anyone is watching.
+    if (input.partnerId !== undefined && !(await this.partners.exists(input.partnerId))) {
+      throw new NotFoundError('No supply partner found for that id');
+    }
     await this.repos.users.create({
       username,
       passwordHash: await this.hasher.hash(input.password),
@@ -165,6 +180,28 @@ export class ConsoleService {
     };
   }
 
+  /**
+   * Bind an existing console account to a supply partner — the backfill lever.
+   *
+   * Accounts created before partnerId existed have none, and an unbound account
+   * is refused every rate card by design. This is how ops repairs that without
+   * recreating the account and its password.
+   */
+  async bindPartner(username: string, partnerId: string): Promise<{ username: string; partnerId: string }> {
+    const user = await this.repos.users.findOne({ username: username.toLowerCase() });
+    if (!user) throw new NotFoundError('No such console account');
+    if (user.role !== 'vendor') {
+      // An ops role already reaches every partner; giving it a binding as well
+      // would imply a scoping that does not apply and would mislead a reader.
+      throw new BadRequestError('Only vendor accounts are bound to a partner');
+    }
+    if (!(await this.partners.exists(partnerId))) {
+      throw new NotFoundError('No supply partner found for that id');
+    }
+    await this.repos.users.updateOne({ username: user.username }, { partnerId });
+    return { username: user.username, partnerId };
+  }
+
   async listVendors(): Promise<Omit<VendorProfile, 'listing'>[]> {
     await this.ensureSeedUsers();
     const users = await this.repos.users.findAll({ role: 'vendor' });
@@ -173,6 +210,7 @@ export class ConsoleService {
       displayName: u.displayName,
       vendorType: u.vendorType,
       refId: u.refId,
+      partnerId: u.partnerId,
     }));
   }
 

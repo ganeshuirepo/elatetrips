@@ -30,6 +30,8 @@ import type {
   CapDecision,
   ContractAcceptance,
   CreateSupplierInput,
+  ProvisionPartnerInput,
+  ProvisionResult,
   Supplier,
   SupplierContractView,
   UpdateSupplierInput,
@@ -110,6 +112,84 @@ export class SupplierService {
       payload: { track: created.track, destinations: created.destinations },
     });
     return SupplierService.toContractView(created);
+  }
+
+  /**
+   * Provision a supplier from a completed partner registration (item 1 of the
+   * partner-identity link). This is what turns a portal lead into a real,
+   * addressable supply partner, and it is the ONLY place a supplier_id is
+   * minted — the caller does not get to invent one, which is the whole point of
+   * having a canonical identity.
+   *
+   * Idempotent on `external_ref`, and it has to be: the caller is a web request
+   * handler that may be retried after a timeout, and the cost of getting this
+   * wrong is two supplier records for one real company — two rate cards, two
+   * pool memberships, and no way to tell which is authoritative.
+   *
+   * The new supplier starts `invited`, exactly like an ops-created one. Nothing
+   * here activates it: vetting and the activation gate (FR3.5/FR3.10) still
+   * apply, so provisioning early is safe — an invited supplier is never
+   * broadcast to.
+   */
+  async provisionForPartner(input: ProvisionPartnerInput): Promise<ProvisionResult> {
+    const existing = await this.repo.findByExternalRef(input.external_ref);
+    if (existing) {
+      // Deliberately returned UNCHANGED. A re-submitted registration must not
+      // silently overwrite destinations or contacts that ops has since curated;
+      // amending a supplier is PATCH /suppliers/:id, an explicit act.
+      return { supplier: SupplierService.toContractView(existing), created: false };
+    }
+
+    const tatIssue = checkTatFloor(input.declared_tat_hours, this.config.tat_floor_hours);
+    if (tatIssue) throw new UnprocessableEntityError(tatIssue);
+
+    const now = new Date().toISOString();
+    const record: Supplier = {
+      supplier_id: await this.repo.nextSupplierId(),
+      external_ref: input.external_ref,
+      type: input.type,
+      name: input.name,
+      destinations: input.destinations,
+      track: input.track,
+      declared_tat_hours: input.declared_tat_hours,
+      contract_accepted: false,
+      status: 'invited',
+      channel_pref: input.channel_pref ?? 'email',
+      ...(input.comms_consent ? { comms_consent: input.comms_consent } : {}),
+      ...(input.contacts ? { contacts: input.contacts } : {}),
+      created_ts: now,
+      updated_ts: now,
+    };
+
+    let created: Supplier;
+    try {
+      created = await this.repo.create(record);
+    } catch (err) {
+      // Two registrations for the same partner can both read "not found" above
+      // and race to insert. The unique index on external_ref lets exactly one
+      // win; the loser looks again and returns the winner's record rather than
+      // failing a request the partner did nothing wrong in. Re-thrown if the
+      // record still is not there, because then the failure was something else.
+      const raced = await this.repo.findByExternalRef(input.external_ref);
+      if (!raced) throw err;
+      return { supplier: SupplierService.toContractView(raced), created: false };
+    }
+
+    this.audit.append({
+      type: 'supplier.invited',
+      actor: 'system',
+      actor_id: this.actorId,
+      role: roleOf(created),
+      subject: { supplier_id: created.supplier_id },
+      after: SupplierService.toContractView(created) as unknown as Record<string, unknown>,
+      payload: {
+        track: created.track,
+        destinations: created.destinations,
+        external_ref: created.external_ref,
+        provisioned_from: 'partner_registration',
+      },
+    });
+    return { supplier: SupplierService.toContractView(created), created: true };
   }
 
   /** Manual edit (FR3.1). Re-derives quality tier when a scorecard is supplied. */

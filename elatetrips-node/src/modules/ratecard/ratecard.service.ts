@@ -16,6 +16,7 @@ import { randomUUID } from 'node:crypto';
 import { NotFoundError, UnprocessableEntityError } from '../../common/errors/AppError';
 import type { RatecardConfig } from './ratecard.config';
 import type { IRateRowRepository, StagedFilter } from './ratecard.repository';
+import type { IPartnerDirectory } from '../../common/ports/partnerDirectory';
 import type { ISheetProvider } from './ratecard.sheets';
 import type { RatecardAuditStore } from './ratecard.audit';
 import { freshness as computeFreshness } from './ratecard.freshness';
@@ -35,6 +36,8 @@ const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 export interface RateCardDeps {
   repo: IRateRowRepository;
+  /** Who counts as a real partner. Every partner-addressed call is checked. */
+  partners: IPartnerDirectory;
   sheets: ISheetProvider;
   audit: RatecardAuditStore;
   config: RatecardConfig;
@@ -43,6 +46,7 @@ export interface RateCardDeps {
 
 export class RateCardService {
   private readonly repo: IRateRowRepository;
+  private readonly partners: IPartnerDirectory;
   private readonly sheets: ISheetProvider;
   private readonly audit: RatecardAuditStore;
   private readonly config: RatecardConfig;
@@ -50,6 +54,7 @@ export class RateCardService {
 
   constructor(deps: RateCardDeps) {
     this.repo = deps.repo;
+    this.partners = deps.partners;
     this.sheets = deps.sheets;
     this.audit = deps.audit;
     this.config = deps.config;
@@ -58,6 +63,20 @@ export class RateCardService {
 
   private iso(): string {
     return this.now().toISOString();
+  }
+
+  /**
+   * Refuse to do anything for a partner that does not exist.
+   *
+   * Every rate-card path is addressed by partner_id, so this is the one place
+   * the id stops being a free string. Reads are checked as well as writes on
+   * purpose: without it, a mistyped id answers "no rates yet" — which reads as a
+   * working page for a partner that was never real.
+   */
+  private async requirePartner(partner_id: string): Promise<void> {
+    if (!(await this.partners.exists(partner_id))) {
+      throw new NotFoundError(`Unknown partner: ${partner_id}`);
+    }
   }
 
   private driftWindowStart(): Date | null {
@@ -70,6 +89,7 @@ export class RateCardService {
 
   /** Pull a partner's owned sheet through the provider, then ingest. */
   async ingestFromSheet(partner_id: string): Promise<IngestSummary> {
+    await this.requirePartner(partner_id);
     const rows = await this.sheets.fetchRows(partner_id);
     return this.ingest(partner_id, rows, 'sheet');
   }
@@ -80,6 +100,7 @@ export class RateCardService {
    * sheet can never write another partner's rates.
    */
   async ingest(partner_id: string, raw: RawSheetRow[], source: RateSource): Promise<IngestSummary> {
+    await this.requirePartner(partner_id);
     const summary: IngestSummary = { partner_id, applied: [], staged: [], rejected: [] };
     const invalidErrors: IngestSummary['rejected'][number]['errors'] = [];
 
@@ -300,6 +321,7 @@ export class RateCardService {
    * auto-confirm eligibility off the audit stream.
    */
   async getFreshness(partner_id: string): Promise<FreshnessResult> {
+    await this.requirePartner(partner_id);
     const last = await this.repo.lastFreshRow(partner_id);
     const result = computeFreshness(partner_id, last?.ingested_ts ?? null, this.config.freshness_threshold_days, this.now());
     if (result.stale) {
@@ -323,6 +345,7 @@ export class RateCardService {
    * keeps the rate it was made against.
    */
   async snapshotRate(partner_id: string, sku: string, on: string): Promise<RateRow> {
+    await this.requirePartner(partner_id);
     const row = await this.repo.rateEffectiveAt(partner_id, sku, on);
     if (!row) throw new NotFoundError(`No applied rate for ${partner_id}/${sku} effective ${on}`);
     this.audit.append({
@@ -337,7 +360,8 @@ export class RateCardService {
   }
 
   /** All applied rows for a SKU (audit / ops inspection). */
-  listRows(partner_id: string, sku: string): Promise<RateRow[]> {
+  async listRows(partner_id: string, sku: string): Promise<RateRow[]> {
+    await this.requirePartner(partner_id);
     return this.repo.appliedForSku(partner_id, sku);
   }
 

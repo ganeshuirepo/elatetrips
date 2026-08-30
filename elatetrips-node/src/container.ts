@@ -93,6 +93,7 @@ import { CommsController } from './modules/comms/comms.controller';
 import { describeRfqFlow, loadRfqFlowConfig } from './modules/rfqflow/rfqflow.config';
 import { RfqFlowService } from './modules/rfqflow/rfqflow.service';
 import { MongoRateRowRepository } from './modules/ratecard/ratecard.repository.mongo';
+import type { IPartnerDirectory } from './common/ports/partnerDirectory';
 import { ManualUploadSheetProvider } from './modules/ratecard/ratecard.sheets';
 import { RatecardAuditStore } from './modules/ratecard/ratecard.audit';
 import { loadRatecardConfig } from './modules/ratecard/ratecard.config';
@@ -236,6 +237,16 @@ export function createContainer(): Container {
     activities: activitiesCrud,
     orders: ordersRead,
   });
+  // The M3 directory IS the answer to "is this a real partner?", so every module
+  // that needs to ask reads it through this one adapter rather than importing the
+  // supplier module. Supplier identity has exactly one owner. Declared here,
+  // above its first consumer, because the console checks partner bindings too.
+  const supplierRepository = new SupplierRepository();
+  const partnerDirectory: IPartnerDirectory = {
+    exists: async (partnerId: string): Promise<boolean> =>
+      (await supplierRepository.findBySupplierId(partnerId)) !== null,
+  };
+
   const consoleService = new ConsoleService(
     {
       users: new MongoCrudRepository<ConsoleUser>(ConsoleUserModel),
@@ -246,6 +257,7 @@ export function createContainer(): Container {
       orders: ordersRead,
     },
     passwordHasher,
+    partnerDirectory,
   );
   // contracts-v1.1 host (spec 006): a self-contained, fixture-seeded engine that
   // reads all business values from config (BR-17). Additive — it wraps no
@@ -255,7 +267,7 @@ export function createContainer(): Container {
   // BRD v1.16 engines (M3/M4/M5/M12/M13/M17) — additive, config-driven (BR-17);
   // providers/ports behind interfaces (stubs until real adapters/creds land).
   const supplierService = new SupplierService(
-    new SupplierRepository(),
+    supplierRepository,
     loadSupplierConfig(),
     new SupplierAuditStore(),
   );
@@ -270,6 +282,7 @@ export function createContainer(): Container {
     // Durable: a partner's submitted rates are an effective-dated ledger a
     // booking snapshots from, so they must outlive a restart.
     repo: new MongoRateRowRepository(),
+    partners: partnerDirectory,
     sheets: new ManualUploadSheetProvider(),
     audit: new RatecardAuditStore(),
     config: loadRatecardConfig(),

@@ -82,6 +82,12 @@ const supplierSchema = new Schema<Supplier>(
       default: undefined,
       _id: false,
     },
+    // The onboarding system's own id for this partner. `sparse` because most
+    // suppliers have none (ops added them directly) and a plain unique index
+    // would then collide on the second such row — every missing value would
+    // count as the same null. Together with the unique constraint this is what
+    // makes provisioning idempotent under retries and races.
+    external_ref: { type: String, unique: true, sparse: true },
     created_ts: String,
     updated_ts: String,
   },
