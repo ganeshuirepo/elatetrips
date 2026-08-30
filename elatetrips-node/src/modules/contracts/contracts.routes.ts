@@ -7,11 +7,31 @@
  * inside the engine the controller calls, so the route layer stays declarative.
  */
 import { Router } from 'express';
+import type { RequestHandler } from 'express';
 import type { ContractsController } from './contracts.controller';
 import { asyncHandler } from '../../common/http/asyncHandler';
+import { razorpayWebhookGuard } from '../../common/middleware/webhookSignature';
+import { publicWriteRateLimit } from '../../common/middleware/rateLimit';
 
-export function buildContractsRouter(c: ContractsController): Router {
+/**
+ * Access model for this surface, which used to have none at all.
+ *
+ *  - PRIVILEGED (broadcast, shortlist, negotiate, the supplier directory, a
+ *    booking's follow-ups): require a session. Broadcast in particular mails
+ *    real partners, so leaving it open let an anonymous caller send mail in
+ *    your name; the supplier list is commercially sensitive on its own.
+ *  - GUEST FUNNEL (create/patch/submit an RFQ, build an itinerary, checkout):
+ *    stays open, because a traveller builds an enquiry before they have an
+ *    account. Rate-limited instead, which is what stops an open write endpoint
+ *    growing the in-memory stores without bound.
+ *  - LINK ROUTES (/link/:token/…): open by design and authenticated BY the
+ *    token, which is now 32 random bytes with an expiry and a guess budget.
+ *  - WEBHOOK: authenticated by its Razorpay signature.
+ *  - CONTENT READS (policy, route packs, POIs, packages): public catalog data.
+ */
+export function buildContractsRouter(c: ContractsController, authGuard: RequestHandler): Router {
   const router = Router();
+  const guestWrite = publicWriteRateLimit();
 
   // Intake (M1)
   /**
@@ -32,7 +52,7 @@ export function buildContractsRouter(c: ContractsController): Router {
    *       '200': { $ref: '#/components/responses/Ok' }
    *       '422': { $ref: '#/components/responses/BadRequest' }
    */
-  router.post('/rfq', asyncHandler(c.createRfq));
+  router.post('/rfq', guestWrite, asyncHandler(c.createRfq));
   /**
    * @openapi
    * /api/v1/rfq/{rfqId}:
@@ -54,7 +74,7 @@ export function buildContractsRouter(c: ContractsController): Router {
    *       '200': { $ref: '#/components/responses/Ok' }
    *       '422': { $ref: '#/components/responses/BadRequest' }
    */
-  router.patch('/rfq/:rfqId', asyncHandler(c.patchRfq));
+  router.patch('/rfq/:rfqId', guestWrite, asyncHandler(c.patchRfq));
   /**
    * @openapi
    * /api/v1/rfq/{rfqId}/submit:
@@ -83,7 +103,7 @@ export function buildContractsRouter(c: ContractsController): Router {
    *       '200': { $ref: '#/components/responses/Ok' }
    *       '422': { $ref: '#/components/responses/BadRequest' }
    */
-  router.post('/rfq/:rfqId/submit', asyncHandler(c.submitRfq));
+  router.post('/rfq/:rfqId/submit', guestWrite, asyncHandler(c.submitRfq));
 
   // Itinerary (M2)
   /**
@@ -107,7 +127,7 @@ export function buildContractsRouter(c: ContractsController): Router {
    *       '200': { $ref: '#/components/responses/Ok' }
    *       '422': { $ref: '#/components/responses/BadRequest' }
    */
-  router.post('/rfq/:rfqId/itinerary', asyncHandler(c.buildItinerary));
+  router.post('/rfq/:rfqId/itinerary', guestWrite, asyncHandler(c.buildItinerary));
   /**
    * @openapi
    * /api/v1/itinerary/{itineraryId}:
@@ -129,7 +149,7 @@ export function buildContractsRouter(c: ContractsController): Router {
    *       '200': { $ref: '#/components/responses/Ok' }
    *       '422': { $ref: '#/components/responses/BadRequest' }
    */
-  router.patch('/itinerary/:itineraryId', asyncHandler(c.patchItinerary));
+  router.patch('/itinerary/:itineraryId', guestWrite, asyncHandler(c.patchItinerary));
 
   // Directory & routing (M3/M12)
   /*
@@ -138,7 +158,7 @@ export function buildContractsRouter(c: ContractsController): Router {
    * route is what actually answers GET /api/v1/suppliers. Documenting this one
    * would put an operation in the spec that no request can reach.
    */
-  router.get('/suppliers', asyncHandler(c.listSuppliers));
+  router.get('/suppliers', authGuard, asyncHandler(c.listSuppliers));
 
   // Broadcast (M5)
   /**
@@ -165,7 +185,7 @@ export function buildContractsRouter(c: ContractsController): Router {
    *       '200': { $ref: '#/components/responses/Ok' }
    *       '422': { $ref: '#/components/responses/BadRequest' }
    */
-  router.post('/rfq/:rfqId/broadcast', asyncHandler(c.broadcast));
+  router.post('/rfq/:rfqId/broadcast', authGuard, asyncHandler(c.broadcast));
 
   // Partner surface (M6)
   /**
@@ -187,7 +207,7 @@ export function buildContractsRouter(c: ContractsController): Router {
    *       '200': { $ref: '#/components/responses/Ok' }
    *       '404': { $ref: '#/components/responses/NotFound' }
    */
-  router.get('/link/:token', asyncHandler(c.getLink));
+  router.get('/link/:token', guestWrite, asyncHandler(c.getLink));
   /**
    * @openapi
    * /api/v1/link/{token}/quote:
@@ -209,7 +229,7 @@ export function buildContractsRouter(c: ContractsController): Router {
    *       '200': { $ref: '#/components/responses/Ok' }
    *       '422': { $ref: '#/components/responses/BadRequest' }
    */
-  router.post('/link/:token/quote', asyncHandler(c.linkQuote));
+  router.post('/link/:token/quote', guestWrite, asyncHandler(c.linkQuote));
   /**
    * @openapi
    * /api/v1/link/{token}/enrichment:
@@ -231,7 +251,7 @@ export function buildContractsRouter(c: ContractsController): Router {
    *       '200': { $ref: '#/components/responses/Ok' }
    *       '422': { $ref: '#/components/responses/BadRequest' }
    */
-  router.post('/link/:token/enrichment', asyncHandler(c.linkEnrichment));
+  router.post('/link/:token/enrichment', guestWrite, asyncHandler(c.linkEnrichment));
   /**
    * @openapi
    * /api/v1/link/{token}/reconfirm:
@@ -253,7 +273,7 @@ export function buildContractsRouter(c: ContractsController): Router {
    *       '200': { $ref: '#/components/responses/Ok' }
    *       '422': { $ref: '#/components/responses/BadRequest' }
    */
-  router.post('/link/:token/reconfirm', asyncHandler(c.linkReconfirm));
+  router.post('/link/:token/reconfirm', guestWrite, asyncHandler(c.linkReconfirm));
 
   // Quote intelligence (M7)
   /**
@@ -300,7 +320,7 @@ export function buildContractsRouter(c: ContractsController): Router {
    *       '200': { $ref: '#/components/responses/Ok' }
    *       '422': { $ref: '#/components/responses/BadRequest' }
    */
-  router.post('/rfq/:rfqId/shortlist', asyncHandler(c.shortlist));
+  router.post('/rfq/:rfqId/shortlist', authGuard, asyncHandler(c.shortlist));
   /**
    * @openapi
    * /api/v1/quote/{quoteId}/negotiate:
@@ -322,7 +342,7 @@ export function buildContractsRouter(c: ContractsController): Router {
    *       '200': { $ref: '#/components/responses/Ok' }
    *       '422': { $ref: '#/components/responses/BadRequest' }
    */
-  router.post('/quote/:quoteId/negotiate', asyncHandler(c.negotiate));
+  router.post('/quote/:quoteId/negotiate', authGuard, asyncHandler(c.negotiate));
 
   // Booking & fulfilment (M8/M9)
   /**
@@ -342,7 +362,7 @@ export function buildContractsRouter(c: ContractsController): Router {
    *       '200': { $ref: '#/components/responses/Ok' }
    *       '422': { $ref: '#/components/responses/BadRequest' }
    */
-  router.post('/quote/:quoteId/checkout', asyncHandler(c.checkout));
+  router.post('/quote/:quoteId/checkout', guestWrite, asyncHandler(c.checkout));
   /**
    * @openapi
    * /api/v1/webhooks/razorpay:
@@ -360,7 +380,7 @@ export function buildContractsRouter(c: ContractsController): Router {
    *     responses:
    *       '200': { $ref: '#/components/responses/Ok' }
    */
-  router.post('/webhooks/razorpay', asyncHandler(c.razorpayWebhook));
+  router.post('/webhooks/razorpay', razorpayWebhookGuard(), asyncHandler(c.razorpayWebhook));
   /**
    * @openapi
    * /api/v1/booking/{bookingId}/followups:
@@ -376,7 +396,7 @@ export function buildContractsRouter(c: ContractsController): Router {
    *     responses:
    *       '200': { $ref: '#/components/responses/Ok' }
    */
-  router.get('/booking/:bookingId/followups', asyncHandler(c.getFollowups));
+  router.get('/booking/:bookingId/followups', authGuard, asyncHandler(c.getFollowups));
 
   // Policy & content (M14/M15/M16)
   /**
@@ -466,7 +486,7 @@ export function buildContractsRouter(c: ContractsController): Router {
    *       '200': { $ref: '#/components/responses/Ok' }
    *       '422': { $ref: '#/components/responses/BadRequest' }
    */
-  router.post('/package/:packageId/delta', asyncHandler(c.packageDelta));
+  router.post('/package/:packageId/delta', guestWrite, asyncHandler(c.packageDelta));
 
   return router;
 }

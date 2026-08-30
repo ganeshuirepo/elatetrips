@@ -1,7 +1,7 @@
 {
   "name": "elatetrips-node",
   "version": "1.0.0",
-  "description": "ElateTrips backend \u2014 Node/Express/MongoDB REST API for the celebration trip planner.",
+  "description": "ElateTrips backend — Node/Express/MongoDB REST API for the celebration trip planner.",
   "main": "dist/server.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
@@ -34,7 +34,7 @@
     "mongoose": "^8.5.1",
     "morgan": "^1.10.0",
     "multer": "^2.2.0",
-    "nodemailer": "^6.10.1",
+    "nodemailer": "^9.0.6",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "zod": "^3.23.8"

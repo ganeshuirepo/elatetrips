@@ -11,7 +11,7 @@
  * Wiring per route: router.<verb>(path, validate({...}), asyncHandler(handler)),
  * exactly the catalog pattern.
  */
-import { Router } from 'express';
+import { Router, type RequestHandler } from 'express';
 import type { SupplierController } from './supplier.controller';
 import { asyncHandler } from '../../common/http/asyncHandler';
 import { validate } from '../../common/middleware/validate';
@@ -25,8 +25,23 @@ import {
   updateSupplierBodySchema,
 } from './supplier.validation';
 
-export function buildSupplierRouter(c: SupplierController): Router {
+/**
+ * The partner directory (M3). EVERY route sits behind `guard` (applied once via
+ * router.use) — the admin guard, because this is ops tooling: it lists every
+ * partner, and its writes create, amend, activate and bench them.
+ *
+ * It used to be entirely public. Validation was in place on all ten routes, so
+ * the shape of every request was checked — but nothing checked WHO was asking,
+ * and this module persists to MongoDB rather than to the in-memory contract
+ * engine. An anonymous caller could read the whole supplier list or add one.
+ *
+ * Nothing in the web or mobile clients calls these endpoints, so closing them
+ * breaks no caller; an ops surface that needs them already holds an admin
+ * console token, which this guard accepts.
+ */
+export function buildSupplierRouter(c: SupplierController, guard: RequestHandler): Router {
   const router = Router();
+  router.use(guard);
 
   // ---- reads ----
   // FR3.8 candidate query — registered BEFORE '/:id' so "candidates" is not

@@ -350,7 +350,17 @@ test('the code is NEVER echoed back in production', () => {
   const result = spawnSync(
     process.execPath,
     ['-r', resolve(__dirname, '../../../scripts/register-ts.js'), fixture],
-    { env: { ...process.env, NODE_ENV: 'production' }, encoding: 'utf8' },
+    {
+      // A production boot now REQUIRES real secrets (config/env fails closed),
+      // so supply them — this test is about devOtp, not about that check.
+      env: {
+        ...process.env,
+        NODE_ENV: 'production',
+        JWT_SECRET: 'test-only-strong-secret-value',
+        ADMIN_KEY: 'test-only-strong-admin-key',
+      },
+      encoding: 'utf8',
+    },
   );
   assert.equal(result.status, 0, result.stderr || result.stdout);
 });

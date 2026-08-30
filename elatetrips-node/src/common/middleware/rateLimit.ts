@@ -93,6 +93,20 @@ export const loginRateLimit = (keyOn: (req: Request) => string): RequestHandler 
     keyOn,
   });
 
+/**
+ * Unauthenticated writes that create server-side state (an RFQ draft, a quote,
+ * a booking). These cannot require a session — the enquiry funnel is open to
+ * guests by design — so the cap is what stops a loop turning an open endpoint
+ * into unbounded memory growth. Loose enough that no real person building an
+ * enquiry will meet it.
+ */
+export const publicWriteRateLimit = (): RequestHandler =>
+  rateLimit({
+    windowMs: 15 * MINUTE,
+    max: 60,
+    message: 'Too many requests.',
+  });
+
 /** Outbound SMS/email: every request past the limit is real money. */
 export const otpSendRateLimit = (keyOn: (req: Request) => string): RequestHandler =>
   rateLimit({
