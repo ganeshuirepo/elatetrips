@@ -117,6 +117,7 @@ export class ConsoleService {
       role: user.role,
       vendorType: user.vendorType,
       refId: user.refId,
+      partnerId: user.partnerId,
       name: user.displayName,
     });
     return {
@@ -150,6 +151,7 @@ export class ConsoleService {
       role: 'vendor',
       vendorType: input.vendorType,
       refId: input.refId,
+      partnerId: input.partnerId,
       createdAt: new Date().toISOString(),
     });
     return {

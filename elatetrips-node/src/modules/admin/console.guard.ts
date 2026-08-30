@@ -8,7 +8,7 @@
 import { createHash, timingSafeEqual } from 'crypto';
 import type { RequestHandler } from 'express';
 import { ForbiddenError, UnauthorizedError } from '../../common/errors/AppError';
-import { verifyConsoleToken } from './console.token';
+import { verifyConsoleToken, type ConsoleClaims } from './console.token';
 import type { ConsoleRole } from './console.model';
 
 /**
@@ -33,6 +33,51 @@ export function consoleGuard(...roles: ConsoleRole[]): RequestHandler {
     } catch (err) {
       next(err);
     }
+  };
+}
+
+/**
+ * Partner-scoped guard for `/…/partners/:partnerId/…`.
+ *
+ * The partner id sits in the URL, where it is an ADDRESS, not a secret — it is
+ * short, sequential-ish and shared in emails, so it can never be the thing that
+ * authorises the request. This is what authorises it: either an ops-side role
+ * (admin, cm, om) which may act for any partner, or a partner account whose own
+ * `partnerId` claim equals the one in the path.
+ *
+ * Deliberately fails closed when an account has no partnerId bound: an
+ * unbound vendor account must not inherit access to every partner's rates
+ * merely because the comparison would otherwise be undefined-vs-undefined.
+ */
+export function partnerScopedGuard(...opsRoles: ConsoleRole[]): RequestHandler {
+  return (req, res, next) => {
+    const header = req.headers.authorization;
+    if (!header?.startsWith('Bearer ')) {
+      next(new UnauthorizedError('Missing bearer token'));
+      return;
+    }
+    let claims: ConsoleClaims;
+    try {
+      claims = verifyConsoleToken(header.slice('Bearer '.length).trim());
+    } catch (err) {
+      next(err);
+      return;
+    }
+
+    res.locals.console = claims;
+    if (opsRoles.includes(claims.role)) {
+      next();
+      return;
+    }
+
+    const target = req.params.partnerId;
+    if (claims.partnerId && target && claims.partnerId === target) {
+      next();
+      return;
+    }
+    // Same answer whether the partner exists or simply is not yours, so the
+    // endpoint cannot be used to discover which partner ids are real.
+    next(new ForbiddenError('This rate card belongs to another partner'));
   };
 }
 

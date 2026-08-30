@@ -18,6 +18,8 @@ export interface ConsoleClaims {
   role: ConsoleRole;
   vendorType?: VendorType;
   refId?: string;
+  /** Supply partner this account may act for (rate cards). See ConsoleUser. */
+  partnerId?: string;
   name: string;
   scope: 'console';
 }

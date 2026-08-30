@@ -89,6 +89,8 @@ export const vendorCreateSchema = z
     displayName: z.string().min(2),
     vendorType: z.enum(['hotel', 'cab', 'experience', 'ground']),
     refId: z.string().min(1).optional(),
+    /** Supply partner this account may maintain rate cards for. */
+    partnerId: z.string().min(1).optional(),
   })
   .refine((v) => v.vendorType === 'ground' || !!v.refId, {
     message: 'A listing reference is required for this vendor type',

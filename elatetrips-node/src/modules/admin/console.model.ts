@@ -24,6 +24,16 @@ export interface ConsoleUser {
   vendorType?: VendorType;
   /** Listing key: hotel id, vehicle id, or "kind:id" for an activity. */
   refId?: string;
+  /**
+   * Supply-side partner this account speaks for — the `partner_id` the rate
+   * card pipeline is keyed by. Distinct from refId on purpose: refId points at
+   * ONE catalog listing, while a partner may hold rates across several.
+   *
+   * This is the binding that makes /partner/ratecard/:partnerId safe. Without
+   * it the id in the URL would be the only thing naming the account, and the
+   * page would open anyone's rates to anyone who could count.
+   */
+  partnerId?: string;
   createdAt: string;
 }
 
@@ -33,6 +43,7 @@ const consoleUserSchema = new Schema<ConsoleUser>(
     passwordHash: { type: String, required: true },
     displayName: { type: String, required: true },
     role: { type: String, required: true, index: true },
+    partnerId: { type: String, index: true },
     vendorType: String,
     refId: String,
     createdAt: String,
