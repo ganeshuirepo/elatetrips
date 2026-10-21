@@ -43,8 +43,7 @@ export class PartnerRepository implements IPartnerRepository {
   }
 }
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-function stripId(_doc: any, ret: any): any {
+function stripId(_doc: unknown, ret: { _id?: unknown }): typeof ret {
   delete ret._id;
   return ret;
 }
