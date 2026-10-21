@@ -1,0 +1,1 @@
+Not applicable: no broadcast module test files exist; the change only removes an unused type-only import. Cumulative application tests remain required.

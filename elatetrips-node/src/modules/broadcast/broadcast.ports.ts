@@ -8,7 +8,7 @@
  * This is the Dependency Inversion Principle: the engine owns the contract, the
  * providers conform to it.
  */
-import type { Route, SupplierCandidate, Track } from './broadcast.types';
+import type { SupplierCandidate, Track } from './broadcast.types';
 
 /** Query for wave candidates — mirrors GET /api/v1/suppliers?destination=&track=. */
 export interface SupplierQuery {
