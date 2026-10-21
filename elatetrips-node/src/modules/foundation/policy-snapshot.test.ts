@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { canonicalJson, createJsonProtection } from './encrypted-json';
 import { authenticateFoundationEvent } from './foundation-event';
 import { FoundationStoreError } from './persistence';
+import { openOutboxWorker } from './outbox';
 import { openPolicySnapshotStore, snapshotPolicySchema, type PolicySnapshotCommand, type PolicySnapshotOptions } from './policy-snapshot';
 
 const now = '2026-10-21T12:00:00.000Z';
@@ -143,6 +144,49 @@ describe('durable write-once policy snapshot seam (real local Mongo)', () => {
     assert.deepEqual(await f.store.commit('token', command()), first);
     assert.deepEqual(await f.counts(), [2, 2, 2, 2, 2, 1]);
   });
+  it('allows another authorized same-scope reader without changing the original audit actor', async () => {
+    const f = await fixture(); const accepted = await f.store.commit('token', command());
+    f.actor('other-user'); f.role('admin');
+    const reader = await openPolicySnapshotStore({ ...f.options, resolveBooking: async (bookingId, principal) => {
+      const binding = await f.options.resolveBooking(bookingId, principal);
+      return { ...z.object({}).passthrough().parse(binding), eventActor: 'system', eventRole: 'platform' };
+    } });
+    assert.deepEqual(await reader.read('token', 'booking-a'), accepted);
+    assert.equal(accepted.event.actor_id, 'user-a');
+    await assert.rejects(reader.commit('token', command()), code('AUTH_SCOPE_DENIED'));
+    const rebound = await openPolicySnapshotStore({ ...f.options, resolveBooking: async (bookingId, principal) => {
+      const binding = await f.options.resolveBooking(bookingId, principal);
+      return { ...z.object({}).passthrough().parse(binding), tenantId: 'different-tenant' };
+    } });
+    await assert.rejects(rebound.read('token', 'booking-a'), code('AUTH_SCOPE_DENIED'));
+    f.membership(false);
+    await assert.rejects(reader.read('token', 'booking-a'), code('AUTH_SCOPE_DENIED'));
+    assert.deepEqual(await f.counts(), [2, 2, 2, 2, 2, 1]);
+  });
+  it('retains read and replay integrity through real outbox leases and acknowledgements', async () => {
+    const f = await fixture(); const accepted = await f.store.commit('token', command());
+    const worker = await openOutboxWorker({ ...f.options,
+      policy: { policyId: 'fixture-delivery', revision: 1, leaseDurationMs: 1000, maxAttempts: 1, retryDelaysMs: [] },
+    });
+    for (let index = 0; index < 2; index++) {
+      assert.equal((await worker.runOnce('fixture-worker', async () => {
+        assert.deepEqual(await f.store.read('token', 'booking-a'), accepted);
+        assert.deepEqual(await f.store.commit('token', command()), accepted);
+      })).status, 'delivered');
+      assert.deepEqual(await f.store.read('token', 'booking-a'), accepted);
+      assert.deepEqual(await f.store.commit('token', command()), accepted);
+    }
+    assert.equal(await f.collection('outbox').countDocuments({ state: 'delivered' }), 2);
+  });
+  for (const corruption of ['deleted', 'event-id', 'delivery-state'] as const) {
+    it(`rejects ${corruption} outbox corruption on read and replay`, async () => {
+      const f = await fixture(); await f.store.commit('token', command());
+      if (corruption === 'deleted') await f.collection('outbox').deleteOne({});
+      else await f.collection('outbox').updateOne({}, { $set: corruption === 'event-id' ? { eventId: 'forged' } : { state: 'leased' } });
+      await assert.rejects(f.store.read('token', 'booking-a'), code('INTEGRITY_FAILURE'));
+      await assert.rejects(f.store.commit('token', command()), code('INTEGRITY_FAILURE'));
+    });
+  }
   for (const mutation of ['body', 'event', 'correlation', 'configuration', 'permission', 'role'] as const) {
     it(`conflicts on changed ${mutation} under the original command`, async () => {
       const f = await fixture(); await f.store.commit('token', command());

@@ -1,0 +1,108 @@
+▶ durable write-once policy snapshot seam (real local Mongo)
+  ✔ commits, freshly reads and reopens the original durable result (344.3337ms)
+  ✔ stores no plaintext snapshot or audit and encrypts the durable receipt (143.7826ms)
+  ✔ publishes one canonical policy payload and a reference-only internal reservation audit (173.7093ms)
+  ✔ returns an independent recursively frozen result and detaches caller input before IO (171.799ms)
+  ✔ preserves accepted terms after caller catalog/source changes (174.2916ms)
+  ✔ retries exactly without adding records, audits or outbox entries (164.2155ms)
+  ✖ allows another authorized same-scope reader without changing the original audit actor (139.5992ms)
+  ✔ retains read and replay integrity through real outbox leases and acknowledgements (811.2704ms)
+  ✖ rejects deleted outbox corruption on read and replay (176.225ms)
+  ✖ rejects event-id outbox corruption on read and replay (164.6907ms)
+  ✖ rejects delivery-state outbox corruption on read and replay (150.6816ms)
+  ✔ conflicts on changed body under the original command (166.3465ms)
+  ✔ conflicts on changed event under the original command (146.7577ms)
+  ✔ conflicts on changed correlation under the original command (146.6655ms)
+  ✔ conflicts on changed configuration under the original command (153.9219ms)
+  ✔ conflicts on changed permission under the original command (146.913ms)
+  ✔ conflicts on changed role under the original command (149.6716ms)
+  ✔ denies competing commands for an accepted booking (137.9194ms)
+  ✔ denies command reuse across different bookings (147.1928ms)
+  ✔ denies event reuse across different bookings (140.1159ms)
+  ✔ coalesces simultaneous exact first commits using durable receipts (254.2434ms)
+  ✔ accepts only one simultaneous competing booking command (144.8209ms)
+  ✔ accepts only one simultaneous cross-booking claim for the same event ID (164.5875ms)
+  ✔ rejects canonical/event/body/ownership/actor mismatch without writes (110.3538ms)
+  ✔ fails closed for account on write, replay and read (139.633ms)
+  ✔ fails closed for membership on write, replay and read (127.7498ms)
+  ✔ fails closed for foreign on write, replay and read (133.0302ms)
+  ✔ fails closed for actor on write, replay and read (143.702ms)
+  ✔ fails closed for producer on write, replay and read (148.5728ms)
+  ✔ rolls back every effect when records insertion fails (136.0337ms)
+  ✔ rolls back every effect when revisions insertion fails (127.4076ms)
+  ✔ rolls back every effect when audit insertion fails (119.0534ms)
+  ✔ rolls back every effect when outbox insertion fails (133.7907ms)
+  ✔ rolls back every effect when receipts insertion fails (128.3674ms)
+  ✔ rolls back every effect when transaction_receipts insertion fails (144.1023ms)
+  ✔ rejects records tampering on read and replay (169.409ms)
+  ✔ rejects revisions tampering on read and replay (147.7724ms)
+  ✔ rejects audit tampering on read and replay (154.9777ms)
+  ✔ rejects receipts tampering on read and replay (165.6472ms)
+  ✔ rejects transaction_receipts tampering on read and replay (152.9ms)
+  ✔ denies missing permission grants/provenance and insufficient configured batch capacity (130.666ms)
+  ✔ maps trusted dependency failures to non-sensitive typed errors (125.3075ms)
+✖ durable write-once policy snapshot seam (real local Mongo) (9428.8627ms)
+ℹ tests 42
+ℹ suites 1
+ℹ pass 38
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11112.5548
+
+✖ failing tests:
+
+test at src\modules\foundation\policy-snapshot.test.ts:157:24
+✖ allows another authorized same-scope reader without changing the original audit actor (139.5992ms)
+  Error [FoundationStoreError]: AUTH_SCOPE_DENIED
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence-review\elatetrips-node\src\modules\foundation\policy-snapshot.ts:74:91)
+      at Object.read (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence-review\elatetrips-node\src\modules\foundation\policy-snapshot.ts:184:118)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence-review\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:154:22)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'AUTH_SCOPE_DENIED'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:188:28
+✖ rejects deleted outbox corruption on read and replay (176.225ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence-review\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:179:7)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:188:28
+✖ rejects event-id outbox corruption on read and replay (164.6907ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence-review\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:179:7)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:188:28
+✖ rejects delivery-state outbox corruption on read and replay (150.6816ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence-review\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:179:7)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }

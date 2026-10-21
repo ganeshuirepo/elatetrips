@@ -1,0 +1,30 @@
+﻿{
+    "baseline":  "d9c4099620db09f27b8e708b5d7234c4c0f00717",
+    "branch":  "feature/033-policy-persistence-review",
+    "ownedPathsOnly":  true,
+    "stagedPathsBeforeAuditFile":  [
+                                       ".claude/elatetrips-specs/specs/033-policy-persistence-review/checks.mjs",
+                                       ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/build.log",
+                                       ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/contracts.log",
+                                       ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/focused-tests.log",
+                                       ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/history-regression-red-summary.json",
+                                       ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/history-regression-red.log",
+                                       ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/initial-typecheck.log",
+                                       ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/regressions-red.log",
+                                       ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/scoped-lint.log",
+                                       ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/summary.json",
+                                       ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/typecheck.log",
+                                       ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/whole-lint.json",
+                                       ".claude/elatetrips-specs/specs/033-policy-persistence-review/inputs/ELate_Trips_Development_Backlog_v10.json",
+                                       ".claude/elatetrips-specs/specs/033-policy-persistence-review/review.md",
+                                       ".claude/elatetrips-specs/specs/033-policy-persistence-review/spec.md",
+                                       "elatetrips-node/src/modules/foundation/persistence.test.ts",
+                                       "elatetrips-node/src/modules/foundation/persistence.ts",
+                                       "elatetrips-node/src/modules/foundation/policy-snapshot.test.ts",
+                                       "elatetrips-node/src/modules/foundation/policy-snapshot.ts"
+                                   ],
+    "excludedFromWhitespaceCheck":  [
+                                        "evidence/*",
+                                        "inputs/*"
+                                    ]
+}

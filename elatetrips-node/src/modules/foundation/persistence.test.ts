@@ -117,6 +117,24 @@ describe('DEV-006 real Mongo transaction foundation', () => {
     };
   }
 
+  for (const verifyIntegrity of [false, true]) {
+    it(`${verifyIntegrity ? 'rejects' : 'preserves legacy reads for'} a missing historical audit with integrity ${verifyIntegrity}`, async () => {
+      const f = await fixture({ verifyIntegrity });
+      const first = await f.store.write(f.user, f.command);
+      const second = await f.store.write(f.user, { ...f.command, commandId: 'second-command', expectedRevision: 1,
+        payload: { ...payload, count: 2 } });
+      await f.collection('audit').deleteOne({ revision: 1 });
+      if (verifyIntegrity) {
+        await assert.rejects(f.store.history(f.user, f.command.id), code('INTEGRITY_FAILURE'));
+        await assert.rejects(f.store.write(f.user, f.command), code('INTEGRITY_FAILURE'));
+      } else {
+        assert.deepEqual(await f.store.history(f.user, f.command.id), [first, second]);
+        assert.deepEqual(await f.store.write(f.user, f.command), first);
+      }
+      assert.deepEqual(await f.store.read(f.user, f.command.id), second);
+    });
+  }
+
   it('commits encrypted record, immutable revision, audit, outbox and receipt together', async () => {
     const f = await fixture();
     const result = await f.store.write(f.user, f.command);

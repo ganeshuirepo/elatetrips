@@ -86,6 +86,10 @@ function consistent(request: PolicySnapshotCommand): boolean {
     (!s.policy.partner_id || s.policy.partner_id === s.partnerId) && (!s.policy.quote_id || s.policy.quote_id === s.quoteId) &&
     canonicalJson(e.after) === canonicalJson(s.body);
 }
+function sameBooking(snapshot: PolicySnapshot, binding: PolicyBookingBinding): boolean {
+  return snapshot.bookingId === binding.bookingId && snapshot.quoteId === binding.quoteId &&
+    snapshot.partnerId === binding.partnerId && snapshot.tenantId === binding.tenantId && snapshot.contextId === binding.contextId;
+}
 
 /** Internal persistence seam only. No HTTP route, catalog defaults, booking or money state transition. */
 export async function openPolicySnapshotStore(options: PolicySnapshotOptions): Promise<PolicySnapshotStore> {
@@ -146,6 +150,8 @@ export async function openPolicySnapshotStore(options: PolicySnapshotOptions): P
       const saved = envelopeSchema.parse(detach(payload));
       freeze(saved);
       validate(saved.request);
+      if (!sameBooking(saved.request.snapshot, saved.binding) || saved.request.event.actor !== saved.binding.eventActor ||
+          saved.request.event.role !== saved.binding.eventRole) fail('INTEGRITY_FAILURE');
       const output = { commandId: saved.request.commandId, snapshot: saved.request.snapshot, event: saved.request.event, receipt };
       freeze(output);
       return output;
@@ -159,8 +165,7 @@ export async function openPolicySnapshotStore(options: PolicySnapshotOptions): P
       validate(request);
       const { principal, binding, permissions } = await authorize(token, request.snapshot.bookingId, configuration.writeAction);
       const s = request.snapshot;
-      if (s.quoteId !== binding.quoteId || s.partnerId !== binding.partnerId || s.tenantId !== binding.tenantId ||
-          s.contextId !== binding.contextId || request.event.actor_id !== principal.userId ||
+      if (!sameBooking(s, binding) || request.event.actor_id !== principal.userId ||
           request.event.actor !== binding.eventActor || request.event.role !== binding.eventRole) fail('AUTH_SCOPE_DENIED');
       const payload = { format: 1, request, binding, configuration, permissions };
       const committed = await transaction.write(principal, {
@@ -181,7 +186,8 @@ export async function openPolicySnapshotStore(options: PolicySnapshotOptions): P
       let saved: z.infer<typeof envelopeSchema>;
       try { saved = envelopeSchema.parse(first.payload); }
       catch { return fail('INTEGRITY_FAILURE'); }
-      if (canonicalJson(saved.binding) !== canonicalJson(binding) || saved.request.snapshot.bookingId !== bookingId) fail('AUTH_SCOPE_DENIED');
+      // A reader's audit actor/role can differ from the actor who accepted these immutable terms.
+      if (!sameBooking(saved.request.snapshot, binding) || canonicalJson(saved.binding.scope) !== canonicalJson(binding.scope)) fail('AUTH_SCOPE_DENIED');
       const checked = await transaction.read(principal, [
         { store: snapshots, id: bookingId }, { store: eventClaims, id: saved.request.event.event_id },
       ], { commandId: saved.request.commandId, correlationId: saved.request.correlationId });

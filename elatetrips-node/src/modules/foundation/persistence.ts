@@ -8,7 +8,7 @@ import {
   type EncryptedJson,
   type StorageKeys,
 } from './encrypted-json';
-import { pendingDelivery, type OutboxDelivery } from './outbox-record';
+import { deliverySchema, pendingDelivery, type OutboxDelivery } from './outbox-record';
 import { authenticateFoundationEvent } from './foundation-event';
 
 const scopeSchema = z
@@ -288,11 +288,14 @@ export async function openVersionedStore<T>(options: StoreOptions<T>) {
       const matches = await receipts.find(
         { aggregateId: row._id, revision: row.revision }, { session },
       ).toArray();
+      // Delivery bookkeeping is mutable; require a valid linked queue entry, not its initial bytes.
+      const delivery = deliverySchema.parse(await outbox.findOne({ _id: row.eventId }, { session }));
       if (!saved || saved.aggregateId !== row._id) fail('INTEGRITY_FAILURE');
       const { aggregateId, ...savedRow } = saved;
       const savedVersion = decode({ ...savedRow, _id: aggregateId });
       if (matches.length !== 1 ||
           matches[0].aggregateId !== row._id || matches[0].revision !== row.revision ||
+          delivery.eventId !== row.eventId || event.aggregateId !== row._id || event.revision !== row.revision ||
           event.kind !== kind || event.schemaVersion !== schemaVersion ||
           event.action !== writeAction || canonicalJson(event.scope) !== canonicalJson(row.scope) ||
           canonicalJson(event.after) !== canonicalJson(value.payload) ||
@@ -507,7 +510,7 @@ export async function openVersionedStore<T>(options: StoreOptions<T>) {
               if (!row) return [];
               await authorize(principal, row.scope, readAction, timestamp());
               // Authenticate ownership and read all revisions from the same database snapshot.
-              decode(row);
+              await verified(row, session);
               const rows = await revisions
                 .find({ aggregateId: row._id }, { session })
                 .sort({ revision: 1 })
@@ -522,9 +525,10 @@ export async function openVersionedStore<T>(options: StoreOptions<T>) {
                 rows[rows.length - 1]?.eventId !== row.eventId
               )
                 fail('INTEGRITY_FAILURE');
-              return rows.map(({ aggregateId, ...revision }) =>
-                decode({ ...revision, _id: aggregateId }),
-              );
+              const history: RecordVersion<T>[] = [];
+              for (const { aggregateId, ...revision } of rows)
+                history.push(await verified({ ...revision, _id: aggregateId }, session));
+              return history;
             },
             { readConcern: { level: 'snapshot' }, readPreference: 'primary' },
           );
