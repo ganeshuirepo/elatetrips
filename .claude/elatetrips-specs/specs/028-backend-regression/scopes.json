@@ -1,0 +1,71 @@
+{
+  "base": "23a1a42f026fc9331a499e46e8912b35211d02c2",
+  "testedCheckpoint": "85ca488aec90431022ab32bd91b2b47f6ac6b34e",
+  "checkpoints": [
+    {
+      "commit": "80bab3187e227ce5061672d65e84f46521f39491",
+      "spec": "016-platform-types",
+      "files": [
+        "elatetrips-node/src/container.ts",
+        "elatetrips-node/src/common/logger.ts",
+        "elatetrips-node/src/common/middleware/errorHandler.ts",
+        "elatetrips-node/src/repositories/MongoReadRepository.ts"
+      ]
+    },
+    {
+      "commit": "ffc16f277ecec58a2d483dd3e5b2fc0175e8483e",
+      "spec": "017-auth-types",
+      "module": "auth"
+    },
+    {
+      "commit": "35313a59217802a407d46f0bdffa2c04d2d0bbd2",
+      "spec": "018-broadcast-types",
+      "module": "broadcast"
+    },
+    {
+      "commit": "5d052e5317e74a62eff451bcac5ef87dffbafe7d",
+      "spec": "019-catalog-types",
+      "module": "catalog"
+    },
+    {
+      "commit": "f9f8ee634b22a26c4b592aa1e8071556d11dfb79",
+      "spec": "020-contract-test-types",
+      "module": "contracts"
+    },
+    {
+      "commit": "f5216ccc2115ca50249aab58808be32e3c9916d7",
+      "spec": "021-negotiation-test-types",
+      "module": "negotiation"
+    },
+    {
+      "commit": "c6b45f56346a120e1135cf0a9b817614f2e8db0a",
+      "spec": "022-order-types",
+      "module": "orders"
+    },
+    {
+      "commit": "112afae56859fb7bee3bf89bc4bb74b26363ef03",
+      "spec": "023-partner-types",
+      "module": "partner"
+    },
+    {
+      "commit": "68df592334720a412e0e8fc4ac371ee4f82154fc",
+      "spec": "024-pricing-types",
+      "module": "pricing"
+    },
+    {
+      "commit": "82384a5da625f78340103818205d295412a6a098",
+      "spec": "025-ratecard-types",
+      "module": "ratecard"
+    },
+    {
+      "commit": "8a6a29f48be4c5b64ca5876c4c782bfd4c80d025",
+      "spec": "026-supplier-test-types",
+      "module": "supplier"
+    },
+    {
+      "commit": "85ca488aec90431022ab32bd91b2b47f6ac6b34e",
+      "spec": "027-wedding-types",
+      "module": "wedding"
+    }
+  ]
+}
