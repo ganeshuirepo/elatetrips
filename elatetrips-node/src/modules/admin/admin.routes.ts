@@ -16,6 +16,8 @@ import { asyncHandler } from '../../common/http/asyncHandler';
 import { validate } from '../../common/middleware/validate';
 import {
   vendorCreateSchema,
+  vendorUsernameParamsSchema,
+  bindPartnerBodySchema,
   activityCreateSchema,
   activityParamsSchema,
   activityUpdateSchema,
@@ -42,43 +44,299 @@ export function buildAdminRouter(
   const router = Router();
   router.use(guard);
 
+  /**
+   * @openapi
+   * /api/v1/admin/overview:
+   *   get:
+   *     tags: [Admin]
+   *     summary: Counts and recent activity for the admin dashboard
+   *     security: [{ consoleAuth: [] }]
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   *       '401': { $ref: '#/components/responses/Unauthorized' }
+   */
   router.get('/overview', asyncHandler(controller.overview));
+  /**
+   * @openapi
+   * /api/v1/admin/orders:
+   *   get:
+   *     tags: [Admin]
+   *     summary: Every order, across all customers
+   *     security: [{ consoleAuth: [] }]
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   *       '401': { $ref: '#/components/responses/Unauthorized' }
+   */
   router.get('/orders', asyncHandler(controller.listOrders));
 
   // Vendor onboarding: register the account bound to its one listing.
+  /**
+   * @openapi
+   * /api/v1/admin/vendors:
+   *   get:
+   *     tags: [Admin]
+   *     summary: Vendor accounts
+   *     security: [{ consoleAuth: [] }]
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   *       '401': { $ref: '#/components/responses/Unauthorized' }
+   */
   router.get('/vendors', asyncHandler(consoleController.listVendors));
+  /**
+   * @openapi
+   * /api/v1/admin/vendors:
+   *   post:
+   *     tags: [Admin]
+   *     summary: Create a vendor account, bound to exactly one listing
+   *     description: >-
+   *       One account, one listing. A vendor who could see a second property could see a
+   *       competitor's bookings.
+   *     security: [{ consoleAuth: [] }]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema: { type: object, description: "The vendor account and the listing it is bound to." }
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   *       '401': { $ref: '#/components/responses/Unauthorized' }
+   */
   router.post(
     '/vendors',
     validate({ body: vendorCreateSchema }),
     asyncHandler(consoleController.createVendor),
   );
 
+  /**
+   * @openapi
+   * /api/v1/admin/vendors/{username}/partner:
+   *   post:
+   *     tags: [Admin]
+   *     summary: Bind a vendor account to a supply partner
+   *     description: >-
+   *       What the account's rate-card access is scoped to. Accounts created before
+   *       partner bindings existed have none, and an unbound account is refused every
+   *       rate card by design — this is how ops repairs that without recreating it.
+   *     security: [{ consoleAuth: [] }]
+   *     parameters:
+   *       - in: path
+   *         name: username
+   *         required: true
+   *         schema: { type: string }
+   *         description: The vendor account.
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema: { type: object, description: "The supplier id to bind." }
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '404': { $ref: '#/components/responses/NotFound' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   *       '401': { $ref: '#/components/responses/Unauthorized' }
+   */
+  router.post(
+    '/vendors/:username/partner',
+    validate({ params: vendorUsernameParamsSchema, body: bindPartnerBodySchema }),
+    asyncHandler(consoleController.bindPartner),
+  );
+
+  /**
+   * @openapi
+   * /api/v1/admin/hotels:
+   *   post:
+   *     tags: [Admin]
+   *     summary: Add a hotel
+   *     security: [{ consoleAuth: [] }]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema: { type: object, description: "The hotel record." }
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   *       '401': { $ref: '#/components/responses/Unauthorized' }
+   */
   router.post('/hotels', validate({ body: hotelCreateSchema }), asyncHandler(controller.createHotel));
+  /**
+   * @openapi
+   * /api/v1/admin/hotels/{id}:
+   *   put:
+   *     tags: [Admin]
+   *     summary: Update a hotel
+   *     security: [{ consoleAuth: [] }]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema: { type: string }
+   *         description: The hotel.
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema: { type: object, description: "The changed fields." }
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   *       '401': { $ref: '#/components/responses/Unauthorized' }
+   */
   router.put(
     '/hotels/:id',
     validate({ params: idParamsSchema, body: hotelUpdateSchema }),
     asyncHandler(controller.updateHotel),
   );
 
+  /**
+   * @openapi
+   * /api/v1/admin/packages:
+   *   post:
+   *     tags: [Admin]
+   *     summary: Add a celebration package
+   *     security: [{ consoleAuth: [] }]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema: { type: object, description: "The package record." }
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   *       '401': { $ref: '#/components/responses/Unauthorized' }
+   */
   router.post('/packages', validate({ body: bundleCreateSchema }), asyncHandler(controller.createBundle));
+  /**
+   * @openapi
+   * /api/v1/admin/packages/{id}:
+   *   put:
+   *     tags: [Admin]
+   *     summary: Update a celebration package
+   *     security: [{ consoleAuth: [] }]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema: { type: string }
+   *         description: The package.
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema: { type: object, description: "The changed fields." }
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   *       '401': { $ref: '#/components/responses/Unauthorized' }
+   */
   router.put(
     '/packages/:id',
     validate({ params: idParamsSchema, body: bundleUpdateSchema }),
     asyncHandler(controller.updateBundle),
   );
 
+  /**
+   * @openapi
+   * /api/v1/admin/vehicles:
+   *   post:
+   *     tags: [Admin]
+   *     summary: Add a vehicle
+   *     security: [{ consoleAuth: [] }]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema: { type: object, description: "The vehicle record, including its per-km rate." }
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   *       '401': { $ref: '#/components/responses/Unauthorized' }
+   */
   router.post('/vehicles', validate({ body: vehicleCreateSchema }), asyncHandler(controller.createVehicle));
+  /**
+   * @openapi
+   * /api/v1/admin/vehicles/{id}:
+   *   put:
+   *     tags: [Admin]
+   *     summary: Update a vehicle
+   *     security: [{ consoleAuth: [] }]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema: { type: string }
+   *         description: The vehicle.
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema: { type: object, description: "The changed fields." }
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   *       '401': { $ref: '#/components/responses/Unauthorized' }
+   */
   router.put(
     '/vehicles/:id',
     validate({ params: idParamsSchema, body: vehicleUpdateSchema }),
     asyncHandler(controller.updateVehicle),
   );
 
+  /**
+   * @openapi
+   * /api/v1/admin/activities:
+   *   post:
+   *     tags: [Admin]
+   *     summary: Add an activity
+   *     security: [{ consoleAuth: [] }]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema: { type: object, description: "The activity record." }
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   *       '401': { $ref: '#/components/responses/Unauthorized' }
+   */
   router.post(
     '/activities',
     validate({ body: activityCreateSchema }),
     asyncHandler(controller.createActivity),
   );
+  /**
+   * @openapi
+   * /api/v1/admin/activities/{kind}/{id}:
+   *   put:
+   *     tags: [Admin]
+   *     summary: Update an activity
+   *     description: Activities are stored per kind, so the kind is part of the address, not a field.
+   *     security: [{ consoleAuth: [] }]
+   *     parameters:
+   *       - in: path
+   *         name: kind
+   *         required: true
+   *         schema: { type: string }
+   *         description: Which activity collection it lives in.
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema: { type: string }
+   *         description: The activity.
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema: { type: object, description: "The changed fields." }
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   *       '401': { $ref: '#/components/responses/Unauthorized' }
+   */
   router.put(
     '/activities/:kind/:id',
     validate({ params: activityParamsSchema, body: activityUpdateSchema }),

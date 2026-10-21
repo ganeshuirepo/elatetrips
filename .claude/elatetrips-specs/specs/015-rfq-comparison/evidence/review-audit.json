@@ -1,0 +1,16 @@
+{
+  "baseCommit": "78f5a9628472d7c6c48a699455aed95646f654fe",
+  "changedPaths": 37,
+  "unexpectedPaths": [],
+  "productionImplementationModified": false,
+  "onlySourceChange": "elatetrips-node/src/modules/rfqflow/rfqflow.test.ts",
+  "cachesIgnored": [
+    ".claude/.cache/014-acceptance/mongod-x64-win32-8.2.6.exe",
+    ".claude/.cache/015-rfq/npm"
+  ],
+  "nodeModulesIsReadOnlyExecutionJunction": true,
+  "noDependencyInstall": true,
+  "actualChecksVerified": true,
+  "postVerificationChanges": "Wrapper hardening and child probe, full-runner lint-output sanitizer, docs/evidence and RFQ test CRLF-to-LF normalization only; recorded check commands/exits unchanged.",
+  "originalDotEnvRead": false
+}

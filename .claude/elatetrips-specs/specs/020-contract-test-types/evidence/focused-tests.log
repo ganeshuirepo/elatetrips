@@ -1,0 +1,17 @@
+✔ a token is long, random, and never a counter (4.0864ms)
+✔ minting many tokens never repeats one (4.7044ms)
+✔ the OTP is a six-digit code, not a counter (0.667ms)
+✔ OTPs vary between links (2.4355ms)
+✔ entity ids stay sequential and readable (16.6665ms)
+✔ a link carries a real expiry, not the moment it was made (0.5421ms)
+✔ an expired link is refused, and looks exactly like an unknown one (0.7098ms)
+✔ a valid link still opens inside its lifetime (0.6952ms)
+✔ the OTP guess budget runs out, and the link dies with it (1.3391ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 906.017

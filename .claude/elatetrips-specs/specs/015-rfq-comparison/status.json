@@ -1,0 +1,70 @@
+{
+  "feature": "015-rfq-comparison",
+  "status": "sequential-review-complete; full application tests green; whole-backend lint incomplete",
+  "baseCommit": "78f5a9628472d7c6c48a699455aed95646f654fe",
+  "productionSourceModified": false,
+  "sharedContractsModified": false,
+  "dependenciesInstalled": false,
+  "checkExitCodes": {
+    "lint-rfq": 0,
+    "test-rfq": 0,
+    "test:harness": 0,
+    "test:contracts": 0,
+    "lint": 1,
+    "typecheck": 0,
+    "test": 0,
+    "build": 0
+  },
+  "currentFullSuite": {
+    "total": 610,
+    "pass": 610,
+    "fail": 0,
+    "skipped": 0
+  },
+  "focusedTests": {
+    "before": {
+      "total": 28,
+      "pass": 27,
+      "fail": 1
+    },
+    "after": {
+      "total": 29,
+      "pass": 29,
+      "fail": 0,
+      "skipped": 0
+    }
+  },
+  "harnessTests": 34,
+  "schemas": 15,
+  "goldenFixtures": 20,
+  "environmentProbe": {
+    "tests": 1,
+    "pass": 1,
+    "exitCode": 0
+  },
+  "lint": {
+    "all": {
+      "files": 247,
+      "errors": 35,
+      "warnings": 6
+    },
+    "rfq": {
+      "files": 5,
+      "errors": 0,
+      "warnings": 0
+    }
+  },
+  "combinedExitCode": 1,
+  "evidence": "evidence/sequential-review",
+  "historicalFeature014FullSuite": {
+    "total": 609,
+    "pass": 608,
+    "fail": 1
+  },
+  "historicalFeature014Lint": {
+    "errors": 38,
+    "warnings": 6
+  },
+  "fullBrdComplete": false,
+  "gatesR1R2Complete": false
+}

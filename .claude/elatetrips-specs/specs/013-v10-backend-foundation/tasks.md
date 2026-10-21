@@ -1,0 +1,55 @@
+# DEV-005/006/008 technical slices
+
+- [x] Locate nested backend and create isolated branch/worktree from ce83482.
+- [x] Read owned auth interface/guard/JWT/refresh/configuration; preserve original environment and deployment state.
+- [x] Capture existing backend typecheck/test/build baseline and missing-script evidence.
+- [x] Reproduce nine JWT boundary regression failures, then harden the runtime adapter.
+- [x] Implement stable-account resolution and current exact-scope membership authorization.
+- [x] Verify 44 new focused tests with configured/empty permissions, cross-resource denials and revocation.
+- [x] Record final full-suite comparison, typecheck and build (same one baseline test failure).
+- [ ] Integrate approved contracts, account/membership adapters and server resource resolvers.
+- [x] Implement unmounted versioned single-aggregate Mongo persistence with strict injected schema/configuration.
+- [x] Commit record/revision/immutable audit/outbox/receipt in one transaction; reject standalone deployments.
+- [x] Add authenticated encryption, explicit key rotation support and keyed retry fingerprints.
+- [x] Verify 36 new persistence/crypto cases, including real rollback, races, scope, corruption and reconnect.
+- [x] Capture full suite: 322 pass, same 1 pre-existing fail; typecheck/build pass.
+- [x] Add explicit versioned-policy outbox leases/retries, worker recovery and token/version fencing.
+- [x] Authenticate encrypted events before handing them to trusted internal handlers; quarantine invalid events.
+- [x] Append each queue transition's immutable audit atomically; verify real-server rollback failures.
+- [x] Verify 30 new outbox cases: 110 foundation tests pass; full suite 352 pass and the same 1 baseline failure; typecheck/build pass.
+- [x] Add authenticated snapshot projection with atomic state/receipt/audit, exact event replay and scoped reads.
+- [x] Reject changed intent/scope/before chains, defer revision gaps and prevent stale state regression.
+- [x] Verify producer/outbox/projection recovery after acknowledgment loss and out-of-order delivery against real Mongo.
+- [x] Verify 38 new projection cases: 148 foundation tests pass; full suite 390 pass and the same 1 baseline failure; typecheck/build pass.
+- [x] Share store staging/commit logic with an atomic multi-record coordinator and encrypted group receipts.
+- [x] Require current per-record permissions, expected revisions, explicit versioned configuration and a pure frozen-snapshot guard.
+- [x] Add snapshot-consistent authorized group reads and verify concurrent commit consistency.
+- [x] Verify 35 new transaction cases including partial failure rollback and existing outbox/projection compatibility; 183 foundation tests pass; full suite 425 pass and the same 1 baseline failure.
+- [x] Add explicit scoped delivery inspection/retry permissions and authenticated-source metadata inspection without payload/token exposure.
+- [x] Add configured dead-delivery recovery with expected versions, coded reasons, budgets and atomic operator audit/encrypted receipts.
+- [x] Introduce queue format 2 with lifetime attempts/recovery counters, preserving worker fencing and all prior cycles.
+- [x] Verify 37 new recovery cases including corruption, rollback, old workers and projection deduplication; 220 foundation tests pass; full suite 462 pass and the same 1 baseline failure; typecheck/build pass.
+- [x] Implement an unmounted sequential runner with required versioned pacing/storage retry policy, exact kind/schema routes and single-use lifecycle.
+- [x] Add cooperative cancellation, interrupted timers, awaited in-flight acknowledgment and redacted metadata-only diagnostics.
+- [x] Add 25 lifecycle/real-Mongo acceptance cases including unroutable-event exhaustion, shutdown races and post-projection replay.
+- [x] Capture runner evidence: 245 added foundation tests pass; full backend 487 pass and the same 1 baseline failure; typecheck/build pass.
+- [x] Add explicit bounded lease-renewal policy and process-local active-consumer control, forwarded by runner routes.
+- [x] Commit renewal queue/audit atomically, serialize requests, preserve counters and drain accepted calls before acknowledgment.
+- [x] Verify 20 real-Mongo renewal cases including limits, expired/replaced workers, unawaited failures and rollback.
+- [x] Capture renewal evidence: 265 added foundation tests pass; full backend 507 pass and the same 1 baseline failure; typecheck/build pass.
+- [x] Add opt-in managed runner routes with explicit versioned heartbeat/deadline configuration, cooperative child cancellation and fixed typed errors.
+- [x] Drain consumers/accepted renewals before returning, preserving active deadline/cancellation/lease fencing through renewal drain and cleaning timers/listeners.
+- [x] Verify 31 new managed-consumer cases (26 lifecycle, five real Mongo); retain focused/typecheck/build evidence in evidence/managed-consumer/.
+- [x] Add read-only scoped delivery history with explicit versioned page bounds, fresh default-deny permissions and separately authorized metadata details.
+- [x] Bind encrypted continuation to event/user/source/policy and snapshot anchors; validate bounded contiguous pages while excluding later transitions from captured watermarks.
+- [x] Verify 42 real-Mongo history cases including failure/recovery/renewal/success replay, concurrent reads, corruption, permission revocation, privacy and no writes; retain focused/typecheck/build evidence in evidence/delivery-history/.
+- [x] Assemble an explicit unmounted managed delivery runtime with detached config/keys/routes and conservative configured renewal/deadline compatibility checks before storage access.
+- [x] Reuse the sequential runner through a lazy worker; skip initialization when disabled/pre-aborted, retry fresh after failed openings and preserve host Mongo ownership.
+- [x] Verify 28 new runtime cases (22 config/lifecycle, six real Mongo), including producer/renewal/projection flow, cancellation cleanup and initialization failure recovery; retain focused/typecheck/build evidence in evidence/delivery-runtime/.
+- [x] Review sequential implementation handoffs for lifecycle/cleanup, cursor scope/privacy/anchors and detached/lazy runtime behavior; no concrete source defect required correction.
+- [x] Reconcile aggregate evidence: 366 added foundation cases pass; full backend 608 pass, one unchanged baseline RFQ failure, zero skipped; typecheck/build pass. Retain evidence/sequential/ and sequential-verification.md.
+- [ ] Integrate approved business records and real account/membership/resource directories.
+- [ ] Complete domain transactions, migrations, approved projection/provider adapters, runner application wiring/supervision/operations, DB roles/retention/key provisioning and production deployment checks.
+
+No production readiness, full DEV-005 acceptance, DEV-006 completion or R1/R2 sign-off
+is claimed. Full suite baseline has one RFQ comparison failure before any source edits.

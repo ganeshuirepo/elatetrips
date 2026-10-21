@@ -6,6 +6,7 @@
  * shared across schemas to keep the rules in one place.
  */
 import { z } from 'zod';
+import { GENDER_CHOICES } from '../users/user.types';
 
 /**
  * Meet callers where their phone number actually lives: contacts, SMS and
@@ -72,7 +73,9 @@ export const signupSchema = z.object({
   name: z.string().min(2, 'Name is required').max(120),
   email: z.string().email('Valid email is required'),
   phone,
-  gender: z.enum(['male', 'female', 'other', 'prefer_not_to_say']),
+  // CHOICES, not GENDERS: '' is a storable default for accounts that predate
+  // the question, never something a person may submit.
+  gender: z.enum(GENDER_CHOICES),
   age: z.coerce.number().int().min(1).max(120),
   password,
   verifyVia: z.enum(['email', 'mobile']).default('mobile'),
@@ -89,3 +92,15 @@ export const resetPasswordSchema = z.object({ identifier, otp, password });
 export const refreshSchema = z.object({
   refreshToken: z.string().trim().min(20, 'Provide the refresh token'),
 });
+
+/**
+ * Verifying the second channel while signed in. Note what is ABSENT: no
+ * identifier. The address the code goes to is read from the authenticated
+ * user's own record (see AuthService.ownChannel), so a caller cannot point
+ * this at an address they do not own.
+ */
+const channel = z.enum(['email', 'mobile']);
+
+export const requestChannelVerificationSchema = z.object({ channel });
+
+export const confirmChannelVerificationSchema = z.object({ channel, otp });

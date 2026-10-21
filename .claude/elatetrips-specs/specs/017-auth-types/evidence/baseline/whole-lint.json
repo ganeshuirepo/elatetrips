@@ -1,0 +1,3396 @@
+{
+  "counts": {
+    "files": 247,
+    "errors": 22,
+    "warnings": 4
+  },
+  "diagnostics": [
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\app.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\common\\db\\counter.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\common\\db\\schema.integrity.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\common\\errors\\AppError.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\common\\http\\ApiResponse.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\common\\http\\asyncHandler.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\common\\interfaces\\IReadRepository.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\common\\interfaces\\IWriteRepository.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\common\\logger.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\common\\middleware\\authGuard.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\common\\middleware\\errorHandler.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\common\\middleware\\identityGuard.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\common\\middleware\\notFound.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\common\\middleware\\rateLimit.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\common\\middleware\\validate.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\common\\middleware\\webhookSignature.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\common\\middleware\\webhookSignature.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\common\\ports\\partnerDirectory.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\common\\types\\express\\index.d.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\config\\database.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\config\\env.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\config\\env.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\config\\swagger.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\container.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\admin\\admin.controller.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\admin\\admin.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\admin\\admin.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\admin\\admin.validation.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\admin\\console.controller.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\admin\\console.guard.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\admin\\console.guard.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\admin\\console.model.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\admin\\console.partner.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\admin\\console.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\admin\\console.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\admin\\console.token.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\auth\\__fixtures__\\devotp-prod-check.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\auth\\auth.controller.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\auth\\auth.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\auth\\auth.service.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\auth\\auth.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\auth\\auth.types.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\auth\\auth.validation.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\auth\\otp.sender.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\auth\\otp.sender.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\auth\\otp.store.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\auth\\otp.store.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\auth\\password.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\auth\\refresh.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\auth\\token.service.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\auth\\token.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\broadcast\\broadcast.audit.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\broadcast\\broadcast.config.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\broadcast\\broadcast.controller.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\broadcast\\broadcast.engine.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\broadcast\\broadcast.ports.ts",
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "severity": 2,
+          "message": "'Route' is defined but never used.",
+          "line": 11,
+          "column": 15,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 11,
+          "endColumn": 20,
+          "suggestions": [
+            {
+              "messageId": "removeUnusedVar",
+              "data": {
+                "varName": "Route"
+              },
+              "fix": {
+                "range": [
+                  541,
+                  547
+                ],
+                "text": ""
+              },
+              "desc": "Remove unused variable \"Route\"."
+            }
+          ]
+        }
+      ],
+      "suppressedMessages": [],
+      "errorCount": 1,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\broadcast\\broadcast.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\broadcast\\broadcast.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\broadcast\\broadcast.types.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\broadcast\\broadcast.validation.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\catalog\\catalog.controller.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\catalog\\catalog.models.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\catalog\\catalog.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\catalog\\catalog.service.ts",
+      "messages": [
+        {
+          "ruleId": "eqeqeq",
+          "severity": 2,
+          "message": "Expected '!==' and instead saw '!='.",
+          "line": 288,
+          "column": 26,
+          "nodeType": "BinaryExpression",
+          "messageId": "unexpected",
+          "endLine": 288,
+          "endColumn": 28,
+          "suggestions": [
+            {
+              "messageId": "replaceOperator",
+              "data": {
+                "expectedOperator": "!==",
+                "actualOperator": "!="
+              },
+              "fix": {
+                "range": [
+                  12734,
+                  12736
+                ],
+                "text": "!=="
+              },
+              "desc": "Use '!==' instead of '!='."
+            }
+          ]
+        },
+        {
+          "ruleId": "eqeqeq",
+          "severity": 2,
+          "message": "Expected '!==' and instead saw '!='.",
+          "line": 289,
+          "column": 25,
+          "nodeType": "BinaryExpression",
+          "messageId": "unexpected",
+          "endLine": 289,
+          "endColumn": 27,
+          "suggestions": [
+            {
+              "messageId": "replaceOperator",
+              "data": {
+                "expectedOperator": "!==",
+                "actualOperator": "!="
+              },
+              "fix": {
+                "range": [
+                  12811,
+                  12813
+                ],
+                "text": "!=="
+              },
+              "desc": "Use '!==' instead of '!='."
+            }
+          ]
+        },
+        {
+          "ruleId": "eqeqeq",
+          "severity": 2,
+          "message": "Expected '!==' and instead saw '!='.",
+          "line": 289,
+          "column": 52,
+          "nodeType": "BinaryExpression",
+          "messageId": "unexpected",
+          "endLine": 289,
+          "endColumn": 54,
+          "suggestions": [
+            {
+              "messageId": "replaceOperator",
+              "data": {
+                "expectedOperator": "!==",
+                "actualOperator": "!="
+              },
+              "fix": {
+                "range": [
+                  12838,
+                  12840
+                ],
+                "text": "!=="
+              },
+              "desc": "Use '!==' instead of '!='."
+            }
+          ]
+        },
+        {
+          "ruleId": "eqeqeq",
+          "severity": 2,
+          "message": "Expected '!==' and instead saw '!='.",
+          "line": 291,
+          "column": 29,
+          "nodeType": "BinaryExpression",
+          "messageId": "unexpected",
+          "endLine": 291,
+          "endColumn": 31,
+          "suggestions": [
+            {
+              "messageId": "replaceOperator",
+              "data": {
+                "expectedOperator": "!==",
+                "actualOperator": "!="
+              },
+              "fix": {
+                "range": [
+                  12901,
+                  12903
+                ],
+                "text": "!=="
+              },
+              "desc": "Use '!==' instead of '!='."
+            }
+          ]
+        },
+        {
+          "ruleId": "eqeqeq",
+          "severity": 2,
+          "message": "Expected '!==' and instead saw '!='.",
+          "line": 292,
+          "column": 29,
+          "nodeType": "BinaryExpression",
+          "messageId": "unexpected",
+          "endLine": 292,
+          "endColumn": 31,
+          "suggestions": [
+            {
+              "messageId": "replaceOperator",
+              "data": {
+                "expectedOperator": "!==",
+                "actualOperator": "!="
+              },
+              "fix": {
+                "range": [
+                  12973,
+                  12975
+                ],
+                "text": "!=="
+              },
+              "desc": "Use '!==' instead of '!='."
+            }
+          ]
+        }
+      ],
+      "suppressedMessages": [],
+      "errorCount": 5,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\catalog\\catalog.types.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\catalog\\catalog.validation.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\catalog\\hotel.repository.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\classifier\\classifier.audit.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\classifier\\classifier.config.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\classifier\\classifier.controller.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\classifier\\classifier.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\classifier\\classifier.rules.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\classifier\\classifier.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\classifier\\classifier.types.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\classifier\\classifier.validation.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\comms\\comms.audit.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\comms\\comms.config.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\comms\\comms.controller.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\comms\\comms.factory.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\comms\\comms.ladder.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\comms\\comms.provider.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\comms\\comms.recipients.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\comms\\comms.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\comms\\comms.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\comms\\comms.smtp.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\comms\\comms.templates.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\comms\\comms.tokens.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\comms\\comms.types.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\comms\\comms.validation.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\contracts\\contract.audit.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\contracts\\contract.config.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\contracts\\contract.masking.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\contracts\\contract.validation.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\contracts\\contracts.controller.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\contracts\\contracts.engine.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\contracts\\contracts.links.test.ts",
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "severity": 2,
+          "message": "'_drop' is assigned a value but never used.",
+          "line": 79,
+          "column": 19,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 79,
+          "endColumn": 24
+        }
+      ],
+      "suppressedMessages": [],
+      "errorCount": 1,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\contracts\\contracts.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\contracts\\contracts.types.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\experiences\\experiences.controller.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\experiences\\experiences.import.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\experiences\\experiences.model.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\experiences\\experiences.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\experiences\\experiences.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\experiences\\experiences.validation.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\delivery-history.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\delivery-history.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\delivery-recovery.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\delivery-recovery.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\delivery-runtime.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\delivery-runtime.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\encrypted-json.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\foundation-event.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\identity.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\identity.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\lease-renewal.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\managed-consumer.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\managed-consumer.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\outbox-record.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\outbox-runner.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\outbox-runner.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\outbox.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\outbox.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\persistence.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\persistence.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\projection.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\projection.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\foundation\\transaction.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\negotiation\\negotiation.audit.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\negotiation\\negotiation.config.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\negotiation\\negotiation.controller.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\negotiation\\negotiation.decision.test.ts",
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-non-null-assertion",
+          "severity": 2,
+          "message": "Forbidden non-null assertion.",
+          "line": 110,
+          "column": 28,
+          "nodeType": "TSNonNullExpression",
+          "messageId": "noNonNull",
+          "endLine": 110,
+          "endColumn": 89,
+          "suggestions": [
+            {
+              "messageId": "suggestOptionalChain",
+              "fix": {
+                "range": [
+                  5169,
+                  5170
+                ],
+                "text": "?"
+              },
+              "desc": "Consider using the optional chain operator `?.` instead. This operator includes runtime checks, so it is safer than the compile-only non-null assertion operator."
+            }
+          ]
+        }
+      ],
+      "suppressedMessages": [],
+      "errorCount": 1,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\negotiation\\negotiation.engine.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\negotiation\\negotiation.fixtures.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\negotiation\\negotiation.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\negotiation\\negotiation.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\negotiation\\negotiation.store.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\negotiation\\negotiation.types.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\negotiation\\negotiation.validation.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\orders\\counter.model.ts",
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-non-null-assertion",
+          "severity": 2,
+          "message": "Forbidden non-null assertion.",
+          "line": 41,
+          "column": 10,
+          "nodeType": "TSNonNullExpression",
+          "messageId": "noNonNull",
+          "endLine": 41,
+          "endColumn": 14,
+          "suggestions": [
+            {
+              "messageId": "suggestOptionalChain",
+              "fix": {
+                "range": [
+                  1420,
+                  1421
+                ],
+                "text": "?"
+              },
+              "desc": "Consider using the optional chain operator `?.` instead. This operator includes runtime checks, so it is safer than the compile-only non-null assertion operator."
+            }
+          ]
+        }
+      ],
+      "suppressedMessages": [],
+      "errorCount": 1,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\orders\\coupons.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\orders\\order.controller.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\orders\\order.model.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\orders\\order.repository.ts",
+      "messages": [
+        {
+          "ruleId": null,
+          "message": "'/* eslint-disable @typescript-eslint/no-explicit-any */' has no effect because you have 'noInlineConfig' setting in your config.",
+          "line": 55,
+          "column": 1,
+          "endLine": 55,
+          "endColumn": 56,
+          "severity": 1,
+          "nodeType": null
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 56,
+          "column": 24,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 56,
+          "endColumn": 27,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  2659,
+                  2662
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  2659,
+                  2662
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 56,
+          "column": 34,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 56,
+          "endColumn": 37,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  2669,
+                  2672
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  2669,
+                  2672
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 56,
+          "column": 40,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 56,
+          "endColumn": 43,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  2675,
+                  2678
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  2675,
+                  2678
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        }
+      ],
+      "suppressedMessages": [],
+      "errorCount": 3,
+      "fatalErrorCount": 0,
+      "warningCount": 1,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\orders\\order.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\orders\\order.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\orders\\order.types.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\orders\\order.validation.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\partner\\partner.controller.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\partner\\partner.model.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\partner\\partner.repository.ts",
+      "messages": [
+        {
+          "ruleId": null,
+          "message": "'/* eslint-disable @typescript-eslint/no-explicit-any */' has no effect because you have 'noInlineConfig' setting in your config.",
+          "line": 46,
+          "column": 1,
+          "endLine": 46,
+          "endColumn": 56,
+          "severity": 1,
+          "nodeType": null
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 47,
+          "column": 24,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 47,
+          "endColumn": 27,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  1971,
+                  1974
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  1971,
+                  1974
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 47,
+          "column": 34,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 47,
+          "endColumn": 37,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  1981,
+                  1984
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  1981,
+                  1984
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 47,
+          "column": 40,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 47,
+          "endColumn": 43,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  1987,
+                  1990
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  1987,
+                  1990
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        }
+      ],
+      "suppressedMessages": [],
+      "errorCount": 3,
+      "fatalErrorCount": 0,
+      "warningCount": 1,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\partner\\partner.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\partner\\partner.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\partner\\partner.types.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\partner\\partner.validation.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\pricing\\pricing.controller.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\pricing\\pricing.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\pricing\\pricing.service.ts",
+      "messages": [
+        {
+          "ruleId": "eqeqeq",
+          "severity": 2,
+          "message": "Expected '===' and instead saw '=='.",
+          "line": 71,
+          "column": 27,
+          "nodeType": "BinaryExpression",
+          "messageId": "unexpected",
+          "endLine": 71,
+          "endColumn": 29,
+          "suggestions": [
+            {
+              "messageId": "replaceOperator",
+              "data": {
+                "expectedOperator": "===",
+                "actualOperator": "=="
+              },
+              "fix": {
+                "range": [
+                  2220,
+                  2222
+                ],
+                "text": "==="
+              },
+              "desc": "Use '===' instead of '=='."
+            }
+          ]
+        },
+        {
+          "ruleId": "eqeqeq",
+          "severity": 2,
+          "message": "Expected '!==' and instead saw '!='.",
+          "line": 80,
+          "column": 23,
+          "nodeType": "BinaryExpression",
+          "messageId": "unexpected",
+          "endLine": 80,
+          "endColumn": 25,
+          "suggestions": [
+            {
+              "messageId": "replaceOperator",
+              "data": {
+                "expectedOperator": "!==",
+                "actualOperator": "!="
+              },
+              "fix": {
+                "range": [
+                  2643,
+                  2645
+                ],
+                "text": "!=="
+              },
+              "desc": "Use '!==' instead of '!='."
+            }
+          ]
+        }
+      ],
+      "suppressedMessages": [],
+      "errorCount": 2,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\pricing\\pricing.validation.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\push\\push.model.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\push\\push.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\push\\push.sender.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\push\\push.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\ratecard\\ratecard.audit.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\ratecard\\ratecard.config.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\ratecard\\ratecard.controller.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\ratecard\\ratecard.freshness.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\ratecard\\ratecard.model.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\ratecard\\ratecard.partner.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\ratecard\\ratecard.pipeline.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\ratecard\\ratecard.repository.mongo.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\ratecard\\ratecard.repository.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\ratecard\\ratecard.repository.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\ratecard\\ratecard.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\ratecard\\ratecard.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\ratecard\\ratecard.sheets.ts",
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "severity": 2,
+          "message": "'_partner_id' is defined but never used.",
+          "line": 30,
+          "column": 19,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 30,
+          "endColumn": 30
+        },
+        {
+          "ruleId": null,
+          "message": "'// eslint-disable-next-line no-console' has no effect because you have 'noInlineConfig' setting in your config.",
+          "line": 41,
+          "column": 5,
+          "endLine": 41,
+          "endColumn": 43,
+          "severity": 1,
+          "nodeType": null
+        }
+      ],
+      "suppressedMessages": [],
+      "errorCount": 1,
+      "fatalErrorCount": 0,
+      "warningCount": 1,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\ratecard\\ratecard.tolerance.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\ratecard\\ratecard.types.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\ratecard\\ratecard.validation.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\reviews\\review.controller.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\reviews\\review.model.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\reviews\\review.repository.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\reviews\\review.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\reviews\\review.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\reviews\\review.types.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\reviews\\review.validation.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\rfqflow\\rfqflow.config.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\rfqflow\\rfqflow.format.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\rfqflow\\rfqflow.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\rfqflow\\rfqflow.test.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\rfqflow\\rfqflow.types.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\supplier\\supplier.audit.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\supplier\\supplier.config.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\supplier\\supplier.controller.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\supplier\\supplier.model.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\supplier\\supplier.provision.test.ts",
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "severity": 2,
+          "message": "'_query' is defined but never used.",
+          "line": 78,
+          "column": 24,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 78,
+          "endColumn": 30
+        }
+      ],
+      "suppressedMessages": [],
+      "errorCount": 1,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\supplier\\supplier.repository.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\supplier\\supplier.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\supplier\\supplier.rules.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\supplier\\supplier.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\supplier\\supplier.types.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\supplier\\supplier.validation.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\support\\support.controller.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\support\\support.models.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\support\\support.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\support\\support.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\support\\support.stream.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\support\\support.types.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\support\\support.validation.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\uploads\\upload.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\uploads\\upload.storage.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\users\\user.controller.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\users\\user.model.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\users\\user.repository.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\users\\user.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\users\\user.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\users\\user.types.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\users\\user.validation.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\wedding\\wedding.controller.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\wedding\\wedding.model.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\wedding\\wedding.repository.ts",
+      "messages": [
+        {
+          "ruleId": null,
+          "message": "'/* eslint-disable @typescript-eslint/no-explicit-any */' has no effect because you have 'noInlineConfig' setting in your config.",
+          "line": 25,
+          "column": 1,
+          "endLine": 25,
+          "endColumn": 56,
+          "severity": 1,
+          "nodeType": null
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 26,
+          "column": 24,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 26,
+          "endColumn": 27,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  1080,
+                  1083
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  1080,
+                  1083
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 26,
+          "column": 34,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 26,
+          "endColumn": 37,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  1090,
+                  1093
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  1090,
+                  1093
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 26,
+          "column": 40,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 26,
+          "endColumn": 43,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  1096,
+                  1099
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  1096,
+                  1099
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        }
+      ],
+      "suppressedMessages": [],
+      "errorCount": 3,
+      "fatalErrorCount": 0,
+      "warningCount": 1,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\wedding\\wedding.routes.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\wedding\\wedding.service.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\wedding\\wedding.types.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\modules\\wedding\\wedding.validation.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\repositories\\MongoCrudRepository.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\repositories\\MongoReadRepository.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\routes\\index.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\seed\\data\\activities.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\seed\\data\\activityCategories.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\seed\\data\\celebrationBundles.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\seed\\data\\celebrationCategories.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\seed\\data\\celebrations.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\seed\\data\\destinations.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\seed\\data\\experienceFacets.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\seed\\data\\hotelOptions.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\seed\\data\\hotels.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\seed\\data\\index.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\seed\\data\\packageCategories.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\seed\\data\\packageOptions.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\seed\\data\\packages.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\seed\\data\\products.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\seed\\data\\rooms.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\seed\\data\\supportTeam.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\seed\\data\\vehicles.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\seed\\import-experiences.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\seed\\seed.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-auth-types\\elatetrips-node\\src\\server.ts",
+      "messages": [],
+      "suppressedMessages": [],
+      "errorCount": 0,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    }
+  ]
+}

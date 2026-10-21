@@ -285,11 +285,16 @@ export class CatalogService {
     const query: Record<string, unknown> = {};
     if (filter.shop) query.shop = filter.shop;
     if (filter.cat) query.cat = filter.cat;
-    if (filter.minRating != null) query.rating = { $gte: filter.minRating };
-    if (filter.minPrice != null || filter.maxPrice != null) {
+    if (filter.minRating !== null && filter.minRating !== undefined) {
+      query.rating = { $gte: filter.minRating };
+    }
+    if (
+      (filter.minPrice !== null && filter.minPrice !== undefined) ||
+      (filter.maxPrice !== null && filter.maxPrice !== undefined)
+    ) {
       query.price = {
-        ...(filter.minPrice != null ? { $gte: filter.minPrice } : {}),
-        ...(filter.maxPrice != null ? { $lte: filter.maxPrice } : {}),
+        ...(filter.minPrice !== null && filter.minPrice !== undefined ? { $gte: filter.minPrice } : {}),
+        ...(filter.maxPrice !== null && filter.maxPrice !== undefined ? { $lte: filter.maxPrice } : {}),
       };
     }
     return this.repos.products.findAll(query);

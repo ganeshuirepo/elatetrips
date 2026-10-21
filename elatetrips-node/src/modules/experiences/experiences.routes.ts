@@ -45,7 +45,28 @@ export function buildExperiencesRouter(controller: ExperiencesController): Route
    */
   router.get('/bundle', asyncHandler(controller.bundle));
 
+  /**
+   * @openapi
+   * /api/v1/experiences/catalog:
+   *   get:
+   *     tags: [Experiences]
+   *     summary: The whole Experiences catalog in one response
+   *     description: >-
+   *       Imported from the web repo's committed fixtures, not authored here. Regenerate with
+   *       npm run export:experiences there, then npm run import:experiences here.
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   */
   router.get('/catalog', asyncHandler(controller.catalog));
+  /**
+   * @openapi
+   * /api/v1/experiences/plans:
+   *   get:
+   *     tags: [Experiences]
+   *     summary: The day-by-day plans for every occasion
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   */
   router.get('/plans', asyncHandler(controller.plans));
 
   /**
@@ -81,9 +102,58 @@ export function buildExperiencesRouter(controller: ExperiencesController): Route
    */
   router.get('/festivals', validate({ query: festivalQuerySchema }), asyncHandler(controller.festivals));
 
+  /**
+   * @openapi
+   * /api/v1/experiences/destinations:
+   *   get:
+   *     tags: [Experiences]
+   *     summary: Destinations, with the ones worth showing first flagged
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   */
   router.get('/destinations', asyncHandler(controller.destinations));
+  /**
+   * @openapi
+   * /api/v1/experiences/sections:
+   *   get:
+   *     tags: [Experiences]
+   *     summary: The customizable sections for a trip type, with their tiers
+   *     parameters:
+   *       - in: query
+   *         name: classification
+   *         schema: { type: string }
+   *         description: celebration · festival · recreation · pilgrimage.
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   */
   router.get('/sections', validate({ query: classificationQuerySchema }), asyncHandler(controller.sections));
+  /**
+   * @openapi
+   * /api/v1/experiences/addons:
+   *   get:
+   *     tags: [Experiences]
+   *     summary: The add-on experiences offered for a trip type
+   *     parameters:
+   *       - in: query
+   *         name: classification
+   *         schema: { type: string }
+   *         description: celebration · festival · recreation · pilgrimage.
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   *       '422': { $ref: '#/components/responses/BadRequest' }
+   */
   router.get('/addons', validate({ query: classificationQuerySchema }), asyncHandler(controller.addons));
+  /**
+   * @openapi
+   * /api/v1/experiences/transport:
+   *   get:
+   *     tags: [Experiences]
+   *     summary: Vehicles and their per-km rates
+   *     description: Transport prices by distance and party size, not by tier — the shape here reflects that.
+   *     responses:
+   *       '200': { $ref: '#/components/responses/Ok' }
+   */
   router.get('/transport', asyncHandler(controller.transport));
 
   /**

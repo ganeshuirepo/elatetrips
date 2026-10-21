@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elatetrips.com/contracts/canonical-package.schema.json",
+  "title": "Canonical package — AI-clustered supply pool (M19, Δ-003)",
+  "description": "One buy-box listing backed by a fulfillment pool of ≥80%-equivalent partner packages. The guaranteed floor is the INTERSECTION of pool members (never the union); member extras live in delta_map as post-assignment upsells. Cluster publication requires human approval; pool members drop when rate-card freshness breaches config. Business thresholds (freshness, tolerance bands) are config (BR-17), never encoded here.",
+  "type": "object",
+  "properties": {
+    "canonical_id": {
+      "$ref": "defs/common.schema.json#/$defs/id"
+    },
+    "destination": {
+      "type": "string"
+    },
+    "occasion_tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "duration_days": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "policy_id": {
+      "$ref": "defs/common.schema.json#/$defs/id",
+      "description": "CANONICAL scope (BR-21): exactly one Elate policy, fixed and shown at purchase. Partner-scope policies never surface on pooled bookings."
+    },
+    "guaranteed_floor": {
+      "type": "object",
+      "description": "Intersection of pool members — engine-computed, ops-approved, versioned.",
+      "properties": {
+        "hotel": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "type": "string",
+              "enum": [
+                "3",
+                "4",
+                "5"
+              ]
+            },
+            "locality": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "amenities": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "category"
+          ],
+          "additionalProperties": false
+        },
+        "vehicle_class": {
+          "type": "string"
+        },
+        "meal_plan": {
+          "type": "string"
+        },
+        "itinerary": {
+          "type": "object",
+          "description": "Itinerary schema shape, floor items only.",
+          "additionalProperties": true
+        },
+        "quality": {
+          "type": "object",
+          "description": "Category is not quality (BR-21).",
+          "properties": {
+            "min_review_score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "named_property_candidates": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "min_review_score"
+          ],
+          "additionalProperties": false
+        },
+        "substitution_clause_ref": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "hotel",
+        "vehicle_class",
+        "meal_plan"
+      ],
+      "additionalProperties": false
+    },
+    "hotel_disclosure": {
+      "type": "string",
+      "enum": [
+        "named_with_substitution",
+        "opaque_discounted"
+      ],
+      "description": "Product decision D-open; default named_with_substitution (config)."
+    },
+    "display_price": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "currency": {
+          "$ref": "defs/common.schema.json#/$defs/currency"
+        },
+        "basis": {
+          "type": "string",
+          "enum": [
+            "per_pax",
+            "per_trip"
+          ]
+        },
+        "assembly": {
+          "type": "string",
+          "description": "e.g. pool_p75_plus_margin; re-baselined on schedule from actual pool costs."
+        }
+      },
+      "required": [
+        "amount",
+        "currency",
+        "basis"
+      ],
+      "additionalProperties": false
+    },
+    "pool": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "supplier_id": {
+            "$ref": "defs/common.schema.json#/$defs/id"
+          },
+          "package_id": {
+            "$ref": "defs/common.schema.json#/$defs/id"
+          },
+          "delta_map": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Member extras above the floor (post-assignment upsells)."
+          },
+          "cost_ref": {
+            "type": "string",
+            "description": "Rate-card row reference."
+          },
+          "freshness_days": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "capacity_flags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "signature_addons": {
+            "type": "array",
+            "description": "Differentiators surfaced as storefront customizations; selecting one item-constrains assignment to this member.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "addon_id": {
+                  "$ref": "defs/common.schema.json#/$defs/id"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "price": {
+                  "$ref": "defs/common.schema.json#/$defs/money"
+                }
+              },
+              "required": [
+                "addon_id",
+                "title"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "supplier_id",
+          "package_id",
+          "cost_ref",
+          "freshness_days"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "cluster": {
+      "type": "object",
+      "properties": {
+        "proposed_by": {
+          "type": "string",
+          "enum": [
+            "ai"
+          ]
+        },
+        "match_scores": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "approved_by": {
+          "$ref": "defs/common.schema.json#/$defs/id"
+        },
+        "approved_ts": {
+          "$ref": "defs/common.schema.json#/$defs/iso_datetime"
+        }
+      },
+      "required": [
+        "proposed_by",
+        "match_scores"
+      ],
+      "additionalProperties": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "published",
+        "paused"
+      ]
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    }
+  },
+  "required": [
+    "canonical_id",
+    "destination",
+    "duration_days",
+    "policy_id",
+    "guaranteed_floor",
+    "display_price",
+    "pool",
+    "cluster",
+    "status",
+    "version"
+  ],
+  "additionalProperties": false
+}

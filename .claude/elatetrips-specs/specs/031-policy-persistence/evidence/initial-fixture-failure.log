@@ -1,0 +1,536 @@
+▶ durable write-once policy snapshot seam (real local Mongo)
+  ✖ commits, freshly reads and reopens the original durable result (210.112ms)
+  ✖ stores no plaintext snapshot or audit and encrypts the durable receipt (163.0199ms)
+  ✖ returns an independent recursively frozen result and detaches caller input before IO (130.4506ms)
+  ✖ preserves accepted terms after caller catalog/source changes (135.1208ms)
+  ✖ retries exactly without adding records, audits or outbox entries (149.4186ms)
+  ✖ conflicts on changed body under the original command (140.762ms)
+  ✖ conflicts on changed event under the original command (136.7649ms)
+  ✖ conflicts on changed correlation under the original command (138.4373ms)
+  ✖ conflicts on changed configuration under the original command (132.5417ms)
+  ✖ conflicts on changed permission under the original command (146.3385ms)
+  ✖ conflicts on changed role under the original command (144.5279ms)
+  ✖ denies competing commands for an accepted booking (133.5773ms)
+  ✖ denies command reuse across different bookings (135.8668ms)
+  ✖ denies event reuse across different bookings (261.47ms)
+  ✖ coalesces simultaneous exact first commits using durable receipts (325.0228ms)
+  ✖ accepts only one simultaneous competing booking command (432.6282ms)
+  ✔ rejects canonical/event/body/ownership/actor mismatch without writes (352.6916ms)
+  ✖ fails closed for account on write, replay and read (417.4644ms)
+  ✖ fails closed for membership on write, replay and read (316.8552ms)
+  ✖ fails closed for foreign on write, replay and read (312.3707ms)
+  ✖ fails closed for actor on write, replay and read (360.4123ms)
+  ✖ fails closed for producer on write, replay and read (288.9873ms)
+  ✖ rolls back every effect when records insertion fails (315.2042ms)
+  ✖ rolls back every effect when revisions insertion fails (301.9775ms)
+  ✖ rolls back every effect when audit insertion fails (247.7848ms)
+  ✖ rolls back every effect when outbox insertion fails (240.5352ms)
+  ✖ rolls back every effect when receipts insertion fails (225.0768ms)
+  ✖ rolls back every effect when transaction_receipts insertion fails (238.9933ms)
+  ✖ rejects records tampering on read and replay (217.5231ms)
+  ✖ rejects revisions tampering on read and replay (246.9376ms)
+  ✖ rejects audit tampering on read and replay (215.3596ms)
+  ✖ rejects receipts tampering on read and replay (219.1379ms)
+  ✖ rejects transaction_receipts tampering on read and replay (208.4001ms)
+  ✖ disables missing producer validation, resolver, permissions and unconfigured limits (254.4247ms)
+✖ durable write-once policy snapshot seam (real local Mongo) (10326.2734ms)
+ℹ tests 34
+ℹ suites 1
+ℹ pass 1
+ℹ fail 33
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12180.4718
+
+✖ failing tests:
+
+test at src\modules\foundation\policy-snapshot.test.ts:90:24
+✖ commits, freshly reads and reopens the original durable result (210.112ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:90:34)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1533:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:99:24
+✖ stores no plaintext snapshot or audit and encrypts the durable receipt (163.0199ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:98:46)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:109:24
+✖ returns an independent recursively frozen result and detaches caller input before IO (130.4506ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:109:36)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:119:24
+✖ preserves accepted terms after caller catalog/source changes (135.1208ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:116:89)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:127:24
+✖ retries exactly without adding records, audits or outbox entries (149.4186ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:121:60)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:134:28
+✖ conflicts on changed body under the original command (140.762ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:127:48)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:134:28
+✖ conflicts on changed event under the original command (136.7649ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:127:48)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:134:28
+✖ conflicts on changed correlation under the original command (138.4373ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:127:48)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:134:28
+✖ conflicts on changed configuration under the original command (132.5417ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:127:48)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:134:28
+✖ conflicts on changed permission under the original command (146.3385ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:127:48)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:134:28
+✖ conflicts on changed role under the original command (144.5279ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:127:48)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:159:24
+✖ denies competing commands for an accepted booking (133.5773ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:143:46)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:167:28
+✖ denies command reuse across different bookings (135.8668ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:148:73)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:167:28
+✖ denies event reuse across different bookings (261.47ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:148:73)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:181:24
+✖ coalesces simultaneous exact first commits using durable receipts (325.0228ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:156:105
+      at Array.from (<anonymous>)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:156:71)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:188:24
+✖ accepts only one simultaneous competing booking command (432.6282ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:163:12)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:214:28
+✖ fails closed for account on write, replay and read (417.4644ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:179:48)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:214:28
+✖ fails closed for membership on write, replay and read (316.8552ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:179:48)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:214:28
+✖ fails closed for foreign on write, replay and read (312.3707ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:179:48)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:214:28
+✖ fails closed for actor on write, replay and read (360.4123ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:179:48)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:214:28
+✖ fails closed for producer on write, replay and read (288.9873ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:179:48)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:236:28
+✖ rolls back every effect when records insertion fails (315.2042ms)
+  AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  FoundationStoreError: INVALID_REQUEST
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:196:7)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: FoundationStoreError: INVALID_REQUEST
+        at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+        at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+        at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:196:36)
+        at processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async Test.run (node:internal/test_runner/test:1125:7)
+        at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:236:28
+✖ rolls back every effect when revisions insertion fails (301.9775ms)
+  AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  FoundationStoreError: INVALID_REQUEST
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:196:7)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: FoundationStoreError: INVALID_REQUEST
+        at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+        at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+        at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:196:36)
+        at processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async Test.run (node:internal/test_runner/test:1125:7)
+        at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:236:28
+✖ rolls back every effect when audit insertion fails (247.7848ms)
+  AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  FoundationStoreError: INVALID_REQUEST
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:196:7)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: FoundationStoreError: INVALID_REQUEST
+        at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+        at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+        at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:196:36)
+        at processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async Test.run (node:internal/test_runner/test:1125:7)
+        at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:236:28
+✖ rolls back every effect when outbox insertion fails (240.5352ms)
+  AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  FoundationStoreError: INVALID_REQUEST
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:196:7)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: FoundationStoreError: INVALID_REQUEST
+        at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+        at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+        at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:196:36)
+        at processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async Test.run (node:internal/test_runner/test:1125:7)
+        at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:236:28
+✖ rolls back every effect when receipts insertion fails (225.0768ms)
+  AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  FoundationStoreError: INVALID_REQUEST
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:196:7)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: FoundationStoreError: INVALID_REQUEST
+        at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+        at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+        at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:196:36)
+        at processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async Test.run (node:internal/test_runner/test:1125:7)
+        at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:236:28
+✖ rolls back every effect when transaction_receipts insertion fails (238.9933ms)
+  AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  FoundationStoreError: INVALID_REQUEST
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:196:7)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: FoundationStoreError: INVALID_REQUEST
+        at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+        at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+        at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:196:36)
+        at processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async Test.run (node:internal/test_runner/test:1125:7)
+        at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:244:28
+✖ rejects records tampering on read and replay (217.5231ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:202:48)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:244:28
+✖ rejects revisions tampering on read and replay (246.9376ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:202:48)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:244:28
+✖ rejects audit tampering on read and replay (215.3596ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:202:48)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:244:28
+✖ rejects receipts tampering on read and replay (219.1379ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:202:48)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:244:28
+✖ rejects transaction_receipts tampering on read and replay (208.4001ms)
+  Error [FoundationStoreError]: INVALID_REQUEST
+      at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+      at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:202:48)
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    code: 'INVALID_REQUEST'
+  }
+
+test at src\modules\foundation\policy-snapshot.test.ts:252:24
+✖ disables missing producer validation, resolver, permissions and unconfigured limits (254.4247ms)
+  AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+  
+  Caught error:
+  
+  FoundationStoreError: INVALID_REQUEST
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:212:5)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: FoundationStoreError: INVALID_REQUEST
+        at fail (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:67:91)
+        at Object.commit (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.ts:139:22)
+        at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence\elatetrips-node\src\modules\foundation\policy-snapshot.test.ts:212:35)
+        at processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async Test.run (node:internal/test_runner/test:1125:7)
+        at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7),
+    operator: 'rejects',
+    diff: 'simple'
+  }

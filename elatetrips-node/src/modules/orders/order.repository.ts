@@ -51,9 +51,8 @@ export class OrderRepository implements IOrderRepository {
 
 // toObject transform used by create(): drops Mongo's _id from the returned
 // document, mirroring `projection` on the read paths so every method yields the
-// same clean Order shape. (any-typed because Mongoose's transform signature is.)
-/* eslint-disable @typescript-eslint/no-explicit-any */
-function stripId(_doc: any, ret: any): any {
+// same clean Order shape.
+function stripId<T extends { _id?: unknown }>(_doc: unknown, ret: T): T {
   delete ret._id;
   return ret;
 }

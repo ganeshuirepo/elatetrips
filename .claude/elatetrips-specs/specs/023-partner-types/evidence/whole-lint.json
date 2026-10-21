@@ -1,0 +1,260 @@
+{
+  "counts": {
+    "files": 247,
+    "errors": 7,
+    "warnings": 2
+  },
+  "diagnostics": [
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-partner-types\\elatetrips-node\\src\\modules\\pricing\\pricing.service.ts",
+      "messages": [
+        {
+          "ruleId": "eqeqeq",
+          "severity": 2,
+          "message": "Expected '===' and instead saw '=='.",
+          "line": 71,
+          "column": 27,
+          "nodeType": "BinaryExpression",
+          "messageId": "unexpected",
+          "endLine": 71,
+          "endColumn": 29,
+          "suggestions": [
+            {
+              "messageId": "replaceOperator",
+              "data": {
+                "expectedOperator": "===",
+                "actualOperator": "=="
+              },
+              "fix": {
+                "range": [
+                  2220,
+                  2222
+                ],
+                "text": "==="
+              },
+              "desc": "Use '===' instead of '=='."
+            }
+          ]
+        },
+        {
+          "ruleId": "eqeqeq",
+          "severity": 2,
+          "message": "Expected '!==' and instead saw '!='.",
+          "line": 80,
+          "column": 23,
+          "nodeType": "BinaryExpression",
+          "messageId": "unexpected",
+          "endLine": 80,
+          "endColumn": 25,
+          "suggestions": [
+            {
+              "messageId": "replaceOperator",
+              "data": {
+                "expectedOperator": "!==",
+                "actualOperator": "!="
+              },
+              "fix": {
+                "range": [
+                  2643,
+                  2645
+                ],
+                "text": "!=="
+              },
+              "desc": "Use '!==' instead of '!='."
+            }
+          ]
+        }
+      ],
+      "suppressedMessages": [],
+      "errorCount": 2,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-partner-types\\elatetrips-node\\src\\modules\\ratecard\\ratecard.sheets.ts",
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "severity": 2,
+          "message": "'_partner_id' is defined but never used.",
+          "line": 30,
+          "column": 19,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 30,
+          "endColumn": 30
+        },
+        {
+          "ruleId": null,
+          "message": "'// eslint-disable-next-line no-console' has no effect because you have 'noInlineConfig' setting in your config.",
+          "line": 41,
+          "column": 5,
+          "endLine": 41,
+          "endColumn": 43,
+          "severity": 1,
+          "nodeType": null
+        }
+      ],
+      "suppressedMessages": [],
+      "errorCount": 1,
+      "fatalErrorCount": 0,
+      "warningCount": 1,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-partner-types\\elatetrips-node\\src\\modules\\supplier\\supplier.provision.test.ts",
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "severity": 2,
+          "message": "'_query' is defined but never used.",
+          "line": 78,
+          "column": 24,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 78,
+          "endColumn": 30
+        }
+      ],
+      "suppressedMessages": [],
+      "errorCount": 1,
+      "fatalErrorCount": 0,
+      "warningCount": 0,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    },
+    {
+      "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-partner-types\\elatetrips-node\\src\\modules\\wedding\\wedding.repository.ts",
+      "messages": [
+        {
+          "ruleId": null,
+          "message": "'/* eslint-disable @typescript-eslint/no-explicit-any */' has no effect because you have 'noInlineConfig' setting in your config.",
+          "line": 25,
+          "column": 1,
+          "endLine": 25,
+          "endColumn": 56,
+          "severity": 1,
+          "nodeType": null
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 26,
+          "column": 24,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 26,
+          "endColumn": 27,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  1080,
+                  1083
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  1080,
+                  1083
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 26,
+          "column": 34,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 26,
+          "endColumn": 37,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  1090,
+                  1093
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  1090,
+                  1093
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 26,
+          "column": 40,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 26,
+          "endColumn": 43,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  1096,
+                  1099
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  1096,
+                  1099
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        }
+      ],
+      "suppressedMessages": [],
+      "errorCount": 3,
+      "fatalErrorCount": 0,
+      "warningCount": 1,
+      "fixableErrorCount": 0,
+      "fixableWarningCount": 0,
+      "usedDeprecatedRules": []
+    }
+  ]
+}

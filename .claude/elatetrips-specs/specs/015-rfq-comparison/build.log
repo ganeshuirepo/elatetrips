@@ -1,0 +1,5 @@
+
+> elatetrips-node@1.0.0 build
+> tsc -p tsconfig.build.json
+
+Process exit: 0

@@ -1,0 +1,25 @@
+{
+  "capturedAt": "2026-10-21T15:17:44.182Z",
+  "baselineCommit": "ce83482a9dd556cdd0175424c8fde18266cb0aa7",
+  "safety": "Controlled fixture environment; no original .env, production database, providers or messages.",
+  "checks": [
+    {
+      "name": "focused",
+      "command": "node -r ./scripts/register-ts.js --test src/modules/foundation/delivery-runtime.test.ts",
+      "exitCode": 0,
+      "durationMs": 6722
+    },
+    {
+      "name": "typecheck",
+      "command": "npm.cmd run typecheck",
+      "exitCode": 0,
+      "durationMs": 12995
+    },
+    {
+      "name": "build",
+      "command": "npm.cmd run build",
+      "exitCode": 0,
+      "durationMs": 12890
+    }
+  ]
+}

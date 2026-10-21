@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { VENDOR_TYPES } from './console.model';
 
 /**
  * Zod schemas + inferred types for the admin & console routes. Catalog payloads
@@ -87,13 +88,19 @@ export const vendorCreateSchema = z
       .regex(/^[a-z0-9_.-]+$/i, 'letters, numbers, dots, dashes only'),
     password: z.string().min(6),
     displayName: z.string().min(2),
-    vendorType: z.enum(['hotel', 'cab', 'experience', 'ground']),
+    vendorType: z.enum(VENDOR_TYPES),
     refId: z.string().min(1).optional(),
+    /** Supply partner this account may maintain rate cards for. */
+    partnerId: z.string().min(1).optional(),
   })
   .refine((v) => v.vendorType === 'ground' || !!v.refId, {
     message: 'A listing reference is required for this vendor type',
     path: ['refId'],
   });
+
+/** POST /admin/vendors/:username/partner — bind an account to a supply partner. */
+export const vendorUsernameParamsSchema = z.object({ username: z.string().min(1) });
+export const bindPartnerBodySchema = z.object({ partnerId: z.string().min(1) }).strict();
 
 /** Vendor listing patch — per-type field validation happens in the service. */
 export const listingUpdateSchema = z.record(z.string(), z.unknown());

@@ -1,0 +1,142 @@
+﻿{
+    "checks":  [
+                   {
+                       "name":  "contracts",
+                       "status":  0,
+                       "signal":  null,
+                       "passed":  true
+                   },
+                   {
+                       "name":  "typecheck",
+                       "status":  0,
+                       "signal":  null,
+                       "passed":  true
+                   },
+                   {
+                       "name":  "application-tests",
+                       "status":  0,
+                       "signal":  null,
+                       "passed":  true
+                   },
+                   {
+                       "name":  "harness-tests",
+                       "status":  0,
+                       "signal":  null,
+                       "passed":  true
+                   },
+                   {
+                       "name":  "build",
+                       "status":  0,
+                       "signal":  null,
+                       "passed":  true
+                   },
+                   {
+                       "name":  "whole-lint",
+                       "status":  0,
+                       "passed":  true
+                   }
+               ],
+    "wholeLint":  {
+                      "files":  252,
+                      "errors":  0,
+                      "warnings":  0
+                  },
+    "wholeLintStatus":  0,
+    "applicationTests":  {
+                             "tests":  685,
+                             "suites":  45,
+                             "pass":  685,
+                             "fail":  0,
+                             "cancelled":  0,
+                             "skipped":  0,
+                             "todo":  0
+                         },
+    "harnessTests":  {
+                         "tests":  34,
+                         "suites":  0,
+                         "pass":  34,
+                         "fail":  0,
+                         "cancelled":  0,
+                         "skipped":  0,
+                         "todo":  0
+                     },
+    "contracts":  {
+                      "schemas":  15,
+                      "fixtures":  20
+                  },
+    "policyTests":  {
+                        "existing":  75,
+                        "added":  0,
+                        "includedInApplicationSuite":  true
+                    },
+    "source":  {
+                   "checkpoint":  "f516e5cfc81691b4021dd22c3779ecacd868169b",
+                   "policyTree":  "2ba643112f7551438f5f81a1554e00ebd4000f1f",
+                   "fixPaths":  [
+
+                                ],
+                   "changed":  false,
+                   "implementationPaths":  [
+                                               ".claude/elatetrips-specs/specs/029-policy-engine/checks.mjs",
+                                               ".claude/elatetrips-specs/specs/029-policy-engine/evidence/build.log",
+                                               ".claude/elatetrips-specs/specs/029-policy-engine/evidence/contracts.log",
+                                               ".claude/elatetrips-specs/specs/029-policy-engine/evidence/diagnostic-focused-tests.log",
+                                               ".claude/elatetrips-specs/specs/029-policy-engine/evidence/diagnostic-scoped-lint.log",
+                                               ".claude/elatetrips-specs/specs/029-policy-engine/evidence/diagnostic-summary.json",
+                                               ".claude/elatetrips-specs/specs/029-policy-engine/evidence/focused-tests.log",
+                                               ".claude/elatetrips-specs/specs/029-policy-engine/evidence/scoped-lint.log",
+                                               ".claude/elatetrips-specs/specs/029-policy-engine/evidence/summary.json",
+                                               ".claude/elatetrips-specs/specs/029-policy-engine/evidence/typecheck.log",
+                                               ".claude/elatetrips-specs/specs/029-policy-engine/evidence/whole-lint.json",
+                                               ".claude/elatetrips-specs/specs/029-policy-engine/inputs/ELate_Trips_BRD_Technical_Architecture_v9.html",
+                                               ".claude/elatetrips-specs/specs/029-policy-engine/inputs/ELate_Trips_Development_Backlog_v10.json",
+                                               ".claude/elatetrips-specs/specs/029-policy-engine/spec.md",
+                                               ".claude/elatetrips-specs/specs/029-policy-engine/verification.md",
+                                               "elatetrips-node/src/modules/policy/engine.ts",
+                                               "elatetrips-node/src/modules/policy/index.ts",
+                                               "elatetrips-node/src/modules/policy/policy.test.ts",
+                                               "elatetrips-node/src/modules/policy/types.ts",
+                                               "elatetrips-node/src/modules/policy/validation.ts"
+                                           ],
+                   "implementationUnexpectedPaths":  [
+
+                                                     ],
+                   "implementationWhitespaceStatus":  0,
+                   "implementationWhitespaceOutput":  [
+                                                          "f516e5cfc81691b4021dd22c3779ecacd868169b feat(policy): add configurable snapshots and refund estimates"
+                                                      ]
+               },
+    "review":  {
+                   "result":  "No concrete defect requiring a source correction",
+                   "paths":  [
+                                 ".claude/elatetrips-specs/specs/030-policy-acceptance/checks.mjs",
+                                 ".claude/elatetrips-specs/specs/030-policy-acceptance/evidence/application-tests.log",
+                                 ".claude/elatetrips-specs/specs/030-policy-acceptance/evidence/build.log",
+                                 ".claude/elatetrips-specs/specs/030-policy-acceptance/evidence/contracts.log",
+                                 ".claude/elatetrips-specs/specs/030-policy-acceptance/evidence/harness-tests.log",
+                                 ".claude/elatetrips-specs/specs/030-policy-acceptance/evidence/summary.json",
+                                 ".claude/elatetrips-specs/specs/030-policy-acceptance/evidence/typecheck.log",
+                                 ".claude/elatetrips-specs/specs/030-policy-acceptance/evidence/whole-lint.json",
+                                 ".claude/elatetrips-specs/specs/030-policy-acceptance/inputs/ELate_Trips_BRD_Technical_Architecture_v9.html",
+                                 ".claude/elatetrips-specs/specs/030-policy-acceptance/inputs/ELate_Trips_Development_Backlog_v10.json",
+                                 ".claude/elatetrips-specs/specs/030-policy-acceptance/spec.md",
+                                 ".claude/elatetrips-specs/specs/030-policy-acceptance/verification.md"
+                             ],
+                   "unexpectedPaths":  [
+
+                                       ],
+                   "sourceDocsScriptWhitespaceStatus":  0,
+                   "whitespaceOutput":  [
+
+                                        ],
+                   "rawLogsAndInputsExcludedFromWhitespaceCheck":  true,
+                   "checksRunOnce":  true
+               },
+    "partialBacklogLimits":  {
+                                 "DEV-004":  "Policy resolution/estimation configuration only; general rules and release flags remain",
+                                 "DEV-053":  "Exact policy-reference snapshot proposal only; checkout, item reconciliation and financial responsibilities remain",
+                                 "DEV-056":  "Accepted-snapshot refund estimate only; authenticated approvals, provider cancellation, release and verified settlement remain",
+                                 "gates":  "No R1/R2 completion claimed",
+                                 "trust":  "Caller/adapter owns authenticity, fresh authorization, current records, atomic persistence and durable idempotence; SHA-256 fingerprint is advisory"
+                             }
+}

@@ -1,0 +1,5 @@
+
+> elatetrips-node@1.0.0 typecheck
+> tsc --noEmit
+
+src/modules/policy/binding.integration.test.ts(124,61): error TS2698: Spread types may only be created from object types.

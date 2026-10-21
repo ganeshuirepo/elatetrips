@@ -1,0 +1,41 @@
+{
+  "checks": [
+    {
+      "name": "scoped-lint",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "focused-tests",
+      "status": null,
+      "passed": null,
+      "applicable": false,
+      "reason": "Not applicable: no broadcast module test files exist; the change only removes an unused type-only import. Cumulative application tests remain required."
+    },
+    {
+      "name": "contracts",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "typecheck",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "build",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    }
+  ],
+  "wholeLint": {
+    "files": 247,
+    "errors": 21,
+    "warnings": 4
+  },
+  "wholeLintStatus": 1
+}

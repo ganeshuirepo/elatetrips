@@ -1,0 +1,260 @@
+{
+  "testedCheckpoint": "85ca488aec90431022ab32bd91b2b47f6ac6b34e",
+  "branch": "feature/028-backend-regression",
+  "base": "23a1a42f026fc9331a499e46e8912b35211d02c2",
+  "checkpointCount": 12,
+  "checkpoints": [
+    {
+      "commit": "80bab3187e227ce5061672d65e84f46521f39491",
+      "spec": "016-platform-types",
+      "paths": [
+        ".claude/elatetrips-specs/specs/016-platform-types/check.cjs",
+        ".claude/elatetrips-specs/specs/016-platform-types/evidence/build-result.json",
+        ".claude/elatetrips-specs/specs/016-platform-types/evidence/build.log",
+        ".claude/elatetrips-specs/specs/016-platform-types/evidence/contracts-result.json",
+        ".claude/elatetrips-specs/specs/016-platform-types/evidence/contracts.log",
+        ".claude/elatetrips-specs/specs/016-platform-types/evidence/lint-all-result.json",
+        ".claude/elatetrips-specs/specs/016-platform-types/evidence/lint-all.json",
+        ".claude/elatetrips-specs/specs/016-platform-types/evidence/lint-result.json",
+        ".claude/elatetrips-specs/specs/016-platform-types/evidence/lint.json",
+        ".claude/elatetrips-specs/specs/016-platform-types/evidence/test-full-incidental-result.json",
+        ".claude/elatetrips-specs/specs/016-platform-types/evidence/test-full-incidental.log",
+        ".claude/elatetrips-specs/specs/016-platform-types/evidence/test-result.json",
+        ".claude/elatetrips-specs/specs/016-platform-types/evidence/test.log",
+        ".claude/elatetrips-specs/specs/016-platform-types/evidence/typecheck-result.json",
+        ".claude/elatetrips-specs/specs/016-platform-types/evidence/typecheck.log",
+        ".claude/elatetrips-specs/specs/016-platform-types/spec.md",
+        "elatetrips-node/src/common/logger.ts",
+        "elatetrips-node/src/common/middleware/errorHandler.ts",
+        "elatetrips-node/src/container.ts",
+        "elatetrips-node/src/repositories/MongoReadRepository.ts"
+      ],
+      "invalidPaths": [],
+      "passed": true
+    },
+    {
+      "commit": "ffc16f277ecec58a2d483dd3e5b2fc0175e8483e",
+      "spec": "017-auth-types",
+      "paths": [
+        ".claude/elatetrips-specs/specs/017-auth-types/checks.mjs",
+        ".claude/elatetrips-specs/specs/017-auth-types/evidence/baseline/build.log",
+        ".claude/elatetrips-specs/specs/017-auth-types/evidence/baseline/contracts.log",
+        ".claude/elatetrips-specs/specs/017-auth-types/evidence/baseline/focused-tests.log",
+        ".claude/elatetrips-specs/specs/017-auth-types/evidence/baseline/scoped-lint.log",
+        ".claude/elatetrips-specs/specs/017-auth-types/evidence/baseline/summary.json",
+        ".claude/elatetrips-specs/specs/017-auth-types/evidence/baseline/typecheck.log",
+        ".claude/elatetrips-specs/specs/017-auth-types/evidence/baseline/whole-lint.json",
+        ".claude/elatetrips-specs/specs/017-auth-types/evidence/build.log",
+        ".claude/elatetrips-specs/specs/017-auth-types/evidence/contracts.log",
+        ".claude/elatetrips-specs/specs/017-auth-types/evidence/focused-tests.log",
+        ".claude/elatetrips-specs/specs/017-auth-types/evidence/scoped-lint.log",
+        ".claude/elatetrips-specs/specs/017-auth-types/evidence/summary.json",
+        ".claude/elatetrips-specs/specs/017-auth-types/evidence/typecheck.log",
+        ".claude/elatetrips-specs/specs/017-auth-types/evidence/whole-lint.json",
+        ".claude/elatetrips-specs/specs/017-auth-types/spec.md",
+        "elatetrips-node/src/modules/auth/auth.service.test.ts",
+        "elatetrips-node/src/modules/auth/auth.service.ts"
+      ],
+      "invalidPaths": [],
+      "passed": true
+    },
+    {
+      "commit": "35313a59217802a407d46f0bdffa2c04d2d0bbd2",
+      "spec": "018-broadcast-types",
+      "paths": [
+        ".claude/elatetrips-specs/specs/018-broadcast-types/checks.mjs",
+        ".claude/elatetrips-specs/specs/018-broadcast-types/evidence/build.log",
+        ".claude/elatetrips-specs/specs/018-broadcast-types/evidence/contracts.log",
+        ".claude/elatetrips-specs/specs/018-broadcast-types/evidence/focused-tests.log",
+        ".claude/elatetrips-specs/specs/018-broadcast-types/evidence/scoped-lint.log",
+        ".claude/elatetrips-specs/specs/018-broadcast-types/evidence/summary.json",
+        ".claude/elatetrips-specs/specs/018-broadcast-types/evidence/typecheck.log",
+        ".claude/elatetrips-specs/specs/018-broadcast-types/evidence/whole-lint.json",
+        ".claude/elatetrips-specs/specs/018-broadcast-types/spec.md",
+        "elatetrips-node/src/modules/broadcast/broadcast.ports.ts"
+      ],
+      "invalidPaths": [],
+      "passed": true
+    },
+    {
+      "commit": "5d052e5317e74a62eff451bcac5ef87dffbafe7d",
+      "spec": "019-catalog-types",
+      "paths": [
+        ".claude/elatetrips-specs/specs/019-catalog-types/checks.mjs",
+        ".claude/elatetrips-specs/specs/019-catalog-types/evidence/build.log",
+        ".claude/elatetrips-specs/specs/019-catalog-types/evidence/contracts.log",
+        ".claude/elatetrips-specs/specs/019-catalog-types/evidence/scoped-lint.log",
+        ".claude/elatetrips-specs/specs/019-catalog-types/evidence/summary.json",
+        ".claude/elatetrips-specs/specs/019-catalog-types/evidence/typecheck.log",
+        ".claude/elatetrips-specs/specs/019-catalog-types/evidence/whole-lint.json",
+        ".claude/elatetrips-specs/specs/019-catalog-types/spec.md",
+        "elatetrips-node/src/modules/catalog/catalog.service.ts"
+      ],
+      "invalidPaths": [],
+      "passed": true
+    },
+    {
+      "commit": "f9f8ee634b22a26c4b592aa1e8071556d11dfb79",
+      "spec": "020-contract-test-types",
+      "paths": [
+        ".claude/elatetrips-specs/specs/020-contract-test-types/checks.mjs",
+        ".claude/elatetrips-specs/specs/020-contract-test-types/evidence/build.log",
+        ".claude/elatetrips-specs/specs/020-contract-test-types/evidence/contracts.log",
+        ".claude/elatetrips-specs/specs/020-contract-test-types/evidence/focused-tests.log",
+        ".claude/elatetrips-specs/specs/020-contract-test-types/evidence/scoped-lint.log",
+        ".claude/elatetrips-specs/specs/020-contract-test-types/evidence/summary.json",
+        ".claude/elatetrips-specs/specs/020-contract-test-types/evidence/typecheck.log",
+        ".claude/elatetrips-specs/specs/020-contract-test-types/evidence/whole-lint.json",
+        ".claude/elatetrips-specs/specs/020-contract-test-types/spec.md",
+        "elatetrips-node/src/modules/contracts/contracts.links.test.ts"
+      ],
+      "invalidPaths": [],
+      "passed": true
+    },
+    {
+      "commit": "f5216ccc2115ca50249aab58808be32e3c9916d7",
+      "spec": "021-negotiation-test-types",
+      "paths": [
+        ".claude/elatetrips-specs/specs/021-negotiation-test-types/checks.mjs",
+        ".claude/elatetrips-specs/specs/021-negotiation-test-types/evidence/build.log",
+        ".claude/elatetrips-specs/specs/021-negotiation-test-types/evidence/contracts.log",
+        ".claude/elatetrips-specs/specs/021-negotiation-test-types/evidence/focused-tests.log",
+        ".claude/elatetrips-specs/specs/021-negotiation-test-types/evidence/scoped-lint.log",
+        ".claude/elatetrips-specs/specs/021-negotiation-test-types/evidence/summary.json",
+        ".claude/elatetrips-specs/specs/021-negotiation-test-types/evidence/typecheck.log",
+        ".claude/elatetrips-specs/specs/021-negotiation-test-types/evidence/whole-lint.json",
+        ".claude/elatetrips-specs/specs/021-negotiation-test-types/spec.md",
+        "elatetrips-node/src/modules/negotiation/negotiation.decision.test.ts"
+      ],
+      "invalidPaths": [],
+      "passed": true
+    },
+    {
+      "commit": "c6b45f56346a120e1135cf0a9b817614f2e8db0a",
+      "spec": "022-order-types",
+      "paths": [
+        ".claude/elatetrips-specs/specs/022-order-types/checks.mjs",
+        ".claude/elatetrips-specs/specs/022-order-types/evidence/build.log",
+        ".claude/elatetrips-specs/specs/022-order-types/evidence/contracts.log",
+        ".claude/elatetrips-specs/specs/022-order-types/evidence/initial-checks/build.log",
+        ".claude/elatetrips-specs/specs/022-order-types/evidence/initial-checks/contracts.log",
+        ".claude/elatetrips-specs/specs/022-order-types/evidence/initial-checks/scoped-lint.log",
+        ".claude/elatetrips-specs/specs/022-order-types/evidence/initial-checks/summary.json",
+        ".claude/elatetrips-specs/specs/022-order-types/evidence/initial-checks/typecheck.log",
+        ".claude/elatetrips-specs/specs/022-order-types/evidence/initial-checks/whole-lint.json",
+        ".claude/elatetrips-specs/specs/022-order-types/evidence/scoped-lint.log",
+        ".claude/elatetrips-specs/specs/022-order-types/evidence/summary.json",
+        ".claude/elatetrips-specs/specs/022-order-types/evidence/typecheck.log",
+        ".claude/elatetrips-specs/specs/022-order-types/evidence/whole-lint.json",
+        ".claude/elatetrips-specs/specs/022-order-types/spec.md",
+        "elatetrips-node/src/modules/orders/counter.model.ts",
+        "elatetrips-node/src/modules/orders/order.repository.ts"
+      ],
+      "invalidPaths": [],
+      "passed": true
+    },
+    {
+      "commit": "112afae56859fb7bee3bf89bc4bb74b26363ef03",
+      "spec": "023-partner-types",
+      "paths": [
+        ".claude/elatetrips-specs/specs/023-partner-types/checks.mjs",
+        ".claude/elatetrips-specs/specs/023-partner-types/evidence/build.log",
+        ".claude/elatetrips-specs/specs/023-partner-types/evidence/contracts.log",
+        ".claude/elatetrips-specs/specs/023-partner-types/evidence/scoped-lint.log",
+        ".claude/elatetrips-specs/specs/023-partner-types/evidence/summary.json",
+        ".claude/elatetrips-specs/specs/023-partner-types/evidence/typecheck.log",
+        ".claude/elatetrips-specs/specs/023-partner-types/evidence/whole-lint.json",
+        ".claude/elatetrips-specs/specs/023-partner-types/spec.md",
+        "elatetrips-node/src/modules/partner/partner.repository.ts"
+      ],
+      "invalidPaths": [],
+      "passed": true
+    },
+    {
+      "commit": "68df592334720a412e0e8fc4ac371ee4f82154fc",
+      "spec": "024-pricing-types",
+      "paths": [
+        ".claude/elatetrips-specs/specs/024-pricing-types/checks.mjs",
+        ".claude/elatetrips-specs/specs/024-pricing-types/completion.md",
+        ".claude/elatetrips-specs/specs/024-pricing-types/evidence/build.log",
+        ".claude/elatetrips-specs/specs/024-pricing-types/evidence/contracts.log",
+        ".claude/elatetrips-specs/specs/024-pricing-types/evidence/scoped-lint.log",
+        ".claude/elatetrips-specs/specs/024-pricing-types/evidence/summary.json",
+        ".claude/elatetrips-specs/specs/024-pricing-types/evidence/typecheck.log",
+        ".claude/elatetrips-specs/specs/024-pricing-types/evidence/whole-lint.json",
+        ".claude/elatetrips-specs/specs/024-pricing-types/spec.md",
+        "elatetrips-node/src/modules/pricing/pricing.service.ts"
+      ],
+      "invalidPaths": [],
+      "passed": true
+    },
+    {
+      "commit": "82384a5da625f78340103818205d295412a6a098",
+      "spec": "025-ratecard-types",
+      "paths": [
+        ".claude/elatetrips-specs/specs/025-ratecard-types/checks.mjs",
+        ".claude/elatetrips-specs/specs/025-ratecard-types/evidence/build.log",
+        ".claude/elatetrips-specs/specs/025-ratecard-types/evidence/contracts.log",
+        ".claude/elatetrips-specs/specs/025-ratecard-types/evidence/focused-tests.log",
+        ".claude/elatetrips-specs/specs/025-ratecard-types/evidence/scoped-lint.log",
+        ".claude/elatetrips-specs/specs/025-ratecard-types/evidence/summary.json",
+        ".claude/elatetrips-specs/specs/025-ratecard-types/evidence/typecheck.log",
+        ".claude/elatetrips-specs/specs/025-ratecard-types/evidence/whole-lint.json",
+        ".claude/elatetrips-specs/specs/025-ratecard-types/result.md",
+        ".claude/elatetrips-specs/specs/025-ratecard-types/spec.md",
+        "elatetrips-node/src/modules/ratecard/ratecard.sheets.ts"
+      ],
+      "invalidPaths": [],
+      "passed": true
+    },
+    {
+      "commit": "8a6a29f48be4c5b64ca5876c4c782bfd4c80d025",
+      "spec": "026-supplier-test-types",
+      "paths": [
+        ".claude/elatetrips-specs/specs/026-supplier-test-types/checks.mjs",
+        ".claude/elatetrips-specs/specs/026-supplier-test-types/evidence/build.log",
+        ".claude/elatetrips-specs/specs/026-supplier-test-types/evidence/contracts.log",
+        ".claude/elatetrips-specs/specs/026-supplier-test-types/evidence/focused-tests.log",
+        ".claude/elatetrips-specs/specs/026-supplier-test-types/evidence/scoped-lint.log",
+        ".claude/elatetrips-specs/specs/026-supplier-test-types/evidence/summary.json",
+        ".claude/elatetrips-specs/specs/026-supplier-test-types/evidence/typecheck.log",
+        ".claude/elatetrips-specs/specs/026-supplier-test-types/evidence/whole-lint.json",
+        ".claude/elatetrips-specs/specs/026-supplier-test-types/spec.md",
+        "elatetrips-node/src/modules/supplier/supplier.provision.test.ts"
+      ],
+      "invalidPaths": [],
+      "passed": true
+    },
+    {
+      "commit": "85ca488aec90431022ab32bd91b2b47f6ac6b34e",
+      "spec": "027-wedding-types",
+      "paths": [
+        ".claude/elatetrips-specs/specs/027-wedding-types/checks.mjs",
+        ".claude/elatetrips-specs/specs/027-wedding-types/evidence/attempt-1/build.log",
+        ".claude/elatetrips-specs/specs/027-wedding-types/evidence/attempt-1/contracts.log",
+        ".claude/elatetrips-specs/specs/027-wedding-types/evidence/attempt-1/scoped-lint.log",
+        ".claude/elatetrips-specs/specs/027-wedding-types/evidence/attempt-1/summary.json",
+        ".claude/elatetrips-specs/specs/027-wedding-types/evidence/attempt-1/typecheck.log",
+        ".claude/elatetrips-specs/specs/027-wedding-types/evidence/attempt-1/whole-lint.json",
+        ".claude/elatetrips-specs/specs/027-wedding-types/evidence/build.log",
+        ".claude/elatetrips-specs/specs/027-wedding-types/evidence/contracts.log",
+        ".claude/elatetrips-specs/specs/027-wedding-types/evidence/scoped-lint.log",
+        ".claude/elatetrips-specs/specs/027-wedding-types/evidence/summary.json",
+        ".claude/elatetrips-specs/specs/027-wedding-types/evidence/typecheck.log",
+        ".claude/elatetrips-specs/specs/027-wedding-types/evidence/whole-lint.json",
+        ".claude/elatetrips-specs/specs/027-wedding-types/spec.md",
+        "elatetrips-node/src/modules/wedding/wedding.repository.ts"
+      ],
+      "invalidPaths": [],
+      "passed": true
+    }
+  ],
+  "sourceWhitespace": {
+    "status": 0,
+    "output": ""
+  },
+  "cleanStatusBeforeChecks": "",
+  "passed": true,
+  "rangeCommitsMatchAssignedCheckpoints": true,
+  "cleanStatusAfterChecks": ""
+}

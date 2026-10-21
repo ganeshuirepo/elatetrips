@@ -1,0 +1,17 @@
+
+> elatetrips-node@1.0.0 typecheck
+> tsc --noEmit
+
+src/modules/orders/order.repository.ts(40,46): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(options: ToObjectOptions<unknown, Document<unknown, {}, unknown, {}, {}> & { _id: ObjectId; } & { __v: number; }>): { tripId: string; phone: string; status: "confirmed" | "cancelled"; ... 11 more ...; _id: ObjectId; } & { ...; }', gave the following error.
+    Type '(_doc: unknown, ret: Order & { _id?: unknown; }) => Order' is not assignable to type 'boolean | ((doc: Document<unknown, {}, unknown, {}, {}> & { _id: ObjectId; } & { __v: number; }, ret: { _id: ObjectId; } & { __v: number; }, options: ToObjectOptions<Document<unknown, {}, unknown, {}, {}> & { ...; } & { ...; }, Document<...> & ... 3 more ... & Required<...>>) => any) | undefined'.
+      Type '(_doc: unknown, ret: Order & { _id?: unknown; }) => Order' is not assignable to type '(doc: Document<unknown, {}, unknown, {}, {}> & { _id: ObjectId; } & { __v: number; }, ret: { _id: ObjectId; } & { __v: number; }, options: ToObjectOptions<Document<unknown, {}, unknown, {}, {}> & { ...; } & { ...; }, Document<...> & ... 3 more ... & Required<...>>) => any'.
+        Types of parameters 'ret' and 'ret' are incompatible.
+          Type '{ _id: ObjectId; } & { __v: number; }' is not assignable to type 'Order & { _id?: unknown; }'.
+            Type '{ _id: ObjectId; } & { __v: number; }' is missing the following properties from type 'Order': tripId, phone, status, total, and 6 more.
+  Overload 2 of 3, '(options?: ToObjectOptions<unknown, Document<unknown, {}, unknown, {}, {}> & { _id: ObjectId; } & { __v: number; }> | undefined): ((Order & { _id: ObjectId; }) | (PromiseLike<...> & { ...; })) & { ...; }', gave the following error.
+    Type '(_doc: unknown, ret: Order & { _id?: unknown; }) => Order' is not assignable to type 'boolean | ((doc: Document<unknown, {}, unknown, {}, {}> & { _id: ObjectId; } & { __v: number; }, ret: { _id: ObjectId; } & { __v: number; }, options: ToObjectOptions<Document<unknown, {}, unknown, {}, {}> & { ...; } & { ...; }, Document<...> & ... 3 more ... & Required<...>>) => any) | undefined'.
+      Type '(_doc: unknown, ret: Order & { _id?: unknown; }) => Order' is not assignable to type '(doc: Document<unknown, {}, unknown, {}, {}> & { _id: ObjectId; } & { __v: number; }, ret: { _id: ObjectId; } & { __v: number; }, options: ToObjectOptions<Document<unknown, {}, unknown, {}, {}> & { ...; } & { ...; }, Document<...> & ... 3 more ... & Required<...>>) => any'.
+        Types of parameters 'ret' and 'ret' are incompatible.
+          Type '{ _id: ObjectId; } & { __v: number; }' is not assignable to type 'Order & { _id?: unknown; }'.
+            Type '{ _id: ObjectId; } & { __v: number; }' is missing the following properties from type 'Order': tripId, phone, status, total, and 6 more.

@@ -1,0 +1,12 @@
+{
+  "checks": [
+    { "name": "focused-tests", "passed": true, "status": 0, "tests": 99, "newMongoIntegration": 24, "policyRegression": 75, "skipped": 0, "log": "focused-tests.log" },
+    { "name": "scoped-lint", "passed": true, "status": 0, "log": "scoped-lint-final.log" },
+    { "name": "contracts", "passed": true, "status": 0, "schemas": 15, "fixtures": 20, "log": "contracts.log" },
+    { "name": "typecheck", "passed": true, "status": 0, "log": "typecheck-final.log" },
+    { "name": "build", "passed": true, "status": 0, "log": "build.log" }
+  ],
+  "wholeLint": { "files": 256, "errors": 0, "warnings": 0 },
+  "wholeLintStatus": 0,
+  "note": "Final focused and repaired scoped/typecheck logs supersede initial test-fixture typing/effective-range failures. Contracts and build passed in the checks.mjs invocation; no production source changed after those successful checks. Full application and acceptance harness are reserved for independent review."
+}

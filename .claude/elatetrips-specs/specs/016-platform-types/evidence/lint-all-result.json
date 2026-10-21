@@ -1,0 +1,10 @@
+{
+  "command": [
+    "C:/Program Files/nodejs/node.exe",
+    "node_modules/eslint/bin/eslint.js",
+    "src",
+    "--format",
+    "json"
+  ],
+  "status": 1
+}

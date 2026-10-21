@@ -1,0 +1,14 @@
+{
+  "command": [
+    "C:/Program Files/nodejs/node.exe",
+    "C:/Program Files/nodejs/node_modules/npm/bin/npm-cli.js",
+    "run",
+    "test",
+    "--",
+    "src/common/db/schema.integrity.test.ts",
+    "src/modules/admin/console.partner.test.ts",
+    "src/modules/admin/console.guard.test.ts",
+    "src/modules/rfqflow/rfqflow.test.ts"
+  ],
+  "status": 0
+}

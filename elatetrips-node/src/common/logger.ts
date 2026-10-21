@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 /**
  * Minimal logging facade. Centralising logging behind one module means swapping
  * in pino/winston later touches a single file, not the whole codebase.

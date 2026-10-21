@@ -1,0 +1,16 @@
+
+> elatetrips-node@1.0.0 test:contracts
+> node scripts/acceptance/contracts.mjs
+
+{
+  "schemas": 15,
+  "fixtures": 20,
+  "source": {
+    "repository": "elatetrips-experiences",
+    "commit": "e8dc98fce0d84f5223a3615f50001f0eb4b29922",
+    "directory": "contracts",
+    "releaseLabel": "not-uniformly-declared; no-adoption-inferred"
+  },
+  "digestAlgorithm": "sha256-canonical-json-sorted-keys-utf8-v1"
+}
+Process exit: 0

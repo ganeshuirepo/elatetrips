@@ -1,6 +1,21 @@
 import type { Model } from 'mongoose';
 import type { IReadRepository } from '../common/interfaces/IReadRepository';
 
+/** Query surface shared with the CRUD subclass; model calls keep their receivers. */
+interface RepositoryModel extends Pick<Model<unknown>, 'create' | 'findOneAndUpdate'> {
+  find(filter: Record<string, unknown>): {
+    select(projection: string): {
+      lean<TResult>(): { exec(): Promise<TResult> };
+    };
+  };
+  findOne(filter: Record<string, unknown>): {
+    select(projection: string): {
+      lean<TResult>(): { exec(): Promise<TResult | null> };
+    };
+  };
+  countDocuments(filter: Record<string, unknown>): { exec(): Promise<number> };
+}
+
 /**
  * Generic, reusable read repository backed by a Mongoose model. Concrete
  * repositories either use this directly or extend it (Open/Closed) to add
@@ -11,7 +26,7 @@ export class MongoReadRepository<T> implements IReadRepository<T> {
   /** Hide Mongo bookkeeping so responses match the client DTO shape. */
   protected readonly projection = '-_id -__v';
 
-  constructor(protected readonly model: Model<any>) {}
+  constructor(protected readonly model: RepositoryModel) {}
 
   async findAll(filter: Record<string, unknown> = {}): Promise<T[]> {
     return this.model.find(filter).select(this.projection).lean<T[]>().exec();

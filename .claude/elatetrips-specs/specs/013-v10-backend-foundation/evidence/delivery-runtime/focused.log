@@ -1,0 +1,40 @@
+▶ managed delivery runtime configuration and lazy lifecycle
+  ✔ constructs a frozen runtime without accessing DB, scheduler or consumer (14.0693ms)
+  ✔ disabled runtime does not open storage even with no routes or renewal (2.0151ms)
+  ✔ pre-aborted enabled run does not initialize storage (1.2279ms)
+  ✔ rejects missing renewal before DB access (1.5094ms)
+  ✔ rejects disabled managed policy before DB access (1.177ms)
+  ✔ rejects empty routes before DB access (1.0121ms)
+  ✔ rejects duplicate routes before DB access (1.1067ms)
+  ✔ rejects heartbeat at lease duration before DB access (0.9306ms)
+  ✔ rejects insufficient lifetime before DB access (1.3289ms)
+  ✔ rejects insufficient extensions before DB access (1.1437ms)
+  ✔ rejects invalid key before DB access (0.8848ms)
+  ✔ rejects invalid namespace before DB access (0.8687ms)
+  ✔ rejects invalid database before DB access (0.7824ms)
+  ✔ rejects invalid timer before DB access (1.4276ms)
+  ✔ rejects invalid retry schedule before DB access (1.058ms)
+  ✔ rejects invalid worker ID before DB access (0.9243ms)
+  ✔ rejects invalid handler before DB access (1.0329ms)
+  ✔ accepts exact conservative extension/lifetime bounds (0.8693ms)
+  ✔ rejects invalid signal and single-use restart without opening storage (1.5044ms)
+  ✔ retries failed lazy openings with bounded configured delays and redacts private failures (3.5761ms)
+  ✔ cancellation during initialization backoff prevents another opening (2.0512ms)
+  ✔ unavailable storage follows the same bounded redacted fault path (44.5822ms)
+✔ managed delivery runtime configuration and lazy lifecycle (87.2272ms)
+▶ real Mongo managed delivery runtime composition
+  ✔ lazily opens, renews and commits a single projection before acknowledging (481.0464ms)
+  ✔ detaches mutable routes, policy arrays, options and key buffers before lazy opening (413.2419ms)
+  ✔ does not cache a rejected initialization and successfully opens on the configured retry (454.6086ms)
+  ✔ host cancellation drains consumer timers and schedules a retry without acknowledgment (462.4383ms)
+  ✔ deadline drains consumer timers and schedules a retry without acknowledgment (510.8319ms)
+  ✔ rejects standalone initialization without creating queues or consuming work (706.9544ms)
+✔ real Mongo managed delivery runtime composition (5025.2269ms)
+ℹ tests 28
+ℹ suites 2
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6389.5776

@@ -6,7 +6,9 @@ import {
   UnauthorizedError,
 } from '../../common/errors/AppError';
 import type { IPasswordHasher } from '../auth/auth.types';
+import type { IPartnerDirectory } from '../../common/ports/partnerDirectory';
 import { logger } from '../../common/logger';
+import { env } from '../../config/env';
 import type { Activity, CelebrationBundle, Hotel, Vehicle } from '../catalog/catalog.types';
 import type { ConsoleRole, ConsoleUser, VendorType } from './console.model';
 import { signConsoleToken, type ConsoleClaims } from './console.token';
@@ -33,6 +35,8 @@ export interface ConsoleSession {
   role: ConsoleRole;
   vendorType?: VendorType;
   refId?: string;
+  /** Supply partner this account maintains rate cards for, when bound. */
+  partnerId?: string;
 }
 
 export interface VendorProfile {
@@ -40,10 +44,17 @@ export interface VendorProfile {
   displayName: string;
   vendorType?: VendorType;
   refId?: string;
+  /** Supply partner this account maintains rate cards for, when bound. */
+  partnerId?: string;
   listing: Record<string, unknown> | null;
 }
 
-/** Default console accounts, created once on an empty collection (dev/mock). */
+/**
+ * Demo console accounts for local work. NEVER created in production — see
+ * ensureSeedUsers. The passwords are deliberately still literals: they are
+ * development credentials, and pretending otherwise by reading them from env
+ * would only make it look as though they were secret.
+ */
 const SEED_ADMIN = { username: 'admin', password: 'Elate@2026', displayName: 'Elate Admin' };
 const SEED_VENDOR = {
   username: 'crownvendor',
@@ -64,12 +75,27 @@ export class ConsoleService {
   constructor(
     private readonly repos: ConsoleRepos,
     private readonly hasher: IPasswordHasher,
+    /**
+     * Who counts as a real supply partner. Injected rather than imported so the
+     * console never depends on the supplier module — it only needs the answer.
+     */
+    private readonly partners: IPartnerDirectory,
   ) {}
 
-  /** First-run bootstrap so the consoles are usable on a fresh database. */
+  /**
+   * First-run bootstrap so the consoles are usable on a fresh database.
+   *
+   * Development ONLY. This used to run wherever the collection happened to be
+   * empty, and login() calls it before checking credentials — so on a fresh or
+   * wiped production database an anonymous request created the very admin
+   * account it was about to sign in with, using a password committed to the
+   * repo. A production console account is now made deliberately, by an
+   * operator, and never as a side effect of someone trying to log in.
+   */
   private async ensureSeedUsers(): Promise<void> {
     if (this.seeded) return;
     this.seeded = true;
+    if (env.isProd) return;
     if ((await this.repos.users.count()) > 0) return;
     await this.repos.users.create({
       username: SEED_ADMIN.username,
@@ -101,6 +127,7 @@ export class ConsoleService {
       role: user.role,
       vendorType: user.vendorType,
       refId: user.refId,
+      partnerId: user.partnerId,
       name: user.displayName,
     });
     return {
@@ -110,6 +137,7 @@ export class ConsoleService {
       role: user.role,
       vendorType: user.vendorType,
       refId: user.refId,
+      partnerId: user.partnerId,
     };
   }
 
@@ -127,6 +155,13 @@ export class ConsoleService {
       const listing = await this.resolveListing(input.vendorType, input.refId ?? '');
       if (!listing) throw new NotFoundError('No listing found for that reference');
     }
+    // Same rule for the partner binding, and for a sharper reason: partnerId is
+    // what partnerScopedGuard compares the URL against, so an id bound here that
+    // matches no supplier grants access to a rate card nobody owns. Checked at
+    // the moment it is set, because that is the only moment anyone is watching.
+    if (input.partnerId !== undefined && !(await this.partners.exists(input.partnerId))) {
+      throw new NotFoundError('No supply partner found for that id');
+    }
     await this.repos.users.create({
       username,
       passwordHash: await this.hasher.hash(input.password),
@@ -134,6 +169,7 @@ export class ConsoleService {
       role: 'vendor',
       vendorType: input.vendorType,
       refId: input.refId,
+      partnerId: input.partnerId,
       createdAt: new Date().toISOString(),
     });
     return {
@@ -144,6 +180,28 @@ export class ConsoleService {
     };
   }
 
+  /**
+   * Bind an existing console account to a supply partner — the backfill lever.
+   *
+   * Accounts created before partnerId existed have none, and an unbound account
+   * is refused every rate card by design. This is how ops repairs that without
+   * recreating the account and its password.
+   */
+  async bindPartner(username: string, partnerId: string): Promise<{ username: string; partnerId: string }> {
+    const user = await this.repos.users.findOne({ username: username.toLowerCase() });
+    if (!user) throw new NotFoundError('No such console account');
+    if (user.role !== 'vendor') {
+      // An ops role already reaches every partner; giving it a binding as well
+      // would imply a scoping that does not apply and would mislead a reader.
+      throw new BadRequestError('Only vendor accounts are bound to a partner');
+    }
+    if (!(await this.partners.exists(partnerId))) {
+      throw new NotFoundError('No supply partner found for that id');
+    }
+    await this.repos.users.updateOne({ username: user.username }, { partnerId });
+    return { username: user.username, partnerId };
+  }
+
   async listVendors(): Promise<Omit<VendorProfile, 'listing'>[]> {
     await this.ensureSeedUsers();
     const users = await this.repos.users.findAll({ role: 'vendor' });
@@ -152,6 +210,7 @@ export class ConsoleService {
       displayName: u.displayName,
       vendorType: u.vendorType,
       refId: u.refId,
+      partnerId: u.partnerId,
     }));
   }
 

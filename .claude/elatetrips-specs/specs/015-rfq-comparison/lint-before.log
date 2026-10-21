@@ -1,0 +1,9 @@
+
+D:\projects\elatetrips-experiences\.worktrees\v10-rfq-comparison\elatetrips-node\src\modules\rfqflow\rfqflow.test.ts
+  506:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  521:91  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  533:59  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+? 3 problems (3 errors, 0 warnings)
+
+Process exit: 1

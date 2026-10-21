@@ -30,8 +30,9 @@ function exposedClientError(err: unknown): { status: number; message: string } |
  * responses. Keeping it here (Single Responsibility) means no controller needs
  * to know how errors are serialised.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function errorHandler(err: unknown, _req: Request, res: Response, _next: NextFunction): void {
+  // Express identifies error middleware by its four-argument runtime signature.
+  void _next;
   let statusCode = 500;
   let message = 'Internal server error';
   let details: unknown;

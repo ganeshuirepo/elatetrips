@@ -1,0 +1,770 @@
+{
+  "schemaVersion": "1.0.0",
+  "classifications": [
+    {
+      "id": "celebration",
+      "label": "Celebrations",
+      "icon": "🎉",
+      "accent": "#C25668",
+      "accentDeep": "#9E3D50",
+      "eyebrow": "Celebration packages",
+      "title": "Someone's big day, somewhere beautiful",
+      "sub": "Intimate trips for couples, families and groups up to 20 — the celebration designed in, not bolted on.",
+      "more": "See all celebration packages"
+    },
+    {
+      "id": "festival",
+      "label": "Festivals & events",
+      "icon": "🪔",
+      "accent": "#E9A23B",
+      "accentDeep": "#B87C14",
+      "eyebrow": "Festival & event packages · Oct ’26 – Mar ’27",
+      "title": "India's season, on one rail",
+      "sub": "Real dates, live countdowns. Stay near the action, entry and local logistics, and our on-ground team for the crowded days.",
+      "more": "See the full season calendar"
+    },
+    {
+      "id": "recreation",
+      "label": "Recreation",
+      "icon": "🥾",
+      "accent": "#2E7D57",
+      "accentDeep": "#1F5A3E",
+      "eyebrow": "Recreation packages",
+      "title": "Go do the thing you keep postponing",
+      "sub": "Treks, surf, safari and slow retreats — guides, permits and gear arranged so the day starts on time.",
+      "more": "See all recreation packages"
+    },
+    {
+      "id": "pilgrimage",
+      "label": "Pilgrimage",
+      "icon": "🕉️",
+      "accent": "#B87C14",
+      "accentDeep": "#8A5B0C",
+      "eyebrow": "Pilgrimage packages",
+      "title": "Darshan without the logistics",
+      "sub": "Queues, rituals, sattvic meals and elder care handled — arrive ready to pray, not to plan.",
+      "more": "See all pilgrimage packages"
+    }
+  ],
+  "destinations": [
+    {
+      "name": "Ooty",
+      "icon": "🏔️",
+      "region": "Tamil Nadu",
+      "popular": true
+    },
+    {
+      "name": "Munnar",
+      "icon": "🍃",
+      "region": "Kerala",
+      "popular": true
+    },
+    {
+      "name": "Coorg",
+      "icon": "☕",
+      "region": "Karnataka",
+      "popular": true
+    },
+    {
+      "name": "Goa",
+      "icon": "🏖️",
+      "region": "Goa",
+      "popular": true
+    },
+    {
+      "name": "Kodaikanal",
+      "icon": "🌲",
+      "region": "Tamil Nadu",
+      "popular": true
+    },
+    {
+      "name": "Chikmagalur",
+      "icon": "⛰️",
+      "region": "Karnataka",
+      "popular": true
+    },
+    {
+      "name": "Alleppey",
+      "icon": "🛶",
+      "region": "Kerala",
+      "popular": false
+    },
+    {
+      "name": "Shimla",
+      "icon": "🎿",
+      "region": "Himachal",
+      "popular": false
+    },
+    {
+      "name": "Manali",
+      "icon": "🏂",
+      "region": "Himachal",
+      "popular": false
+    },
+    {
+      "name": "Darjeeling",
+      "icon": "🍵",
+      "region": "West Bengal",
+      "popular": false
+    },
+    {
+      "name": "Gangtok",
+      "icon": "🏞️",
+      "region": "Sikkim",
+      "popular": false
+    },
+    {
+      "name": "Srinagar",
+      "icon": "⛵",
+      "region": "Kashmir",
+      "popular": false
+    },
+    {
+      "name": "Jaipur",
+      "icon": "🕌",
+      "region": "Rajasthan",
+      "popular": false
+    },
+    {
+      "name": "Udaipur",
+      "icon": "🏰",
+      "region": "Rajasthan",
+      "popular": false
+    }
+  ],
+  "routes": [
+    {
+      "name": "Shimla — Manali",
+      "icon": "🏔️",
+      "region": "Himachal",
+      "stops": [
+        "Shimla",
+        "Manali"
+      ]
+    },
+    {
+      "name": "Darjeeling — Gangtok",
+      "icon": "🍵",
+      "region": "Bengal & Sikkim",
+      "stops": [
+        "Darjeeling",
+        "Gangtok"
+      ]
+    },
+    {
+      "name": "Shillong — Cherrapunji",
+      "icon": "🌧️",
+      "region": "Meghalaya",
+      "stops": [
+        "Shillong",
+        "Cherrapunji"
+      ]
+    },
+    {
+      "name": "Srinagar — Gulmarg — Pahalgam",
+      "icon": "⛵",
+      "region": "Kashmir",
+      "stops": [
+        "Srinagar",
+        "Gulmarg",
+        "Pahalgam"
+      ]
+    },
+    {
+      "name": "Ooty + Coorg",
+      "icon": "☕",
+      "region": "Tamil Nadu & Karnataka",
+      "stops": [
+        "Ooty",
+        "Coorg"
+      ]
+    },
+    {
+      "name": "Munnar + Alleppey",
+      "icon": "🛶",
+      "region": "Kerala",
+      "stops": [
+        "Munnar",
+        "Alleppey"
+      ]
+    }
+  ],
+  "occasions": {
+    "celebration": [
+      {
+        "name": "Birthday trips",
+        "icon": "🎂",
+        "occasion": "Birthday",
+        "best": "Ooty · Coorg · Goa",
+        "blurb": "Themed decor, cake and the sparkler moment, activities for kids or the whole gang — ready when you walk in.",
+        "fromPrice": "₹18,999",
+        "unit": "couple · 2N",
+        "cover": "cv-bday"
+      },
+      {
+        "name": "Anniversaries",
+        "icon": "💞",
+        "occasion": "Anniversary",
+        "best": "Munnar · Coorg · Kashmir",
+        "blurb": "Private candlelight dinners, room styling, bouquet and keepsake hampers at hill and beach stays.",
+        "fromPrice": "₹21,999",
+        "unit": "couple · 2N",
+        "cover": "cv-anniv"
+      },
+      {
+        "name": "Proposals",
+        "icon": "💍",
+        "occasion": "Proposal",
+        "best": "Ooty · Goa · Munnar",
+        "blurb": "The spot, the setup, the photographer on cue — planned quietly with you, kept a secret from them.",
+        "fromPrice": "₹24,999",
+        "unit": "2 nights",
+        "cover": "cv-prop"
+      },
+      {
+        "name": "Honeymoons",
+        "icon": "🌸",
+        "occasion": "Honeymoon",
+        "best": "Munnar + Alleppey · Kashmir",
+        "blurb": "Slow mornings, curated local experiences and surprise touches across our handpicked stays.",
+        "fromPrice": "₹32,999",
+        "unit": "couple · 3N",
+        "cover": "cv-honey"
+      },
+      {
+        "name": "Baby showers",
+        "icon": "🍼",
+        "occasion": "Baby shower",
+        "best": "Coorg · Chikmagalur",
+        "blurb": "Gentle celebrations for family circles — decor, photography and easy plans around the guest of honour.",
+        "fromPrice": "₹26,999",
+        "unit": "family · 2N",
+        "cover": "cv-baby"
+      },
+      {
+        "name": "Family milestones",
+        "icon": "🎊",
+        "occasion": "Group celebration",
+        "best": "Ooty + Coorg · Shimla–Manali",
+        "blurb": "Reunions, retirements, 50th birthdays — one villa or resort, up to 20 people, everything coordinated.",
+        "fromPrice": "₹15,999",
+        "unit": "person · 2N",
+        "cover": "cv-family"
+      }
+    ],
+    "festival": [],
+    "recreation": [
+      {
+        "name": "Trekking & trails",
+        "icon": "🥾",
+        "occasion": "Trekking",
+        "best": "Coorg · Chikmagalur · Manali",
+        "blurb": "Guided day hikes and summit trails, permits and packed meals sorted — walk, don’t plan.",
+        "fromPrice": "₹12,999",
+        "unit": "person · 2N",
+        "cover": "cv-trek"
+      },
+      {
+        "name": "Beach & watersports",
+        "icon": "🏄",
+        "occasion": "Watersports",
+        "best": "Goa · Gokarna · Alleppey",
+        "blurb": "Surf lessons, kayaking and sunset cruises with a shack-side stay and every booking pre-paid.",
+        "fromPrice": "₹14,999",
+        "unit": "person · 2N",
+        "cover": "cv-surf"
+      },
+      {
+        "name": "Wildlife & safari",
+        "icon": "🐘",
+        "occasion": "Wildlife",
+        "best": "Bandipur · Kabini · Wayanad",
+        "blurb": "Dawn and dusk safari slots held in advance, naturalist-led, forest-edge lodges.",
+        "fromPrice": "₹17,999",
+        "unit": "person · 2N",
+        "cover": "cv-safari"
+      },
+      {
+        "name": "Wellness & retreats",
+        "icon": "🧘",
+        "occasion": "Wellness",
+        "best": "Munnar · Rishikesh · Coorg",
+        "blurb": "Ayurveda, yoga mornings and silent evenings — a slower week, fully arranged.",
+        "fromPrice": "₹19,999",
+        "unit": "person · 3N",
+        "cover": "cv-wellness"
+      }
+    ],
+    "pilgrimage": [
+      {
+        "name": "Char Dham Yatra",
+        "icon": "🕉️",
+        "occasion": "Char Dham",
+        "best": "Uttarakhand",
+        "dests": [
+          "Yamunotri",
+          "Gangotri",
+          "Kedarnath",
+          "Badrinath"
+        ],
+        "blurb": "Registration, darshan slots and altitude-paced stays across all four dhams.",
+        "fromPrice": "₹34,999",
+        "unit": "person · 8N",
+        "cover": "cv-yatra"
+      },
+      {
+        "name": "Tirupati Darshan",
+        "icon": "🛕",
+        "occasion": "Tirupati",
+        "best": "Tirumala, Andhra Pradesh",
+        "dests": [
+          "Tirumala"
+        ],
+        "blurb": "Special-entry darshan, laddu prasadam and a rest-ready stay near the hill.",
+        "fromPrice": "₹9,999",
+        "unit": "person · 1N",
+        "cover": "cv-temple"
+      },
+      {
+        "name": "Varanasi & Kashi",
+        "icon": "🪔",
+        "occasion": "Kashi",
+        "best": "Varanasi, Uttar Pradesh",
+        "dests": [
+          "Varanasi"
+        ],
+        "blurb": "Ganga aarti seating, pandit-led rituals and a ghat-facing room.",
+        "fromPrice": "₹15,999",
+        "unit": "person · 2N",
+        "cover": "cv-ghat"
+      },
+      {
+        "name": "Golden Temple & Punjab",
+        "icon": "🙏",
+        "occasion": "Golden Temple",
+        "best": "Amritsar, Punjab",
+        "dests": [
+          "Amritsar"
+        ],
+        "blurb": "Early-hour darshan, langar seva and the Wagah ceremony arranged end to end.",
+        "fromPrice": "₹13,999",
+        "unit": "person · 2N",
+        "cover": "cv-gurdwara"
+      }
+    ]
+  },
+  "festivals": [
+    {
+      "id": "garba",
+      "month": "Oct ’26",
+      "name": "Navratri Garba",
+      "location": "Ahmedabad · Vadodara",
+      "dateLabel": "11–20 Oct",
+      "start": "2026-10-11",
+      "end": "2026-10-20",
+      "dests": [
+        "Ahmedabad",
+        "Vadodara"
+      ],
+      "cover": "cv-garba",
+      "icon": "🪩",
+      "blurb": "Passes to the big garba grounds, chaniya choli included.",
+      "fromPrice": "₹19,999",
+      "aliases": [
+        "garba",
+        "navratri",
+        "dandiya",
+        "gujarat"
+      ]
+    },
+    {
+      "id": "dasara",
+      "month": "Oct ’26",
+      "name": "Mysuru Dasara",
+      "location": "Mysuru, Karnataka",
+      "dateLabel": "11–20 Oct",
+      "start": "2026-10-11",
+      "end": "2026-10-20",
+      "dests": [
+        "Mysuru"
+      ],
+      "cover": "cv-dasara",
+      "icon": "🏰",
+      "blurb": "Lit palace nights and the Jumboo Savari finale.",
+      "fromPrice": "₹17,999",
+      "aliases": [
+        "dasara",
+        "dussehra",
+        "mysore",
+        "mysuru"
+      ]
+    },
+    {
+      "id": "durga",
+      "month": "Oct ’26",
+      "name": "Durga Puja",
+      "location": "Kolkata, West Bengal",
+      "dateLabel": "17–21 Oct",
+      "start": "2026-10-17",
+      "end": "2026-10-21",
+      "dests": [
+        "Kolkata"
+      ],
+      "cover": "cv-durga",
+      "icon": "🥁",
+      "blurb": "Guided pandal-hopping across the UNESCO-listed carnival.",
+      "fromPrice": "₹18,999",
+      "aliases": [
+        "durga",
+        "pujo",
+        "puja",
+        "pandal",
+        "kolkata"
+      ]
+    },
+    {
+      "id": "diwali",
+      "month": "Nov ’26",
+      "name": "Diwali Lights Trail",
+      "location": "Varanasi · Ayodhya · Jaipur",
+      "dateLabel": "6–10 Nov",
+      "start": "2026-11-06",
+      "end": "2026-11-10",
+      "dests": [
+        "Varanasi",
+        "Ayodhya",
+        "Jaipur"
+      ],
+      "cover": "cv-diwali",
+      "icon": "🪔",
+      "blurb": "Ghat-front diyas, Deepotsav or the lit pink city — your pick.",
+      "fromPrice": "₹21,999",
+      "aliases": [
+        "diwali",
+        "deepavali",
+        "deepotsav",
+        "lights"
+      ]
+    },
+    {
+      "id": "rann",
+      "month": "Nov ’26",
+      "name": "Rann Utsav",
+      "location": "Dhordo, Kutch, Gujarat",
+      "dateLabel": "5 Nov – 4 Mar",
+      "start": "2026-11-05",
+      "end": "2027-03-04",
+      "dests": [
+        "Dhordo, Kutch"
+      ],
+      "cover": "cv-rann",
+      "icon": "🏜️",
+      "blurb": "Tent City on the White Rann — full-moon nights sell out first.",
+      "fromPrice": "₹24,999",
+      "aliases": [
+        "rann",
+        "utsav",
+        "kutch",
+        "white rann",
+        "dhordo",
+        "tent city"
+      ]
+    },
+    {
+      "id": "pushkar",
+      "month": "Nov ’26",
+      "name": "Pushkar Camel Fair",
+      "location": "Pushkar, Rajasthan",
+      "dateLabel": "17–24 Nov",
+      "start": "2026-11-17",
+      "end": "2026-11-24",
+      "dests": [
+        "Pushkar"
+      ],
+      "cover": "cv-pushkar",
+      "icon": "🐪",
+      "blurb": "Desert camps, fair-ground access and Kartik Purnima at the lake.",
+      "fromPrice": "₹22,999",
+      "aliases": [
+        "pushkar",
+        "camel",
+        "mela"
+      ]
+    },
+    {
+      "id": "hornbill",
+      "month": "Dec ’26",
+      "name": "Hornbill Festival",
+      "location": "Kisama, Nagaland",
+      "dateLabel": "1–10 Dec",
+      "start": "2026-12-01",
+      "end": "2026-12-10",
+      "dests": [
+        "Kohima (Kisama)"
+      ],
+      "cover": "cv-hornbill",
+      "icon": "🪶",
+      "blurb": "All 17 Naga tribes — permits and stays handled for you.",
+      "fromPrice": "₹28,999",
+      "aliases": [
+        "hornbill",
+        "nagaland",
+        "kohima",
+        "kisama"
+      ]
+    },
+    {
+      "id": "pongal",
+      "month": "Jan ’27",
+      "name": "Pongal & Jallikattu",
+      "location": "Madurai, Tamil Nadu",
+      "dateLabel": "14–17 Jan",
+      "start": "2027-01-14",
+      "end": "2027-01-17",
+      "dests": [
+        "Madurai"
+      ],
+      "cover": "cv-pongal",
+      "icon": "🌾",
+      "blurb": "Harvest tables, village arenas and temple-town mornings.",
+      "fromPrice": "₹15,999",
+      "aliases": [
+        "pongal",
+        "jallikattu",
+        "madurai",
+        "sankranti"
+      ]
+    },
+    {
+      "id": "carnival",
+      "month": "Feb ’27",
+      "name": "Goa Carnival",
+      "location": "Panaji · Margao",
+      "dateLabel": "6–9 Feb",
+      "start": "2027-02-06",
+      "end": "2027-02-09",
+      "dests": [
+        "Panaji",
+        "Margao"
+      ],
+      "cover": "cv-carnival",
+      "icon": "🎭",
+      "blurb": "Float parades by day, beach stays by night.",
+      "fromPrice": "₹18,999",
+      "aliases": [
+        "carnival",
+        "carnaval",
+        "goa"
+      ]
+    },
+    {
+      "id": "jaisalmer",
+      "month": "Feb ’27",
+      "name": "Jaisalmer Desert Festival",
+      "location": "Sam Dunes, Rajasthan",
+      "dateLabel": "18–20 Feb",
+      "start": "2027-02-18",
+      "end": "2027-02-20",
+      "dests": [
+        "Jaisalmer"
+      ],
+      "cover": "cv-jaisalmer",
+      "icon": "🏯",
+      "blurb": "Maru Mahotsav — folk nights ending on the full moon.",
+      "fromPrice": "₹20,999",
+      "aliases": [
+        "jaisalmer",
+        "desert",
+        "maru",
+        "mahotsav",
+        "sam"
+      ]
+    },
+    {
+      "id": "holi",
+      "month": "Mar ’27",
+      "name": "Braj Holi",
+      "location": "Mathura · Vrindavan · Barsana",
+      "dateLabel": "18–23 Mar",
+      "start": "2027-03-18",
+      "end": "2027-03-23",
+      "dests": [
+        "Mathura",
+        "Vrindavan",
+        "Barsana"
+      ],
+      "cover": "cv-holi",
+      "icon": "🎨",
+      "blurb": "Lathmar at Barsana, widow’s Holi at Vrindavan — colours with a guide who knows the lanes.",
+      "fromPrice": "₹19,999",
+      "aliases": [
+        "holi",
+        "braj",
+        "lathmar",
+        "mathura",
+        "vrindavan",
+        "barsana",
+        "colours"
+      ]
+    },
+    {
+      "id": "shigmo",
+      "month": "Mar ’27",
+      "name": "Goa Shigmo",
+      "location": "Panaji · Ponda · Vasco",
+      "dateLabel": "24–29 Mar",
+      "start": "2027-03-24",
+      "end": "2027-03-29",
+      "dests": [
+        "Panaji",
+        "Ponda"
+      ],
+      "cover": "cv-shigmo",
+      "icon": "🥁",
+      "blurb": "Konkani spring parades — float nights and folk troupes, beach stay attached.",
+      "fromPrice": "₹17,999",
+      "aliases": [
+        "shigmo",
+        "shigmotsav",
+        "goa",
+        "spring",
+        "konkani"
+      ]
+    }
+  ],
+  "hero": {
+    "slides": [
+      {
+        "eyebrow": "From occasion to elation",
+        "lead": "You bring the ",
+        "em": "occasion",
+        "tail": ", we bring the elation.",
+        "sub": "Stay, meals, access and every arrangement made before you arrive — one price, one booking."
+      },
+      {
+        "eyebrow": "What we cover",
+        "lead": "Four ",
+        "em": "occasion types",
+        "tail": ", tap easy customizations.",
+        "sub": "Celebrations, festivals, recreation, pilgrimage — stay, celebration, experiences, transport."
+      },
+      {
+        "eyebrow": "Three ways to plan",
+        "lead": "Fill form in ",
+        "em": "three modes",
+        "tail": ": Say it, chat it, or fill it in yourself.",
+        "sub": "Say it in one breath, answer a few short questions, or set every detail yourself in the form."
+      }
+    ],
+    "themes": [
+      {
+        "id": "celebration",
+        "accent": "#C25668",
+        "accentDeep": "#9E3D50",
+        "icon": "🎂",
+        "kicker": "Celebrations",
+        "title": "Rooftop birthday, Ooty",
+        "line": "Decor, cake and the candlelight dinner — set before check-in."
+      },
+      {
+        "id": "festival",
+        "accent": "#E9A23B",
+        "accentDeep": "#B87C14",
+        "icon": "🪔",
+        "kicker": "Festivals & events",
+        "title": "Rann Utsav opens 5 Nov",
+        "line": "Tent City on the White Rann — full-moon nights fill first."
+      },
+      {
+        "id": "recreation",
+        "accent": "#2E7D57",
+        "accentDeep": "#1F5A3E",
+        "icon": "🏖️",
+        "kicker": "Recreation",
+        "title": "Nothing-to-do afternoon, Goa",
+        "line": "A chair, the sea, and a surf lesson only if you feel like it."
+      },
+      {
+        "id": "pilgrimage",
+        "accent": "#B87C14",
+        "accentDeep": "#8A5B0C",
+        "icon": "🕉️",
+        "kicker": "Pilgrimage",
+        "title": "Char Dham yatra, Uttarakhand",
+        "line": "All four dhams, eight nights — registration and darshan slots held."
+      }
+    ],
+    "prompts": [
+      "Say or type — “birthday in Ooty in December for 4 adults”",
+      "Try — “Rann Utsav in November, 2 adults, under ₹80k”",
+      "Or — “anniversary in Kashmir from Nov 8th to 12th”",
+      "Or — “Char Dham yatra for six, in May”"
+    ],
+    "intervalMs": 3000,
+    "themeEvery": 2
+  },
+  "budgets": [
+    25000,
+    50000,
+    75000,
+    100000,
+    150000,
+    200000
+  ],
+  "stays": [
+    "Resort",
+    "Villa",
+    "Homestay",
+    "Tent city",
+    "Houseboat"
+  ],
+  "groups": [
+    "Couple",
+    "Family",
+    "Group"
+  ],
+  "nights": [
+    {
+      "value": "2",
+      "label": "2 nights"
+    },
+    {
+      "value": "3",
+      "label": "3 nights"
+    },
+    {
+      "value": "4",
+      "label": "4+ nights"
+    }
+  ],
+  "inclusions": [
+    {
+      "id": "decor",
+      "label": "Decor & styling"
+    },
+    {
+      "id": "dinner",
+      "label": "Private dinner"
+    },
+    {
+      "id": "cake",
+      "label": "Cake & surprises"
+    },
+    {
+      "id": "photo",
+      "label": "Photographer"
+    },
+    {
+      "id": "transfer",
+      "label": "Transfers included"
+    },
+    {
+      "id": "exp",
+      "label": "Experiences included"
+    },
+    {
+      "id": "meals",
+      "label": "All meals"
+    }
+  ]
+}

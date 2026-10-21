@@ -10,7 +10,8 @@
  * threshold all arrive as configuration (BR-17, see ratecard.config.ts).
  */
 
-export type Currency = 'INR' | 'USD' | 'EUR' | 'GBP' | 'AED';
+export const CURRENCIES = ['INR', 'USD', 'EUR', 'GBP', 'AED'] as const;
+export type Currency = (typeof CURRENCIES)[number];
 
 /** Money in integer MINOR units (paise/cents) + explicit currency (NFR). */
 export interface Money {
@@ -25,7 +26,8 @@ export interface SheetCellRef {
 }
 
 /** Where a batch of rows came from. */
-export type RateSource = 'sheet' | 'manual_upload' | 'nightly_reconcile';
+export const RATE_SOURCES = ['sheet', 'manual_upload', 'nightly_reconcile'] as const;
+export type RateSource = (typeof RATE_SOURCES)[number];
 
 /**
  * A raw, untrusted row as delivered by a sheet/upload adapter. Every field is
@@ -104,10 +106,18 @@ export interface ToleranceBand {
   upper_minor: number;
 }
 
-export type StageReason = 'beyond_band' | 'cumulative_drift' | 'validation_hold';
+export const STAGE_REASONS = ['beyond_band', 'cumulative_drift', 'validation_hold'] as const;
+export type StageReason = (typeof STAGE_REASONS)[number];
+
+/** Where a staged proposal is in review. Approval APPENDS; it never edits. */
+export const PROPOSAL_STATUSES = ['pending', 'approved', 'rejected'] as const;
+export type ProposalStatus = (typeof PROPOSAL_STATUSES)[number];
+
+export const TOLERANCE_DECISIONS = ['auto_apply', 'stage'] as const;
+export type ToleranceDecision = (typeof TOLERANCE_DECISIONS)[number];
 
 export interface ToleranceOutcome {
-  decision: 'auto_apply' | 'stage';
+  decision: ToleranceDecision;
   within_band: boolean;
   band: ToleranceBand | null;
   delta_pct: number | null;
@@ -158,7 +168,7 @@ export interface StagedProposal {
   reason: StageReason;
   tolerance: ToleranceOutcome;
   drift: DriftResult;
-  status: 'pending' | 'approved' | 'rejected';
+  status: ProposalStatus;
   created_ts: string;
   resolved_ts?: string;
   resolved_by?: string;

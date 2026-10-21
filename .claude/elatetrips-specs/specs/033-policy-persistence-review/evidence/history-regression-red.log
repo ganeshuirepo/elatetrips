@@ -1,0 +1,66 @@
+▶ DEV-006 real Mongo transaction foundation
+  ✔ preserves legacy reads for a missing historical audit with integrity false (232.4968ms)
+  ✖ rejects a missing historical audit with integrity true (257.9546ms)
+  ✔ commits encrypted record, immutable revision, audit, outbox and receipt together (209.0614ms)
+  ✔ preserves immutable history and audit before/after across replacement (218.2253ms)
+  ✔ reads consistent history when a write commits between its database reads (213.0379ms)
+  ✔ rolls every write back when audit rejects its insert (167.0081ms)
+  ✔ rolls every write back when outbox rejects its insert (187.4252ms)
+  ✔ rolls every write back when receipts rejects its insert (172.1384ms)
+  ✔ rolls a replacement back to its prior payload and revision after audit failure (188.693ms)
+  ✔ replays the original command result even after a later revision (191.2531ms)
+  ✔ rejects command ID reuse with different normalized input (133.9947ms)
+  ✔ rejects stale revisions without adding events or receipts (104.7436ms)
+  ✔ allows exactly one of two simultaneous updates at the same expected revision (113.0245ms)
+  ✔ coalesces simultaneous identical creation retries into one immutable result (114.9564ms)
+  ✔ does not share retry receipts across different aggregates (104.815ms)
+  ✔ reloads server scope and refuses attempted ownership changes (102.8289ms)
+  ✔ denies cross-customer creates without writing any state (85.5611ms)
+  ✔ denies cross-organization creates without writing any state (90.8755ms)
+  ✔ denies cross-partner creates without writing any state (93.1677ms)
+  ✔ denies read, history, updates and retry replay after membership revocation (101.0128ms)
+  ✔ denies persisted data to a user with a different server membership scope (107.7431ms)
+  ✔ rejects a serialized identity rather than trusting HTTP-shaped claims (102.3501ms)
+  ✔ fails closed on missing policy and membership storage failures (108.5278ms)
+  ✔ enforces append-only record kinds while allowing exact retry replay (114.1976ms)
+  ✔ reports a fixed storage error when its injected client is closed (102.4116ms)
+  ✔ retains reads and exact replay after closing and reopening a client (129.1721ms)
+  ✔ retains unique revision/event/outbox indexes and rejects duplicate revision inserts (96.3573ms)
+  ✔ rejects corrupted ciphertext and metadata without exposing private data (103.6546ms)
+  ✔ authenticates stored ownership before releasing immutable history (97.507ms)
+  ✔ rejects incomplete history and modified retry revision metadata (137.5111ms)
+  ✔ refuses unknown persisted schema versions instead of guessing a migration (148.3643ms)
+  ✔ requires retained decryption keys after key rotation (134.0826ms)
+  ✔ rejects invalid payload, unsafe revision, missing creation scope and invalid clock before writes (94.4224ms)
+  ✔ rejects a non-stable decoder instead of changing a stored value on each read (94.3753ms)
+  ✔ returns empty reads/history for missing records (82.6584ms)
+  ✔ rejects standalone MongoDB before creating persistence collections (933.7829ms)
+✖ DEV-006 real Mongo transaction foundation (7320.7879ms)
+▶ authenticated JSON storage protection
+  ✔ canonicalizes object key order and rejects values JSON would silently lose (1.8989ms)
+  ✔ binds encrypted values to their record and rejects missing or malformed keys (1.1923ms)
+✔ authenticated JSON storage protection (3.4235ms)
+ℹ tests 38
+ℹ suites 2
+ℹ pass 37
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8793.8801
+
+✖ failing tests:
+
+test at src\modules\foundation\persistence.test.ts:113:28
+✖ rejects a missing historical audit with integrity true (257.9546ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-policy-persistence-review\elatetrips-node\src\modules\foundation\persistence.test.ts:128:9)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }

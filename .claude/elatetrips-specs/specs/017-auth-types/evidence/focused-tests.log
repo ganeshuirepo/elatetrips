@@ -1,0 +1,88 @@
+✔ signup sends the code to the channel the traveller chose (3.6907ms)
+✔ signup by email addresses the code to the email, not the phone (0.9184ms)
+✔ signup leaves the account inactive until the code comes back (0.6416ms)
+✔ verifying proves ONLY the channel the code went to (1.3448ms)
+✔ a wrong code does not activate the account (1.5645ms)
+✔ signup refuses a mobile that belongs to an active account (0.507ms)
+✔ signup refuses an email held by somebody else mid-signup (0.5848ms)
+✔ signup CAN be re-attempted while it is still pending on the same phone (0.5134ms)
+✔ auto-activate skips the code entirely and returns a session (0.6379ms)
+✔ a wrong password and an unknown account answer identically (1.3758ms)
+✔ a correct password on an unverified account is refused (0.7041ms)
+✔ auto-activate lets that same account through, and only then (0.4917ms)
+✔ a session never carries the password hash back to the caller (0.2491ms)
+✔ OTP login verifies the channel it was sent to (0.3792ms)
+✔ OTP login refuses a wrong code (0.4898ms)
+✔ forgot-password answers "sent" for an unknown account, without sending (0.3213ms)
+✔ resend does the same for an unknown account (0.3746ms)
+✔ resetting the password also proves the channel it was reset through (0.7771ms)
+✔ a wrong reset code leaves the old password in place (0.7432ms)
+✔ the code is echoed back outside production, so dev needs no inbox (0.8316ms)
+✔ the code is NEVER echoed back in production (797.8138ms)
+✔ the code goes to the address ON FILE for the authenticated account (0.753ms)
+✔ confirming marks that channel, and leaves the other one alone (0.8865ms)
+✔ a wrong code leaves the channel unproved (0.4801ms)
+✔ a code issued for one channel does not confirm the other (0.4703ms)
+✔ an already-verified channel is refused rather than re-sent (0.6775ms)
+✔ a token for an account that no longer exists is refused (0.4316ms)
+✔ a channel with no address on file is a 400, not a send to nowhere (0.392ms)
+[info] [OTP] mobile → 9876543210: 123456
+[info] OTP senders — email: ConsoleOtpSender, sms: ConsoleOtpSender
+[info] OTP senders — email: ConsoleOtpSender, sms: ConsoleOtpSender
+[info] OTP senders — email: ConsoleOtpSender, sms: ConsoleOtpSender
+[error] Fast2SMS send failed (200): { return: false }
+[error] Fast2SMS send failed (401): { return: false }
+[error] Brevo send failed (401): unrecognised IP address
+[error] The Brevo key is valid but this server's IP is not authorised. Add it at https://app.brevo.com/security/authorised_ips (or disable the IP restriction) before turning AUTH_AUTO_ACTIVATE off.
+[error] Fast2SMS did not answer within 10s
+✔ routes an email code to the email provider and an SMS to the SMS one (5.5501ms)
+✔ the console sender never throws — it is the fallback of last resort (2.1511ms)
+✔ with nothing configured, both channels fall back to the console (1.9057ms)
+✔ a half-configured Brevo does not count as configured (0.9725ms)
+✔ a half-configured Twilio does not count as configured (1.3272ms)
+✔ Fast2SMS posts the bare 10-digit number on the OTP route (1.8175ms)
+✔ Fast2SMS treats a 200 that says return:false as a failure (2.6268ms)
+✔ Fast2SMS surfaces a non-200 as a 502 (2.0908ms)
+✔ Brevo sends the code in the subject and body of a real email (2.2039ms)
+✔ a Brevo rejection becomes a 502, not a silently undelivered code (2.1066ms)
+✔ Twilio prefixes the Indian country code, which Fast2SMS must not (1.7536ms)
+✔ the auth header is Basic, and the token never lands in the URL (0.8945ms)
+✔ a provider that stalls is given up on rather than held forever (1.2894ms)
+✔ every provider carries the deadline, not just one of them (1.4013ms)
+✔ issues a six-digit numeric code (3.7485ms)
+✔ pads a small random draw instead of emitting a short code (2.759ms)
+✔ accepts the correct code exactly once (0.4602ms)
+✔ rejects a code that was never issued (0.4462ms)
+✔ rejects the right code offered for a different identifier (0.5772ms)
+✔ expires a code, and expiry fails closed (2.0944ms)
+✔ still accepts a code just inside its lifetime (0.6735ms)
+✔ burns the code after too many wrong guesses (0.6119ms)
+✔ a wrong guess does not invalidate the code before the cap (0.4752ms)
+✔ re-issuing invalidates the previous code (1.0147ms)
+✔ refuses a rapid re-issue with 429 rather than spending another send (1.6695ms)
+✔ allows the re-issue once the cooldown has run down (2.3371ms)
+✔ the cooldown is per identifier, not global (0.5056ms)
+▶ DEV-005 user credential boundary
+  ✔ round-trips existing user credentials without changing the identifier (15.6349ms)
+  ✔ rejects a malformed phone claim: null (2.7516ms)
+  ✔ rejects a malformed phone claim: 42 (0.9431ms)
+  ✔ rejects a malformed phone claim: true (0.9158ms)
+  ✔ rejects a malformed phone claim: {} (0.8613ms)
+  ✔ rejects a malformed phone claim: ["customer"] (1.4812ms)
+  ✔ rejects a malformed phone claim: "" (1.1529ms)
+  ✔ rejects a malformed phone claim: "   " (0.7937ms)
+  ✔ rejects a credential explicitly belonging to the console adapter (0.8633ms)
+  ✔ rejects a credential explicitly belonging to the partner-card adapter (1.1998ms)
+  ✔ rejects a credential explicitly belonging to the refresh adapter (1.0768ms)
+  ✔ does not turn token role claims into a server authorization role (1.126ms)
+  ✔ rejects expired, incorrectly signed and malformed tokens (2.134ms)
+  ✔ accepts only the algorithm used by this user-token signer (1.4752ms)
+✔ DEV-005 user credential boundary (36.7287ms)
+ℹ tests 69
+ℹ suites 1
+ℹ pass 69
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1868.9955

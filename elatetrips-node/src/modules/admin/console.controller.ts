@@ -21,6 +21,10 @@ export class ConsoleController {
     created(res, await this.service.createVendor(req.body));
   };
 
+  bindPartner = async (req: Request, res: Response): Promise<void> => {
+    ok(res, await this.service.bindPartner(req.params.username, req.body.partnerId));
+  };
+
   listVendors = async (_req: Request, res: Response): Promise<void> => {
     ok(res, await this.service.listVendors());
   };

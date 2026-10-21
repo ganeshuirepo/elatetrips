@@ -18,6 +18,38 @@ const OTP_MESSAGE = (code: string) =>
   `${code} is your ElateTrips verification code. It expires in 5 minutes. Do not share it with anyone.`;
 
 /**
+ * How long to wait on a provider before giving up. Without a cap, a provider
+ * that accepts the connection and then stalls holds the traveller's sign-in
+ * request open for as long as it likes — the request never returns, they retry,
+ * and each retry pins another connection. Ten seconds is far longer than any
+ * healthy send and short enough that a stall surfaces as an error someone can
+ * act on. The code itself is already stored, so a timeout costs a resend, not
+ * the sign-in.
+ */
+const SEND_TIMEOUT_MS = 10_000;
+
+/**
+ * fetch with a deadline, turning both a timeout and a dead host into the same
+ * 502 the caller already handles. `provider` only names who was slow, so the
+ * log says which account to go and look at.
+ */
+async function fetchWithTimeout(
+  provider: string,
+  url: string,
+  init: RequestInit,
+): Promise<Response> {
+  try {
+    return await fetch(url, { ...init, signal: AbortSignal.timeout(SEND_TIMEOUT_MS) });
+  } catch (err) {
+    const reason = err instanceof Error && err.name === 'TimeoutError'
+      ? `did not answer within ${SEND_TIMEOUT_MS / 1000}s`
+      : `could not be reached (${err instanceof Error ? err.message : String(err)})`;
+    logger.error(`${provider} ${reason}`);
+    throw new AppError(502, 'Could not send the OTP. Please try again.');
+  }
+}
+
+/**
  * Dev fallback: prints the OTP to the server console instead of delivering it.
  * Active for any channel that has no provider configured, so the whole flow is
  * testable with zero third-party accounts.
@@ -34,7 +66,7 @@ export class ConsoleOtpSender implements IOtpSender {
  */
 export class BrevoEmailOtpSender implements IOtpSender {
   async send(_channel: Channel, email: string, code: string): Promise<void> {
-    const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+    const res = await fetchWithTimeout('Brevo', 'https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
         'api-key': env.brevoApiKey,
@@ -79,7 +111,8 @@ export class BrevoEmailOtpSender implements IOtpSender {
 export class TwilioSmsOtpSender implements IOtpSender {
   async send(_channel: Channel, phone: string, code: string): Promise<void> {
     const auth = Buffer.from(`${env.twilioAccountSid}:${env.twilioAuthToken}`).toString('base64');
-    const res = await fetch(
+    const res = await fetchWithTimeout(
+      'Twilio',
       `https://api.twilio.com/2010-04-01/Accounts/${env.twilioAccountSid}/Messages.json`,
       {
         method: 'POST',
@@ -107,7 +140,7 @@ export class TwilioSmsOtpSender implements IOtpSender {
  */
 export class Fast2SmsOtpSender implements IOtpSender {
   async send(_channel: Channel, phone: string, code: string): Promise<void> {
-    const res = await fetch('https://www.fast2sms.com/dev/bulkV2', {
+    const res = await fetchWithTimeout('Fast2SMS', 'https://www.fast2sms.com/dev/bulkV2', {
       method: 'POST',
       headers: { authorization: env.fast2smsApiKey, 'content-type': 'application/json' },
       body: JSON.stringify({ route: 'otp', variables_values: code, numbers: phone }),

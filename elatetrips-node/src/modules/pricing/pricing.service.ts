@@ -68,7 +68,7 @@ export class PricingService {
     vehicleId?: string;
   }): Promise<PickupEstimate | null> {
     const dest = await this.destinations.findById(input.destId);
-    if (!dest || dest.lat == null) return null;
+    if (!dest || dest.lat === null || dest.lat === undefined) return null;
 
     const straight = haversineKm(input.pickupLat, input.pickupLon, dest.lat, dest.lon);
     if (straight < 1) return null;
@@ -77,7 +77,7 @@ export class PricingService {
     const roundTripKm = oneWayKm * 2;
     const veh = input.vehicleId ? await this.vehicles.findById(input.vehicleId) : null;
     const rate = veh ? veh.rate : null;
-    const fare = rate != null ? Math.round((roundTripKm * rate) / 100) * 100 : null;
+    const fare = rate !== null && rate !== undefined ? Math.round((roundTripKm * rate) / 100) * 100 : null;
 
     return {
       oneWayKm,

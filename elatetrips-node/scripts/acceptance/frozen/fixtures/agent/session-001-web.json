@@ -1,0 +1,87 @@
+{
+  "session_id": "ag_001",
+  "channel": "web",
+  "user_ref": "anon_7f3",
+  "draft_rfq_id": "rfq_draft_001",
+  "state": {
+    "filled_slots": [
+      "occasion",
+      "dates",
+      "budget",
+      "travellers"
+    ],
+    "missing_critical": [],
+    "questions_asked": 1,
+    "presented_package_ids": [
+      "pkg_goa_beach_4d",
+      "pkg_goa_villa_4d"
+    ],
+    "refinements": [
+      {
+        "kind": "cheaper",
+        "ts": "2026-08-23T10:05:00Z"
+      }
+    ],
+    "escalation": null
+  },
+  "turns": [
+    {
+      "role": "user",
+      "content": "planning my wife's 30th in October, beach vibes, around 60k total",
+      "tool_calls": [
+        {
+          "tool": "update_draft_rfq",
+          "args_hash": "h1"
+        }
+      ],
+      "ts": "2026-08-23T10:00:00Z"
+    },
+    {
+      "role": "agent",
+      "content": "Which destination — Goa, or shall I suggest a few beach options?",
+      "ts": "2026-08-23T10:00:05Z"
+    },
+    {
+      "role": "user",
+      "content": "Goa",
+      "tool_calls": [
+        {
+          "tool": "update_draft_rfq",
+          "args_hash": "h2"
+        },
+        {
+          "tool": "search_packages",
+          "args_hash": "h3"
+        }
+      ],
+      "ts": "2026-08-23T10:01:00Z"
+    },
+    {
+      "role": "agent",
+      "content": "Two fit your brief: pkg_goa_beach_4d and pkg_goa_villa_4d.",
+      "tool_calls": [
+        {
+          "tool": "get_price",
+          "args_hash": "h4"
+        }
+      ],
+      "ts": "2026-08-23T10:01:05Z"
+    },
+    {
+      "role": "user",
+      "content": "anything cheaper?",
+      "tool_calls": [
+        {
+          "tool": "search_packages",
+          "args_hash": "h5"
+        }
+      ],
+      "ts": "2026-08-23T10:05:00Z"
+    },
+    {
+      "role": "agent",
+      "content": "Of these, pkg_goa_beach_4d is the most affordable.",
+      "ts": "2026-08-23T10:05:05Z"
+    }
+  ]
+}

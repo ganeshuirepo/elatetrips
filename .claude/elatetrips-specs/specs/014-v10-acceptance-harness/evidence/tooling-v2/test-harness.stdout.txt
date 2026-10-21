@@ -1,0 +1,44 @@
+
+> elatetrips-node@1.0.0 test:harness
+> node --test scripts/acceptance/harness.test.mjs
+
+✔ all 15 frozen schemas compile and all 20 canonical fixtures replay (372.6173ms)
+✔ canonical digest ignores CRLF/format/key order, but preserves value changes (375.3963ms)
+✔ manifest rejects missing format (89.5728ms)
+✔ manifest rejects unknown fields (93.3059ms)
+✔ manifest rejects unknown format (93.5053ms)
+✔ manifest rejects invalid digest algorithm (92.0791ms)
+✔ manifest rejects invalid source commit (93.0988ms)
+✔ manifest rejects invented release adoption (87.5688ms)
+✔ manifest rejects invalid file checksum (90.4664ms)
+✔ manifest rejects duplicate bundle entry (92.0866ms)
+✔ manifest rejects unsafe traversal path (87.4059ms)
+✔ manifest rejects absolute file path (85.9458ms)
+✔ manifest rejects removed declared fixture (92.4381ms)
+✔ manifest rejects fixture without registered schema (211.5845ms)
+✔ unmanifested files fail closed (88.723ms)
+✔ missing files fail closed (81.4264ms)
+✔ malformed manifest JSON fails (72.7565ms)
+✔ malformed schema JSON fails (89.0294ms)
+✔ changed fixture fails its hash before schema validation (136.5957ms)
+✔ manifest-rehashed invalid payload still fails schema validation (421.6764ms)
+✔ date formats are enforced rather than annotations (432.9262ms)
+✔ malformed schema keywords fail even after manifest rehash (303.5297ms)
+✔ unknown schema keywords fail rather than silently disabling checks (306.3075ms)
+✔ external missing reference fails offline (267.9055ms)
+✔ invalid local reference fails offline (279.6611ms)
+✔ schema identity cannot be silently substituted (244.5052ms)
+✔ deliberate TypeScript violations produce errors and clean declarations do not (1707.3977ms)
+✔ lint covers every backend TypeScript source/test/declaration file (4368.9186ms)
+✔ inline suppressions cannot hide an explicit any violation (7.2075ms)
+✔ combined checks include contract, full lint, typecheck, full test and build (0.2943ms)
+✔ verification rejects traversal labels and direct unknown npm execution (0.994ms)
+✔ verification strips secrets and runtime injection, fixes only fixture settings (0.5991ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11525.3841

@@ -1,0 +1,13 @@
+{
+  "command": [
+    "C:/Program Files/nodejs/node.exe",
+    "-r",
+    "./scripts/register-ts.js",
+    "--test",
+    "src/common/db/schema.integrity.test.ts",
+    "src/modules/admin/console.partner.test.ts",
+    "src/modules/admin/console.guard.test.ts",
+    "src/modules/rfqflow/rfqflow.test.ts"
+  ],
+  "status": 0
+}

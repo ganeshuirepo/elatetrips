@@ -18,6 +18,7 @@
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import nodemailer from 'nodemailer';
 
 import { describeRfqFlow, loadRfqFlowConfig } from './rfqflow.config';
 import { RfqFlowService } from './rfqflow.service';
@@ -318,7 +319,7 @@ const quote = (id: string, supplier: string, amount: number, partial = false): Q
     itinerary_version: 1,
     line_items: [],
     total: { amount, currency: 'INR' },
-    validity_ts: '2026-10-01',
+    validity_ts: '2026-10-01T00:00:00.000Z',
     partial,
     channel: 'card',
     status: 'shortlisted',
@@ -333,6 +334,8 @@ test('the comparison resolves supplier ids to names and prices them correctly', 
     mail: mail.port,
     directory: new ConfigRecipientDirectory({ source: ENV_ON }),
     names: { nameFor: async (id) => (id === 'sup-1' ? 'Coorg Trails' : null) },
+    // Keep the fixture live independently of the machine's calendar date.
+    now: () => new Date('2026-09-30T00:00:00.000Z'),
   });
 
   await service.onQuotesShortlisted(rfq(), [quote('q1', 'sup-1', 8400000), quote('q2', 'sup-9', 9100000, true)]);
@@ -344,6 +347,42 @@ test('the comparison resolves supplier ids to names and prices them correctly', 
   assert.match(rows, /sup-9/, 'an unresolved name falls back to the id rather than dropping the row');
   assert.match(rows, /partial/);
   assert.equal(summary?.data.quote_count, 2);
+});
+
+test('the same comparison fixture stays live through validity and is withheld after it', async () => {
+  const mail = fakeMail();
+  const offer = quote('q1', 'sup-1', 8400000);
+  const validity = new Date(offer.validity_ts).getTime();
+  let currentTime = validity - 1;
+  const lookedUp: string[] = [];
+  const service = new RfqFlowService({
+    config: loadRfqFlowConfig(ENV_ON),
+    candidates: fakeCandidates([]),
+    wave: fakeWave().port,
+    mail: mail.port,
+    directory: new ConfigRecipientDirectory({ source: ENV_ON }),
+    names: { nameFor: async (id) => { lookedUp.push(id); return 'Coorg Trails'; } },
+    now: () => new Date(currentTime),
+  });
+
+  for (const instant of [validity - 1, validity]) {
+    currentTime = instant;
+    const report = await service.onQuotesShortlisted(rfq(), [offer]);
+    assert.equal(report.customer?.outcome, 'sent');
+    const summary = mail.sent[mail.sent.length - 1];
+    assert.equal(summary.templateId, 'quote_summary');
+    assert.equal(summary.data.quote_count, 1);
+    assert.match(String(summary.data.quote_rows), /Coorg Trails/);
+    assert.match(String(summary.data.quote_rows), /INR 84,000/);
+  }
+
+  currentTime = validity + 1;
+  const expired = await service.onQuotesShortlisted(rfq(), [offer]);
+  assert.match(expired.skipped ?? '', /expired/);
+  assert.equal(mail.sent.length, 2, 'expiry withholds the summary rather than changing the supplier');
+  assert.deepEqual(lookedUp, ['sup-1', 'sup-1'], 'only live quotes resolve their canonical supplier id');
+  assert.equal(offer.supplier_id, 'sup-1');
+  assert.deepEqual(offer.total, { amount: 8400000, currency: 'INR' });
 });
 
 test('an expired price is never quoted to a customer', async () => {
@@ -479,14 +518,33 @@ interface CapturedMail {
 }
 
 function fakeTransport(capture: CapturedMail[], fail?: string) {
-  return {
-    async sendMail(message: CapturedMail): Promise<{ messageId: string }> {
-      if (fail) throw new Error(fail);
-      capture.push(message);
-      return { messageId: '<abc@example>' };
+  // A real typed transporter with an in-memory plugin: no SMTP socket or cast.
+  return nodemailer.createTransport({
+    name: 'rfqflow-fixture',
+    version: '1.0.0',
+    send(message, callback) {
+      const result = {
+        messageId: '<abc@example>',
+        envelope: { from: 'fixture@elatetrips.example', to: [] },
+        accepted: [],
+        rejected: [],
+        pending: [],
+        response: 'in-memory fixture',
+      };
+      if (fail) {
+        callback(new Error(fail), result);
+        return;
+      }
+      const { to, subject, text, headers } = message.data;
+      capture.push({
+        to: String(to),
+        subject,
+        text: String(text),
+        headers: Object.fromEntries(Object.entries(headers ?? {}).map(([key, value]) => [key, String(value)])),
+      });
+      callback(null, result);
     },
-    close(): void {},
-  };
+  });
 }
 
 const sendRequest = (email: string | undefined): SendRequest => ({
@@ -503,7 +561,7 @@ test('a configured test inbox takes every mail, with the real address kept visib
   assert.ok(config);
   const provider = new SmtpChannelProvider({
     config,
-    transport: fakeTransport(capture) as any,
+    transport: fakeTransport(capture),
   });
 
   const result = await provider.send(sendRequest('real@dmc.example'));
@@ -518,7 +576,7 @@ test('with no test inbox the mail goes to the real address, unprefixed', async (
   const capture: CapturedMail[] = [];
   const config = loadSmtpConfig(SMTP_ENV);
   assert.ok(config);
-  const provider = new SmtpChannelProvider({ config, transport: fakeTransport(capture) as any });
+  const provider = new SmtpChannelProvider({ config, transport: fakeTransport(capture) });
 
   await provider.send(sendRequest('real@dmc.example'));
   assert.equal(capture[0].to, 'real@dmc.example');
@@ -530,7 +588,7 @@ test('a transport failure comes back as a result, never as a throw', async () =>
   assert.ok(config);
   const provider = new SmtpChannelProvider({
     config,
-    transport: fakeTransport([], 'connection refused') as any,
+    transport: fakeTransport([], 'connection refused'),
   });
 
   const result = await provider.send(sendRequest('real@dmc.example'));

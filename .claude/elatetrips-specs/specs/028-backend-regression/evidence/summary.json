@@ -1,0 +1,93 @@
+{
+  "checks": [
+    {
+      "name": "contracts",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "typecheck",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "application-tests",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "harness-tests",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "build",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "whole-lint",
+      "status": 0,
+      "passed": true
+    }
+  ],
+  "wholeLint": {
+    "files": 247,
+    "errors": 0,
+    "warnings": 0
+  },
+  "wholeLintStatus": 0,
+  "testedCheckpoint": "85ca488aec90431022ab32bd91b2b47f6ac6b34e",
+  "branch": "feature/028-backend-regression",
+  "recordedAtUtc": "2026-10-21T17:46:17.471Z",
+  "runnerRuns": 1,
+  "applicationTests": {
+    "tests": 610,
+    "suites": 45,
+    "pass": 610,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "harnessTests": {
+    "tests": 34,
+    "suites": 0,
+    "pass": 34,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "contracts": {
+    "schemas": 15,
+    "fixtures": 20,
+    "source": {
+      "repository": "elatetrips-experiences",
+      "commit": "e8dc98fce0d84f5223a3615f50001f0eb4b29922",
+      "directory": "contracts",
+      "releaseLabel": "not-uniformly-declared; no-adoption-inferred"
+    }
+  },
+  "scopeAudit": {
+    "checkpoints": 12,
+    "passed": true,
+    "rangeCommitsMatchAssignedCheckpoints": true,
+    "sourceWhitespaceStatus": 0,
+    "trackedAndUntrackedStatusAfterChecks": ""
+  },
+  "preflight": {
+    "runnerSyntax": "node --check passed",
+    "childEnvironment": "Strict OS allowlist; fixture-only settings; inherited runtime injection and provider variables excluded; explicit provider settings empty",
+    "dependencies": "Existing node_modules junction used read-only; no install",
+    "mongo": "Existing local MongoDB 8.2.6 binary; runtime download disabled",
+    "scope": "Only own spec manually read; Git metadata audit and automated backend checks only"
+  },
+  "lintDiagnosticsContainSourceFields": false,
+  "outcome": "passed"
+}

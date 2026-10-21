@@ -3,7 +3,7 @@ import { ok } from '../../common/http/ApiResponse';
 import { UnauthorizedError } from '../../common/errors/AppError';
 import type { ConsoleClaims } from '../admin/console.token';
 import type { SupportService } from './support.service';
-import { supportBus } from './support.stream';
+import { claimStreamSlot, releaseStreamSlot, supportBus } from './support.stream';
 
 /**
  * Three audiences, one controller: the guest thread (user JWT, scoped to the
@@ -125,6 +125,22 @@ export class SupportController {
    * heartbeat comment every 25s keeps proxies from reaping idle connections.
    */
   stream = (req: Request, res: Response): void => {
+    // EventSource cannot send an Authorization header, so this endpoint is open.
+    // That makes what it BROADCASTS the whole security question: it used to push
+    // every event to every listener with tripId and vendorId attached, handing
+    // anyone who held the connection open a live feed of trip identifiers and
+    // business activity.
+    //
+    // Nothing needs those ids to travel. A client already knows its own trip, so
+    // the event only has to say that something in a given scope changed; the
+    // client then refetches over an endpoint that DOES authenticate and DOES
+    // enforce ownership. The wire now carries a bare scope and nothing else.
+    if (!claimStreamSlot(req.ip)) {
+      res.writeHead(429, { 'Content-Type': 'text/plain' });
+      res.end('Too many open streams from this address');
+      return;
+    }
+
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache, no-transform',
@@ -134,11 +150,12 @@ export class SupportController {
     res.write(': connected\n\n');
     const heartbeat = setInterval(() => res.write(': ping\n\n'), 25_000);
     const unsubscribe = supportBus.onEvent((e) => {
-      res.write(`data: ${JSON.stringify(e)}\n\n`);
+      res.write(`data: ${JSON.stringify({ scope: e.scope })}\n\n`);
     });
     req.on('close', () => {
       clearInterval(heartbeat);
       unsubscribe();
+      releaseStreamSlot(req.ip);
     });
   };
 }

@@ -1,0 +1,883 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elatetrips.com/contracts/experiences.schema.json",
+  "title": "Experiences catalog bundle (Δ-005) — generated, never hand-written",
+  "description": "The Experiences catalog exported from src/domain/experiences by `npm run export:experiences`, so the web, the backend seed and the Flutter app read ONE catalog instead of three. Two documents share this schema: catalog.v1.json (what we sell and how it reads) and plans.v1.json (what prices and schedules it). Content values here are DATA, not hard-coded business rules (BR-17): prices, tiers and day plans are authored in the domain modules and flow outward — no client embeds its own copy.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/catalog"
+    },
+    {
+      "$ref": "#/$defs/plans"
+    },
+    {
+      "$ref": "#/$defs/manifest"
+    }
+  ],
+  "$defs": {
+    "classification": {
+      "enum": [
+        "celebration",
+        "festival",
+        "recreation",
+        "pilgrimage"
+      ]
+    },
+    "tierName": {
+      "enum": [
+        "Essential",
+        "Signature",
+        "Grand"
+      ]
+    },
+    "occasion": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "icon": {
+          "type": "string",
+          "minLength": 1
+        },
+        "occasion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "best": {
+          "type": "string"
+        },
+        "dests": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "blurb": {
+          "type": "string"
+        },
+        "fromPrice": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "cover": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "icon",
+        "occasion",
+        "best",
+        "blurb",
+        "fromPrice",
+        "unit",
+        "cover"
+      ],
+      "additionalProperties": false
+    },
+    "festival": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "month": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "location": {
+          "type": "string"
+        },
+        "dateLabel": {
+          "type": "string"
+        },
+        "start": {
+          "type": "string",
+          "format": "date"
+        },
+        "end": {
+          "type": "string",
+          "format": "date"
+        },
+        "dests": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "cover": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "blurb": {
+          "type": "string"
+        },
+        "fromPrice": {
+          "type": "string"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "month",
+        "name",
+        "location",
+        "dateLabel",
+        "start",
+        "end",
+        "dests",
+        "cover",
+        "icon",
+        "blurb",
+        "fromPrice",
+        "aliases"
+      ],
+      "additionalProperties": false
+    },
+    "section": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "icon": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "detail": {
+          "type": "string"
+        },
+        "skippable": {
+          "type": "boolean"
+        },
+        "levels": {
+          "type": "object",
+          "properties": {
+            "Essential": {
+              "$ref": "#/$defs/tier"
+            },
+            "Signature": {
+              "$ref": "#/$defs/tier"
+            },
+            "Grand": {
+              "$ref": "#/$defs/tier"
+            }
+          },
+          "required": [
+            "Essential",
+            "Signature",
+            "Grand"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "id",
+        "icon",
+        "name",
+        "detail",
+        "skippable",
+        "levels"
+      ],
+      "additionalProperties": false
+    },
+    "tier": {
+      "type": "object",
+      "properties": {
+        "price": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "price",
+        "items"
+      ],
+      "additionalProperties": false
+    },
+    "sectionsByClassification": {
+      "type": "object",
+      "properties": {
+        "celebration": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/section"
+          },
+          "minItems": 1
+        },
+        "festival": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/section"
+          },
+          "minItems": 1
+        },
+        "recreation": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/section"
+          },
+          "minItems": 1
+        },
+        "pilgrimage": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/section"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "celebration",
+        "festival",
+        "recreation",
+        "pilgrimage"
+      ],
+      "additionalProperties": false
+    },
+    "catalog": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "classifications": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/classification"
+              },
+              "label": {
+                "type": "string"
+              },
+              "icon": {
+                "type": "string"
+              },
+              "accent": {
+                "type": "string"
+              },
+              "accentDeep": {
+                "type": "string"
+              },
+              "eyebrow": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "sub": {
+                "type": "string"
+              },
+              "more": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "label",
+              "icon",
+              "accent",
+              "accentDeep",
+              "eyebrow",
+              "title",
+              "sub",
+              "more"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "destinations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "icon": {
+                "type": "string"
+              },
+              "region": {
+                "type": "string"
+              },
+              "popular": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "name",
+              "icon",
+              "region",
+              "popular"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "routes": {
+          "type": "array",
+          "description": "Package destinations: neighbouring places sold as one trip. `stops` is derived from the name, never authored separately.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "icon": {
+                "type": "string"
+              },
+              "region": {
+                "type": "string"
+              },
+              "stops": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 2
+              }
+            },
+            "required": [
+              "name",
+              "icon",
+              "region",
+              "stops"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "occasions": {
+          "type": "object",
+          "properties": {
+            "celebration": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/occasion"
+              }
+            },
+            "festival": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/occasion"
+              }
+            },
+            "recreation": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/occasion"
+              }
+            },
+            "pilgrimage": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/occasion"
+              }
+            }
+          },
+          "required": [
+            "celebration",
+            "festival",
+            "recreation",
+            "pilgrimage"
+          ],
+          "additionalProperties": false
+        },
+        "festivals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/festival"
+          }
+        },
+        "hero": {
+          "type": "object",
+          "properties": {
+            "slides": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "eyebrow": {
+                    "type": "string"
+                  },
+                  "lead": {
+                    "type": "string"
+                  },
+                  "em": {
+                    "type": "string"
+                  },
+                  "tail": {
+                    "type": "string"
+                  },
+                  "sub": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "eyebrow",
+                  "lead",
+                  "em",
+                  "tail",
+                  "sub"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "themes": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/classification"
+                  },
+                  "icon": {
+                    "type": "string"
+                  },
+                  "kicker": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "line": {
+                    "type": "string"
+                  },
+                  "accent": {
+                    "type": "string"
+                  },
+                  "accentDeep": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "icon",
+                  "kicker",
+                  "title",
+                  "line",
+                  "accent",
+                  "accentDeep"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "prompts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "intervalMs": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "themeEvery": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "slides",
+            "themes",
+            "prompts",
+            "intervalMs",
+            "themeEvery"
+          ],
+          "additionalProperties": false
+        },
+        "budgets": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "minItems": 1
+        },
+        "stays": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "nights": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value",
+              "label"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "inclusions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "label"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "classifications",
+        "destinations",
+        "routes",
+        "occasions",
+        "festivals",
+        "hero",
+        "budgets",
+        "stays",
+        "groups",
+        "nights",
+        "inclusions"
+      ],
+      "additionalProperties": false
+    },
+    "plans": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "sections": {
+          "$ref": "#/$defs/sectionsByClassification"
+        },
+        "celebrationAddon": {
+          "$ref": "#/$defs/section"
+        },
+        "addons": {
+          "type": "object",
+          "properties": {
+            "celebration": {
+              "$ref": "#/$defs/addonList"
+            },
+            "festival": {
+              "$ref": "#/$defs/addonList"
+            },
+            "recreation": {
+              "$ref": "#/$defs/addonList"
+            },
+            "pilgrimage": {
+              "$ref": "#/$defs/addonList"
+            }
+          },
+          "required": [
+            "celebration",
+            "festival",
+            "recreation",
+            "pilgrimage"
+          ],
+          "additionalProperties": false
+        },
+        "transport": {
+          "type": "object",
+          "properties": {
+            "defaultMode": {
+              "enum": [
+                "full",
+                "destination",
+                "own"
+              ]
+            },
+            "carLimit": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "modes": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "enum": [
+                      "full",
+                      "destination",
+                      "own"
+                    ]
+                  },
+                  "icon": {
+                    "type": "string"
+                  },
+                  "label": {
+                    "type": "string"
+                  },
+                  "blurb": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "icon",
+                  "label",
+                  "blurb"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "vehicles": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "icon": {
+                    "type": "string"
+                  },
+                  "kind": {
+                    "enum": [
+                      "car",
+                      "coach"
+                    ]
+                  },
+                  "seats": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "note": {
+                    "type": "string"
+                  },
+                  "perKm": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "minKm": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "inclusions": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "exclusions": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "id",
+                  "name",
+                  "icon",
+                  "kind",
+                  "seats",
+                  "note",
+                  "perKm",
+                  "minKm",
+                  "inclusions",
+                  "exclusions"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "defaultMode",
+            "carLimit",
+            "modes",
+            "vehicles"
+          ],
+          "additionalProperties": false
+        },
+        "occasionPlans": {
+          "type": "object",
+          "description": "Occasion name → its fixed day-by-day plan.",
+          "additionalProperties": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "day": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "title": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "minItems": 1
+                }
+              },
+              "required": [
+                "day",
+                "title",
+                "items"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "sections",
+        "celebrationAddon",
+        "addons",
+        "transport",
+        "occasionPlans"
+      ],
+      "additionalProperties": false
+    },
+    "manifest": {
+      "type": "object",
+      "description": "What an importer checks a delivery against before writing a row. No generatedAt: a timestamp would make every export differ from the last, which is the exact signal the drift check reads. When a bundle entered a database is the importer's fact to record.",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "files": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "bytes": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "sha256",
+              "bytes"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "counts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "files",
+        "counts"
+      ],
+      "additionalProperties": false
+    },
+    "addonList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "blurb": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "id",
+          "icon",
+          "name",
+          "blurb",
+          "unit",
+          "price"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

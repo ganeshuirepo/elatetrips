@@ -1,0 +1,38 @@
+diff --git a/elatetrips-node/src/modules/policy/binding.integration.test.ts b/elatetrips-node/src/modules/policy/binding.integration.test.ts
+index 4409d1c..0115ddf 100644
+--- a/elatetrips-node/src/modules/policy/binding.integration.test.ts
++++ b/elatetrips-node/src/modules/policy/binding.integration.test.ts
+@@ -147,6 +147,33 @@ test('initial scope denial does not load acceptance; authoritative mapping drift
+   await assert.rejects(service.read(token, f.intent.bookingId));
+ });
+ 
++test('different authorized scoped reader preserves stored writer and estimates old terms but cannot replay', async () => {
++  const f = fixture(); const writer = await openPolicyBindingService(f.options);
++  const original = await writer.accept(token, f.intent);
++  const beforeRows = await rawRows(f.database);
++  f.state.currentCatalog = [];
++  f.authority.load = async () => { throw new Error('Reader must not reload acceptance'); };
++  const reader = await openPolicyBindingService({ ...f.options, proposalClock: () => { throw new Error('Reader must not create proposal'); } });
++  const readerToken = 'fixture-other-authorized-reader';
++  const saved = await reader.read(readerToken, f.intent.bookingId);
++  assert.deepEqual(saved, original);
++  assert.equal(saved?.event.actor_id, f.intent.actorId);
++  assert.equal(saved?.event.role, f.intent.role);
++  const estimate = await reader.estimate(readerToken, f.intent.bookingId, { cancellation_date: '2028-03-03', captured_amount: f.intent.amount });
++  assert.equal(estimate.status, 'ok');
++  if (estimate.status === 'ok' && 'value' in estimate) assert.equal(estimate.value.refund.amount, 7500);
++  await assert.rejects(reader.accept(readerToken, f.intent));
++  await assert.rejects(reader.accept(readerToken, { ...f.intent, actorId: 'fixture-foreign-user' }), hasCode('IDEMPOTENCY_CONFLICT'));
++  assert.deepEqual(await rawRows(f.database), beforeRows);
++  assert.equal(f.state.loadCalls, 1);
++  assert.equal(f.state.clockCalls, 1);
++  f.state.read = false;
++  await assert.rejects(reader.read(readerToken, f.intent.bookingId));
++  await assert.rejects(reader.estimate(readerToken, f.intent.bookingId, { cancellation_date: '2028-03-03', captured_amount: f.intent.amount }));
++  f.state.read = true; f.state.scope = 'foreign';
++  await assert.rejects(reader.read(readerToken, f.intent.bookingId));
++});
++
+ test('simultaneous identical requests reconcile original winner despite different server times and catalog reads', async () => {
+   const f = fixture(); f.state.barrier = true; f.state.raceCatalogChange = true;
+   const first = await openPolicyBindingService(f.options); const second = await openPolicyBindingService(f.options);

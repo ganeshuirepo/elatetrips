@@ -1,0 +1,2443 @@
+{
+  "planVersion": "10",
+  "sourceBRD": "9",
+  "preparedDate": "19 October 2026",
+  "repoBaselineObserved": "18 October 2026",
+  "repoCommit": "cee97b67999ed72aae5e4f09809ce42910c96bb5",
+  "scope": "Development planning only; no application, backend or frozen contract changes.",
+  "phases": [
+    {
+      "id": "P0",
+      "title": "Align contracts and establish foundations",
+      "release": "Foundation",
+      "outcome": "One reconciled contract baseline, documented repo gaps, secure persistence and test harness.",
+      "entry": "BRD revision 9 and local repository snapshot available.",
+      "exit": "DEV-001 to DEV-006 and DEV-057 accepted; contract proposals and unresolved commercial policies recorded; no frozen contract edited without owner merge.",
+      "depends": []
+    },
+    {
+      "id": "P1",
+      "title": "Deliver purpose based planning",
+      "release": "MVP-A",
+      "outcome": "Six combinable purpose journeys, minimum-input interpretation, smart list plus chat, comparable mock offers and reviewed enquiry handoff.",
+      "entry": "P0 schema/access foundations; mock catalog fixtures.",
+      "exit": "A mixed family/rest request produces valid options; chips and chat match; both scope skips work; no model-invented price or automatic booking.",
+      "depends": [
+        "P0"
+      ]
+    },
+    {
+      "id": "P2",
+      "title": "Connect organization enquiries and commercial operations",
+      "release": "MVP-A",
+      "outcome": "Corporate/MICE and education RFQs, first-party leads, versioned customer proposals, organizer decisions and partner catalog.",
+      "entry": "Accepted TripContext/cart and common API contracts.",
+      "exit": "Each of ten journey classifications can reach a qualified, priced, versioned proposal with an authorized organizer decision; Gate R1 evidence ready.",
+      "depends": [
+        "P1"
+      ]
+    },
+    {
+      "id": "P3",
+      "title": "Connect partner fulfillment and shared administration",
+      "release": "MVP-A",
+      "outcome": "Dated availability, explicit allocations, manual/instant response engine, component ledger, amendments and shared staff views.",
+      "entry": "Current-version acceptance, scoped partner products and rates.",
+      "exit": "Rehearsal proves no over-allocation or duplicate reservation, partial status honesty, explicit release/reconfirmation and separate occasion proposal. MVP-A planning/RFQ pilot gate passes.",
+      "depends": [
+        "P2"
+      ]
+    },
+    {
+      "id": "P4",
+      "title": "Certify live supply and transactional checkout",
+      "release": "MVP-B",
+      "outcome": "Contracted GDS/direct integrations, real revalidation, payment/refund evidence, supplier timeout recovery and release operations.",
+      "entry": "MVP-A accepted; supplier sandbox access and commercial/payment model resolved.",
+      "exit": "Gate R2 passes supplier certification, money/fulfillment tests, tenant security, backup restore and staffed exception rehearsals. Paid booking enabled only for supported capabilities.",
+      "depends": [
+        "P3"
+      ]
+    },
+    {
+      "id": "P5",
+      "title": "Expand journeys and optimize operations",
+      "release": "Post-MVP",
+      "outcome": "Advanced multi-leg and sequential-stay UI, group invite/discount tooling, richer organization rules and optional pooled supply.",
+      "entry": "Stable supported transactional pilot and product prioritization.",
+      "exit": "Each feature passes its own contract, consent, coverage and regression criteria; merchant pooling remains separately gated.",
+      "depends": [
+        "P4"
+      ]
+    }
+  ],
+  "modules": [
+    {
+      "id": "WP01",
+      "title": "Contract and configuration alignment",
+      "legacy_specs": "000",
+      "owner": "Platform lead",
+      "reuse": "constitution.md; contracts/; .claude/elatetrips-specs/contracts-deltas/",
+      "planned": "Owner-approved contract extensions and documented policy reconciliation"
+    },
+    {
+      "id": "WP02",
+      "title": "Shared backend access persistence and events",
+      "legacy_specs": "006",
+      "owner": "Backend",
+      "reuse": "src/store/contractsApi.ts; src/store/contractsBaseQuery.ts; src/store/elateApi.ts",
+      "planned": "Backend implementation in separately obtained elatetrips-node checkout; no backend directory in this frontend snapshot"
+    },
+    {
+      "id": "WP03",
+      "title": "Trip intent and six purpose journeys",
+      "legacy_specs": "001 + 007",
+      "owner": "Frontend and AI",
+      "reuse": "src/domain/rfq/; src/domain/agent/; src/store/rfqApi.ts; src/store/agentApi.ts; src/store/agentSlice.ts",
+      "planned": "Shared TripContext contract and purpose preference reducers; selected planner entry route"
+    },
+    {
+      "id": "WP04",
+      "title": "Offer search ranking and smart workspace",
+      "legacy_specs": "002 + 007",
+      "owner": "Frontend and backend",
+      "reuse": "src/components/agent/; src/components/itinerary/; src/domain/agent/; src/store/agentApi.ts",
+      "planned": "Normalized offer/search adapter contract and split results/chat workspace"
+    },
+    {
+      "id": "WP05",
+      "title": "Component selection coverage and RFQ handoff",
+      "legacy_specs": "001 + 002",
+      "owner": "Domain and frontend",
+      "reuse": "src/components/builder/; src/store/slices/cartSlice.ts; src/store/slices/itinerarySlice.ts; src/domain/itinerary/",
+      "planned": "Coverage-aware component cart and explicit independent travel/stay scope"
+    },
+    {
+      "id": "WP06",
+      "title": "Corporate MICE and education entry points",
+      "legacy_specs": "001 + 002 + 003 extensions",
+      "owner": "Frontend and backend",
+      "reuse": "src/components/rfq/; src/components/itinerary/; src/components/quotes/",
+      "planned": "Proposed /corporate and /education routes; organization context and RFQ extension"
+    },
+    {
+      "id": "WP07",
+      "title": "Lead intake and sales desk",
+      "legacy_specs": "003 + 006 extensions",
+      "owner": "Sales domain and frontend",
+      "reuse": "src/app/desk/; src/app/leads/; src/store/opsApi.ts; src/domain/ops/",
+      "planned": "Customer lead pipeline ownership and source attribution; optional /sales alias only"
+    },
+    {
+      "id": "WP08",
+      "title": "Customer proposals revisions and approval",
+      "legacy_specs": "003 + 004 extensions",
+      "owner": "Commercial domain",
+      "reuse": "src/components/quotes/; src/store/quotesApi.ts; src/store/slices/quotesSlice.ts; src/domain/quotes.ts",
+      "planned": "Separate customer proposal/version/approval entities linked to existing supplier quote IDs"
+    },
+    {
+      "id": "WP09",
+      "title": "Partner account listings amenities and rates",
+      "legacy_specs": "005 + 006 extensions",
+      "owner": "Partner frontend and backend",
+      "reuse": "src/app/partner/card/[token]/; src/app/partner/ratecard/[partnerId]/; src/app/partners/onboard/; src/store/partnerApi.ts",
+      "planned": "Proposed /partner/portal workspace; product/rate revisions with authenticated partner membership"
+    },
+    {
+      "id": "WP10",
+      "title": "Inventory allocation and component booking ledger",
+      "legacy_specs": "004 + 005; limited 008 reuse",
+      "owner": "Fulfillment backend",
+      "reuse": "src/domain/booking.ts; src/domain/fulfillment.ts; src/domain/assignment/; src/store/bookingApi.ts; src/store/supplyApi.ts",
+      "planned": "Internal dated allocations and pre-payment component task model without pooled merchant promises"
+    },
+    {
+      "id": "WP11",
+      "title": "Common admin recovery and readiness",
+      "legacy_specs": "004 + 008 + 006 extensions",
+      "owner": "Operations frontend and backend",
+      "reuse": "src/app/admin/; src/app/ops/console/; src/app/ops/recovery/; src/app/partners/admin/; src/store/opsApi.ts",
+      "planned": "Common projections and role rules, preserving separate partner recruitment administration"
+    },
+    {
+      "id": "WP12",
+      "title": "Group interest and separate occasions",
+      "legacy_specs": "001 + 002 + 003 extensions",
+      "owner": "Product domain",
+      "reuse": "src/domain/rfq/; src/domain/itinerary/; src/domain/quotes.ts",
+      "planned": "Group-interest/invite records and parent-linked post-confirmation arrangement proposals"
+    },
+    {
+      "id": "WP13",
+      "title": "GDS bus and direct supplier integrations",
+      "legacy_specs": "006",
+      "owner": "Integration backend",
+      "reuse": "contracts/api.md; src/store/apiMode.ts; src/store/contractsBaseQuery.ts",
+      "planned": "Capability adapters in shared backend; supplier-specific SDKs/keys never in web bundle"
+    },
+    {
+      "id": "WP14",
+      "title": "Checkout financial state and aftercare",
+      "legacy_specs": "004; 008 behavior gated",
+      "owner": "Payments and fulfillment",
+      "reuse": "src/components/checkout/; src/components/booking/; src/store/bookingApi.ts; src/domain/policy.ts; src/domain/refund/",
+      "planned": "Accepted cart/proposal bridge, verified gateway events and policy-driven compensations"
+    },
+    {
+      "id": "WP15",
+      "title": "Quality migration and release evidence",
+      "legacy_specs": "000 + 006 and all feature tests",
+      "owner": "QA and platform",
+      "reuse": "scripts/test-contracts.mjs; .github/workflows/contracts.yml; .github/workflows/deploy.yml",
+      "planned": "Approved gate checklist, parity/e2e/concurrency/security tests and migration evidence"
+    },
+    {
+      "id": "WP16",
+      "title": "Advanced segments stays and organization features",
+      "legacy_specs": "002 + 008 extensions",
+      "owner": "Domain and frontend",
+      "reuse": "src/domain/itinerary/; src/store/slices/itinerarySlice.ts; src/domain/canonical/; src/domain/assignment/",
+      "planned": "Advanced segment/sequence UI and optional policy-based optimizations"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "DEV-001",
+      "module": "WP01",
+      "phase": "P0",
+      "priority": "P0",
+      "size": "S",
+      "title": "Capture a reproducible repository baseline",
+      "deliverable": "Record commit, route/module ownership, package scripts, actual fixture/live seams and existing failures before estimating remaining work.",
+      "acceptance": [
+        "Given a clean checkout, documented contract/typecheck/lint/test/build commands produce retained results with each pre-existing failure identified.",
+        "File presence is distinguished from implemented behavior; missing backend and review-gates.md are recorded, not assumed complete."
+      ],
+      "depends_on": [],
+      "brd_refs": [
+        "BRD9.BR-26"
+      ],
+      "acceptance_refs": [],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-002",
+      "module": "WP01",
+      "phase": "P0",
+      "priority": "P0",
+      "size": "M",
+      "title": "Reconcile the new BRD with legacy contracts",
+      "deliverable": "Create a requirement-to-contract delta register, entity glossary and current contract version decision. Identify old constitution/CHANGES text and reserved delta numbers.",
+      "acceptance": [
+        "Every BRD9.BR-01 through BR-35 is mapped to a task and contract decision; no field is silently dropped.",
+        "SupplierQuote and CustomerProposal are distinct; event naming, inventory dependency and merchant auto-confirm semantics have an explicit resolution."
+      ],
+      "depends_on": [
+        "DEV-001"
+      ],
+      "brd_refs": [],
+      "acceptance_refs": [],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-003",
+      "module": "WP01",
+      "phase": "P0",
+      "priority": "P0",
+      "size": "L",
+      "title": "Prepare owner mergeable contract proposals",
+      "deliverable": "Draft compatible intent/context, offer, organization/lead/proposal, partner inventory and booking/payment event changes with fixtures and migrations. Reserve next unused delta IDs; leave /contracts unchanged until owner merges.",
+      "acceptance": [
+        "A proposal states affected modules, old/new payload examples, backward compatibility and migration tests.",
+        "Consumer/provider schemas and event/API additions validate against the owner-approved target version before dependent integration starts."
+      ],
+      "depends_on": [
+        "DEV-002"
+      ],
+      "brd_refs": [],
+      "acceptance_refs": [],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-004",
+      "module": "WP01",
+      "phase": "P0",
+      "priority": "P0",
+      "size": "M",
+      "title": "Externalize policies and release flags",
+      "deliverable": "Define versioned configuration for purpose prompts, scoring, validity, SLAs, partner modes, group tiers, taxes/fees and supplier/payment capabilities.",
+      "acceptance": [
+        "Changing a configured policy changes deterministic fixture output without engine code edits.",
+        "Missing commercial rules disable the affected live action and explain the reason; no old 008 thresholds or refund guarantees are copied as constants."
+      ],
+      "depends_on": [
+        "DEV-002"
+      ],
+      "brd_refs": [
+        "BRD9.BR-04",
+        "BRD9.BR-26",
+        "BRD9.BR-30"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-02",
+        "BRD9.AT-14"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-005",
+      "module": "WP02",
+      "phase": "P0",
+      "priority": "P0",
+      "size": "L",
+      "title": "Establish server identity and resource scope",
+      "deliverable": "Inventory existing JWT/OTP/membership behavior in the authorized backend checkout; implement validated customer, organizer, sales, ops, admin and partner scopes.",
+      "acceptance": [
+        "Cross-customer, cross-organization and cross-partner queries/mutations return a typed denial.",
+        "A recipient-bound partner link cannot grant broader portal access; existing money-affecting OTP checks remain until changed through governance."
+      ],
+      "depends_on": [
+        "DEV-003"
+      ],
+      "brd_refs": [
+        "BRD9.BR-22",
+        "BRD9.BR-31"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-15"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-006",
+      "module": "WP02",
+      "phase": "P0",
+      "priority": "P0",
+      "size": "L",
+      "title": "Persist canonical records and immutable audit",
+      "deliverable": "Implement central versioned contexts/leads/proposals/products/bookings and audit persistence; verify database transaction support and indexes.",
+      "acceptance": [
+        "Refreshing in another authorized session reads the same server record, while another tenant cannot read it.",
+        "State mutation and its audit/outbox record commit together where applicable; stale revisions fail instead of overwriting newer work."
+      ],
+      "depends_on": [
+        "DEV-003",
+        "DEV-005"
+      ],
+      "brd_refs": [
+        "BRD9.BR-20",
+        "BRD9.BR-21",
+        "BRD9.BR-33"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-07",
+        "BRD9.AT-12",
+        "BRD9.AT-15"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-007",
+      "module": "WP02",
+      "phase": "P1",
+      "priority": "P0",
+      "size": "M",
+      "title": "Wire fixture and live service ports",
+      "deliverable": "Extend the existing contract/agent/RFQ API slices through documented adapters. Keep catalog, RFQ and recommendation state joined by canonical IDs.",
+      "acceptance": [
+        "The same accepted scenario passes fixture and server adapter contract tests with equivalent payloads.",
+        "No second browser-only RFQ/cart becomes authoritative; loading, empty and typed failure states render in every boundary."
+      ],
+      "depends_on": [
+        "DEV-006",
+        "DEV-057"
+      ],
+      "brd_refs": [
+        "BRD9.BR-02",
+        "BRD9.BR-14"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-01",
+        "BRD9.AT-06"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-008",
+      "module": "WP02",
+      "phase": "P2",
+      "priority": "P0",
+      "size": "L",
+      "title": "Add idempotent commands and event projections",
+      "deliverable": "Use idempotency keys, payload hashes, optimistic revisions, outbox delivery and replay-safe projections for commercial and fulfillment actions.",
+      "acceptance": [
+        "Retrying an identical command returns its prior result; the same key with different intent is rejected.",
+        "Duplicate/out-of-order provider events cannot regress state or duplicate a confirmation; source and receive times remain distinct."
+      ],
+      "depends_on": [
+        "DEV-006",
+        "DEV-007"
+      ],
+      "brd_refs": [
+        "BRD9.BR-23",
+        "BRD9.BR-33",
+        "BRD9.BR-35"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-12",
+        "BRD9.AT-16"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-009",
+      "module": "WP03",
+      "phase": "P1",
+      "priority": "P0",
+      "size": "L",
+      "title": "Introduce the accepted TripContext seam",
+      "deliverable": "Version purposes, origin/destination, dates, party, preferences and scope while retaining adapters to the current RFQ and itinerary contracts. Include future segment IDs without shipping advanced UI.",
+      "acceptance": [
+        "Unknown values remain null; explicit user facts and model proposals retain provenance.",
+        "A route/date/party change creates a reviewed context revision and invalidates stale search assumptions without silently changing selected services."
+      ],
+      "depends_on": [
+        "DEV-003",
+        "DEV-004",
+        "DEV-007"
+      ],
+      "brd_refs": [
+        "BRD9.BR-01",
+        "BRD9.BR-02",
+        "BRD9.BR-08"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-01",
+        "BRD9.AT-04"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-010",
+      "module": "WP03",
+      "phase": "P1",
+      "priority": "P0",
+      "size": "M",
+      "title": "Build minimal purpose first entry",
+      "deliverable": "Revise the selected existing /plan or /trip entry using current tokens; show essentials on every device and offer six purpose chips with a one-sentence search.",
+      "acceptance": [
+        "Six purposes support multi-select; corporate and education are absent from the consumer purpose list.",
+        "Essentials are visible at mobile and desktop sizes; own travel/stay controls are reachable without a long planning form or voice input."
+      ],
+      "depends_on": [
+        "DEV-009"
+      ],
+      "brd_refs": [
+        "BRD9.BR-01",
+        "BRD9.BR-02",
+        "BRD9.BR-03",
+        "BRD9.BR-06"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-01",
+        "BRD9.AT-03"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-011",
+      "module": "WP03",
+      "phase": "P1",
+      "priority": "P0",
+      "size": "L",
+      "title": "Extend the existing recommendation loop",
+      "deliverable": "Reuse 007 extraction/tool-result ledger/serializer with validated purpose and filter actions, context version guards and a server-side model gateway.",
+      "acceptance": [
+        "Known facts are not re-asked; ambiguous year, budget basis or place triggers one relevant clarification.",
+        "Untooled price/availability/product IDs, invalid output and injected supplier instructions cannot enter a result or invoke booking/payment mutations."
+      ],
+      "depends_on": [
+        "DEV-009",
+        "DEV-013"
+      ],
+      "brd_refs": [
+        "BRD9.BR-02",
+        "BRD9.BR-04",
+        "BRD9.BR-18"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-01",
+        "BRD9.AT-14"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-012",
+      "module": "WP03",
+      "phase": "P1",
+      "priority": "P0",
+      "size": "L",
+      "title": "Implement six distinct purpose preference flows",
+      "deliverable": "Add separate reducers/questions for discovery, rest/wellness, family, celebrations, pilgrimage and group intent, composing them into one context.",
+      "acceptance": [
+        "Each purpose fixture reaches its own relevant next step; mixed family/rest and pilgrimage/rest retain both preference sets.",
+        "Conflicts prompt a priority choice; protected rest time, occupancy and requested visit timing are not overwritten by another purpose."
+      ],
+      "depends_on": [
+        "DEV-010",
+        "DEV-011"
+      ],
+      "brd_refs": [
+        "BRD9.BR-02",
+        "BRD9.BR-03"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-01",
+        "BRD9.AT-13"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-013",
+      "module": "WP04",
+      "phase": "P1",
+      "priority": "P0",
+      "size": "M",
+      "title": "Define normalized supply capabilities",
+      "deliverable": "Add common offer/search/revalidate/status ports with product, rate-plan, policy, currency, scope, coverage, observation and expiry references.",
+      "acceptance": [
+        "Flight, bus, stay, experience and bundled mock offers validate against the approved schema.",
+        "An adapter explicitly declares unsupported capabilities; expired or unverified offers cannot be labeled bookable."
+      ],
+      "depends_on": [
+        "DEV-003",
+        "DEV-007"
+      ],
+      "brd_refs": [
+        "BRD9.BR-05",
+        "BRD9.BR-28",
+        "BRD9.BR-30"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-02",
+        "BRD9.AT-14"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-014",
+      "module": "WP04",
+      "phase": "P1",
+      "priority": "P0",
+      "size": "M",
+      "title": "Build representative mock supply cases",
+      "deliverable": "Provide route/date/party fixtures for flight/bus with local cab optional, separate stays, bus packages and complete private packages; include missing coverage, repricing, timeout and unavailable outcomes.",
+      "acceptance": [
+        "For a supported fixture the list includes separate and package alternatives with consistent total/average-per-person amounts, exclusions and validity.",
+        "Unsupported routes produce an honest empty/partial-source state; sample rates are labeled and never advertised as live."
+      ],
+      "depends_on": [
+        "DEV-013"
+      ],
+      "brd_refs": [
+        "BRD9.BR-05",
+        "BRD9.BR-13"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-02",
+        "BRD9.AT-05",
+        "BRD9.AT-14"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-015",
+      "module": "WP04",
+      "phase": "P1",
+      "priority": "P0",
+      "size": "M",
+      "title": "Unify behavioral filters and deterministic ranking",
+      "deliverable": "Reuse 007 scoring/tool logic for cheapest, shortest, best value and purpose fit over eligible normalized offers. Declare comparison basis and configurable weights.",
+      "acceptance": [
+        "A chip and equivalent chat message produce the same filter state, eligible IDs and sort order.",
+        "Cheapest compares the same scope; shortest uses a declared duration; explanations expose key trade-offs without inventing inclusions."
+      ],
+      "depends_on": [
+        "DEV-004",
+        "DEV-011",
+        "DEV-014"
+      ],
+      "brd_refs": [
+        "BRD9.BR-04",
+        "BRD9.BR-05",
+        "BRD9.BR-07"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-02"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-016",
+      "module": "WP04",
+      "phase": "P1",
+      "priority": "P0",
+      "size": "L",
+      "title": "Build the results and chatbot workspace",
+      "deliverable": "Compose existing agent, itinerary and catalog components with results left/chat right and results above/chat below on mobile.",
+      "acceptance": [
+        "User sees current filters, comparable offer details and selected-but-hidden notices while chatting.",
+        "Keyboard, focus, loading/error/empty states and layout checks pass at 390, 768 and 1440 px; changing layout preserves selections."
+      ],
+      "depends_on": [
+        "DEV-010",
+        "DEV-015"
+      ],
+      "brd_refs": [
+        "BRD9.BR-03",
+        "BRD9.BR-04",
+        "BRD9.BR-07"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-01",
+        "BRD9.AT-02",
+        "BRD9.AT-04"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-017",
+      "module": "WP05",
+      "phase": "P1",
+      "priority": "P0",
+      "size": "L",
+      "title": "Create coverage aware component selection",
+      "deliverable": "Extend existing itinerary/cart seams with supplier product/session coverage and package-inclusion deduplication.",
+      "acceptance": [
+        "Selecting a private package with a transfer adds that transfer once; a different dated session remains a distinct item.",
+        "A locked item is retained; a proposed alternate requires explicit customer action and a valid supplier bundle rule."
+      ],
+      "depends_on": [
+        "DEV-009",
+        "DEV-013",
+        "DEV-014"
+      ],
+      "brd_refs": [
+        "BRD9.BR-05",
+        "BRD9.BR-07"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-04"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-018",
+      "module": "WP05",
+      "phase": "P1",
+      "priority": "P0",
+      "size": "M",
+      "title": "Implement independent travel and stay skips",
+      "deliverable": "Make intercity travel, accommodation and local transport separate scopes in selection and pricing.",
+      "acceptance": [
+        "All four travel/stay inclusion combinations work; own travel retains a desired local cab and own stay retains experiences.",
+        "Affected components and totals are reviewed when scope changes; hidden selections are never silently purchased or discarded."
+      ],
+      "depends_on": [
+        "DEV-017"
+      ],
+      "brd_refs": [
+        "BRD9.BR-06",
+        "BRD9.BR-07"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-03",
+        "BRD9.AT-04"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-019",
+      "module": "WP05",
+      "phase": "P1",
+      "priority": "P0",
+      "size": "L",
+      "title": "Validate timing occupancy and component totals",
+      "deliverable": "Use deterministic arrival/departure buffers, room/participant rules, slot overlap checks and integer-minor-unit arithmetic.",
+      "acceptance": [
+        "Infeasible check-in/return/slot fixtures are blocked with a reason and alternatives.",
+        "Room-nights, participant counts and shared services reconcile to the selected total; changing party invalidates dependent estimates for review."
+      ],
+      "depends_on": [
+        "DEV-017",
+        "DEV-018"
+      ],
+      "brd_refs": [
+        "BRD9.BR-05",
+        "BRD9.BR-08",
+        "BRD9.BR-13"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-04",
+        "BRD9.AT-05"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-020",
+      "module": "WP05",
+      "phase": "P1",
+      "priority": "P0",
+      "size": "M",
+      "title": "Connect reviewed planning to RFQ submission",
+      "deliverable": "Reuse RFQ APIs and review sentence with an immutable selected-plan snapshot and source reference. Capture minimum reply contact/permission separately from trip discovery.",
+      "acceptance": [
+        "No lead/submission is created before explicit review and submit; retry is deduplicated.",
+        "Selected component totals and separate occasion budget survive the handoff; editing the carried brief prevents reuse of stale prices."
+      ],
+      "depends_on": [
+        "DEV-012",
+        "DEV-016",
+        "DEV-019",
+        "DEV-045",
+        "DEV-046"
+      ],
+      "brd_refs": [
+        "BRD9.BR-14",
+        "BRD9.BR-16"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-06",
+        "BRD9.AT-13"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-021",
+      "module": "WP06",
+      "phase": "P2",
+      "priority": "P0",
+      "size": "M",
+      "title": "Extend organization party and package pricing",
+      "deliverable": "Add organization lane, organizer authority, student/staff counts and explicit room/vehicle/day/venue pricing bases to common context and proposals.",
+      "acceptance": [
+        "Student and staff counts reconcile to the total, and unknown staff counts are not invented as zero.",
+        "A headcount or date change recomputes quantities from declared assumptions and asks for review of inconsistent rooming or vehicle capacity."
+      ],
+      "depends_on": [
+        "DEV-003",
+        "DEV-009",
+        "DEV-019"
+      ],
+      "brd_refs": [
+        "BRD9.BR-09",
+        "BRD9.BR-10",
+        "BRD9.BR-11",
+        "BRD9.BR-12",
+        "BRD9.BR-13"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-05"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-022",
+      "module": "WP06",
+      "phase": "P2",
+      "priority": "P0",
+      "size": "L",
+      "title": "Deliver corporate and MICE package entry",
+      "deliverable": "Add proposed /corporate route using shared result/chat components with corporate travel and event package variants.",
+      "acceptance": [
+        "Each lane shows sample total and per-person costs, inclusions/exclusions and estimated validity.",
+        "Chat can revise event days, rooming, AV, meals, travel or activities; corporate options never appear as extra consumer purposes."
+      ],
+      "depends_on": [
+        "DEV-016",
+        "DEV-021"
+      ],
+      "brd_refs": [
+        "BRD9.BR-09",
+        "BRD9.BR-10",
+        "BRD9.BR-13"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-05"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-023",
+      "module": "WP06",
+      "phase": "P2",
+      "priority": "P0",
+      "size": "L",
+      "title": "Deliver education and institution vacation entry",
+      "deliverable": "Add proposed /education route with learning and vacation packages and independently recorded institution requirements.",
+      "acceptance": [
+        "Both lanes show explicit student/staff, room, coach, meal and activity assumptions plus total/average pricing.",
+        "Educational readiness/permissions are displayed as requirements for review, not inferred from a booking or presented as a universal compliance guarantee."
+      ],
+      "depends_on": [
+        "DEV-016",
+        "DEV-021"
+      ],
+      "brd_refs": [
+        "BRD9.BR-11",
+        "BRD9.BR-12",
+        "BRD9.BR-13",
+        "BRD9.BR-25"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-05",
+        "BRD9.AT-09"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-024",
+      "module": "WP06",
+      "phase": "P2",
+      "priority": "P0",
+      "size": "M",
+      "title": "Join organization RFQs to common operations",
+      "deliverable": "Save reviewed organization requests as deduplicated first-party enquiries carrying exact context, inclusions/exclusions and source snapshot.",
+      "acceptance": [
+        "Corporate, MICE, learning and vacation requests all open in the same authorized commercial workbench.",
+        "Save/import does not imply supplier prices are verified or organizer acceptance exists; missing authority/contact blocks publication."
+      ],
+      "depends_on": [
+        "DEV-020",
+        "DEV-022",
+        "DEV-023",
+        "DEV-025"
+      ],
+      "brd_refs": [
+        "BRD9.BR-09",
+        "BRD9.BR-10",
+        "BRD9.BR-11",
+        "BRD9.BR-12",
+        "BRD9.BR-14",
+        "BRD9.BR-16"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-05",
+        "BRD9.AT-06"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-025",
+      "module": "WP07",
+      "phase": "P2",
+      "priority": "P0",
+      "size": "M",
+      "title": "Add first party lead intake and deduplication",
+      "deliverable": "Reuse /leads and current APIs, separating customer travel enquiries from existing partner recruitment/EOI leads.",
+      "acceptance": [
+        "Website, assisted and organization submissions retain source/campaign, permission timestamp and original brief.",
+        "Retries use submission keys; a deliberate second enquiry from the same email is retained and does not overwrite the first."
+      ],
+      "depends_on": [
+        "DEV-006",
+        "DEV-008",
+        "DEV-020"
+      ],
+      "brd_refs": [
+        "BRD9.BR-14",
+        "BRD9.BR-15"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-06"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-026",
+      "module": "WP07",
+      "phase": "P2",
+      "priority": "P0",
+      "size": "M",
+      "title": "Extend the existing sales desk",
+      "deliverable": "Use /desk and /leads for journey/source/stage search, owner, follow-up and assigned next action; optional /sales routing alias only.",
+      "acceptance": [
+        "New, qualified, quoted and closed/lost records can be filtered; overdue and unassigned leads are visible.",
+        "A follow-up note does not itself send an email/WhatsApp message; scoped staff cannot read another organization’s leads."
+      ],
+      "depends_on": [
+        "DEV-025"
+      ],
+      "brd_refs": [
+        "BRD9.BR-15",
+        "BRD9.BR-17"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-06",
+        "BRD9.AT-15"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-027",
+      "module": "WP07",
+      "phase": "P2",
+      "priority": "P0",
+      "size": "M",
+      "title": "Qualify and convert to an internal proposal",
+      "deliverable": "Verify organizer, route, dates, party, budget basis and source-price assumptions before creating a customer proposal.",
+      "acceptance": [
+        "Conversion is idempotent and retains the source RFQ/cart snapshot; unknowns stay explicit.",
+        "Imported fixture prices remain internal estimates until reviewed; conversion does not create acceptance or reservations."
+      ],
+      "depends_on": [
+        "DEV-021",
+        "DEV-026",
+        "DEV-029"
+      ],
+      "brd_refs": [
+        "BRD9.BR-16",
+        "BRD9.BR-18",
+        "BRD9.BR-20"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-06",
+        "BRD9.AT-07"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-028",
+      "module": "WP07",
+      "phase": "P3",
+      "priority": "P1",
+      "size": "S",
+      "title": "Project sales workload and response metrics",
+      "deliverable": "Add source conversion, quoted pipeline, approval follow-ups and supplier attention from the shared commercial/booking event model.",
+      "acceptance": [
+        "Quoted value is labeled separately from collected revenue; duplicate events do not inflate counts.",
+        "Partner changes and partial/failed confirmations surface with an assigned next action in sales and admin."
+      ],
+      "depends_on": [
+        "DEV-026",
+        "DEV-031",
+        "DEV-037",
+        "DEV-041"
+      ],
+      "brd_refs": [
+        "BRD9.BR-17",
+        "BRD9.BR-18"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-06",
+        "BRD9.AT-08"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-029",
+      "module": "WP08",
+      "phase": "P2",
+      "priority": "P0",
+      "size": "L",
+      "title": "Separate customer proposals from supplier quotes",
+      "deliverable": "Introduce immutable CustomerProposalVersion and Approval linked to existing SupplierQuote IDs, policy/version snapshots and accepted context hash.",
+      "acceptance": [
+        "A supplier quote cannot be mistaken for customer acceptance; the two retain separate IDs, states and lineage.",
+        "Included item amounts sum in minor units and keep supplier/service basis, exclusions and validity; contract replay preserves legacy quotes."
+      ],
+      "depends_on": [
+        "DEV-003",
+        "DEV-006",
+        "DEV-017"
+      ],
+      "brd_refs": [
+        "BRD9.BR-20",
+        "BRD9.BR-21",
+        "BRD9.BR-22"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-07"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-030",
+      "module": "WP08",
+      "phase": "P2",
+      "priority": "P0",
+      "size": "L",
+      "title": "Build the common commercial workbench",
+      "deliverable": "Extend existing quote UI for draft line quantities/prices, included/bookable flags, supplier, terms, exclusions and revision reason; compare candidate partner rates.",
+      "acceptance": [
+        "Saving a draft leaves the published version, supplier commitments and current approval unchanged.",
+        "Concurrent staff edits fail a stale draft revision check; preparing partner prices never silently updates a customer-approved amount."
+      ],
+      "depends_on": [
+        "DEV-027",
+        "DEV-029",
+        "DEV-035"
+      ],
+      "brd_refs": [
+        "BRD9.BR-18",
+        "BRD9.BR-19",
+        "BRD9.BR-20",
+        "BRD9.BR-21"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-07",
+        "BRD9.AT-11"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-031",
+      "module": "WP08",
+      "phase": "P2",
+      "priority": "P0",
+      "size": "L",
+      "title": "Publish and obtain version specific organizer decisions",
+      "deliverable": "Publish append-only proposals; serve authenticated, authorized organizer review and approve/request-change/decline commands.",
+      "acceptance": [
+        "Stale/expired versions and unauthorized organizers cannot approve; changes/decline require a note and all decisions carry evidence.",
+        "Publishing v2 resets acceptance without changing v1; no supplier component confirms merely because a quote is approved."
+      ],
+      "depends_on": [
+        "DEV-005",
+        "DEV-008",
+        "DEV-030"
+      ],
+      "brd_refs": [
+        "BRD9.BR-21",
+        "BRD9.BR-22",
+        "BRD9.BR-23"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-07",
+        "BRD9.AT-08",
+        "BRD9.AT-15"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-032",
+      "module": "WP08",
+      "phase": "P3",
+      "priority": "P0",
+      "size": "L",
+      "title": "Reconcile amendments and earlier commitments",
+      "deliverable": "Version service/context changes and retain prior supplier references, requiring explicit release or reconfirmation before revised tasks.",
+      "acceptance": [
+        "Removed or changed services keep their prior ledger until a verified outcome is recorded.",
+        "No new revision rebooks an old reservation automatically; stale confirmation events are reconciled and cannot silently confirm the new commercial scope."
+      ],
+      "depends_on": [
+        "DEV-031",
+        "DEV-037"
+      ],
+      "brd_refs": [
+        "BRD9.BR-24",
+        "BRD9.BR-35"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-09",
+        "BRD9.AT-12",
+        "BRD9.AT-16"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-033",
+      "module": "WP09",
+      "phase": "P2",
+      "priority": "P0",
+      "size": "M",
+      "title": "Reuse partner onboarding and scoped links",
+      "deliverable": "Keep /partners discovery/onboarding and /partner signed cards; add authenticated account membership for proposed /partner/portal without breaking existing links.",
+      "acceptance": [
+        "A partner sees only its assigned resources; expired/renewed links remain recipient-bound and registration consent is retained.",
+        "A read-only card or role switch cannot grant rate-edit or money-affecting commit authority; required OTP actions remain enforced."
+      ],
+      "depends_on": [
+        "DEV-005",
+        "DEV-006"
+      ],
+      "brd_refs": [
+        "BRD9.BR-27",
+        "BRD9.BR-31"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-10",
+        "BRD9.AT-15"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-034",
+      "module": "WP09",
+      "phase": "P2",
+      "priority": "P0",
+      "size": "M",
+      "title": "Manage bookable partner listings and amenities",
+      "deliverable": "Add room/category and experience products with city, occupancy/eligibility, verified/declarative rating source, descriptions, inclusions/exclusions and active state.",
+      "acceptance": [
+        "Hotel/resort/host users can update only their own listings; staff reads the same persisted revision.",
+        "Pausing blocks new requests without deleting existing bookings; property ratings/amenities are not fabricated or automatically promoted as verified."
+      ],
+      "depends_on": [
+        "DEV-033"
+      ],
+      "brd_refs": [
+        "BRD9.BR-27"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-10"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-035",
+      "module": "WP09",
+      "phase": "P2",
+      "priority": "P0",
+      "size": "L",
+      "title": "Add effective dated partner rate revisions",
+      "deliverable": "Reuse the existing ratecard seam, extending approved contracts for unit, dates, currency, taxes/fees, meal/policy basis and expected revision.",
+      "acceptance": [
+        "Invalid/negative/non-finite amounts and stale edits are rejected with typed messages.",
+        "New rates appear as sales candidates while published customer prices and their accepted policy snapshots remain unchanged."
+      ],
+      "depends_on": [
+        "DEV-004",
+        "DEV-013",
+        "DEV-034"
+      ],
+      "brd_refs": [
+        "BRD9.BR-28",
+        "BRD9.BR-34"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-10",
+        "BRD9.AT-11"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-036",
+      "module": "WP09",
+      "phase": "P3",
+      "priority": "P0",
+      "size": "L",
+      "title": "Manage dated availability and stop sell",
+      "deliverable": "Implement lodging rooms per night and experience capacity per dated session, with source ownership and inventory revision.",
+      "acceptance": [
+        "Check-out consumes no extra room-night; an experience session has a separate participant allotment.",
+        "Capacity cannot be reduced below confirmed units/active holds; stop-sell prevents new confirmations while retaining historical reservations."
+      ],
+      "depends_on": [
+        "DEV-006",
+        "DEV-035"
+      ],
+      "brd_refs": [
+        "BRD9.BR-29",
+        "BRD9.BR-33"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-10",
+        "BRD9.AT-12"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-037",
+      "module": "WP10",
+      "phase": "P3",
+      "priority": "P0",
+      "size": "L",
+      "title": "Create the component booking state machine",
+      "deliverable": "Extend fulfillment contracts to represent approved pre-payment requests, supplier responses and independent payment state, without reusing old post-payment confirmed flags ambiguously.",
+      "acceptance": [
+        "One approved version produces one logical task per required bookable component; retry does not duplicate tasks.",
+        "One confirmed hotel/activity leaves the trip partial; all required current components must confirm for aggregate supplier-confirmed status."
+      ],
+      "depends_on": [
+        "DEV-008",
+        "DEV-031"
+      ],
+      "brd_refs": [
+        "BRD9.BR-23",
+        "BRD9.BR-31"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-08",
+        "BRD9.AT-12"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-038",
+      "module": "WP10",
+      "phase": "P3",
+      "priority": "P0",
+      "size": "L",
+      "title": "Map approved services and allocate inventory atomically",
+      "deliverable": "Require explicit product, dates/session and rooms/participants tied to approved commercial quantities; reserve internal dates and event state in one supported transaction.",
+      "acceptance": [
+        "A room-night total cannot be mistaken for rooms; mismatched city, supplier, service dates or quantity is rejected.",
+        "Two concurrent attempts for the final unit yield at most one allocation; failed or pending requests consume no capacity unless an explicit supported hold exists."
+      ],
+      "depends_on": [
+        "DEV-036",
+        "DEV-037"
+      ],
+      "brd_refs": [
+        "BRD9.BR-29",
+        "BRD9.BR-31",
+        "BRD9.BR-33"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-11",
+        "BRD9.AT-12"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-039",
+      "module": "WP10",
+      "phase": "P3",
+      "priority": "P0",
+      "size": "L",
+      "title": "Connect manual and instant partner responses",
+      "deliverable": "Let owning partners or authorized call/chat staff confirm with reference/evidence, request details or decline. Instant runs only for supported fresh matching rates/capacity.",
+      "acceptance": [
+        "Missing evidence, stop-sell, insufficient inventory, stale approval or unsupported instant capability prevents confirmation.",
+        "A rate difference requires explicit partner honor of the accepted amount or new customer acceptance; decline flags an action without reserving inventory."
+      ],
+      "depends_on": [
+        "DEV-033",
+        "DEV-035",
+        "DEV-038"
+      ],
+      "brd_refs": [
+        "BRD9.BR-30",
+        "BRD9.BR-31",
+        "BRD9.BR-32",
+        "BRD9.BR-34"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-08",
+        "BRD9.AT-11",
+        "BRD9.AT-12"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-040",
+      "module": "WP10",
+      "phase": "P3",
+      "priority": "P0",
+      "size": "L",
+      "title": "Implement release and allocation transfer",
+      "deliverable": "Record verified release reference/evidence and same-service reconfirmation with links to the older reservation.",
+      "acceptance": [
+        "A repeated confirmation/release has one effect; no capacity is deducted or returned twice.",
+        "Identical-service reconfirmation transfers the allocation once; a changed service needs an explicit release/reallocation and a release does not imply a refund."
+      ],
+      "depends_on": [
+        "DEV-032",
+        "DEV-039"
+      ],
+      "brd_refs": [
+        "BRD9.BR-24",
+        "BRD9.BR-33",
+        "BRD9.BR-35"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-09",
+        "BRD9.AT-12"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-041",
+      "module": "WP11",
+      "phase": "P3",
+      "priority": "P0",
+      "size": "L",
+      "title": "Join common request and fulfillment views",
+      "deliverable": "Extend /ops/console and /admin with common ten-lane request filters, approval/booking state, partner status and component evidence.",
+      "acceptance": [
+        "Personal, corporate, MICE, learning and vacation requests are visible through the same authorized record model.",
+        "A response recorded by partner or staff is reflected in both views; no copied dashboard state can contradict the component ledger."
+      ],
+      "depends_on": [
+        "DEV-024",
+        "DEV-026",
+        "DEV-031",
+        "DEV-037"
+      ],
+      "brd_refs": [
+        "BRD9.BR-19",
+        "BRD9.BR-23"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-08",
+        "BRD9.AT-15"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-042",
+      "module": "WP11",
+      "phase": "P3",
+      "priority": "P0",
+      "size": "L",
+      "title": "Extend recovery for partial and unknown outcomes",
+      "deliverable": "Reuse /ops/recovery and safe existing recovery primitives, adding status-unknown reconciliation before retry and explicit alternative acceptance.",
+      "acceptance": [
+        "A timeout is unknown rather than confirmed/failed; no retry creates another external booking before status lookup.",
+        "Valid confirmed components retain their references while an exception is assigned; substitution cannot bypass customer consent or locked-service constraints."
+      ],
+      "depends_on": [
+        "DEV-032",
+        "DEV-039",
+        "DEV-041"
+      ],
+      "brd_refs": [
+        "BRD9.BR-23",
+        "BRD9.BR-24",
+        "BRD9.BR-35"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-09",
+        "BRD9.AT-16"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-043",
+      "module": "WP11",
+      "phase": "P3",
+      "priority": "P0",
+      "size": "M",
+      "title": "Manage configuration and institution readiness",
+      "deliverable": "Keep role/config administration in /admin, recruitment in /partners/admin and operational readiness with the trip; audit both.",
+      "acceptance": [
+        "Disabling new enquiry intake does not remove old records; only permitted roles change configuration.",
+        "Institution permissions/rooming are separate from supplier confirmation and reset for review on a new commercial version."
+      ],
+      "depends_on": [
+        "DEV-004",
+        "DEV-023",
+        "DEV-031",
+        "DEV-041"
+      ],
+      "brd_refs": [
+        "BRD9.BR-25",
+        "BRD9.BR-26"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-09",
+        "BRD9.AT-15"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-044",
+      "module": "WP11",
+      "phase": "P3",
+      "priority": "P1",
+      "size": "M",
+      "title": "Add in app response attention and delivery ports",
+      "deliverable": "Persist partner/staff/customer attention events with acknowledgement and future delivery adapters; preserve contact permissions and existing follow-up history.",
+      "acceptance": [
+        "A confirmation or failure creates one in-app attention record; reopening or replay does not resend it.",
+        "External email/WhatsApp/voice channels stay off unless separately enabled and authorized; customer voice assistant and social automation stay off."
+      ],
+      "depends_on": [
+        "DEV-008",
+        "DEV-041",
+        "DEV-042"
+      ],
+      "brd_refs": [
+        "BRD9.BR-15",
+        "BRD9.BR-23"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-15",
+        "BRD9.AT-16"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-045",
+      "module": "WP12",
+      "phase": "P1",
+      "priority": "P0",
+      "size": "M",
+      "title": "Capture group interest without promising inventory",
+      "deliverable": "Collect route, mode, purpose, target/group size, budget basis and package interest with explicit price/availability conditions.",
+      "acceptance": [
+        "Interested and confirmed/paid travelers are separate counts; interest cannot reserve seats or trigger a discount.",
+        "The customer sees each sample package amount, inclusions/exclusions and the next assisted quote step."
+      ],
+      "depends_on": [
+        "DEV-009",
+        "DEV-014",
+        "DEV-017"
+      ],
+      "brd_refs": [
+        "BRD9.BR-05",
+        "BRD9.BR-14"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-13"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-046",
+      "module": "WP12",
+      "phase": "P1",
+      "priority": "P0",
+      "size": "S",
+      "title": "Keep occasion intent and budget outside main totals",
+      "deliverable": "Capture birthday/anniversary or another supported occasion brief without making an arrangement a compulsory entry step or main-trip payable line.",
+      "acceptance": [
+        "A celebration plus leisure/family request keeps the main trip eligible while recording its separate budget.",
+        "Review shows main total and indicative occasion budget separately; no automatic arrangement booking or charge occurs."
+      ],
+      "depends_on": [
+        "DEV-009",
+        "DEV-017"
+      ],
+      "brd_refs": [
+        "BRD9.BR-25"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-13"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-047",
+      "module": "WP12",
+      "phase": "P3",
+      "priority": "P0",
+      "size": "M",
+      "title": "Create separately accepted occasion proposals",
+      "deliverable": "After an eligible main stay/package is supplier-confirmed, create a parent-linked arrangement proposal using the same commercial and supplier engines.",
+      "acceptance": [
+        "Before eligible main confirmation the arrangement action is blocked; after it, repeated creation yields one child proposal.",
+        "The child starts unapproved and requires its own price acceptance and provider confirmation; main booking approval never authorizes its charge."
+      ],
+      "depends_on": [
+        "DEV-031",
+        "DEV-039",
+        "DEV-046"
+      ],
+      "brd_refs": [
+        "BRD9.BR-25"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-09",
+        "BRD9.AT-13"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-048",
+      "module": "WP12",
+      "phase": "P5",
+      "priority": "P1",
+      "size": "L",
+      "title": "Add invitation sharing and verified discount tiers",
+      "deliverable": "Create opt-in group invitations with privacy controls and supplier-configured thresholds, deadlines and price revisions.",
+      "acceptance": [
+        "A user explicitly chooses to share a link; no automatic social post/message or participant identity exposure occurs.",
+        "A threshold uses the declared interested/accepted/paid basis and verified supplier terms; any changed payable total requires fresh acceptance."
+      ],
+      "depends_on": [
+        "DEV-045",
+        "DEV-055",
+        "DEV-060"
+      ],
+      "brd_refs": [],
+      "acceptance_refs": [
+        "BRD9.AT-13"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-049",
+      "module": "WP13",
+      "phase": "P4",
+      "priority": "P0",
+      "size": "L",
+      "title": "Integrate contracted flight supply",
+      "deliverable": "Implement a provider-specific backend adapter against the normalized search/revalidate/book/status contract, retaining baggage/fare/expiry and client references.",
+      "acceptance": [
+        "Sandbox fixtures and provider cases cover reprice, unavailable fare, partial failure and timeout/status reconciliation.",
+        "No provider key enters the frontend; a timed-out booking is looked up before another mutation."
+      ],
+      "depends_on": [
+        "DEV-013",
+        "DEV-039",
+        "DEV-042"
+      ],
+      "brd_refs": [
+        "BRD9.BR-05",
+        "BRD9.BR-30",
+        "BRD9.BR-33"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-11",
+        "BRD9.AT-14",
+        "BRD9.AT-16"
+      ],
+      "status": "Planned",
+      "scope_condition": "Required before this source/capability is enabled; not all three sources must launch together."
+    },
+    {
+      "id": "DEV-050",
+      "module": "WP13",
+      "phase": "P4",
+      "priority": "P0",
+      "size": "L",
+      "title": "Integrate contracted bus supply",
+      "deliverable": "Use a bus aggregator/direct operator adapter with route/service/seat identity and actual cancellation/status capabilities.",
+      "acceptance": [
+        "Seat changes and unavailability are revalidated and require customer review where price or scope changes.",
+        "Bus coverage/capabilities are explicit; the application does not assume the flight GDS also provides buses."
+      ],
+      "depends_on": [
+        "DEV-013",
+        "DEV-039",
+        "DEV-042"
+      ],
+      "brd_refs": [
+        "BRD9.BR-05",
+        "BRD9.BR-30"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-11",
+        "BRD9.AT-14",
+        "BRD9.AT-16"
+      ],
+      "status": "Planned",
+      "scope_condition": "Required before this source/capability is enabled; not all three sources must launch together."
+    },
+    {
+      "id": "DEV-051",
+      "module": "WP13",
+      "phase": "P4",
+      "priority": "P0",
+      "size": "L",
+      "title": "Integrate hotel GDS and direct partner APIs",
+      "deliverable": "Map external room/rate-plan identities and partner API events to the central catalog/booking ledger with signature and replay checks.",
+      "acceptance": [
+        "Direct allotment remains distinct from externally owned inventory and cannot be double counted.",
+        "Manual and API events follow the same approved scope/amount/evidence rules; duplicate callbacks change no totals or inventory."
+      ],
+      "depends_on": [
+        "DEV-013",
+        "DEV-035",
+        "DEV-038",
+        "DEV-039"
+      ],
+      "brd_refs": [
+        "BRD9.BR-28",
+        "BRD9.BR-29",
+        "BRD9.BR-30",
+        "BRD9.BR-33"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-11",
+        "BRD9.AT-12",
+        "BRD9.AT-15"
+      ],
+      "status": "Planned",
+      "scope_condition": "Required before this source/capability is enabled; not all three sources must launch together."
+    },
+    {
+      "id": "DEV-052",
+      "module": "WP13",
+      "phase": "P4",
+      "priority": "P0",
+      "size": "L",
+      "title": "Certify adapter parity and reconciliation",
+      "deliverable": "Run approved sandbox/certification scenarios for each provider and scheduled status checks with source deadlines, retry limits and exception ownership.",
+      "acceptance": [
+        "Supported adapters pass the same contract suite and required provider certification; missing capabilities are disabled.",
+        "Stale rates, missing callbacks and capacity drift surface with correlation IDs and an assigned exception rather than a fabricated successful booking."
+      ],
+      "depends_on": [
+        "DEV-013",
+        "DEV-039",
+        "DEV-042"
+      ],
+      "brd_refs": [
+        "BRD9.BR-23",
+        "BRD9.BR-33",
+        "BRD9.BR-35"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-12",
+        "BRD9.AT-14",
+        "BRD9.AT-16"
+      ],
+      "status": "Planned",
+      "conditional_depends_on": [
+        "DEV-049",
+        "DEV-050",
+        "DEV-051"
+      ],
+      "scope_condition": "Complete and certify every adapter selected for launch; leave all unselected provider capabilities disabled."
+    },
+    {
+      "id": "DEV-053",
+      "module": "WP14",
+      "phase": "P4",
+      "priority": "P0",
+      "size": "L",
+      "title": "Resolve and implement accepted scope and payment policy",
+      "deliverable": "Bridge current quote checkout to an accepted cart/customer proposal version. Reconcile platform-held payment and policy snapshot timing with the constitution before enabling money.",
+      "acceptance": [
+        "The exact item/amount/currency/policy version is revalidated and explicitly accepted before payment or paid supplier mutation.",
+        "Supplier amount, taxes/fees, markup/discount and payable reconcile; undefined commercial responsibilities keep checkout disabled."
+      ],
+      "depends_on": [
+        "DEV-002",
+        "DEV-004",
+        "DEV-031",
+        "DEV-039"
+      ],
+      "brd_refs": [
+        "BRD9.BR-20",
+        "BRD9.BR-21",
+        "BRD9.BR-22"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-07",
+        "BRD9.AT-15"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-054",
+      "module": "WP14",
+      "phase": "P4",
+      "priority": "P0",
+      "size": "L",
+      "title": "Wire sandbox payments and verified financial events",
+      "deliverable": "Reuse 004/Razorpay integration seams with server-side idempotency, signature checks and separate authorized/captured/failed financial state.",
+      "acceptance": [
+        "Browser success alone cannot mark paid; only a valid gateway event advances the financial ledger.",
+        "Duplicate webhooks capture once; failure/cancel scenarios retain supplier commitments and enter recovery under the agreed policy."
+      ],
+      "depends_on": [
+        "DEV-008",
+        "DEV-053"
+      ],
+      "brd_refs": [],
+      "acceptance_refs": [
+        "BRD9.AT-15",
+        "BRD9.AT-16"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-055",
+      "module": "WP14",
+      "phase": "P4",
+      "priority": "P0",
+      "size": "L",
+      "title": "Publish honest customer booking status and aftercare",
+      "deliverable": "Join booking/status, voucher and follow-up views to supplier and payment ledgers with explicit pending/partial/unknown states.",
+      "acceptance": [
+        "Consolidated review/status shows per-component suppliers, references, price and policy coverage without claiming an atomic external transaction.",
+        "A partial confirmation, payment state or readiness checklist alone cannot display full trip fulfillment."
+      ],
+      "depends_on": [
+        "DEV-040",
+        "DEV-042",
+        "DEV-052",
+        "DEV-054"
+      ],
+      "brd_refs": [
+        "BRD9.BR-23",
+        "BRD9.BR-24",
+        "BRD9.BR-25"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-08",
+        "BRD9.AT-09",
+        "BRD9.AT-16"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-056",
+      "module": "WP14",
+      "phase": "P4",
+      "priority": "P0",
+      "size": "L",
+      "title": "Implement approved cancellation and refund recovery",
+      "deliverable": "Reuse policy/refund domain primitives only after deciding which legacy 008 promises remain applicable; model requests, provider cancellation, inventory release and refund settlement separately.",
+      "acceptance": [
+        "Refund amounts use the accepted policy snapshot, not the latest catalog; money-affecting staff actions follow required role/approval evidence.",
+        "No release or supplier failure automatically asserts a settled refund; pooling satisfaction/dead-man guarantees remain disabled unless separately approved."
+      ],
+      "depends_on": [
+        "DEV-040",
+        "DEV-053",
+        "DEV-054",
+        "DEV-055"
+      ],
+      "brd_refs": [],
+      "acceptance_refs": [
+        "BRD9.AT-12",
+        "BRD9.AT-15",
+        "BRD9.AT-16"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-057",
+      "module": "WP15",
+      "phase": "P0",
+      "priority": "P0",
+      "size": "M",
+      "title": "Restore and extend the acceptance harness",
+      "deliverable": "Keep existing schema replay/path-guard and domain tests; record missing gate docs and establish module-local contract and end-to-end fixtures.",
+      "acceptance": [
+        "All required scripts exist and a reproducible baseline report records pass/fail without hiding existing failures.",
+        "New tests use canonical fixtures, not copied HTML localStorage structures, and prove approved contract-version compatibility."
+      ],
+      "depends_on": [
+        "DEV-001",
+        "DEV-003"
+      ],
+      "brd_refs": [],
+      "acceptance_refs": [],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-058",
+      "module": "WP15",
+      "phase": "P2",
+      "priority": "P0",
+      "size": "M",
+      "title": "Demonstrate the complete quote loop at R1",
+      "deliverable": "Prepare the proposed R1 evidence pack: purpose planning, organization lanes, lead qualification, proposal revision, organizer decision and partner quote/link compatibility.",
+      "acceptance": [
+        "All ten journey classifications traverse the reviewed quote loop with proper scope/authority and no inferred booking.",
+        "Contract/typecheck/lint/test and relevant e2e checks pass, including stale/expired approval and mixed-purpose scenarios; owner verifies the restored gate checklist."
+      ],
+      "depends_on": [
+        "DEV-012",
+        "DEV-020",
+        "DEV-024",
+        "DEV-026",
+        "DEV-030",
+        "DEV-031",
+        "DEV-033",
+        "DEV-035"
+      ],
+      "brd_refs": [
+        "BRD9.BR-01",
+        "BRD9.BR-02",
+        "BRD9.BR-03",
+        "BRD9.BR-04",
+        "BRD9.BR-05",
+        "BRD9.BR-06",
+        "BRD9.BR-07",
+        "BRD9.BR-09",
+        "BRD9.BR-10",
+        "BRD9.BR-11",
+        "BRD9.BR-12",
+        "BRD9.BR-13",
+        "BRD9.BR-14",
+        "BRD9.BR-15",
+        "BRD9.BR-16",
+        "BRD9.BR-18",
+        "BRD9.BR-19",
+        "BRD9.BR-20",
+        "BRD9.BR-21",
+        "BRD9.BR-22",
+        "BRD9.BR-27",
+        "BRD9.BR-28"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-01",
+        "BRD9.AT-02",
+        "BRD9.AT-03",
+        "BRD9.AT-05",
+        "BRD9.AT-06",
+        "BRD9.AT-07",
+        "BRD9.AT-10",
+        "BRD9.AT-14",
+        "BRD9.AT-15"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-059",
+      "module": "WP15",
+      "phase": "P3",
+      "priority": "P0",
+      "size": "L",
+      "title": "Accept the planning and operations MVP-A pilot",
+      "deliverable": "Run role/tenant, persisted cross-portal, final-unit concurrency, duplicate response, amendment, readiness and separate occasion rehearsals; publish supported capability flags and a rollback runbook.",
+      "acceptance": [
+        "The core P0-priority MVP-A tasks and R1 evidence pass; unresolved optional items are explicit and disabled.",
+        "Public-facing paid booking remains disabled; the pilot accurately states supported planning/RFQ/manual-coordination capabilities and mock/live boundaries."
+      ],
+      "depends_on": [
+        "DEV-032",
+        "DEV-036",
+        "DEV-038",
+        "DEV-039",
+        "DEV-040",
+        "DEV-041",
+        "DEV-042",
+        "DEV-043",
+        "DEV-047",
+        "DEV-058"
+      ],
+      "brd_refs": [
+        "BRD9.BR-17",
+        "BRD9.BR-23",
+        "BRD9.BR-24",
+        "BRD9.BR-25",
+        "BRD9.BR-26",
+        "BRD9.BR-29",
+        "BRD9.BR-30",
+        "BRD9.BR-31",
+        "BRD9.BR-32",
+        "BRD9.BR-33",
+        "BRD9.BR-34",
+        "BRD9.BR-35"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-08",
+        "BRD9.AT-09",
+        "BRD9.AT-10",
+        "BRD9.AT-11",
+        "BRD9.AT-12",
+        "BRD9.AT-13",
+        "BRD9.AT-15",
+        "BRD9.AT-16"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-060",
+      "module": "WP15",
+      "phase": "P4",
+      "priority": "P0",
+      "size": "L",
+      "title": "Accept transactional release at R2",
+      "deliverable": "Produce certification, payment/refund, authorization, accessibility, observability, migration/restore and staffed incident evidence; release only the certified capability subset.",
+      "acceptance": [
+        "Customer payment through supplier confirmation/partial-failure recovery is demonstrated with replay-safe financial and booking evidence.",
+        "Backup restore and feature-flag rollback preserve external reservation references; business owners confirm provider/commercial prerequisites and R2 checklist."
+      ],
+      "depends_on": [
+        "DEV-052",
+        "DEV-054",
+        "DEV-055",
+        "DEV-056",
+        "DEV-059"
+      ],
+      "brd_refs": [],
+      "acceptance_refs": [
+        "BRD9.AT-08",
+        "BRD9.AT-12",
+        "BRD9.AT-15",
+        "BRD9.AT-16"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-061",
+      "module": "WP16",
+      "phase": "P5",
+      "priority": "P1",
+      "size": "L",
+      "title": "Expose multi destination and leg level customization",
+      "deliverable": "Extend the segment-ready context UI to ordered legs with per-leg travel/stay skips, route transfers and itinerary coverage.",
+      "acceptance": [
+        "An A-to-B-to-C fixture maintains chronological coverage and shows which segment each offer serves.",
+        "Changing one leg revalidates affected components and totals; unrelated accepted selections remain identified and no duplicate shared transfer is added."
+      ],
+      "depends_on": [
+        "DEV-009",
+        "DEV-017",
+        "DEV-019",
+        "DEV-055",
+        "DEV-060"
+      ],
+      "brd_refs": [
+        "BRD9.BR-06",
+        "BRD9.BR-07",
+        "BRD9.BR-08"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-03",
+        "BRD9.AT-04"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-062",
+      "module": "WP16",
+      "phase": "P5",
+      "priority": "P1",
+      "size": "L",
+      "title": "Expose sequential hotel selection",
+      "deliverable": "Allow more than one hotel category/property across non-overlapping night windows and destinations while keeping one party together.",
+      "acceptance": [
+        "Hotel change fixtures cover each required night once, with correct exclusive check-out and transfer buffers.",
+        "Same-night splitting of the party across hotels is rejected as outside the agreed MVP; changed stay scope gets reprice/reacceptance."
+      ],
+      "depends_on": [
+        "DEV-038",
+        "DEV-061"
+      ],
+      "brd_refs": [
+        "BRD9.BR-08",
+        "BRD9.BR-29",
+        "BRD9.BR-33"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-04",
+        "BRD9.AT-12"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-063",
+      "module": "WP16",
+      "phase": "P5",
+      "priority": "P2",
+      "size": "L",
+      "title": "Expand organization policy and rooming workflows",
+      "deliverable": "Add richer corporate policy/approval and institution staff/rooming/event schedules using the same commercial engine.",
+      "acceptance": [
+        "Role-specific policies can be configured without cloning the backend or introducing consumer purposes.",
+        "A policy/rooming change creates a reviewable revision and never resets historical supplier or institution evidence silently."
+      ],
+      "depends_on": [
+        "DEV-021",
+        "DEV-024",
+        "DEV-043",
+        "DEV-060"
+      ],
+      "brd_refs": [
+        "BRD9.BR-09",
+        "BRD9.BR-10",
+        "BRD9.BR-11",
+        "BRD9.BR-12",
+        "BRD9.BR-25"
+      ],
+      "acceptance_refs": [
+        "BRD9.AT-05",
+        "BRD9.AT-09"
+      ],
+      "status": "Planned"
+    },
+    {
+      "id": "DEV-064",
+      "module": "WP16",
+      "phase": "P5",
+      "priority": "P2",
+      "size": "L",
+      "title": "Reassess pooled supply and automated allocation",
+      "deliverable": "Reuse 008 canonical/assignment engines only if the merchant promise, policy-gap responsibility and customer disclosure are explicitly approved for this product.",
+      "acceptance": [
+        "Pooling stays off by default; component-confirmed trip status cannot inherit booking.auto_confirmed semantics.",
+        "Approved optional pooling uses configurable eligibility, capacity/freshness checks, floor equivalence, audited assignment and contractual refund rules with migration tests."
+      ],
+      "depends_on": [
+        "DEV-002",
+        "DEV-004",
+        "DEV-040",
+        "DEV-056",
+        "DEV-060"
+      ],
+      "brd_refs": [],
+      "acceptance_refs": [
+        "BRD9.AT-11",
+        "BRD9.AT-12",
+        "BRD9.AT-15",
+        "BRD9.AT-16"
+      ],
+      "status": "Planned"
+    }
+  ],
+  "topologicalExecutionOrder": [
+    "DEV-001",
+    "DEV-002",
+    "DEV-003",
+    "DEV-004",
+    "DEV-005",
+    "DEV-057",
+    "DEV-006",
+    "DEV-007",
+    "DEV-033",
+    "DEV-008",
+    "DEV-009",
+    "DEV-013",
+    "DEV-034",
+    "DEV-010",
+    "DEV-011",
+    "DEV-014",
+    "DEV-035",
+    "DEV-012",
+    "DEV-015",
+    "DEV-017",
+    "DEV-036",
+    "DEV-016",
+    "DEV-018",
+    "DEV-029",
+    "DEV-045",
+    "DEV-046",
+    "DEV-019",
+    "DEV-020",
+    "DEV-021",
+    "DEV-022",
+    "DEV-023",
+    "DEV-025",
+    "DEV-024",
+    "DEV-026",
+    "DEV-027",
+    "DEV-030",
+    "DEV-031",
+    "DEV-037",
+    "DEV-058",
+    "DEV-032",
+    "DEV-038",
+    "DEV-041",
+    "DEV-028",
+    "DEV-039",
+    "DEV-043",
+    "DEV-040",
+    "DEV-042",
+    "DEV-047",
+    "DEV-051",
+    "DEV-053",
+    "DEV-044",
+    "DEV-049",
+    "DEV-050",
+    "DEV-052",
+    "DEV-054",
+    "DEV-059",
+    "DEV-055",
+    "DEV-056",
+    "DEV-060",
+    "DEV-048",
+    "DEV-061",
+    "DEV-063",
+    "DEV-064",
+    "DEV-062"
+  ],
+  "brdTraceability": {
+    "BRD9.BR-01": [
+      "DEV-009",
+      "DEV-010"
+    ],
+    "BRD9.BR-02": [
+      "DEV-007",
+      "DEV-009",
+      "DEV-010",
+      "DEV-011",
+      "DEV-012"
+    ],
+    "BRD9.BR-03": [
+      "DEV-010",
+      "DEV-012",
+      "DEV-016"
+    ],
+    "BRD9.BR-04": [
+      "DEV-004",
+      "DEV-011",
+      "DEV-015",
+      "DEV-016"
+    ],
+    "BRD9.BR-05": [
+      "DEV-013",
+      "DEV-014",
+      "DEV-015",
+      "DEV-017",
+      "DEV-019",
+      "DEV-045",
+      "DEV-049",
+      "DEV-050"
+    ],
+    "BRD9.BR-06": [
+      "DEV-010",
+      "DEV-018",
+      "DEV-061"
+    ],
+    "BRD9.BR-07": [
+      "DEV-015",
+      "DEV-016",
+      "DEV-017",
+      "DEV-018",
+      "DEV-061"
+    ],
+    "BRD9.BR-08": [
+      "DEV-009",
+      "DEV-019",
+      "DEV-061",
+      "DEV-062"
+    ],
+    "BRD9.BR-09": [
+      "DEV-021",
+      "DEV-022",
+      "DEV-024",
+      "DEV-063"
+    ],
+    "BRD9.BR-10": [
+      "DEV-021",
+      "DEV-022",
+      "DEV-024",
+      "DEV-063"
+    ],
+    "BRD9.BR-11": [
+      "DEV-021",
+      "DEV-023",
+      "DEV-024",
+      "DEV-063"
+    ],
+    "BRD9.BR-12": [
+      "DEV-021",
+      "DEV-023",
+      "DEV-024",
+      "DEV-063"
+    ],
+    "BRD9.BR-13": [
+      "DEV-014",
+      "DEV-019",
+      "DEV-021",
+      "DEV-022",
+      "DEV-023"
+    ],
+    "BRD9.BR-14": [
+      "DEV-007",
+      "DEV-020",
+      "DEV-024",
+      "DEV-025",
+      "DEV-045"
+    ],
+    "BRD9.BR-15": [
+      "DEV-025",
+      "DEV-026",
+      "DEV-044"
+    ],
+    "BRD9.BR-16": [
+      "DEV-020",
+      "DEV-024",
+      "DEV-027"
+    ],
+    "BRD9.BR-17": [
+      "DEV-026",
+      "DEV-028"
+    ],
+    "BRD9.BR-18": [
+      "DEV-011",
+      "DEV-027",
+      "DEV-028",
+      "DEV-030"
+    ],
+    "BRD9.BR-19": [
+      "DEV-030",
+      "DEV-041"
+    ],
+    "BRD9.BR-20": [
+      "DEV-006",
+      "DEV-027",
+      "DEV-029",
+      "DEV-030",
+      "DEV-053"
+    ],
+    "BRD9.BR-21": [
+      "DEV-006",
+      "DEV-029",
+      "DEV-030",
+      "DEV-031",
+      "DEV-053"
+    ],
+    "BRD9.BR-22": [
+      "DEV-005",
+      "DEV-029",
+      "DEV-031",
+      "DEV-053"
+    ],
+    "BRD9.BR-23": [
+      "DEV-008",
+      "DEV-031",
+      "DEV-037",
+      "DEV-041",
+      "DEV-042",
+      "DEV-044",
+      "DEV-052",
+      "DEV-055"
+    ],
+    "BRD9.BR-24": [
+      "DEV-032",
+      "DEV-040",
+      "DEV-042",
+      "DEV-055"
+    ],
+    "BRD9.BR-25": [
+      "DEV-023",
+      "DEV-043",
+      "DEV-046",
+      "DEV-047",
+      "DEV-055",
+      "DEV-063"
+    ],
+    "BRD9.BR-26": [
+      "DEV-001",
+      "DEV-004",
+      "DEV-043"
+    ],
+    "BRD9.BR-27": [
+      "DEV-033",
+      "DEV-034"
+    ],
+    "BRD9.BR-28": [
+      "DEV-013",
+      "DEV-035",
+      "DEV-051"
+    ],
+    "BRD9.BR-29": [
+      "DEV-036",
+      "DEV-038",
+      "DEV-051",
+      "DEV-062"
+    ],
+    "BRD9.BR-30": [
+      "DEV-004",
+      "DEV-013",
+      "DEV-039",
+      "DEV-049",
+      "DEV-050",
+      "DEV-051"
+    ],
+    "BRD9.BR-31": [
+      "DEV-005",
+      "DEV-033",
+      "DEV-037",
+      "DEV-038",
+      "DEV-039"
+    ],
+    "BRD9.BR-32": [
+      "DEV-039"
+    ],
+    "BRD9.BR-33": [
+      "DEV-006",
+      "DEV-008",
+      "DEV-036",
+      "DEV-038",
+      "DEV-040",
+      "DEV-049",
+      "DEV-051",
+      "DEV-052",
+      "DEV-062"
+    ],
+    "BRD9.BR-34": [
+      "DEV-035",
+      "DEV-039"
+    ],
+    "BRD9.BR-35": [
+      "DEV-008",
+      "DEV-032",
+      "DEV-040",
+      "DEV-042",
+      "DEV-052"
+    ]
+  },
+  "acceptanceTraceability": {
+    "BRD9.AT-01": [
+      "DEV-007",
+      "DEV-009",
+      "DEV-010",
+      "DEV-011",
+      "DEV-012",
+      "DEV-016",
+      "DEV-058"
+    ],
+    "BRD9.AT-02": [
+      "DEV-004",
+      "DEV-013",
+      "DEV-014",
+      "DEV-015",
+      "DEV-016",
+      "DEV-058"
+    ],
+    "BRD9.AT-03": [
+      "DEV-010",
+      "DEV-018",
+      "DEV-058",
+      "DEV-061"
+    ],
+    "BRD9.AT-04": [
+      "DEV-009",
+      "DEV-016",
+      "DEV-017",
+      "DEV-018",
+      "DEV-019",
+      "DEV-061",
+      "DEV-062"
+    ],
+    "BRD9.AT-05": [
+      "DEV-014",
+      "DEV-019",
+      "DEV-021",
+      "DEV-022",
+      "DEV-023",
+      "DEV-024",
+      "DEV-058",
+      "DEV-063"
+    ],
+    "BRD9.AT-06": [
+      "DEV-007",
+      "DEV-020",
+      "DEV-024",
+      "DEV-025",
+      "DEV-026",
+      "DEV-027",
+      "DEV-028",
+      "DEV-058"
+    ],
+    "BRD9.AT-07": [
+      "DEV-006",
+      "DEV-027",
+      "DEV-029",
+      "DEV-030",
+      "DEV-031",
+      "DEV-053",
+      "DEV-058"
+    ],
+    "BRD9.AT-08": [
+      "DEV-028",
+      "DEV-031",
+      "DEV-037",
+      "DEV-039",
+      "DEV-041",
+      "DEV-055",
+      "DEV-059",
+      "DEV-060"
+    ],
+    "BRD9.AT-09": [
+      "DEV-023",
+      "DEV-032",
+      "DEV-040",
+      "DEV-042",
+      "DEV-043",
+      "DEV-047",
+      "DEV-055",
+      "DEV-059",
+      "DEV-063"
+    ],
+    "BRD9.AT-10": [
+      "DEV-033",
+      "DEV-034",
+      "DEV-035",
+      "DEV-036",
+      "DEV-058",
+      "DEV-059"
+    ],
+    "BRD9.AT-11": [
+      "DEV-030",
+      "DEV-035",
+      "DEV-038",
+      "DEV-039",
+      "DEV-049",
+      "DEV-050",
+      "DEV-051",
+      "DEV-059",
+      "DEV-064"
+    ],
+    "BRD9.AT-12": [
+      "DEV-006",
+      "DEV-008",
+      "DEV-032",
+      "DEV-036",
+      "DEV-037",
+      "DEV-038",
+      "DEV-039",
+      "DEV-040",
+      "DEV-051",
+      "DEV-052",
+      "DEV-056",
+      "DEV-059",
+      "DEV-060",
+      "DEV-062",
+      "DEV-064"
+    ],
+    "BRD9.AT-13": [
+      "DEV-012",
+      "DEV-020",
+      "DEV-045",
+      "DEV-046",
+      "DEV-047",
+      "DEV-048",
+      "DEV-059"
+    ],
+    "BRD9.AT-14": [
+      "DEV-004",
+      "DEV-011",
+      "DEV-013",
+      "DEV-014",
+      "DEV-049",
+      "DEV-050",
+      "DEV-052",
+      "DEV-058"
+    ],
+    "BRD9.AT-15": [
+      "DEV-005",
+      "DEV-006",
+      "DEV-026",
+      "DEV-031",
+      "DEV-033",
+      "DEV-041",
+      "DEV-043",
+      "DEV-044",
+      "DEV-051",
+      "DEV-053",
+      "DEV-054",
+      "DEV-056",
+      "DEV-058",
+      "DEV-059",
+      "DEV-060",
+      "DEV-064"
+    ],
+    "BRD9.AT-16": [
+      "DEV-008",
+      "DEV-032",
+      "DEV-042",
+      "DEV-044",
+      "DEV-049",
+      "DEV-050",
+      "DEV-052",
+      "DEV-054",
+      "DEV-055",
+      "DEV-056",
+      "DEV-059",
+      "DEV-060",
+      "DEV-064"
+    ]
+  },
+  "conditionalDependencyRule": "DEV-052 requires all supplier adapter tasks selected for launch; unselected capabilities stay disabled.",
+  "priorities": {
+    "P0": "Release blocker for the release/capability in which it is scheduled",
+    "P1": "High-priority improvement; not an MVP-A release blocker",
+    "P2": "Later optimization requiring its own scope decision"
+  },
+  "sizes": "S M L describe relative complexity only; no calendar estimate or completion status is implied."
+}

@@ -1,0 +1,43 @@
+▶ managed trusted consumer lifecycle
+  ✔ constructs a detached frozen route without scheduling work (3.8381ms)
+  ✔ rejects invalid configuration and Node timer overflow (2.3945ms)
+  ✔ disabled routes reject without invoking consumers, controls or timers (0.6609ms)
+  ✔ pre-aborted invocations reject before work (0.3176ms)
+  ✔ requires a real AbortSignal and renewal capability (0.6247ms)
+  ✔ passes a child signal and same message/control, then cancels all pending timers (1.3292ms)
+  ✔ heartbeats sequentially using configured intervals and stops after success (4.7225ms)
+  ✔ does not overlap renewals when a renewal is slow (0.5713ms)
+  ✔ deadline aborts cooperatively, drains cleanup and rejects even if consumer resolves (0.6255ms)
+  ✔ host cancellation uses a redacted fixed reason and cannot acknowledge a resolving consumer (0.4934ms)
+  ✔ stops and rejects when renewal reports disabled (0.3136ms)
+  ✔ stops and rejects when renewal reports closed (0.1806ms)
+  ✔ stops and rejects when renewal reports limit_reached (0.1432ms)
+  ✔ stops and rejects when renewal reports lease_lost (0.1749ms)
+  ✔ renewal errors abort consumers and omit private storage details (0.3505ms)
+  ✔ consumer errors cancel waits and expose a fixed error (0.2418ms)
+  ✔ scheduler rejection at 10 aborts and drains (0.2403ms)
+  ✔ scheduler rejection at 90 aborts and drains (0.1401ms)
+  ✔ drains an active renewal before returning success (2.2757ms)
+  ✔ a failed renewal during drain prevents successful acknowledgment (0.7455ms)
+  ✔ first cancellation cause survives later consumer failure (0.5263ms)
+  ✔ deadline after consumer success while renewal drains cannot acknowledge (0.7809ms)
+  ✔ abort after consumer success while renewal drains cannot acknowledge (0.4346ms)
+  ✔ lease-loss after consumer success while renewal drains cannot acknowledge (0.4126ms)
+  ✔ detaches policy and handler, and keeps concurrent invocation state independent (0.4568ms)
+  ✔ aborts actual long Node waits promptly on host cancellation (0.7676ms)
+✔ managed trusted consumer lifecycle (26.0883ms)
+▶ managed consumers with real transactional outbox leases
+  ✔ extends, excludes a replacement after original expiry, and acknowledges the renewed version (393.5582ms)
+  ✔ deadline resolution still schedules a retry instead of delivered (405.2339ms)
+  ✔ lease loss stops the consumer and cannot finish a replacement lease (367.7794ms)
+  ✔ disabled renewal aborts managed work and schedules a retry (381.068ms)
+  ✔ renewal audit failure drains and prevents worker acknowledgment even if caught by consumer (371.684ms)
+✔ managed consumers with real transactional outbox leases (2928.0125ms)
+ℹ tests 31
+ℹ suites 2
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3958.4355

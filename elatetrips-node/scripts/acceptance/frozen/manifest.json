@@ -1,0 +1,189 @@
+{
+  "format": 1,
+  "digestAlgorithm": "sha256-canonical-json-sorted-keys-utf8-v1",
+  "source": {
+    "repository": "elatetrips-experiences",
+    "commit": "e8dc98fce0d84f5223a3615f50001f0eb4b29922",
+    "directory": "contracts",
+    "releaseLabel": "not-uniformly-declared; no-adoption-inferred"
+  },
+  "schemas": [
+    {
+      "path": "agent.schema.json",
+      "sha256": "bbc74bc342a2c6935ef12fc50f00c69ea15f7305d7c5e66e45ff145c534fdec8",
+      "schemaId": "https://elatetrips.com/contracts/agent.schema.json"
+    },
+    {
+      "path": "assignment.schema.json",
+      "sha256": "84e09157ec4d0580d0eebe1e7dbd75672c7455d12a74044868d36e128318728f",
+      "schemaId": "https://elatetrips.com/contracts/assignment.schema.json"
+    },
+    {
+      "path": "canonical-package.schema.json",
+      "sha256": "1e7304c62125557618c2f961ff494e8eb3d44b1788e81bdb40d43f74ee544ff1",
+      "schemaId": "https://elatetrips.com/contracts/canonical-package.schema.json"
+    },
+    {
+      "path": "defs/common.schema.json",
+      "sha256": "0c59883aa6de0a8bf851d80f8128ae12d18e2ed91e5f9a2e59a74b02de2541eb",
+      "schemaId": "https://elatetrips.com/contracts/defs/common.schema.json"
+    },
+    {
+      "path": "experiences.schema.json",
+      "sha256": "2a373a9f80a3c747cde348c5b1aa22c73036f10eccd766e164169304d9eabbdd",
+      "schemaId": "https://elatetrips.com/contracts/experiences.schema.json"
+    },
+    {
+      "path": "fulfillment.schema.json",
+      "sha256": "e16bab2491f7049716c951eb9fd7a70d7e7d00f83670ac020e2bbaab203fcd3c",
+      "schemaId": "https://elatetrips.com/contracts/fulfillment.schema.json"
+    },
+    {
+      "path": "itinerary.schema.json",
+      "sha256": "6007488c9ee132afbda6985fc872bb58793660b71032937f57abc8bed83186f9",
+      "schemaId": "https://elatetrips.com/contracts/itinerary.schema.json"
+    },
+    {
+      "path": "package-delta.schema.json",
+      "sha256": "73ce39bba17df11d8b10e977f1d8eecac4233e6faa0719f6008ef5beda5d7b67",
+      "schemaId": "https://elatetrips.com/contracts/package-delta.schema.json"
+    },
+    {
+      "path": "package.schema.json",
+      "sha256": "e01ad5ff0eefde504831eb0f7aca3d7999dd48699eb0c8fa27e408a3677ce35d",
+      "schemaId": "https://elatetrips.com/contracts/package.schema.json"
+    },
+    {
+      "path": "poi.schema.json",
+      "sha256": "bd0996a3b616ae67bb1ee90d4d3fff865c337b448bdcc6490eb1045b5d163b93",
+      "schemaId": "https://elatetrips.com/contracts/poi.schema.json"
+    },
+    {
+      "path": "policy.schema.json",
+      "sha256": "5b8cd41fb17003661f52bbc176723bc943c974e67e0377e83b72418c4f9e21c6",
+      "schemaId": "https://elatetrips.com/contracts/policy.schema.json"
+    },
+    {
+      "path": "quote.schema.json",
+      "sha256": "aff15106d74b168daa5effb8ee01d4f8bd4c3cfe0c010edac00b3b8208d5c09d",
+      "schemaId": "https://elatetrips.com/contracts/quote.schema.json"
+    },
+    {
+      "path": "rfq.schema.json",
+      "sha256": "a194d596642cd76e16f80e9153451371a16ad04ae68c9ffbb1693302cecef560",
+      "schemaId": "https://elatetrips.com/contracts/rfq.schema.json"
+    },
+    {
+      "path": "route-pack.schema.json",
+      "sha256": "68bfe0b3beadba8c4e31a784068111017b1edacf72cd21507639a4ee25e90c1e",
+      "schemaId": "https://elatetrips.com/contracts/route-pack.schema.json"
+    },
+    {
+      "path": "supplier.schema.json",
+      "sha256": "c454d6521399bf27a1131b18bed1dcdaa05c19bf7c7be55e990cfb0af5afbb48",
+      "schemaId": "https://elatetrips.com/contracts/supplier.schema.json"
+    }
+  ],
+  "fixtures": [
+    {
+      "path": "fixtures/agent/session-001-web.json",
+      "sha256": "ca5d7c3161b52cec20a82dfba300c779f0589ad8da22f15551afd59b45ff521d",
+      "schemaId": "https://elatetrips.com/contracts/agent.schema.json"
+    },
+    {
+      "path": "fixtures/assignment/asg-001-cascade.json",
+      "sha256": "24a531ea8a4d422ad5abd3a0b847fddf986e5bb7bc965dd188eff500756ed66c",
+      "schemaId": "https://elatetrips.com/contracts/assignment.schema.json"
+    },
+    {
+      "path": "fixtures/assignment/asg-002-recovery.json",
+      "sha256": "20e5554bb8a8b4afa7d29c1fdf311c27180f92f4b04da9fd15c2547fbdaddc33",
+      "schemaId": "https://elatetrips.com/contracts/assignment.schema.json"
+    },
+    {
+      "path": "fixtures/assignment/asg-003-deadman.json",
+      "sha256": "ed1f1c2631b80f98b816462a7d64dbec6c29c43e18f10aa5c5edf9c3d2f72127",
+      "schemaId": "https://elatetrips.com/contracts/assignment.schema.json"
+    },
+    {
+      "path": "fixtures/canonical/cp-goa-4d.json",
+      "sha256": "cd445527f871d28bcce289dc734bca5399af20e33ab1e9bd6e4aa06bcc643ea2",
+      "schemaId": "https://elatetrips.com/contracts/canonical-package.schema.json"
+    },
+    {
+      "path": "fixtures/experiences/catalog.v1.json",
+      "sha256": "375da98f22eed99a2e9c4c883de71b816b7e1c38b01850d1d1774f2e1116dfa3",
+      "schemaId": "https://elatetrips.com/contracts/experiences.schema.json"
+    },
+    {
+      "path": "fixtures/experiences/manifest.v1.json",
+      "sha256": "8191408d8c586d4ef25a8211cc5942c44a855784df8555a737f73c73652630e5",
+      "schemaId": "https://elatetrips.com/contracts/experiences.schema.json"
+    },
+    {
+      "path": "fixtures/experiences/plans.v1.json",
+      "sha256": "0f70aff232543717dad2c7d4031727dfdfb7afc517763b46c972bd51826fdbcc",
+      "schemaId": "https://elatetrips.com/contracts/experiences.schema.json"
+    },
+    {
+      "path": "fixtures/fulfillment/fulfillment-001-ooty.json",
+      "sha256": "a95193ded42677131879c254a0365f758c6c7605924569c37c2d34c786c7e989",
+      "schemaId": "https://elatetrips.com/contracts/fulfillment.schema.json"
+    },
+    {
+      "path": "fixtures/itinerary/itin-001.json",
+      "sha256": "6d08b9ef59986ab22355271dc569a7564e86e04d4dd440d7fcdffd190da015d2",
+      "schemaId": "https://elatetrips.com/contracts/itinerary.schema.json"
+    },
+    {
+      "path": "fixtures/itinerary/itin-003-package.json",
+      "sha256": "5fdb2c87eb61d55a23a4117935eb35b700c9d20172e9d11cb7318f97d603b0e3",
+      "schemaId": "https://elatetrips.com/contracts/itinerary.schema.json"
+    },
+    {
+      "path": "fixtures/itinerary/itin-005-routepack.json",
+      "sha256": "11e8957602d54864fb76b2e828d762ec160f707eb10bd9343633931813b28545",
+      "schemaId": "https://elatetrips.com/contracts/itinerary.schema.json"
+    },
+    {
+      "path": "fixtures/quote/quote-001-full.json",
+      "sha256": "696e9037b2bd9461aeb5113fbb4ea18b838c20fb5c0b65d559e45e05968115e7",
+      "schemaId": "https://elatetrips.com/contracts/quote.schema.json"
+    },
+    {
+      "path": "fixtures/quote/quote-expired.json",
+      "sha256": "b017722faa535e0b7c941994b74b396c6dcd892295ef253226cc858d37c0b5be",
+      "schemaId": "https://elatetrips.com/contracts/quote.schema.json"
+    },
+    {
+      "path": "fixtures/quote/quote-partial.json",
+      "sha256": "a3095bd168a899fd8c395ab1625a59f64089df1518988216916e013f355c006e",
+      "schemaId": "https://elatetrips.com/contracts/quote.schema.json"
+    },
+    {
+      "path": "fixtures/rfq/rfq-001.json",
+      "sha256": "616cd14f19454ad1e9fb3f6b709ed0f7ece376311c2ca9947a9ef07fd39fc2fa",
+      "schemaId": "https://elatetrips.com/contracts/rfq.schema.json"
+    },
+    {
+      "path": "fixtures/rfq/rfq-002-surprise.json",
+      "sha256": "936b390a96c9f9067d725551dc2aebf04d714bd5a280ddf7047b0687341d6fc6",
+      "schemaId": "https://elatetrips.com/contracts/rfq.schema.json"
+    },
+    {
+      "path": "fixtures/rfq/rfq-003-package.json",
+      "sha256": "fe19255a08e5c8ed6d66020d2f8a8c935c8bb7c63f9b126e32c561bd05ac6330",
+      "schemaId": "https://elatetrips.com/contracts/rfq.schema.json"
+    },
+    {
+      "path": "fixtures/rfq/rfq-004-adventure.json",
+      "sha256": "a71f63db04ae262393a505d100ca87037a4e113178dbe3eb87b9a58a7499e90d",
+      "schemaId": "https://elatetrips.com/contracts/rfq.schema.json"
+    },
+    {
+      "path": "fixtures/rfq/rfq-005-multi-celebration.json",
+      "sha256": "d50c9254fd3a9f7149b09049c0f5292351f95c818a34c086ab77fd56d4f3e3ef",
+      "schemaId": "https://elatetrips.com/contracts/rfq.schema.json"
+    }
+  ]
+}

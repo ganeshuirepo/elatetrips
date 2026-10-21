@@ -34,7 +34,17 @@ export function createApp(): Express {
   app.use(compression());
   // Bounded bodies: the largest legitimate payload here is an order with its
   // lines, comfortably under 100kb.
-  app.use(express.json({ limit: '100kb' }));
+  app.use(
+    express.json({
+      limit: '100kb',
+      // Keep the raw bytes for webhook routes so their signatures can be
+      // verified. Scoped to those paths deliberately: buffering every request
+      // body would double the memory cost of ordinary traffic for no benefit.
+      verify: (req, _res, buf) => {
+        if (req.url?.includes('/webhooks/')) (req as express.Request).rawBody = Buffer.from(buf);
+      },
+    }),
+  );
   app.use(express.urlencoded({ extended: true, limit: '100kb' }));
   if (!env.isProd) app.use(morgan('dev'));
 

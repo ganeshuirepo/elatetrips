@@ -9,10 +9,39 @@
  * reads business values from config (BR-17), and appends an audit event (BR-6).
  * Supplier-facing reads are masked (BR-3). Money is integer minor units.
  */
+import { createHash, randomBytes, randomInt, timingSafeEqual } from 'crypto';
 import { ForbiddenError, NotFoundError, UnprocessableEntityError } from '../../common/errors/AppError';
 import { AuditStore } from './contract.audit';
 import { loadPlatformConfig, type ConfigSource, type PlatformConfig } from './contract.config';
 import { assertContract } from './contract.validation';
+
+/** How long a recipient-bound supplier link stays usable. */
+const LINK_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+
+/** Wrong codes allowed on one link before it is burned. */
+const MAX_LINK_OTP_ATTEMPTS = 5;
+
+/**
+ * Ceiling on draft RFQs held in memory.
+ *
+ * `POST /rfq` is open to guests (a traveller builds an enquiry before they have
+ * an account), so without a ceiling the map only ever grows and the process
+ * eventually dies — on a box whose deploy notes already describe running out of
+ * heap. The rate limiter on the route slows that down; this bounds it. Oldest
+ * drafts are evicted first: a stale draft nobody returned to is the cheapest
+ * thing to lose, and submitted work has already left this map.
+ */
+const MAX_DRAFT_RFQS = 5_000;
+
+/**
+ * Compare two codes without leaking how many leading digits were right.
+ * Hashed first so timingSafeEqual gets the equal-length buffers it requires.
+ */
+function codesMatch(given: string, expected: string): boolean {
+  const a = createHash('sha256').update(given).digest();
+  const b = createHash('sha256').update(expected).digest();
+  return timingSafeEqual(a, b);
+}
 import { maskEventForSupplier, maskRfqForSupplier, type SupplierRfqView } from './contract.masking';
 import type {
   AuditEvent,
@@ -82,9 +111,44 @@ export class ContractsEngine {
     for (const q of seedQuotes) this.quotes.set(q.quote_id, structuredClone(q));
   }
 
+  /**
+   * Entity ids (rfq-001, quote-001 …). Sequential ON PURPOSE: these are the
+   * readable identifiers the frozen contract fixtures are written against, and
+   * they are never a credential. Anything that GRANTS ACCESS must not come from
+   * here — see secureToken/secureOtp below.
+   */
   private id(prefix: string): string {
     this.counter += 1;
     return `${prefix}-${this.counter.toString().padStart(3, '0')}`;
+  }
+
+  /**
+   * A recipient-bound link token (BR-15). This IS the credential — possession of
+   * it opens a supplier's RFQ — so it needs real entropy. It was previously
+   * drawn from the sequential counter above, which made every partner's link
+   * reachable by counting from tok-001.
+   */
+  private secureToken(): string {
+    return `tok_${randomBytes(32).toString('base64url')}`;
+  }
+
+  /** The six-digit code paired with a link. Uniform, unguessable, no counter. */
+  private secureOtp(): string {
+    return randomInt(0, 1_000_000).toString().padStart(6, '0');
+  }
+
+  /**
+   * Drop the oldest drafts once the store is full. Map preserves insertion
+   * order, so the first keys are the least recently created.
+   */
+  private evictOldestRfqs(): void {
+    if (this.rfqs.size <= MAX_DRAFT_RFQS) return;
+    const excess = this.rfqs.size - MAX_DRAFT_RFQS;
+    let dropped = 0;
+    for (const key of this.rfqs.keys()) {
+      this.rfqs.delete(key);
+      if (++dropped >= excess) break;
+    }
   }
 
   private iso(): string {
@@ -96,6 +160,8 @@ export class ContractsEngine {
   createRfq(body: Partial<Rfq>): Rfq {
     const rfq: Rfq = assertContract('rfq', { ...(body as Rfq), rfq_id: this.id('rfq'), version: 1, status: 'draft' });
     this.rfqs.set(rfq.rfq_id, rfq);
+    // Open endpoint, unbounded map — bound it. See MAX_DRAFT_RFQS.
+    this.evictOldestRfqs();
     this.audit.append({
       type: 'rfq.created',
       actor: 'customer',
@@ -235,8 +301,17 @@ export class ContractsEngine {
   // ---- Recipient-bound tokens + OTP (BR-15) --------------------------------
 
   mintLink(rfq_id: string, supplier_id: string): LinkToken {
-    const token = this.id('tok');
-    const link: LinkToken = { token, rfq_id, supplier_id, expires_ts: this.iso(), otp: this.id('otp'), otp_attempts: 0 };
+    const token = this.secureToken();
+    const link: LinkToken = {
+      token,
+      rfq_id,
+      supplier_id,
+      // expires_ts used to be stamped with "now", which reads as already-expired
+      // and was never checked anyway. Give it a real lifetime and enforce it.
+      expires_ts: new Date(this.now().getTime() + LINK_TTL_MS).toISOString(),
+      otp: this.secureOtp(),
+      otp_attempts: 0,
+    };
     this.links.set(token, link);
     return link;
   }
@@ -244,6 +319,12 @@ export class ContractsEngine {
   private requireLink(token: string): LinkToken {
     const link = this.links.get(token);
     if (!link) throw new NotFoundError('Link not found or expired');
+    // A link that outlives its wave is a standing key to a supplier's RFQ.
+    // Same answer as an unknown token, so expiry cannot be probed.
+    if (new Date(link.expires_ts).getTime() <= this.now().getTime()) {
+      this.links.delete(token);
+      throw new NotFoundError('Link not found or expired');
+    }
     return link;
   }
 
@@ -257,7 +338,15 @@ export class ContractsEngine {
       subject: { rfq_id: link.rfq_id },
       payload: { rfq_id: link.rfq_id, supplier_id: link.supplier_id, token_id: link.token, otp_attempt: link.otp_attempts },
     });
-    if (!otp || otp !== link.otp) throw new ForbiddenError('OTP verification required');
+    // Six digits is 10^6. Without a cap, an unlimited guess budget makes the
+    // code decorative — burn the link once the budget is spent.
+    if (link.otp_attempts > MAX_LINK_OTP_ATTEMPTS) {
+      this.links.delete(link.token);
+      throw new ForbiddenError('Too many incorrect codes — this link is no longer usable');
+    }
+    if (!otp || !codesMatch(otp, link.otp)) {
+      throw new ForbiddenError('OTP verification required');
+    }
   }
 
   // ---- Partner surface (M6) ------------------------------------------------

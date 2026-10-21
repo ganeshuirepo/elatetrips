@@ -12,6 +12,7 @@ import type {
   CandidateQuery,
   ContractAcceptance,
   CreateSupplierInput,
+  ProvisionPartnerInput,
   UpdateSupplierInput,
 } from './supplier.types';
 
@@ -21,6 +22,19 @@ export class SupplierController {
   /** POST /suppliers — invite/create a supplier. */
   create = async (req: Request, res: Response): Promise<Response> =>
     created(res, await this.service.invite(req.body as CreateSupplierInput));
+
+  /**
+   * POST /suppliers/provision — idempotent create from a partner registration.
+   *
+   * 201 when this call minted the supplier, 200 when it matched an existing one
+   * on external_ref. The caller needs to be able to tell the two apart to log
+   * honestly, and a retry that returns 200 is the signal that the first attempt
+   * had in fact landed.
+   */
+  provision = async (req: Request, res: Response): Promise<Response> => {
+    const result = await this.service.provisionForPartner(req.body as ProvisionPartnerInput);
+    return result.created ? created(res, result) : ok(res, result);
+  };
 
   /** GET /suppliers — public directory (contract view), tiering applied. */
   directory = async (req: Request, res: Response): Promise<Response> => {

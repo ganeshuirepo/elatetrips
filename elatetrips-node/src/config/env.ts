@@ -14,18 +14,52 @@ function required(key: string, fallback?: string): string {
 const INSECURE_JWT_DEFAULT = 'change-me-in-production';
 
 /**
+ * Admin-key values that must never authenticate anything. The first was the
+ * old committed fallback, the second is what .env.production.example ships —
+ * both are public, so both are as good as no key at all.
+ */
+const INSECURE_ADMIN_KEYS = new Set(['elate-admin-key', '<change-me>', 'change-me']);
+
+/** True when this process is running as production. */
+const runningInProd = (): boolean => (process.env.NODE_ENV ?? 'development') === 'production';
+
+/**
  * The JWT signing secret. Best practice: an empty or default secret is fatal in
  * production (forgeable tokens), so we fail closed there; in dev we fall back to
  * a placeholder so local work keeps running.
  */
 function resolveJwtSecret(): string {
   const raw = (process.env.JWT_SECRET ?? '').trim();
-  const isProd = (process.env.NODE_ENV ?? 'development') === 'production';
+  const isProd = runningInProd();
   if (!raw || raw === INSECURE_JWT_DEFAULT) {
     if (isProd) {
       throw new Error('JWT_SECRET must be set to a strong, non-default value in production');
     }
     return raw || INSECURE_JWT_DEFAULT;
+  }
+  return raw;
+}
+
+/**
+ * The shared admin key, which opens catalog CRUD, vendor creation and the
+ * customer order feed. It used to fall back to a committed literal, so a
+ * deployment that simply forgot to set ADMIN_KEY was wide open while looking
+ * perfectly healthy — the failure is invisible precisely because nothing errors.
+ *
+ * Now it fails closed exactly like resolveJwtSecret above: unset, blank or a
+ * known placeholder is fatal in production. In development it falls back to a
+ * placeholder so local work and ops scripts keep running.
+ */
+function resolveAdminKey(): string {
+  const raw = (process.env.ADMIN_KEY ?? '').trim();
+  if (!raw || INSECURE_ADMIN_KEYS.has(raw)) {
+    if (runningInProd()) {
+      throw new Error(
+        'ADMIN_KEY must be set to a strong, non-default value in production ' +
+        '(it grants full admin API access, including the customer order feed)',
+      );
+    }
+    return raw || 'elate-admin-key-dev-only';
   }
   return raw;
 }
@@ -38,7 +72,15 @@ const corsRaw = (process.env.CORS_ORIGINS ?? 'http://localhost:3000').trim();
  * truth (Single Responsibility) and makes the app easy to test.
  */
 export const env = {
-  nodeEnv: process.env.NODE_ENV ?? 'development',
+  /**
+   * Read live rather than snapshotted at import, so `isProd` reflects the
+   * process it is actually running in. NODE_ENV is set once at boot in every
+   * real deployment, so this changes no runtime behaviour — it just means a
+   * test can exercise the production branch without a child process.
+   */
+  get nodeEnv(): string {
+    return process.env.NODE_ENV ?? 'development';
+  },
   /** TEMP: activate accounts at signup without OTP (no SMS/email provider is
    *  wired yet). Set AUTH_AUTO_ACTIVATE=false once verification goes live —
    *  the whole OTP flow (issue/verify/resend) stays in place for that day. */
@@ -52,13 +94,21 @@ export const env = {
     : corsRaw.split(',').map((o) => o.trim()).filter(Boolean),
   mongoUri: required('MONGODB_URI', 'mongodb://127.0.0.1:27017/elatetrips'),
   jwtSecret: resolveJwtSecret(),
-  /** Shared secret for the admin console (mock-first; real accounts later). */
-  adminKey: process.env.ADMIN_KEY ?? 'elate-admin-key',
+  /** Shared secret for the admin console (see resolveAdminKey — fails closed). */
+  adminKey: resolveAdminKey(),
   /** Access-token lifetime — fully env-driven (e.g. 15m, 1h, 7d). Short is
    *  best-practice; the mobile client transparently rotates on expiry. */
   jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? '1h',
   /** Refresh-token lifetime in days — env-driven, no code change to tune. */
   refreshExpiresDays: Number(process.env.REFRESH_EXPIRES_DAYS ?? 30),
+  /**
+   * Razorpay webhook signing secret. Unset means the webhook cannot be
+   * authenticated: production refuses every call, development warns and passes.
+   * See common/middleware/webhookSignature.
+   */
+  get razorpayWebhookSecret(): string {
+    return (process.env.RAZORPAY_WEBHOOK_SECRET ?? '').trim();
+  },
   /** Where uploaded photos are written (disk mock-first storage). */
   uploadsDir: process.env.UPLOADS_DIR ?? 'uploads',
   /** Absolute base for URLs the API hands out (uploaded photo links). */

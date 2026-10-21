@@ -10,34 +10,46 @@
  * contract-shaped response — see `toContractView` in the service.
  */
 
+/*
+ * Each closed set is declared once as a frozen array and the union derived from
+ * it, so supplier.model.ts can use the SAME array as its schema enum. One
+ * definition, not two that agree today.
+ */
+
 /** Contract enum — DMC route (A) vs direct-hotel route (B). BR-10/BR-11. */
-export type Track = 'A' | 'B';
+export const TRACKS = ['A', 'B'] as const;
+export type Track = (typeof TRACKS)[number];
 
 /** Contract enum — supplier entity type. */
-export type SupplierType = 'dmc' | 'hotel' | 'adventure' | 'experience' | 'transport';
+export const SUPPLIER_TYPES = ['dmc', 'hotel', 'adventure', 'experience', 'transport'] as const;
+export type SupplierType = (typeof SUPPLIER_TYPES)[number];
 
 /**
  * Contract `tier` — the CAP SLOT a supplier occupies per destination (FR3.3):
  * primary (a capped active slot), bench (vetted, inactive reserve), reserve
  * (uncapped direct-hotel roster / provider pool). Distinct from `quality_tier`.
  */
-export type CapTier = 'primary' | 'bench' | 'reserve';
+export const CAP_TIERS = ['primary', 'bench', 'reserve'] as const;
+export type CapTier = (typeof CAP_TIERS)[number];
 
 /**
  * FR3.4 tiering — Preferred | Standard | Probation, driven by the M10 scorecard.
  * Affects wave ordering and enrichment eligibility, NEVER inclusion (fairness
  * floor, M5 FR5.2). Internal only; not part of the frozen contract projection.
  */
-export type QualityTier = 'preferred' | 'standard' | 'probation';
+export const QUALITY_TIERS = ['preferred', 'standard', 'probation'] as const;
+export type QualityTier = (typeof QUALITY_TIERS)[number];
 
 /** FR3.7 lifecycle status. */
-export type SupplierStatus =
-  | 'invited'
-  | 'vetting'
-  | 'active'
-  | 'bench'
-  | 'probation'
-  | 'paused';
+export const SUPPLIER_STATUSES = [
+  'invited',
+  'vetting',
+  'active',
+  'bench',
+  'probation',
+  'paused',
+] as const;
+export type SupplierStatus = (typeof SUPPLIER_STATUSES)[number];
 
 /** Contract comms-consent block (BR-2 gates WhatsApp; FR3.10 gates voice). */
 export interface CommsConsent {
@@ -47,9 +59,16 @@ export interface CommsConsent {
   voice?: boolean;
 }
 
+/** Which job a contact does — routing depends on it (quotes to the quoter). */
+export const CHANNEL_PREFS = ['email', 'whatsapp'] as const;
+export type ChannelPref = (typeof CHANNEL_PREFS)[number];
+
+export const CONTACT_ROLES = ['owner', 'quoter', 'banquet_sales', 'emergency'] as const;
+export type ContactRole = (typeof CONTACT_ROLES)[number];
+
 /** FR3.7 role-specific contact. `otp_verified` gates commit actions (BR-15). */
 export interface SupplierContact {
-  role: 'owner' | 'quoter' | 'banquet_sales' | 'emergency';
+  role: ContactRole;
   name: string;
   email?: string;
   phone?: string;
@@ -120,11 +139,19 @@ export interface Supplier {
   status: SupplierStatus;
   quality_tier?: QualityTier;
   contacts?: SupplierContact[];
-  channel_pref?: 'email' | 'whatsapp';
+  channel_pref?: ChannelPref;
   vetting?: VettingArtifacts;
   /** The accepted contract; absent until the clickwrap step (FR3.10). */
   contract_acceptance?: ContractAcceptance;
   scorecard?: ScorecardRef;
+  /**
+   * The id this partner carries in the system that onboarded them — the partner
+   * portal's `Vendor.leadId`. It is what makes provisioning idempotent: a
+   * registration that is submitted twice, or retried after a timeout, resolves
+   * to the SAME supplier rather than a second one. Unique where present; absent
+   * on suppliers ops added directly.
+   */
+  external_ref?: string;
   created_ts?: string;
   updated_ts?: string;
 }
@@ -154,6 +181,33 @@ export interface CreateSupplierInput {
   comms_consent?: CommsConsent;
   contacts?: SupplierContact[];
   vetting?: VettingArtifacts;
+}
+
+/**
+ * Body to provision a supplier from a completed partner registration.
+ *
+ * Unlike CreateSupplierInput there is no `supplier_id`: the platform mints it,
+ * because the whole point is to establish ONE canonical partner identity rather
+ * than let each caller invent its own. `external_ref` is the caller's own id for
+ * the same partner, and is what makes the call idempotent.
+ */
+export interface ProvisionPartnerInput {
+  external_ref: string;
+  type: SupplierType;
+  name: string;
+  destinations: string[];
+  track: Track;
+  declared_tat_hours: number;
+  channel_pref?: 'email' | 'whatsapp';
+  comms_consent?: CommsConsent;
+  contacts?: SupplierContact[];
+}
+
+/** What provisioning returns — and whether this call is what created it. */
+export interface ProvisionResult {
+  supplier: SupplierContractView;
+  /** False when an existing supplier was matched on `external_ref`. */
+  created: boolean;
 }
 
 /** Partial patch for manual add/edit (FR3.1). */

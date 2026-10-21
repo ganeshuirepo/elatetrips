@@ -1,0 +1,19 @@
+{
+  "head": "1f6db641e29138b56f372a4eff3ee8f82ae8d9df",
+  "sourceCommit": "e8dc98fce0d84f5223a3615f50001f0eb4b29922",
+  "sourceInventoryMatches": true,
+  "sourceCanonicalDigestsMatch": true,
+  "schemaCount": 15,
+  "fixtureCount": 20,
+  "manifestCanonicalSha256": "4dce93437fb85b98513de58272553f859fd2963704fe3475e4d8586e648bbedf",
+  "bundleCanonicalSha256": "344dc41dd7e768c65213066f680769df70f4d7750fc5565e783af6e727c68e36",
+  "bundleRawFileInventorySha256": "15438b01a7cecf6e0ba73fd9c4970844779d535d9968a8e20411e5f7b0c0a0c3",
+  "originalLockedPackageCount": 297,
+  "changedOriginalLockedPackages": [],
+  "lockfileSha256": "5e2a320b18c86453e52d016611fb5f170033e7f24a26d62175f426bc026997ad",
+  "isolatedNodeModules": true,
+  "cacheIgnored": ".claude/.cache/014-acceptance/mongod-x64-win32-8.2.6.exe",
+  "noOriginalEnvironmentRead": true,
+  "lockfileSha256AtVerification": "a4526d3b6bcdbd88bd279022bea4e30e13d53accd189eadc83a050a2736955c0",
+  "postVerificationChanges": "Documentation/evidence plus package JSON whitespace normalization only; parsed package/lock values unchanged."
+}

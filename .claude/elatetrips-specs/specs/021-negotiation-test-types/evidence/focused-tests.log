@@ -1,0 +1,19 @@
+✔ counter is engine-computed within the customer target (budget + 5%) (2.7602ms)
+✔ BR-16: decision is deterministic and carries NO message text (1.1414ms)
+✔ 2-round cap: round 3 stops regardless of rules (BR-16 hard guardrail) (0.2888ms)
+✔ config cannot raise the cap above the BR-16 ceiling of 2 (0.2216ms)
+✔ rounds_allowed stop condition fires before the hard cap (0.2485ms)
+✔ fairness floor is never breached (0.2768ms)
+✔ mandatory default rule → deterministic no_negotiate when nothing matches (0.1759ms)
+✔ service.decide emits a negotiation.round with the engine amount only on counter (3.7488ms)
+✔ dry-run flags exactly one dead and one shadowed rule (FR13.5) (0.6309ms)
+✔ publishing price rules without a matching dry-run is blocked (FR13.5) (1.5215ms)
+✔ rollback restores exact prior behaviour on replay (FR13.4) (2.2905ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 696.9526

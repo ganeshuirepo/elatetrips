@@ -1,0 +1,363 @@
+
+> elatetrips-node@1.0.0 test
+> node -r ./scripts/register-ts.js --test "src/**/*.test.ts"
+
+▶ console accounts
+  ✔ accepts a real role (10.77ms)
+  ✔ refuses a role no guard would recognise (3.3569ms)
+  ✔ refuses a vendor type that binds to no listing (0.6522ms)
+  ✔ still allows an account with no vendor type at all (0.5433ms)
+✔ console accounts (18.2399ms)
+▶ push tokens
+  ✔ refuses a platform nothing can deliver to (1.4081ms)
+  ✔ refuses an audience that does not exist (1.043ms)
+✔ push tokens (2.839ms)
+▶ suppliers
+  ✔ refuses an entity type outside the five (6.3194ms)
+  ✔ refuses a contact role nothing routes to (5.5244ms)
+  ✔ accepts each of the roles that do route (4.616ms)
+  ✔ refuses a status outside the lifecycle (1.2329ms)
+✔ suppliers (18.4429ms)
+▶ orders
+  ✔ refuses a negative total (3.5232ms)
+  ✔ refuses a negative discount (1.3983ms)
+  ✔ refuses a payment status that was never settled (1.9681ms)
+  ✔ refuses a status outside the two lifecycle states (1.6845ms)
+✔ orders (8.9997ms)
+▶ users
+  ✔ keeps the blank gender that predates the question (1.0107ms)
+  ✔ refuses a gender nothing renders (4.757ms)
+  ✔ refuses an impossible age (1.0022ms)
+✔ users (7.0769ms)
+▶ rate rows
+  ✔ refuses a currency the platform does not price in (2.3149ms)
+  ✔ refuses a negative price (1.2264ms)
+  ✔ refuses an unpadded date (2.7524ms)
+  ✔ refuses an unpadded end date too (1.1646ms)
+  ✔ accepts a well-formed row, open-ended or bounded (2.746ms)
+  ✔ refuses a source no adapter produces (1.0335ms)
+✔ rate rows (11.7583ms)
+▶ staged proposals
+  ✔ refuses a review status outside the queue (3.8627ms)
+  ✔ refuses a staging reason the engine never emits (1.7415ms)
+  ✔ refuses a tolerance decision that is neither (1.7237ms)
+✔ staged proposals (7.6704ms)
+▶ support
+  ✔ refuses a milestone state outside the machine (2.3755ms)
+  ✔ accepts every state the machine does use (1.3765ms)
+  ✔ refuses a photo-approval verdict nobody rules (0.8208ms)
+  ✔ refuses a message sender that is not a party to the thread (1.2782ms)
+  ✔ refuses a message kind nothing renders (0.5367ms)
+  ✔ refuses a ticket escalation level nobody owns (0.8229ms)
+  ✔ refuses a ticket state outside the lifecycle (0.441ms)
+  ✔ refuses a notify preference the thresholds do not know (0.4933ms)
+  ✔ refuses a staff role that is neither CM nor OM (0.4439ms)
+  ✔ refuses a vendor category nothing is assigned from (0.5364ms)
+  ✔ refuses a rating off the 1–5 scale it is averaged on (1.0734ms)
+✔ support (11.088ms)
+▶ refresh tokens
+  ✔ expire themselves (0.629ms)
+  ✔ store expiry as a Date, because a TTL index cannot reap a string (0.3041ms)
+✔ refresh tokens (1.189ms)
+[warn] [webhook] Razorpay signature mismatch — rejected.
+[warn] [webhook] Razorpay signature mismatch — rejected.
+[warn] [webhook] Razorpay signature mismatch — rejected.
+[warn] [webhook] Razorpay signature mismatch — rejected.
+[warn] [webhook] Razorpay signature mismatch — rejected.
+[error] RAZORPAY_WEBHOOK_SECRET is not set — refusing the webhook. An unverified payment webhook can mark any booking paid.
+[warn] [webhook] RAZORPAY_WEBHOOK_SECRET unset — signature NOT verified (dev only).
+✔ accepts a correctly signed payload (4.5361ms)
+✔ rejects a payload with no signature header (1.2631ms)
+✔ rejects a signature computed with the wrong secret (2.13ms)
+✔ rejects a valid signature attached to a DIFFERENT body (1.685ms)
+✔ rejects a malformed signature without throwing (1.7171ms)
+✔ rejects when the raw body was never captured (0.9578ms)
+✔ production refuses every webhook when no secret is set (7.6898ms)
+✔ development passes it through so the mock flow stays usable (1.4193ms)
+✔ development starts with no secrets set at all (1096.9303ms)
+✔ production starts when both secrets are strong (541.0217ms)
+✔ production refuses to start with no ADMIN_KEY (563.3516ms)
+✔ production refuses the old committed default admin key (591.0953ms)
+✔ production refuses the placeholder the example file ships (1182.7794ms)
+✔ production refuses a blank ADMIN_KEY (622.8598ms)
+✔ production still refuses a missing or default JWT secret (1232.1296ms)
+✔ a partner reaches its own rate card (10.4585ms)
+✔ a partner cannot reach somebody else’s by changing the id (2.2368ms)
+✔ an ops role may act for any partner (2.5071ms)
+✔ a vendor with no partner bound gets nothing (1.0141ms)
+✔ an unbound account is refused even when the path names no partner (1.0393ms)
+✔ a crew token does not become a supply account (0.9565ms)
+✔ no token at all is a 401, not a 403 (0.5359ms)
+✔ a forged or tampered token is refused (0.3945ms)
+✔ a traveller JWT is not a console token (1.4992ms)
+✔ the refusal does not reveal whether the partner exists (1.462ms)
+▶ creating an account with a partner binding
+  ✔ accepts a partner that exists (4.606ms)
+  ✔ refuses a partner that does not (1.2106ms)
+  ✔ creates nothing when the binding is refused (0.7656ms)
+  ✔ still allows an account with no binding at all (0.8483ms)
+✔ creating an account with a partner binding (10.3115ms)
+▶ binding an account that already exists
+  ✔ binds it, which is how an old account is repaired (1.6488ms)
+  ✔ is case-insensitive on the username, like login is (1.3933ms)
+  ✔ refuses a partner that does not exist (0.9632ms)
+  ✔ refuses an account that does not exist (0.3693ms)
+  ✔ refuses to bind an ops account (0.4421ms)
+  ✔ rebinds when a partner id is corrected (0.8872ms)
+✔ binding an account that already exists (6.6023ms)
+✔ signup sends the code to the channel the traveller chose (3.9772ms)
+✔ signup by email addresses the code to the email, not the phone (0.5076ms)
+✔ signup leaves the account inactive until the code comes back (0.3668ms)
+✔ verifying proves ONLY the channel the code went to (1.0076ms)
+✔ a wrong code does not activate the account (0.8901ms)
+✔ signup refuses a mobile that belongs to an active account (0.5164ms)
+✔ signup refuses an email held by somebody else mid-signup (0.6583ms)
+✔ signup CAN be re-attempted while it is still pending on the same phone (0.6174ms)
+✔ auto-activate skips the code entirely and returns a session (0.6357ms)
+✔ a wrong password and an unknown account answer identically (0.8245ms)
+✔ a correct password on an unverified account is refused (0.4523ms)
+✔ auto-activate lets that same account through, and only then (0.3463ms)
+✔ a session never carries the password hash back to the caller (0.3022ms)
+✔ OTP login verifies the channel it was sent to (0.5594ms)
+✔ OTP login refuses a wrong code (1.2233ms)
+✔ forgot-password answers "sent" for an unknown account, without sending (0.4067ms)
+✔ resend does the same for an unknown account (0.3053ms)
+✔ resetting the password also proves the channel it was reset through (0.6875ms)
+✔ a wrong reset code leaves the old password in place (0.607ms)
+✔ the code is echoed back outside production, so dev needs no inbox (0.6996ms)
+✔ the code is NEVER echoed back in production (831.2298ms)
+✔ the code goes to the address ON FILE for the authenticated account (0.8201ms)
+✔ confirming marks that channel, and leaves the other one alone (0.6812ms)
+✔ a wrong code leaves the channel unproved (0.3891ms)
+✔ a code issued for one channel does not confirm the other (0.3651ms)
+✔ an already-verified channel is refused rather than re-sent (0.2999ms)
+✔ a token for an account that no longer exists is refused (0.2036ms)
+✔ a channel with no address on file is a 400, not a send to nowhere (0.4204ms)
+[info] [OTP] mobile → 9876543210: 123456
+[info] OTP senders — email: ConsoleOtpSender, sms: ConsoleOtpSender
+[info] OTP senders — email: ConsoleOtpSender, sms: ConsoleOtpSender
+[info] OTP senders — email: ConsoleOtpSender, sms: ConsoleOtpSender
+[error] Fast2SMS send failed (200): { return: false }
+[error] Fast2SMS send failed (401): { return: false }
+[error] Brevo send failed (401): unrecognised IP address
+[error] The Brevo key is valid but this server's IP is not authorised. Add it at https://app.brevo.com/security/authorised_ips (or disable the IP restriction) before turning AUTH_AUTO_ACTIVATE off.
+[error] Fast2SMS did not answer within 10s
+✔ routes an email code to the email provider and an SMS to the SMS one (6.8814ms)
+✔ the console sender never throws — it is the fallback of last resort (3.2386ms)
+✔ with nothing configured, both channels fall back to the console (2.3801ms)
+✔ a half-configured Brevo does not count as configured (1.3558ms)
+✔ a half-configured Twilio does not count as configured (1.796ms)
+✔ Fast2SMS posts the bare 10-digit number on the OTP route (1.9607ms)
+✔ Fast2SMS treats a 200 that says return:false as a failure (3.6527ms)
+✔ Fast2SMS surfaces a non-200 as a 502 (5.5757ms)
+✔ Brevo sends the code in the subject and body of a real email (1.2214ms)
+✔ a Brevo rejection becomes a 502, not a silently undelivered code (1.7233ms)
+✔ Twilio prefixes the Indian country code, which Fast2SMS must not (1.349ms)
+✔ the auth header is Basic, and the token never lands in the URL (1.0155ms)
+✔ a provider that stalls is given up on rather than held forever (1.2804ms)
+✔ every provider carries the deadline, not just one of them (2.5574ms)
+✔ issues a six-digit numeric code (4.2111ms)
+✔ pads a small random draw instead of emitting a short code (33.1477ms)
+✔ accepts the correct code exactly once (0.6136ms)
+✔ rejects a code that was never issued (0.3761ms)
+✔ rejects the right code offered for a different identifier (0.4618ms)
+✔ expires a code, and expiry fails closed (3.0406ms)
+✔ still accepts a code just inside its lifetime (0.7961ms)
+✔ burns the code after too many wrong guesses (0.6712ms)
+✔ a wrong guess does not invalidate the code before the cap (0.5374ms)
+✔ re-issuing invalidates the previous code (1.0326ms)
+✔ refuses a rapid re-issue with 429 rather than spending another send (1.4974ms)
+✔ allows the re-issue once the cooldown has run down (7.3644ms)
+✔ the cooldown is per identifier, not global (0.5137ms)
+✔ a token is long, random, and never a counter (4.9224ms)
+✔ minting many tokens never repeats one (14.2262ms)
+✔ the OTP is a six-digit code, not a counter (1.4947ms)
+✔ OTPs vary between links (6.139ms)
+✔ entity ids stay sequential and readable (38.0795ms)
+✔ a link carries a real expiry, not the moment it was made (1.0165ms)
+✔ an expired link is refused, and looks exactly like an unknown one (1.4055ms)
+✔ a valid link still opens inside its lifetime (1.418ms)
+✔ the OTP guess budget runs out, and the link dies with it (2.0909ms)
+✔ counter is engine-computed within the customer target (budget + 5%) (4.238ms)
+✔ BR-16: decision is deterministic and carries NO message text (9.0522ms)
+✔ 2-round cap: round 3 stops regardless of rules (BR-16 hard guardrail) (0.7782ms)
+✔ config cannot raise the cap above the BR-16 ceiling of 2 (0.4679ms)
+✔ rounds_allowed stop condition fires before the hard cap (0.5749ms)
+✔ fairness floor is never breached (0.7336ms)
+✔ mandatory default rule → deterministic no_negotiate when nothing matches (0.3153ms)
+✔ service.decide emits a negotiation.round with the engine amount only on counter (5.8109ms)
+✔ dry-run flags exactly one dead and one shadowed rule (FR13.5) (1.2525ms)
+✔ publishing price rules without a matching dry-run is blocked (FR13.5) (1.4045ms)
+✔ rollback restores exact prior behaviour on replay (FR13.4) (1.7239ms)
+▶ a partner that does not exist
+  ✔ cannot have rates ingested for it (3.4593ms)
+  ✔ is refused before any row is even looked at (0.7893ms)
+  ✔ cannot be synced from a sheet (0.9772ms)
+  ✔ has no freshness — rather than a plausible-looking "never submitted" (1.08ms)
+  ✔ has no rows to list (1.2056ms)
+  ✔ has no rate to snapshot (0.5601ms)
+✔ a partner that does not exist (10.9117ms)
+▶ a partner that does exist
+  ✔ ingests, and the rows land (5.8938ms)
+  ✔ answers freshness before it has ever submitted (0.9718ms)
+  ✔ lists no rows for a SKU it has not priced (1.8613ms)
+  ✔ still 404s for a SKU with no applied rate, not for the partner (1.1067ms)
+✔ a partner that does exist (10.7227ms)
+▶ the refusal message
+  ✔ names the unknown partner, because the caller made a typo (0.5619ms)
+✔ the refusal message (0.7742ms)
+▶ in-memory rate rows
+  ▶ the applied ledger
+    ✔ round-trips a row, optional fields and all (3.3502ms)
+    ✔ leaves an absent end date absent rather than null (0.4727ms)
+    ✔ returns a frozen row — the ledger is append-only (0.4008ms)
+    ✔ has nothing to say about a row that was never appended (0.4128ms)
+    ✔ orders a SKU chronologically by ingestion (15.4658ms)
+    ✔ takes the newest row as the live baseline (0.531ms)
+    ✔ breaks a same-millisecond tie on insertion order (0.3543ms)
+    ✔ never bleeds one partner rows into another (0.2584ms)
+    ✔ keeps SKUs apart (0.2602ms)
+  ✔ the applied ledger (23.1147ms)
+  ▶ the rate effective on a date — what a booking snapshots
+    ✔ picks the row whose window contains the date (0.4849ms)
+    ✔ treats an open-ended row as running forever (0.2545ms)
+    ✔ includes both edges of the window (0.2574ms)
+    ✔ excludes a date outside the window entirely (0.1837ms)
+    ✔ lets a later correction supersede an overlapping earlier row (0.2232ms)
+  ✔ the rate effective on a date — what a booking snapshots (1.6714ms)
+  ▶ freshness
+    ✔ reads the newest row across every SKU (0.7958ms)
+    ✔ reports nothing for a partner that has never submitted (0.3327ms)
+  ✔ freshness (1.3848ms)
+  ▶ the staged review queue
+    ✔ round-trips a proposal with its tolerance and drift intact (0.9217ms)
+    ✔ keeps a null band as null — "no baseline" is not "not written" (0.321ms)
+    ✔ resolves a proposal without touching the others (0.5687ms)
+    ✔ filters by partner, sku and status (0.7471ms)
+    ✔ has nothing to say about a proposal that was never staged (0.1645ms)
+  ✔ the staged review queue (3.0292ms)
+✔ in-memory rate rows (30.2757ms)
+▶ mongo-backed rate rows
+  ▶ behaves like the contract says
+    ▶ the applied ledger
+      ✔ round-trips a row, optional fields and all (114.6691ms)
+      ✔ leaves an absent end date absent rather than null (18.2213ms)
+      ✔ returns a frozen row — the ledger is append-only (15.0664ms)
+      ✔ has nothing to say about a row that was never appended (19.0611ms)
+      ✔ orders a SKU chronologically by ingestion (23.4567ms)
+      ✔ takes the newest row as the live baseline (14.6395ms)
+      ✔ breaks a same-millisecond tie on insertion order (13.6014ms)
+      ✔ never bleeds one partner rows into another (13.8658ms)
+      ✔ keeps SKUs apart (7.9161ms)
+    ✔ the applied ledger (241.4217ms)
+    ▶ the rate effective on a date — what a booking snapshots
+      ✔ picks the row whose window contains the date (42.3797ms)
+      ✔ treats an open-ended row as running forever (14.1663ms)
+      ✔ includes both edges of the window (12.4136ms)
+      ✔ excludes a date outside the window entirely (12.7386ms)
+      ✔ lets a later correction supersede an overlapping earlier row (14.2357ms)
+    ✔ the rate effective on a date — what a booking snapshots (96.7433ms)
+    ▶ freshness
+      ✔ reads the newest row across every SKU (12.085ms)
+      ✔ reports nothing for a partner that has never submitted (6.6092ms)
+    ✔ freshness (19.0316ms)
+    ▶ the staged review queue
+      ✔ round-trips a proposal with its tolerance and drift intact (13.6732ms)
+      ✔ keeps a null band as null — "no baseline" is not "not written" (9.4719ms)
+      ✔ resolves a proposal without touching the others (35.6009ms)
+      ✔ filters by partner, sku and status (36.0123ms)
+      ✔ has nothing to say about a proposal that was never staged (5.2198ms)
+    ✔ the staged review queue (100.6695ms)
+  ✔ behaves like the contract says (458.3746ms)
+✔ mongo-backed rate rows (3406.9477ms)
+[info] [rfqflow] rfq-001 confirmed → 1/4 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 confirmed → 1/2 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 confirmed → 2/3 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 confirmed → 2/2 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 confirmed → 1/1 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 confirmed → 1/2 suppliers mailed, customer sent
+[error] [rfqflow] candidate lookup failed for Coorg: Error: mongo is having a moment
+[info] [rfqflow] rfq-001 confirmed → 0/0 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 confirmed → 1/3 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 confirmed → 1/1 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 confirmed → 0/0 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 confirmed → 1/1 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 quote summary → sent
+[info] [rfqflow] rfq-001 quote summary → sent
+[info] [comms:smtp] sent "New RFQ" to inbox@example.com (diverted from real@dmc.example) [rfq rfq-001]
+[info] [comms:smtp] sent "New RFQ" to real@dmc.example [rfq rfq-001]
+[error] [comms:smtp] send to real@dmc.example failed: connection refused
+✔ sends nothing at all until the workflow is switched on (3.3785ms)
+✔ a server with none of the keys set is inert, and says so at boot (0.6904ms)
+✔ the boot line names the risk when dispatch is on without a link base (0.4108ms)
+✔ never writes to a supplier who has not consented or must re-accept (46.302ms)
+✔ a supplier we hold no address for is reported, not silently dropped (2.5955ms)
+✔ the wave cap takes M3 order as given and records who was held back (2.8378ms)
+✔ one wave mints the tokens, and each supplier gets their own link (3.1438ms)
+✔ with no link base configured the mail carries the bare token (2.0435ms)
+✔ one failed send neither stops the wave nor throws into the submit (3.6331ms)
+✔ a candidate lookup that blows up degrades to "no suppliers", not a 500 (3.0298ms)
+✔ the acknowledgement states the number actually mailed, not the number tried (3.0333ms)
+✔ the submit call can name the customer address, overriding the config fallback (2.3123ms)
+✔ an RFQ with no place and no region cannot match suppliers, and says so (2.1674ms)
+✔ the supplier brief carries trip shape and no traveller identity (BR-3) (2.4344ms)
+✖ the comparison resolves supplier ids to names and prices them correctly (11.049ms)
+✔ an expired price is never quoted to a customer (8.816ms)
+✔ a quote with no readable validity date is shown rather than hidden (0.7183ms)
+✔ no quotes means no mail (0.294ms)
+✔ formatting reads the way a person would write it (1.7576ms)
+✔ supplier names are escaped before they reach an HTML mail (0.6256ms)
+✔ an M3 contact wins over the config map, and a broken map is ignored (0.7377ms)
+✔ a lookup that throws falls through to config instead of failing the send (0.4794ms)
+✔ a configured test inbox takes every mail, with the real address kept visible (2.0684ms)
+✔ with no test inbox the mail goes to the real address, unprefixed (0.4673ms)
+✔ a transport failure comes back as a result, never as a throw (0.6747ms)
+✔ a recipient with no address is refused before a socket is opened (0.2002ms)
+✔ a partial SMTP config is a misconfiguration, not a degraded mode (0.2287ms)
+✔ the plain-text part keeps the link a phone at a trade desk needs (0.2441ms)
+▶ provisioning a partner for the first time
+  ✔ mints the supplier id — the caller does not get to choose one (5.1316ms)
+  ✔ carries the registration through to the record (2.5598ms)
+  ✔ starts invited, and unaccepted — provisioning is not activation (0.7794ms)
+  ✔ keeps the onboarding system’s own id, which is what makes it findable again (0.796ms)
+  ✔ gives each partner its own id (1.3085ms)
+✔ provisioning a partner for the first time (13.1194ms)
+▶ provisioning the same partner again
+  ✔ returns the same supplier and says it did not create one (1.2641ms)
+  ✔ does not overwrite what ops has since curated (1.0622ms)
+  ✔ survives two processes racing to create it (1.4358ms)
+  ✔ re-throws a failure that is not a lost race (2.3564ms)
+✔ provisioning the same partner again (7.3106ms)
+▶ the turnaround a partner declares
+  ✔ is refused below the configured platform floor (1.9046ms)
+  ✔ is accepted at the floor exactly (4.4739ms)
+  ✔ is unconstrained when no floor is configured — the module ships inert (BR-17) (0.565ms)
+  ✔ leaves nothing behind when it is refused (0.6046ms)
+✔ the turnaround a partner declares (8.0849ms)
+ℹ tests 243
+ℹ suites 28
+ℹ pass 242
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19463.7695
+
+✖ failing tests:
+
+test at src\modules\rfqflow\rfqflow.test.ts:264:25
+✖ the comparison resolves supplier ids to names and prices them correctly (11.049ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /Coorg Trails/. Input:
+  
+  'undefined'
+  
+      at TestContext.<anonymous> (D:\projects\elatetrips-experiences\.worktrees\v10-backend-foundation\elatetrips-node\src\modules\rfqflow\rfqflow.test.ts:342:10)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: /Coorg Trails/,
+    operator: 'match',
+    diff: 'simple'
+  }

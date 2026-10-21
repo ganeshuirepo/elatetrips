@@ -45,7 +45,7 @@ export function buildApiRouter(c: Container): Router {
    */
   router.get('/health', (_req, res) => ok(res, { status: 'ok', uptime: process.uptime() }));
 
-  router.use('/auth', buildAuthRouter(c.controllers.auth));
+  router.use('/auth', buildAuthRouter(c.controllers.auth, c.authGuard));
   router.use('/users', buildUserRouter(c.controllers.users, c.authGuard));
   router.use('/orders', buildOrderRouter(c.controllers.orders, c.authGuard));
   // Post-booking support: guest thread (auth), vendor app + ops console (mock
@@ -73,9 +73,9 @@ export function buildApiRouter(c: Container): Router {
   router.use('/vendor', buildVendorRouter(c.controllers.console));
   // BRD v1.16 engines (M3/M4/M5/M12/M13/M17) — mounted BEFORE the contracts
   // catch-all so the richer M3 /suppliers wins; the rest are new prefixes.
-  router.use('/suppliers', buildSupplierRouter(c.controllers.suppliers));
+  router.use('/suppliers', buildSupplierRouter(c.controllers.suppliers, c.adminGuard));
   router.use('/comm', buildCommsRouter(c.controllers.comms));
-  router.use('/ratecard', buildRatecardRouter(c.controllers.ratecard));
+  router.use('/ratecard', buildRatecardRouter(c.controllers.ratecard, c.adminGuard));
   router.use('/broadcast', buildBroadcastRouter(c.controllers.broadcast));
   router.use('/classifier', buildClassifierRouter(c.controllers.classifier));
   router.use('/negotiation', buildNegotiationRouter(c.controllers.negotiation));
@@ -83,7 +83,7 @@ export function buildApiRouter(c: Container): Router {
   // contracts-v1.1 surface (spec 006): mounted at the /api/v1 root so paths match
   // /contracts/api.md exactly (/rfq, /itinerary, /suppliers, /link, /quote, …).
   // New prefixes only — no collision with the module routers above.
-  router.use('/', buildContractsRouter(c.controllers.contracts));
+  router.use('/', buildContractsRouter(c.controllers.contracts, c.authGuard));
 
   return router;
 }

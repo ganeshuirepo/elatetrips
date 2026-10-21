@@ -1,0 +1,43 @@
+{
+  "label": "recovery",
+  "capturedAt": "2026-10-21T14:41:43.052Z",
+  "baselineCommit": "ce83482a9dd556cdd0175424c8fde18266cb0aa7",
+  "dependencySetup": "Junction to supplied backend installation; original .env and deployment files are not copied.",
+  "safety": "Test environment, fixture JWT/admin keys, no original database/provider credentials; real database URI disabled.",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/server.js",
+    "seed": "ts-node-dev --transpile-only src/seed/seed.ts",
+    "seed:built": "node dist/seed/seed.js",
+    "typecheck": "tsc --noEmit",
+    "test": "node -r ./scripts/register-ts.js --test \"src/**/*.test.ts\"",
+    "docs:check": "node scripts/swagger-coverage.mjs",
+    "import:experiences": "ts-node-dev --transpile-only src/seed/import-experiences.ts",
+    "import:experiences:built": "node dist/seed/import-experiences.js"
+  },
+  "missingScripts": [
+    "lint",
+    "test:contracts"
+  ],
+  "checks": [
+    {
+      "name": "typecheck",
+      "command": "npm.cmd run typecheck",
+      "exitCode": 0,
+      "durationMs": 6126
+    },
+    {
+      "name": "test",
+      "command": "npm.cmd run test",
+      "exitCode": 1,
+      "durationMs": 26958
+    },
+    {
+      "name": "build",
+      "command": "npm.cmd run build",
+      "exitCode": 0,
+      "durationMs": 6758
+    }
+  ]
+}
