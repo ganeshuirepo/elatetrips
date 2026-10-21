@@ -9,6 +9,7 @@ import {
   type StorageKeys,
 } from './encrypted-json';
 import { pendingDelivery, type OutboxDelivery } from './outbox-record';
+import { authenticateFoundationEvent } from './foundation-event';
 
 const scopeSchema = z
   .object({
@@ -114,6 +115,8 @@ export interface WriteRecord {
   payload: unknown;
 }
 export interface StoreOptions<T> {
+  /** Require the matching authenticated audit, revision and durable subreceipt on reads/replays. */
+  verifyIntegrity?: boolean;
   client: mongo.MongoClient;
   database: string;
   namespace: string;
@@ -269,6 +272,37 @@ export async function openVersionedStore<T>(options: StoreOptions<T>) {
       return fail('INTEGRITY_FAILURE');
     }
   }
+  async function verified(row: Row, session?: mongo.ClientSession): Promise<RecordVersion<T>> {
+    const value = decode(row);
+    if (!options.verifyIntegrity) return value;
+    try {
+      const event = authenticateFoundationEvent(
+        await events.findOne({ _id: row.eventId }, { session }),
+        protection,
+        { database, namespace: prefix, eventId: row.eventId },
+      );
+      const saved = await revisions.findOne(
+        { _id: revisionKey(row._id, row.revision) },
+        { session },
+      );
+      const matches = await receipts.find(
+        { aggregateId: row._id, revision: row.revision }, { session },
+      ).toArray();
+      if (!saved || saved.aggregateId !== row._id) fail('INTEGRITY_FAILURE');
+      const { aggregateId, ...savedRow } = saved;
+      const savedVersion = decode({ ...savedRow, _id: aggregateId });
+      if (matches.length !== 1 ||
+          matches[0].aggregateId !== row._id || matches[0].revision !== row.revision ||
+          event.kind !== kind || event.schemaVersion !== schemaVersion ||
+          event.action !== writeAction || canonicalJson(event.scope) !== canonicalJson(row.scope) ||
+          canonicalJson(event.after) !== canonicalJson(value.payload) ||
+          canonicalJson(savedVersion.payload) !== canonicalJson(value.payload) ||
+          saved.eventId !== row.eventId) fail('INTEGRITY_FAILURE');
+      return value;
+    } catch {
+      return fail('INTEGRITY_FAILURE');
+    }
+  }
   async function authorize(principal: VerifiedPrincipal, scope: Scope, action: string, ts: string) {
     let policy: unknown;
     try {
@@ -332,7 +366,7 @@ export async function openVersionedStore<T>(options: StoreOptions<T>) {
     const scope = current?.scope ?? request.createScope;
     if (!scope) fail('INVALID_REQUEST');
     const actor = await authorize(principal, scope, writeAction, ts);
-    const before = current ? decode(current).payload : null;
+    const before = current ? (await verified(current, session)).payload : null;
     if (
       current &&
       request.createScope &&
@@ -365,7 +399,7 @@ export async function openVersionedStore<T>(options: StoreOptions<T>) {
       )
         fail('INTEGRITY_FAILURE');
       const { aggregateId, ...version } = saved;
-      return decode({ ...version, _id: aggregateId });
+      return verified({ ...version, _id: aggregateId }, session);
     }
     return {
       change: {
@@ -459,7 +493,7 @@ export async function openVersionedStore<T>(options: StoreOptions<T>) {
         const row = await records.findOne({ _id: key(id) });
         if (!row) return null;
         await authorize(principal, row.scope, readAction, timestamp());
-        return decode(row);
+        return verified(row);
       });
     },
     async history(principal: VerifiedPrincipal, id: string): Promise<RecordVersion<T>[]> {
@@ -546,7 +580,7 @@ export async function openVersionedStore<T>(options: StoreOptions<T>) {
       const row = await records.findOne({ _id: key(id) }, { session });
       if (!row) return null;
       await authorize(principal, row.scope, readAction, ts);
-      return decode(row);
+      return verified(row, session);
     },
     normalize: (input) => {
       const prepared = prepare(input);
@@ -603,12 +637,14 @@ const transactionBodySchema = z
   .object({
     fingerprint: z.string().regex(/^[a-f0-9]{64}$/),
     records: z.array(resultReferenceSchema).min(1),
+    subreceipts: z.array(z.object({ _id: idSchema, aggregateId: idSchema, fingerprint: idSchema, revision: z.number().int().positive() }).strict()).optional(),
   })
   .strict();
 interface TransactionReceipt extends Omit<z.infer<typeof transactionReceiptSchema>, 'body'> {
   body: EncryptedJson;
 }
 export interface RecordTransactionOptions {
+  verifyIntegrity?: boolean;
   client: mongo.MongoClient;
   database: string;
   namespace: string;
@@ -691,10 +727,19 @@ export async function openRecordTransaction(options: RecordTransactionOptions) {
   function binding(metadata: unknown): string {
     return canonicalJson({ database, namespace, type: 'record-transaction-receipt', metadata });
   }
+  async function verifySubreceipts(body: z.infer<typeof transactionBodySchema>, session: mongo.ClientSession) {
+    if (!options.verifyIntegrity) return;
+    if (!body.subreceipts || body.subreceipts.length !== body.records.length) fail('INTEGRITY_FAILURE');
+    for (const expected of body.subreceipts) {
+      const actual = await db.collection<Receipt>(`${namespace}_receipts`).findOne({ _id: expected._id }, { session });
+      if (canonicalJson(actual) !== canonicalJson(expected)) fail('INTEGRITY_FAILURE');
+    }
+  }
   return {
     async read(
       principal: VerifiedPrincipal,
       targets: Array<{ store: object; id: string }>,
+      committed?: { commandId: string; correlationId: string },
     ): Promise<RecordTransactionSnapshot> {
       const parsed = z
         .array(
@@ -737,6 +782,23 @@ export async function openRecordTransaction(options: RecordTransactionOptions) {
                   id: entry.id,
                   record: await entry.port.read(principal, entry.id, session, ts),
                 });
+              if (committed) {
+                try {
+                  const row = transactionReceiptSchema.parse(await receipts.findOne(
+                    { _id: hashStorageKey([policy.policyId, committed.commandId]) }, { session },
+                  ));
+                  const { body: ciphertext, ...metadata } = row;
+                  const body = transactionBodySchema.parse(protection.open(ciphertext, binding(metadata)));
+                  await verifySubreceipts(body, session);
+                  const refs = records.map(({ kind, id, record }) => {
+                    if (!record) return fail('INTEGRITY_FAILURE');
+                    return { kind, id, revision: record.revision, eventId: record.eventId };
+                  });
+                  if (row.policyId !== policy.policyId || row.policyRevision !== policy.revision ||
+                      row.commandId !== committed.commandId || row.correlationId !== committed.correlationId ||
+                      canonicalJson(body.records) !== canonicalJson(refs)) fail('INTEGRITY_FAILURE');
+                } catch { return fail('INTEGRITY_FAILURE'); }
+              }
               return { records };
             },
             { readConcern: { level: 'snapshot' }, readPreference: 'primary' },
@@ -816,6 +878,7 @@ export async function openRecordTransaction(options: RecordTransactionOptions) {
                     body = transactionBodySchema.parse(
                       protection.open(ciphertext, binding(savedMetadata)),
                     );
+                    await verifySubreceipts(body, session);
                     if (body.fingerprint !== fingerprint) fail('IDEMPOTENCY_CONFLICT');
                     if (
                       canonicalJson(savedMetadata) !== canonicalJson(metadata) ||
@@ -867,10 +930,18 @@ export async function openRecordTransaction(options: RecordTransactionOptions) {
                   revision,
                   eventId,
                 }));
+                const subreceipts: Receipt[] = [];
+                for (const change of changes) {
+                  const receipt = await db.collection<Receipt>(`${namespace}_receipts`).findOne({
+                    _id: hashStorageKey([change.port.kind, canonicalJson([change.input.id, change.input.commandId])]),
+                  }, { session });
+                  if (!receipt) fail('INTEGRITY_FAILURE');
+                  subreceipts.push(receipt);
+                }
                 await receipts.insertOne(
                   {
                     ...metadata,
-                    body: protection.seal({ fingerprint, records: refs }, binding(metadata)),
+                    body: protection.seal({ fingerprint, records: refs, subreceipts }, binding(metadata)),
                   },
                   { session },
                 );
