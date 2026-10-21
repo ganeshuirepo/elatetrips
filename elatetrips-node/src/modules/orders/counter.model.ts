@@ -38,5 +38,5 @@ export async function nextSequence(name: string): Promise<number> {
   )
     .lean()
     .exec();
-  return doc!.seq;
+  return doc.seq;
 }
