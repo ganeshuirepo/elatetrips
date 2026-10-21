@@ -76,7 +76,8 @@ test('entity ids stay sequential and readable', () => {
   // frozen contract fixtures. They are identifiers, never credentials — so the
   // security work above must not have swept them up.
   const engine = fresh();
-  const { rfq_id: _drop, ...draft } = rfq001 as unknown as Record<string, unknown>;
+  const draft: Record<string, unknown> = { ...rfq001 };
+  delete draft.rfq_id;
   const rfq = engine.createRfq(draft as never) as { rfq_id: string };
   assert.match(rfq.rfq_id, /^rfq-\d{3}$/);
 });
