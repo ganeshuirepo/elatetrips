@@ -1,0 +1,14 @@
+{
+  "installMode": "isolated node_modules; network fallback after offline ENOTCACHED; ignore-scripts/no-audit/no-fund",
+  "nodeModulesSymbolicLink": false,
+  "dependencies": {
+    "eslint": "9.39.4",
+    "@typescript-eslint/parser": "8.63.0",
+    "@typescript-eslint/eslint-plugin": "8.63.0",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1"
+  },
+  "baselineLockedPackages": 297,
+  "changedBaselinePackages": [],
+  "originalEnvironmentRead": false
+}

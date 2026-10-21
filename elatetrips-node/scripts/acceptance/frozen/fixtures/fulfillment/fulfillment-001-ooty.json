@@ -1,0 +1,83 @@
+{
+  "fulfillment_id": "ful_001_ooty",
+  "booking_id": "bkg_001",
+  "quote_id": "qt_001",
+  "rfq_id": "rfq_001",
+  "policy_snapshot": {
+    "policy_id": "pol_partner1",
+    "version": 3,
+    "snapshotted_ts": "2026-09-20T09:15:00Z"
+  },
+  "phase1_components": [
+    {
+      "component_id": "cmp_voucher_hotel",
+      "type": "voucher",
+      "title": "Nilgiri Crown Resort — stay voucher",
+      "sla_key": "voucher",
+      "due_ts": "2026-09-21T09:15:00Z",
+      "state": "confirmed",
+      "evidence_ref": "vch_nilgiri_001"
+    },
+    {
+      "component_id": "cmp_occasion_anniv",
+      "type": "occasion",
+      "title": "Anniversary candlelight setup",
+      "sla_key": "occasion",
+      "due_ts": "2026-09-22T09:15:00Z",
+      "state": "confirmed",
+      "evidence_ref": "occ_confirm_001"
+    },
+    {
+      "component_id": "cmp_activity_pykara",
+      "type": "activity",
+      "title": "Pykara route sightseeing bookings",
+      "sla_key": "activity",
+      "due_ts": "2026-09-23T09:15:00Z",
+      "state": "delayed",
+      "grace_note": "Boathouse slot is being reconfirmed for your dates; alternate 9:30am slot held. Final confirmation by tomorrow noon — your other stops are unaffected."
+    },
+    {
+      "component_id": "cmp_transfer_cab",
+      "type": "transfer",
+      "title": "Airport + local cab transfers",
+      "sla_key": "transfer",
+      "due_ts": "2026-09-24T09:15:00Z",
+      "state": "pending"
+    }
+  ],
+  "phase2_milestones": [
+    {
+      "milestone_id": "ms_checkin",
+      "title": "Check-in at Nilgiri Crown Resort",
+      "state": "confirmed",
+      "photo_ref": "ph_checkin_001",
+      "confirmed_ts": "2026-10-12T11:40:00Z"
+    },
+    {
+      "milestone_id": "ms_anniv_dinner",
+      "title": "Anniversary candlelight dinner",
+      "state": "upcoming"
+    }
+  ],
+  "gate": {
+    "status": "amber",
+    "message": "One activity (Pykara boathouse) is being reconfirmed; a held alternate keeps your plan on track. We'll confirm by tomorrow noon and update you here.",
+    "customer_informed_ts": "2026-09-23T10:05:00Z"
+  },
+  "follow_ups": [
+    {
+      "step": "pre_trip_checklist",
+      "channel": "app",
+      "scheduled_ts": "2026-10-05T04:00:00Z",
+      "state": "completed",
+      "completed_ts": "2026-10-05T04:00:12Z"
+    },
+    {
+      "step": "post_trip_feedback",
+      "channel": "email",
+      "scheduled_ts": "2026-10-16T04:00:00Z",
+      "state": "scheduled"
+    }
+  ],
+  "status": "in_progress"
+}

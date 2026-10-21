@@ -1,0 +1,109 @@
+
+> elatetrips-node@1.0.0 lint
+> eslint "src/**/*.ts" --max-warnings 0
+
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\common\logger.ts
+  1:1  warning  '/* eslint-disable no-console */' has no effect because you have 'noInlineConfig' setting in your config
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\common\middleware\errorHandler.ts
+  33:1   warning  '// eslint-disable-next-line @typescript-eslint/no-unused-vars' has no effect because you have 'noInlineConfig' setting in your config
+  34:74  error    '_next' is defined but never used                                                                                                       @typescript-eslint/no-unused-vars
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\container.ts
+  168:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  169:48  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  170:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  171:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  172:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  175:48  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  177:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  178:48  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  179:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\auth\auth.service.test.ts
+  80:27  error  '_omit' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\auth\auth.service.ts
+  222:27  error  '_omit' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\broadcast\broadcast.ports.ts
+  11:15  error  'Route' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\catalog\catalog.service.ts
+  288:26  error  Expected '!==' and instead saw '!='  eqeqeq
+  289:25  error  Expected '!==' and instead saw '!='  eqeqeq
+  289:52  error  Expected '!==' and instead saw '!='  eqeqeq
+  291:29  error  Expected '!==' and instead saw '!='  eqeqeq
+  292:29  error  Expected '!==' and instead saw '!='  eqeqeq
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\contracts\contracts.links.test.ts
+  79:19  error  '_drop' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\foundation\delivery-history.ts
+  376:92  error  Expected '===' and instead saw '=='  eqeqeq
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\foundation\delivery-recovery.ts
+  173:92  error  Expected '===' and instead saw '=='  eqeqeq
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\foundation\outbox-record.ts
+  60:36  error  'leaseToken' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\foundation\outbox.ts
+  160:92  error  Expected '===' and instead saw '=='  eqeqeq
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\foundation\persistence.test.ts
+  588:13  error  'createScope' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\foundation\persistence.ts
+  216:92  error  Expected '===' and instead saw '=='  eqeqeq
+  672:92  error  Expected '===' and instead saw '=='  eqeqeq
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\foundation\projection.ts
+  160:92  error  Expected '===' and instead saw '=='  eqeqeq
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\negotiation\negotiation.decision.test.ts
+  110:28  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\orders\counter.model.ts
+  41:10  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\orders\order.repository.ts
+  55:1   warning  '/* eslint-disable @typescript-eslint/no-explicit-any */' has no effect because you have 'noInlineConfig' setting in your config
+  56:24  error    Unexpected any. Specify a different type                                                                                          @typescript-eslint/no-explicit-any
+  56:34  error    Unexpected any. Specify a different type                                                                                          @typescript-eslint/no-explicit-any
+  56:40  error    Unexpected any. Specify a different type                                                                                          @typescript-eslint/no-explicit-any
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\partner\partner.repository.ts
+  46:1   warning  '/* eslint-disable @typescript-eslint/no-explicit-any */' has no effect because you have 'noInlineConfig' setting in your config
+  47:24  error    Unexpected any. Specify a different type                                                                                          @typescript-eslint/no-explicit-any
+  47:34  error    Unexpected any. Specify a different type                                                                                          @typescript-eslint/no-explicit-any
+  47:40  error    Unexpected any. Specify a different type                                                                                          @typescript-eslint/no-explicit-any
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\pricing\pricing.service.ts
+  71:27  error  Expected '===' and instead saw '=='  eqeqeq
+  80:23  error  Expected '!==' and instead saw '!='  eqeqeq
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\ratecard\ratecard.sheets.ts
+  30:19  error    '_partner_id' is defined but never used                                                                          @typescript-eslint/no-unused-vars
+  41:5   warning  '// eslint-disable-next-line no-console' has no effect because you have 'noInlineConfig' setting in your config
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\rfqflow\rfqflow.test.ts
+  506:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  521:91  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  533:59  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\supplier\supplier.provision.test.ts
+  78:24  error  '_query' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\modules\wedding\wedding.repository.ts
+  25:1   warning  '/* eslint-disable @typescript-eslint/no-explicit-any */' has no effect because you have 'noInlineConfig' setting in your config
+  26:24  error    Unexpected any. Specify a different type                                                                                          @typescript-eslint/no-explicit-any
+  26:34  error    Unexpected any. Specify a different type                                                                                          @typescript-eslint/no-explicit-any
+  26:40  error    Unexpected any. Specify a different type                                                                                          @typescript-eslint/no-explicit-any
+
+D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\elatetrips-node\src\repositories\MongoReadRepository.ts
+  14:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+✖ 52 problems (46 errors, 6 warnings)
+

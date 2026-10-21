@@ -1,0 +1,104 @@
+{
+  "canonical_id": "cp_goa_4d",
+  "destination": "Goa",
+  "occasion_tags": [
+    "celebration",
+    "leisure"
+  ],
+  "duration_days": 4,
+  "policy_id": "pol_canonical_goa",
+  "guaranteed_floor": {
+    "hotel": {
+      "category": "4",
+      "locality": [
+        "Candolim",
+        "Calangute"
+      ],
+      "amenities": [
+        "pool",
+        "breakfast"
+      ]
+    },
+    "vehicle_class": "sedan_ac",
+    "meal_plan": "CP",
+    "itinerary": {
+      "days": []
+    },
+    "quality": {
+      "min_review_score": 4,
+      "named_property_candidates": [
+        "Novotel Candolim",
+        "Lemon Tree Candolim"
+      ]
+    },
+    "substitution_clause_ref": "clause_sub_v1"
+  },
+  "hotel_disclosure": "named_with_substitution",
+  "display_price": {
+    "amount": 5400000,
+    "currency": "INR",
+    "basis": "per_trip",
+    "assembly": "pool_p75_plus_margin"
+  },
+  "pool": [
+    {
+      "supplier_id": "sup_a",
+      "package_id": "pkg_a",
+      "delta_map": {
+        "hotel": "5*"
+      },
+      "cost_ref": "rc_a_r12",
+      "freshness_days": 2,
+      "capacity_flags": [],
+      "signature_addons": [
+        {
+          "addon_id": "add_sunset",
+          "title": "Private sunset cruise",
+          "price": {
+            "amount": 1200000,
+            "currency": "INR"
+          }
+        }
+      ]
+    },
+    {
+      "supplier_id": "sup_b",
+      "package_id": "pkg_b",
+      "delta_map": {},
+      "cost_ref": "rc_b_r7",
+      "freshness_days": 1,
+      "capacity_flags": []
+    },
+    {
+      "supplier_id": "sup_c",
+      "package_id": "pkg_c",
+      "delta_map": {
+        "meal_plan": "MAP"
+      },
+      "cost_ref": "rc_c_r3",
+      "freshness_days": 4,
+      "capacity_flags": []
+    },
+    {
+      "supplier_id": "sup_d",
+      "package_id": "pkg_d",
+      "delta_map": {},
+      "cost_ref": "rc_d_r9",
+      "freshness_days": 3,
+      "capacity_flags": []
+    }
+  ],
+  "cluster": {
+    "proposed_by": "ai",
+    "match_scores": {
+      "pkg_a": 0.86,
+      "pkg_b": 0.91,
+      "pkg_c": 0.83,
+      "pkg_d": 0.88
+    },
+    "approved_by": "ops_meera",
+    "approved_ts": "2026-08-20T09:00:00Z"
+  },
+  "status": "published",
+  "version": 1
+}

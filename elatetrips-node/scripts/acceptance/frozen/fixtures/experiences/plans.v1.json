@@ -1,0 +1,1498 @@
+{
+  "schemaVersion": "1.0.0",
+  "sections": {
+    "celebration": [
+      {
+        "id": "stay",
+        "icon": "🏨",
+        "name": "Stay & room",
+        "detail": "2 nights, Ooty",
+        "skippable": false,
+        "levels": {
+          "Essential": {
+            "price": 11800,
+            "items": [
+              "Deluxe room, 3★ hill resort",
+              "Breakfast for two",
+              "Garden-facing, standard bedding"
+            ]
+          },
+          "Signature": {
+            "price": 18600,
+            "items": [
+              "Premium valley-view room, 4★",
+              "Breakfast + one dinner",
+              "Early check-in, late check-out"
+            ]
+          },
+          "Grand": {
+            "price": 31500,
+            "items": [
+              "Private cottage / suite with deck",
+              "All meals included",
+              "Butler on call, welcome hamper"
+            ]
+          }
+        }
+      },
+      {
+        "id": "celebration",
+        "icon": "🎈",
+        "name": "Celebration & surprises",
+        "detail": "Decor, the celebration meal, the cake, the welcome and the photography — set up before you arrive",
+        "skippable": false,
+        "levels": {
+          "Essential": {
+            "price": 6100,
+            "items": [
+              "Balloon arch and happy-birthday banner",
+              "Basic table setting",
+              "500g celebration cake",
+              "Sparkler moment at the table",
+              "Welcome drink and garland on arrival",
+              "One surprise touch waiting in the room",
+              "Phone-shot guidance and a best-spot map"
+            ]
+          },
+          "Signature": {
+            "price": 19800,
+            "items": [
+              "Full room styling + fairy lights",
+              "Fresh florals and a personalised name backdrop",
+              "1kg premium cake, your flavour",
+              "Private candlelight dinner for two",
+              "Bubbly toast",
+              "Decorated welcome entry with name board",
+              "A surprise gift or hamper of your choosing",
+              "Photographer, 2 hours",
+              "40+ edited images in 5 days"
+            ]
+          },
+          "Grand": {
+            "price": 43600,
+            "items": [
+              "Designer theme in your colour palette",
+              "Floral canopy + candle pathway",
+              "Designer 2kg cake with styled cake table",
+              "Chef-curated 5-course private dinner",
+              "Live music and a dessert table",
+              "Grand welcome — floral entry and staff line-up",
+              "Surprises sequenced across the whole trip",
+              "Photographer + videographer, 4 hours",
+              "100+ edited images",
+              "60-second reel, next-day delivery"
+            ]
+          }
+        }
+      }
+    ],
+    "festival": [
+      {
+        "id": "stay",
+        "icon": "🏨",
+        "name": "Stay & room",
+        "detail": "Near the action",
+        "skippable": false,
+        "levels": {
+          "Essential": {
+            "price": 9800,
+            "items": [
+              "Clean 3★ room, 20–30 min out",
+              "Breakfast for two",
+              "Shared transfers to the venue"
+            ]
+          },
+          "Signature": {
+            "price": 16400,
+            "items": [
+              "4★ room on the festival route",
+              "Breakfast + one festive dinner",
+              "Late check-out on the big night"
+            ]
+          },
+          "Grand": {
+            "price": 28900,
+            "items": [
+              "Heritage suite, walking distance",
+              "All meals through the festival",
+              "Private balcony viewing where offered"
+            ]
+          }
+        }
+      },
+      {
+        "id": "festival",
+        "icon": "🎟️",
+        "name": "Festival package",
+        "detail": "Entry and viewing, the festive table, and the photographs",
+        "skippable": false,
+        "levels": {
+          "Essential": {
+            "price": 3600,
+            "items": [
+              "General entry passes",
+              "Festival day-map & timings",
+              "One traditional festive thali",
+              "Best-spot & timing guide for the crowd"
+            ]
+          },
+          "Signature": {
+            "price": 17100,
+            "items": [
+              "Reserved viewing for the main event",
+              "Skip-the-queue entry",
+              "Local host through the crowd",
+              "Festive thali + guided street-food walk",
+              "Sweets hamper to carry home",
+              "Photographer, 3 hours on the main day",
+              "50+ edited images"
+            ]
+          },
+          "Grand": {
+            "price": 39400,
+            "items": [
+              "Premium stand / front-row seating",
+              "Backstage or ritual access where permitted",
+              "Dedicated escort on all festival days",
+              "Chef-led regional tasting menu",
+              "Private festive feast for the group",
+              "Sweets & artisan hamper",
+              "Photographer + videographer, both days",
+              "120+ edited images",
+              "Festival reel, 48-hour delivery"
+            ]
+          }
+        }
+      }
+    ],
+    "recreation": [
+      {
+        "id": "stay",
+        "icon": "🏕️",
+        "name": "Stay & base camp",
+        "detail": "Where you sleep between days out",
+        "skippable": false,
+        "levels": {
+          "Essential": {
+            "price": 8400,
+            "items": [
+              "Twin-share camp or 3★ lodge",
+              "Breakfast included",
+              "Basic gear storage"
+            ]
+          },
+          "Signature": {
+            "price": 15200,
+            "items": [
+              "Private room, 4★ nature resort",
+              "Breakfast + dinner",
+              "Hot water & drying room"
+            ]
+          },
+          "Grand": {
+            "price": 27400,
+            "items": [
+              "Premium cottage / glamping suite",
+              "All meals, packed lunches on activity days",
+              "In-room recovery kit"
+            ]
+          }
+        }
+      },
+      {
+        "id": "activity",
+        "icon": "🥾",
+        "name": "Activity package",
+        "detail": "The activity itself, the gear it needs, and the recovery after",
+        "skippable": false,
+        "levels": {
+          "Essential": {
+            "price": 4400,
+            "items": [
+              "One guided half-day activity",
+              "Entry permits included",
+              "Group of up to 12",
+              "Packing list & fitness prep notes",
+              "Guided stretch & recovery session"
+            ]
+          },
+          "Signature": {
+            "price": 16700,
+            "items": [
+              "Two full activity days",
+              "Certified instructor, small group of 6",
+              "All technical gear provided",
+              "Full gear rental (boots, packs, layers)",
+              "First-aid escort on activity days",
+              "Sports massage, one per person",
+              "Sunrise yoga on the rest morning"
+            ]
+          },
+          "Grand": {
+            "price": 39200,
+            "items": [
+              "Private guide, all days",
+              "Premium or rare route slot",
+              "Photo-documented, safety kit yours to keep",
+              "Premium branded gear rental",
+              "Medic on call + oxygen where relevant",
+              "Personal porter support",
+              "Daily therapy — massage or physio",
+              "Private yoga & breathwork sessions",
+              "Nutritionist-planned recovery meals"
+            ]
+          }
+        }
+      }
+    ],
+    "pilgrimage": [
+      {
+        "id": "stay",
+        "icon": "🏨",
+        "name": "Stay & room",
+        "detail": "Rest between darshans",
+        "skippable": false,
+        "levels": {
+          "Essential": {
+            "price": 6800,
+            "items": [
+              "Clean twin-share room near the temple",
+              "Vegetarian breakfast",
+              "Early-morning wake-up call"
+            ]
+          },
+          "Signature": {
+            "price": 12900,
+            "items": [
+              "3★ room, walking distance to the queue",
+              "Sattvic breakfast + dinner",
+              "Late check-out after darshan"
+            ]
+          },
+          "Grand": {
+            "price": 24500,
+            "items": [
+              "Premium suite closest to the sanctum",
+              "All sattvic meals",
+              "Attendant on call, luggage handled"
+            ]
+          }
+        }
+      },
+      {
+        "id": "darshan",
+        "icon": "🛕",
+        "name": "Darshan package",
+        "detail": "Access and rituals, sattvic meals, the guide, and elder care",
+        "skippable": false,
+        "levels": {
+          "Essential": {
+            "price": 3800,
+            "items": [
+              "General darshan queue assistance",
+              "Prasadam collection",
+              "Timings & dress-code briefing",
+              "Daily sattvic breakfast",
+              "Written temple guide & ritual meanings",
+              "Queue-wait seating guidance",
+              "Step-free route notes"
+            ]
+          },
+          "Signature": {
+            "price": 17600,
+            "items": [
+              "Special-entry darshan tickets",
+              "Archana in your name & gotra",
+              "Priest-guided ritual, one hour",
+              "All meals, pure-veg, no onion or garlic on request",
+              "Local temple guide, all darshan days",
+              "Seva arranged in your name",
+              "Palanquin or wheelchair booking at the shrine",
+              "Attendant through the queue"
+            ]
+          },
+          "Grand": {
+            "price": 43000,
+            "items": [
+              "Break darshan where permitted",
+              "Full pooja / abhishekam booking",
+              "Dedicated pandit through the trip",
+              "Sanctified prasadam hamper",
+              "Private cook for the group",
+              "Temple-style feast on the main day",
+              "Scholar-guide across the itinerary",
+              "Annadanam seva sponsored for you",
+              "Dedicated attendant per elder",
+              "Doctor on call + medical kit"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "celebrationAddon": {
+    "id": "celebration",
+    "icon": "🎈",
+    "name": "Celebration & surprises",
+    "detail": "Optional — decor, the cake, the welcome and the photography, added to this trip",
+    "skippable": true,
+    "levels": {
+      "Essential": {
+        "price": 6100,
+        "items": [
+          "Balloon arch and happy-birthday banner",
+          "Basic table setting",
+          "500g celebration cake",
+          "Sparkler moment at the table",
+          "Welcome drink and garland on arrival",
+          "One surprise touch waiting in the room",
+          "Phone-shot guidance and a best-spot map"
+        ]
+      },
+      "Signature": {
+        "price": 19800,
+        "items": [
+          "Full room styling + fairy lights",
+          "Fresh florals and a personalised name backdrop",
+          "1kg premium cake, your flavour",
+          "Private candlelight dinner for two",
+          "Bubbly toast",
+          "Decorated welcome entry with name board",
+          "A surprise gift or hamper of your choosing",
+          "Photographer, 2 hours",
+          "40+ edited images in 5 days"
+        ]
+      },
+      "Grand": {
+        "price": 43600,
+        "items": [
+          "Designer theme in your colour palette",
+          "Floral canopy + candle pathway",
+          "Designer 2kg cake with styled cake table",
+          "Chef-curated 5-course private dinner",
+          "Live music and a dessert table",
+          "Grand welcome — floral entry and staff line-up",
+          "Surprises sequenced across the whole trip",
+          "Photographer + videographer, 4 hours",
+          "100+ edited images",
+          "60-second reel, next-day delivery"
+        ]
+      }
+    }
+  },
+  "addons": {
+    "celebration": [
+      {
+        "id": "route-card",
+        "icon": "🗺️",
+        "name": "Curated route card",
+        "blurb": "Self-guided day, mapped around your celebration.",
+        "unit": "Per trip",
+        "price": 600
+      },
+      {
+        "id": "tea-day",
+        "icon": "🍃",
+        "name": "Tea-estate & factory day",
+        "blurb": "Guided estate walk, factory tour and a tasting.",
+        "unit": "Full day",
+        "price": 2400
+      },
+      {
+        "id": "boat",
+        "icon": "🚣",
+        "name": "Ooty lake boat ride",
+        "blurb": "Private pedal or row boat, best at golden hour.",
+        "unit": "1 hour",
+        "price": 900
+      },
+      {
+        "id": "toy-train",
+        "icon": "🚂",
+        "name": "Toy-train first class",
+        "blurb": "The Nilgiri mountain railway leg, seats held.",
+        "unit": "One way",
+        "price": 1800
+      },
+      {
+        "id": "sunrise",
+        "icon": "🌄",
+        "name": "Sunrise at Doddabetta",
+        "blurb": "Early drive to the peak with a packed picnic.",
+        "unit": "Half day",
+        "price": 2200
+      },
+      {
+        "id": "workshop",
+        "icon": "🧶",
+        "name": "Nilgiri artisan workshop",
+        "blurb": "Sit with a maker; take home what you make.",
+        "unit": "2 hours",
+        "price": 2600
+      }
+    ],
+    "festival": [
+      {
+        "id": "city-card",
+        "icon": "🗺️",
+        "name": "Self-guided city card",
+        "blurb": "The route locals take between the pandals.",
+        "unit": "Per trip",
+        "price": 500
+      },
+      {
+        "id": "heritage-walk",
+        "icon": "🏛️",
+        "name": "Guided heritage walk",
+        "blurb": "Half a day through the old quarter with a historian.",
+        "unit": "Half day",
+        "price": 2200
+      },
+      {
+        "id": "craft-market",
+        "icon": "🧺",
+        "name": "Craft market with a local",
+        "blurb": "Where the festival goods are actually made.",
+        "unit": "3 hours",
+        "price": 1400
+      },
+      {
+        "id": "artisan",
+        "icon": "🎨",
+        "name": "Artisan workshop session",
+        "blurb": "Hands on the craft the festival is known for.",
+        "unit": "2 hours",
+        "price": 2800
+      },
+      {
+        "id": "day-trip",
+        "icon": "🚌",
+        "name": "Nearby heritage day trip",
+        "blurb": "The site an hour out, with transport and entry.",
+        "unit": "Full day",
+        "price": 3600
+      },
+      {
+        "id": "fest-guide",
+        "icon": "🧭",
+        "name": "Private guide, festival days",
+        "blurb": "Someone who knows the crowd and the timings.",
+        "unit": "Per day",
+        "price": 4200
+      }
+    ],
+    "recreation": [
+      {
+        "id": "route-card",
+        "icon": "🗺️",
+        "name": "Self-guided route card",
+        "blurb": "The non-activity hours, planned lightly.",
+        "unit": "Per trip",
+        "price": 500
+      },
+      {
+        "id": "attraction",
+        "icon": "🎫",
+        "name": "Local attraction entry",
+        "blurb": "Tickets held for the one everybody asks about.",
+        "unit": "Per person",
+        "price": 800
+      },
+      {
+        "id": "village-day",
+        "icon": "🌾",
+        "name": "Plantation or village day",
+        "blurb": "Guided walk through working land, not a set.",
+        "unit": "Full day",
+        "price": 2600
+      },
+      {
+        "id": "host-lunch",
+        "icon": "🍲",
+        "name": "Lunch with a host family",
+        "blurb": "Home cooking, at their table.",
+        "unit": "Per person",
+        "price": 1200
+      },
+      {
+        "id": "viewpoint",
+        "icon": "🌅",
+        "name": "Sunrise viewpoint & picnic",
+        "blurb": "Early start, the view, and breakfast carried up.",
+        "unit": "Half day",
+        "price": 2000
+      },
+      {
+        "id": "craft",
+        "icon": "🪵",
+        "name": "Artisan or craft workshop",
+        "blurb": "Learn the local craft from the person who does it.",
+        "unit": "2 hours",
+        "price": 2400
+      }
+    ],
+    "pilgrimage": [
+      {
+        "id": "aarti",
+        "icon": "🪔",
+        "name": "Aarti front seating",
+        "blurb": "Reserved place for the evening ceremony.",
+        "unit": "Per person",
+        "price": 900
+      },
+      {
+        "id": "ghat-walk",
+        "icon": "🌊",
+        "name": "Dawn walk along the ghats",
+        "blurb": "The river before the crowds, with a guide.",
+        "unit": "2 hours",
+        "price": 800
+      },
+      {
+        "id": "second-shrine",
+        "icon": "🛕",
+        "name": "Second shrine visit",
+        "blurb": "The nearby temple most yatras miss, with transport.",
+        "unit": "Half day",
+        "price": 2200
+      },
+      {
+        "id": "temple-town",
+        "icon": "🏛️",
+        "name": "Temple-town heritage walk",
+        "blurb": "The town around the shrine and why it grew there.",
+        "unit": "3 hours",
+        "price": 1600
+      },
+      {
+        "id": "annadanam",
+        "icon": "🍛",
+        "name": "Annadanam seva",
+        "blurb": "Sponsor a meal service in your name.",
+        "unit": "Per seva",
+        "price": 2500
+      },
+      {
+        "id": "handloom",
+        "icon": "🧵",
+        "name": "Handloom & craft visit",
+        "blurb": "The weavers who supply the temple.",
+        "unit": "2 hours",
+        "price": 1200
+      }
+    ]
+  },
+  "transport": {
+    "defaultMode": "full",
+    "carLimit": 6,
+    "modes": [
+      {
+        "id": "full",
+        "icon": "🚗",
+        "label": "Full trip",
+        "blurb": "Pickup, drop and travel throughout"
+      },
+      {
+        "id": "destination",
+        "icon": "📍",
+        "label": "Only at destination",
+        "blurb": "Transfers and local travel there"
+      },
+      {
+        "id": "own",
+        "icon": "🔑",
+        "label": "Own vehicle",
+        "blurb": "Driving ourselves — none needed"
+      }
+    ],
+    "vehicles": [
+      {
+        "id": "sedan",
+        "name": "Sedan",
+        "icon": "🚗",
+        "kind": "car",
+        "seats": 4,
+        "note": "Dzire or similar · 3 bags",
+        "perKm": 18,
+        "minKm": 250,
+        "inclusions": [
+          "Driver allowance, night halt and stay",
+          "Fuel and vehicle maintenance",
+          "All tolls, state permits and border taxes",
+          "Air conditioning through the journey",
+          "Verified chauffeur, GPS-tracked vehicle",
+          "Boot space for 3 cabin bags"
+        ],
+        "exclusions": [
+          "Parking fees at attractions and temples",
+          "Distance beyond your estimate, billed at the same per-km rate",
+          "Anything the driver is asked for outside the agreed route",
+          "Driver tips, at your discretion",
+          "Roof carrier — ask for an SUV instead"
+        ]
+      },
+      {
+        "id": "suv",
+        "name": "SUV",
+        "icon": "🚙",
+        "kind": "car",
+        "seats": 6,
+        "note": "Ertiga or similar · 5 bags",
+        "perKm": 24,
+        "minKm": 250,
+        "inclusions": [
+          "Driver allowance, night halt and stay",
+          "Fuel and vehicle maintenance",
+          "All tolls, state permits and border taxes",
+          "Air conditioning through the journey",
+          "Verified chauffeur, GPS-tracked vehicle",
+          "Boot space for 5 bags",
+          "Hill-route capable"
+        ],
+        "exclusions": [
+          "Parking fees at attractions and temples",
+          "Distance beyond your estimate, billed at the same per-km rate",
+          "Anything the driver is asked for outside the agreed route",
+          "Driver tips, at your discretion",
+          "Off-road or 4x4 routes, quoted separately"
+        ]
+      },
+      {
+        "id": "tempo",
+        "name": "Tempo Traveller",
+        "icon": "🚐",
+        "kind": "coach",
+        "seats": 12,
+        "note": "Pushback seats · 12 bags",
+        "perKm": 32,
+        "minKm": 300,
+        "inclusions": [
+          "Driver allowance, night halt and stay",
+          "Fuel and vehicle maintenance",
+          "All tolls, state permits and border taxes",
+          "Air conditioning through the journey",
+          "Verified chauffeur, GPS-tracked vehicle",
+          "Pushback seats and reading lights",
+          "Luggage carrier"
+        ],
+        "exclusions": [
+          "Parking fees at attractions and temples",
+          "Distance beyond your estimate, billed at the same per-km rate",
+          "Anything the driver is asked for outside the agreed route",
+          "Driver tips, at your discretion",
+          "Second driver on runs above 12 hours"
+        ]
+      },
+      {
+        "id": "coach",
+        "name": "Mini coach",
+        "icon": "🚌",
+        "kind": "coach",
+        "seats": 20,
+        "note": "AC coach · luggage hold",
+        "perKm": 46,
+        "minKm": 300,
+        "inclusions": [
+          "Driver allowance, night halt and stay",
+          "Fuel and vehicle maintenance",
+          "All tolls, state permits and border taxes",
+          "Air conditioning through the journey",
+          "Verified chauffeur, GPS-tracked vehicle",
+          "Luggage hold underneath",
+          "Public-address system"
+        ],
+        "exclusions": [
+          "Parking fees at attractions and temples",
+          "Distance beyond your estimate, billed at the same per-km rate",
+          "Anything the driver is asked for outside the agreed route",
+          "Driver tips, at your discretion",
+          "Routes with a coach restriction — we will say so before booking"
+        ]
+      }
+    ]
+  },
+  "occasionPlans": {
+    "Birthday": [
+      {
+        "day": 1,
+        "title": "Arrive to a room that is already ready",
+        "items": [
+          "Transfer from your pickup point, on the transport you chose",
+          "Decor, balloons and the name-board go up BEFORE you check in",
+          "Welcome drink, and the room reveal on your cue",
+          "Birthday dinner at the stay"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "The birthday itself",
+        "items": [
+          "Slow breakfast, then the experiences you picked",
+          "Cake at the hour you set — sparklers where the property allows them",
+          "Photo window while the decor is still fresh",
+          "Evening free, or the private dinner if it is in your package"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "One last morning",
+        "items": [
+          "Breakfast and late check-out where your stay allows it",
+          "A short local stop on the way out",
+          "Transfer to the station or airport"
+        ]
+      }
+    ],
+    "Anniversary": [
+      {
+        "day": 1,
+        "title": "Arrival & the room",
+        "items": [
+          "Private transfer in, no shared vehicles",
+          "Room styled with flowers and a handwritten card before you walk in",
+          "Candlelight dinner laid out at the spot you chose"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "A day that is yours",
+        "items": [
+          "Breakfast in the room if your stay offers it",
+          "The experiences you picked — a couple’s spa slot, a drive, a boat",
+          "Cake and the keepsake hamper in the evening",
+          "Photographer on hand if the package includes one"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "Unhurried exit",
+        "items": [
+          "Late breakfast, no rush to the door",
+          "Transfer out"
+        ]
+      }
+    ],
+    "Proposal": [
+      {
+        "day": 1,
+        "title": "You arrive, they suspect nothing",
+        "items": [
+          "Transfer in — the coordinator meets only you, quietly",
+          "The setup is built out of sight while you check in",
+          "A normal-looking evening at the stay"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "The moment",
+        "items": [
+          "The spot is dressed and cleared of other guests at the agreed hour",
+          "Photographer already in position before you walk up",
+          "The proposal, then the celebration you chose — dinner, cake, or both",
+          "Rest of the day free"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "First morning of the news",
+        "items": [
+          "Breakfast, and the photo set handed over",
+          "Transfer out"
+        ]
+      }
+    ],
+    "Honeymoon": [
+      {
+        "day": 1,
+        "title": "Arrive slowly",
+        "items": [
+          "Private transfer, at your pace",
+          "Room set with flowers and a welcome note",
+          "Nothing scheduled for the evening but dinner"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "The first place",
+        "items": [
+          "Late breakfast on purpose",
+          "The experiences you picked around the stay",
+          "Private dinner if it is in your package"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "The second place",
+        "items": [
+          "Transfer on to the next stay, with stops on the way",
+          "Check in, then an easy afternoon",
+          "Sunset experience if you added one"
+        ]
+      },
+      {
+        "day": 4,
+        "title": "Home",
+        "items": [
+          "Breakfast and late check-out where allowed",
+          "Transfer to the airport or station"
+        ]
+      }
+    ],
+    "Baby shower": [
+      {
+        "day": 1,
+        "title": "Family arrives",
+        "items": [
+          "Transfers arranged for everyone, not just the couple",
+          "Rooms allocated and the celebration space dressed before anyone is up",
+          "Easy dinner together"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "The shower",
+        "items": [
+          "Late-morning ceremony in the space you chose",
+          "Festive lunch, and the cake",
+          "Photography through the ceremony if your package has it",
+          "Gentle afternoon — nothing that asks the guest of honour to walk far"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "Slow goodbye",
+        "items": [
+          "Breakfast together",
+          "Transfers out, staggered so nobody waits"
+        ]
+      }
+    ],
+    "Group celebration": [
+      {
+        "day": 1,
+        "title": "Everyone lands",
+        "items": [
+          "Coaches or cars per your transport choice, from more than one pickup point",
+          "One property to yourselves; rooms pre-allocated by family",
+          "Welcome dinner with the group"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "The main day",
+        "items": [
+          "Morning free, or the group experiences you picked",
+          "The celebration itself in the afternoon — decor and cake ready beforehand",
+          "Group photograph while everyone is together and dressed",
+          "Dinner and the evening on the property"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "Wind down",
+        "items": [
+          "Breakfast, then a short group outing if there is time",
+          "Staggered transfers out"
+        ]
+      }
+    ],
+    "Trekking": [
+      {
+        "day": 1,
+        "title": "Arrive & brief",
+        "items": [
+          "Transfer to the base stay",
+          "Gear check and safety brief with your guide",
+          "Short acclimatisation walk, early dinner"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "The trail",
+        "items": [
+          "Pre-dawn start with packed breakfast",
+          "Guided summit or ridge trail, permits already held",
+          "Packed lunch on the trail; back by late afternoon",
+          "Any second experience you added — a bonfire, a stargazing slot"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "Down and out",
+        "items": [
+          "Easy morning walk or a viewpoint drive",
+          "Breakfast and check-out",
+          "Transfer back"
+        ]
+      }
+    ],
+    "Watersports": [
+      {
+        "day": 1,
+        "title": "Arrive at the coast",
+        "items": [
+          "Transfer to the shack-side or beach stay",
+          "Session briefing and a swim test where the activity needs one",
+          "Sunset on the beach, dinner at the stay"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "On the water",
+        "items": [
+          "Morning slot for your main activity — surf, kayak or dive — pre-paid and pre-booked",
+          "Rest through the midday sun",
+          "Second session or the cruise you added, late afternoon"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "Last swim",
+        "items": [
+          "Free morning on the beach",
+          "Check-out and transfer"
+        ]
+      }
+    ],
+    "Wildlife": [
+      {
+        "day": 1,
+        "title": "Into the forest edge",
+        "items": [
+          "Transfer to the lodge, arriving before the gates shut",
+          "Naturalist briefing over tea",
+          "Evening safari slot if the timing allows it"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "Dawn and dusk",
+        "items": [
+          "Dawn safari — the slot is held in advance, not queued for",
+          "Late breakfast and the middle of the day off",
+          "Second safari at dusk, same vehicle and naturalist",
+          "Any add-on you picked — a birding walk, a river stretch"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "Out",
+        "items": [
+          "One short morning drive or walk",
+          "Breakfast and transfer out"
+        ]
+      }
+    ],
+    "Wellness": [
+      {
+        "day": 1,
+        "title": "Arrive and stop",
+        "items": [
+          "Quiet transfer in",
+          "Consultation with the practitioner; your plan for the stay is set",
+          "Light dinner, early night"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "Settle",
+        "items": [
+          "Yoga at sunrise",
+          "Treatments through the morning per your consultation",
+          "Afternoon free; the experiences you picked sit here"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "Deeper",
+        "items": [
+          "Second morning practice",
+          "Longer treatment block",
+          "Silent evening if you asked for one"
+        ]
+      },
+      {
+        "day": 4,
+        "title": "Carry it home",
+        "items": [
+          "Closing session and a plan to take with you",
+          "Breakfast and transfer out"
+        ]
+      }
+    ],
+    "Char Dham": [
+      {
+        "day": 1,
+        "title": "Haridwar / Dehradun",
+        "items": [
+          "Arrival transfer and yatra registration completed for you",
+          "Evening Ganga aarti at Har Ki Pauri"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "To Barkot",
+        "items": [
+          "Drive through the hills with rest stops paced for elders",
+          "Overnight at the stay in your package"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "Yamunotri",
+        "items": [
+          "Early start; pony or palki arranged where you asked for it",
+          "Darshan, then back down to Barkot"
+        ]
+      },
+      {
+        "day": 4,
+        "title": "To Uttarkashi & Gangotri",
+        "items": [
+          "Transfer to Uttarkashi",
+          "Gangotri darshan and Ganga puja at the ghat"
+        ]
+      },
+      {
+        "day": 5,
+        "title": "Towards Kedarnath",
+        "items": [
+          "Drive to Guptkashi or Sonprayag",
+          "Rest day by design — altitude is paced, not rushed"
+        ]
+      },
+      {
+        "day": 6,
+        "title": "Kedarnath",
+        "items": [
+          "Trek, pony or helicopter as per your booking",
+          "Darshan; overnight near the shrine or back at base"
+        ]
+      },
+      {
+        "day": 7,
+        "title": "To Badrinath",
+        "items": [
+          "Descent and transfer to Badrinath",
+          "Evening aarti"
+        ]
+      },
+      {
+        "day": 8,
+        "title": "Badrinath & Mana",
+        "items": [
+          "Morning abhishek darshan",
+          "Mana village, the last village before the border"
+        ]
+      },
+      {
+        "day": 9,
+        "title": "Return",
+        "items": [
+          "Long drive back to Haridwar or Rishikesh",
+          "Drop at your onward point"
+        ]
+      }
+    ],
+    "Tirupati": [
+      {
+        "day": 1,
+        "title": "Up the hill",
+        "items": [
+          "Pickup and transfer to Tirumala",
+          "Check in and rest — the darshan slot is already held",
+          "Special-entry darshan at your allotted time",
+          "Laddu prasadam collected for you"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "Down and home",
+        "items": [
+          "Early temple round or a local shrine visit",
+          "Breakfast, check-out",
+          "Transfer to the station or airport"
+        ]
+      }
+    ],
+    "Kashi": [
+      {
+        "day": 1,
+        "title": "Arrive at the ghats",
+        "items": [
+          "Transfer to a ghat-facing room",
+          "Reserved seating for the evening Ganga aarti",
+          "Quiet dinner nearby"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "Rituals and the old city",
+        "items": [
+          "Sunrise boat on the Ganga",
+          "Kashi Vishwanath darshan with the pandit arranged in your package",
+          "Any rituals you asked for, performed at the right ghat",
+          "Old-city walk in the afternoon if you added it"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "Sarnath & out",
+        "items": [
+          "Sarnath in the morning",
+          "Transfer out"
+        ]
+      }
+    ],
+    "Golden Temple": [
+      {
+        "day": 1,
+        "title": "Amritsar",
+        "items": [
+          "Transfer to the stay near the complex",
+          "First darshan and a walk around the sarovar",
+          "Langar seva if you asked to serve"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "Early hours and the border",
+        "items": [
+          "Pre-dawn darshan, when the complex is quietest",
+          "Jallianwala Bagh and the old city in the morning",
+          "Wagah border ceremony in the evening, seating arranged"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "Last darshan",
+        "items": [
+          "Morning darshan and prasad",
+          "Transfer out"
+        ]
+      }
+    ],
+    "Navratri Garba": [
+      {
+        "day": 1,
+        "title": "Into Ahmedabad",
+        "items": [
+          "Transfer to the stay, chaniya choli and kediyu fitted on arrival",
+          "A smaller neighbourhood garba to find your feet"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "The big ground",
+        "items": [
+          "Late start — the nights run long here",
+          "Passes to the main garba ground, in the block your package covers",
+          "Dinner on site, dancing until it ends"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "Ahmedabad by day",
+        "items": [
+          "Old-city heritage walk or the stepwell, if you added it",
+          "Transfer out"
+        ]
+      }
+    ],
+    "Mysuru Dasara": [
+      {
+        "day": 1,
+        "title": "Mysuru",
+        "items": [
+          "Transfer in; the palace illumination starts at dusk",
+          "First evening walk around the lit palace"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "Jumboo Savari",
+        "items": [
+          "Seated viewing of the procession, per your access tier",
+          "Festive lunch",
+          "Evening at the palace or Chamundi Hill"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "Around Mysuru",
+        "items": [
+          "Market and silk-weaving visit if you added it",
+          "Transfer out"
+        ]
+      }
+    ],
+    "Durga Puja": [
+      {
+        "day": 1,
+        "title": "Kolkata",
+        "items": [
+          "Transfer in; pandal map and the night plan handed over",
+          "First pandal round on foot, guided"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "Pandal hopping",
+        "items": [
+          "The big north-Kolkata pandals with your guide, ahead of the crowds",
+          "Bhog lunch",
+          "Dhunuchi naach in the evening; sindoor khela if the day falls right"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "The city",
+        "items": [
+          "Kumartuli and a heritage tram or river stretch",
+          "Transfer out"
+        ]
+      }
+    ],
+    "Diwali Lights Trail": [
+      {
+        "day": 1,
+        "title": "Arrive before the lights",
+        "items": [
+          "Transfer to the stay in the city you chose",
+          "Evening market walk while the diyas go up"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "The night itself",
+        "items": [
+          "Morning free or a heritage walk",
+          "Reserved viewing for the ghat deepotsav or the city illumination",
+          "Festive dinner, and the celebration bundle if you added one"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "The morning after",
+        "items": [
+          "A quiet temple or fort visit",
+          "Transfer out"
+        ]
+      }
+    ],
+    "Rann Utsav": [
+      {
+        "day": 1,
+        "title": "Into Kutch",
+        "items": [
+          "Transfer to Dhordo; check in to the tent your package covers",
+          "Sunset on the White Rann, then folk music at the camp"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "The white desert",
+        "items": [
+          "Craft villages — Nirona, Hodka — with a guide",
+          "Afternoon rest at the camp",
+          "Full-moon night on the salt flats, camel cart out and back"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "Bhuj and out",
+        "items": [
+          "Kalo Dungar or the Bhuj museums if you added them",
+          "Transfer out"
+        ]
+      }
+    ],
+    "Pushkar Camel Fair": [
+      {
+        "day": 1,
+        "title": "Desert camp",
+        "items": [
+          "Transfer to the camp or haveli in your package",
+          "Evening at the fairground as the traders settle in"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "The fair",
+        "items": [
+          "Dawn at the camel grounds, when the light and the trading are both best",
+          "Competitions and the arena events with reserved seating",
+          "Kartik Purnima aarti at the lake"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "Pushkar town",
+        "items": [
+          "Brahma temple and the ghats in the morning",
+          "Transfer out"
+        ]
+      }
+    ],
+    "Hornbill Festival": [
+      {
+        "day": 1,
+        "title": "Kohima",
+        "items": [
+          "Transfer from Dimapur; inner-line permits already issued",
+          "Kohima war cemetery and the evening market"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "Kisama",
+        "items": [
+          "Full day at the heritage village — all 17 morungs",
+          "Traditional lunch inside a tribal kitchen",
+          "Evening music at the festival grounds"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "A village and out",
+        "items": [
+          "Khonoma or Touphema village visit if you added it",
+          "Transfer to Dimapur"
+        ]
+      }
+    ],
+    "Pongal & Jallikattu": [
+      {
+        "day": 1,
+        "title": "Madurai",
+        "items": [
+          "Transfer in; evening at the Meenakshi temple for the closing ritual"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "Pongal day",
+        "items": [
+          "Pongal cooked at the stay at sunrise, as it should be",
+          "Village visit — kolam, cattle decorated for Mattu Pongal",
+          "Jallikattu arena viewing where your package includes it"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "Temple town",
+        "items": [
+          "Morning temple round and the flower market",
+          "Transfer out"
+        ]
+      }
+    ],
+    "Goa Carnival": [
+      {
+        "day": 1,
+        "title": "Goa",
+        "items": [
+          "Transfer to the beach stay",
+          "Evening on the sand, nothing scheduled"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "The float parade",
+        "items": [
+          "Panaji or Margao parade route, seating per your package",
+          "Late lunch, then the beach through the afternoon",
+          "Parade after-party if you added it"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "Slow Goa",
+        "items": [
+          "Old Goa churches or a spice plantation",
+          "Transfer out"
+        ]
+      }
+    ],
+    "Jaisalmer Desert Festival": [
+      {
+        "day": 1,
+        "title": "The golden fort",
+        "items": [
+          "Transfer in; fort and haveli walk in the afternoon",
+          "Evening at the stay"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "Maru Mahotsav",
+        "items": [
+          "Festival events at the stadium — turban tying, moustache contests, folk dance",
+          "Camel or jeep safari into Sam dunes",
+          "Folk night on the dunes under a full moon"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "Out through the desert",
+        "items": [
+          "Kuldhara or Gadisar lake in the morning",
+          "Transfer out"
+        ]
+      }
+    ],
+    "Braj Holi": [
+      {
+        "day": 1,
+        "title": "Into Braj",
+        "items": [
+          "Transfer to Mathura or Vrindavan",
+          "Evening aarti at Banke Bihari, before the crowds build"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "Lathmar and colour",
+        "items": [
+          "Barsana for Lathmar Holi with a guide who knows the lanes",
+          "Change of clothes and a wash-up stop built into the day",
+          "Widow’s Holi at Vrindavan in the afternoon if the dates align"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "The quiet after",
+        "items": [
+          "Govardhan or Gokul in the morning",
+          "Transfer out"
+        ]
+      }
+    ],
+    "Goa Shigmo": [
+      {
+        "day": 1,
+        "title": "Goa in spring",
+        "items": [
+          "Transfer to the stay",
+          "Evening on the beach or the riverfront"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "The parade",
+        "items": [
+          "Float parade at Panaji or Ponda, viewing arranged",
+          "Folk troupes — romta mel, ghode modni — through the evening"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "Around Goa",
+        "items": [
+          "Spice plantation or a village temple round if you added it",
+          "Transfer out"
+        ]
+      }
+    ]
+  }
+}

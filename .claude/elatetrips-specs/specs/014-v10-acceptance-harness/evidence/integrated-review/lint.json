@@ -1,0 +1,2935 @@
+{
+  "counts": {
+    "all": {
+      "files": 247,
+      "errors": 38,
+      "warnings": 6
+    },
+    "foundation": {
+      "files": 25,
+      "errors": 0,
+      "warnings": 0
+    },
+    "legacy": {
+      "files": 222,
+      "errors": 38,
+      "warnings": 6
+    }
+  },
+  "diagnostics": [
+    {
+      "file": "src/app.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/common/db/counter.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/common/db/schema.integrity.test.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/common/errors/AppError.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/common/http/ApiResponse.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/common/http/asyncHandler.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/common/interfaces/IReadRepository.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/common/interfaces/IWriteRepository.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/common/logger.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 1,
+      "messages": [
+        {
+          "ruleId": null,
+          "message": "'/* eslint-disable no-console */' has no effect because you have 'noInlineConfig' setting in your config.",
+          "line": 1,
+          "column": 1,
+          "endLine": 1,
+          "endColumn": 32,
+          "severity": 1,
+          "nodeType": null
+        }
+      ]
+    },
+    {
+      "file": "src/common/middleware/authGuard.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/common/middleware/errorHandler.ts",
+      "group": "legacy",
+      "errorCount": 1,
+      "warningCount": 1,
+      "messages": [
+        {
+          "ruleId": null,
+          "message": "'// eslint-disable-next-line @typescript-eslint/no-unused-vars' has no effect because you have 'noInlineConfig' setting in your config.",
+          "line": 33,
+          "column": 1,
+          "endLine": 33,
+          "endColumn": 62,
+          "severity": 1,
+          "nodeType": null
+        },
+        {
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "severity": 2,
+          "message": "'_next' is defined but never used.",
+          "line": 34,
+          "column": 74,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 34,
+          "endColumn": 79
+        }
+      ]
+    },
+    {
+      "file": "src/common/middleware/identityGuard.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/common/middleware/notFound.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/common/middleware/rateLimit.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/common/middleware/validate.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/common/middleware/webhookSignature.test.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/common/middleware/webhookSignature.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/common/ports/partnerDirectory.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/common/types/express/index.d.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/config/database.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/config/env.test.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/config/env.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/config/swagger.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/container.ts",
+      "group": "legacy",
+      "errorCount": 9,
+      "warningCount": 0,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 168,
+          "column": 52,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 168,
+          "endColumn": 55,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  8924,
+                  8927
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  8924,
+                  8927
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 169,
+          "column": 48,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 169,
+          "endColumn": 51,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  8996,
+                  8999
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  8996,
+                  8999
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 170,
+          "column": 45,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 170,
+          "endColumn": 48,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  9061,
+                  9064
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  9061,
+                  9064
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 171,
+          "column": 47,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 171,
+          "endColumn": 50,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  9125,
+                  9128
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  9125,
+                  9128
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 172,
+          "column": 52,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 172,
+          "endColumn": 55,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  9196,
+                  9199
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  9196,
+                  9199
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 175,
+          "column": 48,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 175,
+          "endColumn": 51,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  9454,
+                  9457
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  9454,
+                  9457
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 177,
+          "column": 50,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 177,
+          "endColumn": 53,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  9615,
+                  9618
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  9615,
+                  9618
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 178,
+          "column": 48,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 178,
+          "endColumn": 51,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  9684,
+                  9687
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  9684,
+                  9687
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 179,
+          "column": 52,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 179,
+          "endColumn": 55,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  9756,
+                  9759
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  9756,
+                  9759
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "src/modules/admin/admin.controller.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/admin/admin.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/admin/admin.service.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/admin/admin.validation.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/admin/console.controller.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/admin/console.guard.test.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/admin/console.guard.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/admin/console.model.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/admin/console.partner.test.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/admin/console.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/admin/console.service.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/admin/console.token.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/auth/__fixtures__/devotp-prod-check.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/auth/auth.controller.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/auth/auth.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/auth/auth.service.test.ts",
+      "group": "legacy",
+      "errorCount": 1,
+      "warningCount": 0,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "severity": 2,
+          "message": "'_omit' is assigned a value but never used.",
+          "line": 80,
+          "column": 27,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 80,
+          "endColumn": 32
+        }
+      ]
+    },
+    {
+      "file": "src/modules/auth/auth.service.ts",
+      "group": "legacy",
+      "errorCount": 1,
+      "warningCount": 0,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "severity": 2,
+          "message": "'_omit' is assigned a value but never used.",
+          "line": 222,
+          "column": 27,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 222,
+          "endColumn": 32
+        }
+      ]
+    },
+    {
+      "file": "src/modules/auth/auth.types.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/auth/auth.validation.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/auth/otp.sender.test.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/auth/otp.sender.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/auth/otp.store.test.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/auth/otp.store.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/auth/password.service.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/auth/refresh.service.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/auth/token.service.test.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/auth/token.service.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/broadcast/broadcast.audit.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/broadcast/broadcast.config.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/broadcast/broadcast.controller.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/broadcast/broadcast.engine.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/broadcast/broadcast.ports.ts",
+      "group": "legacy",
+      "errorCount": 1,
+      "warningCount": 0,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "severity": 2,
+          "message": "'Route' is defined but never used.",
+          "line": 11,
+          "column": 15,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 11,
+          "endColumn": 20,
+          "suggestions": [
+            {
+              "messageId": "removeUnusedVar",
+              "data": {
+                "varName": "Route"
+              },
+              "fix": {
+                "range": [
+                  541,
+                  547
+                ],
+                "text": ""
+              },
+              "desc": "Remove unused variable \"Route\"."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "src/modules/broadcast/broadcast.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/broadcast/broadcast.service.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/broadcast/broadcast.types.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/broadcast/broadcast.validation.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/catalog/catalog.controller.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/catalog/catalog.models.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/catalog/catalog.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/catalog/catalog.service.ts",
+      "group": "legacy",
+      "errorCount": 5,
+      "warningCount": 0,
+      "messages": [
+        {
+          "ruleId": "eqeqeq",
+          "severity": 2,
+          "message": "Expected '!==' and instead saw '!='.",
+          "line": 288,
+          "column": 26,
+          "nodeType": "BinaryExpression",
+          "messageId": "unexpected",
+          "endLine": 288,
+          "endColumn": 28,
+          "suggestions": [
+            {
+              "messageId": "replaceOperator",
+              "data": {
+                "expectedOperator": "!==",
+                "actualOperator": "!="
+              },
+              "fix": {
+                "range": [
+                  12734,
+                  12736
+                ],
+                "text": "!=="
+              },
+              "desc": "Use '!==' instead of '!='."
+            }
+          ]
+        },
+        {
+          "ruleId": "eqeqeq",
+          "severity": 2,
+          "message": "Expected '!==' and instead saw '!='.",
+          "line": 289,
+          "column": 25,
+          "nodeType": "BinaryExpression",
+          "messageId": "unexpected",
+          "endLine": 289,
+          "endColumn": 27,
+          "suggestions": [
+            {
+              "messageId": "replaceOperator",
+              "data": {
+                "expectedOperator": "!==",
+                "actualOperator": "!="
+              },
+              "fix": {
+                "range": [
+                  12811,
+                  12813
+                ],
+                "text": "!=="
+              },
+              "desc": "Use '!==' instead of '!='."
+            }
+          ]
+        },
+        {
+          "ruleId": "eqeqeq",
+          "severity": 2,
+          "message": "Expected '!==' and instead saw '!='.",
+          "line": 289,
+          "column": 52,
+          "nodeType": "BinaryExpression",
+          "messageId": "unexpected",
+          "endLine": 289,
+          "endColumn": 54,
+          "suggestions": [
+            {
+              "messageId": "replaceOperator",
+              "data": {
+                "expectedOperator": "!==",
+                "actualOperator": "!="
+              },
+              "fix": {
+                "range": [
+                  12838,
+                  12840
+                ],
+                "text": "!=="
+              },
+              "desc": "Use '!==' instead of '!='."
+            }
+          ]
+        },
+        {
+          "ruleId": "eqeqeq",
+          "severity": 2,
+          "message": "Expected '!==' and instead saw '!='.",
+          "line": 291,
+          "column": 29,
+          "nodeType": "BinaryExpression",
+          "messageId": "unexpected",
+          "endLine": 291,
+          "endColumn": 31,
+          "suggestions": [
+            {
+              "messageId": "replaceOperator",
+              "data": {
+                "expectedOperator": "!==",
+                "actualOperator": "!="
+              },
+              "fix": {
+                "range": [
+                  12901,
+                  12903
+                ],
+                "text": "!=="
+              },
+              "desc": "Use '!==' instead of '!='."
+            }
+          ]
+        },
+        {
+          "ruleId": "eqeqeq",
+          "severity": 2,
+          "message": "Expected '!==' and instead saw '!='.",
+          "line": 292,
+          "column": 29,
+          "nodeType": "BinaryExpression",
+          "messageId": "unexpected",
+          "endLine": 292,
+          "endColumn": 31,
+          "suggestions": [
+            {
+              "messageId": "replaceOperator",
+              "data": {
+                "expectedOperator": "!==",
+                "actualOperator": "!="
+              },
+              "fix": {
+                "range": [
+                  12973,
+                  12975
+                ],
+                "text": "!=="
+              },
+              "desc": "Use '!==' instead of '!='."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "src/modules/catalog/catalog.types.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/catalog/catalog.validation.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/catalog/hotel.repository.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/classifier/classifier.audit.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/classifier/classifier.config.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/classifier/classifier.controller.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/classifier/classifier.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/classifier/classifier.rules.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/classifier/classifier.service.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/classifier/classifier.types.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/classifier/classifier.validation.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/comms/comms.audit.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/comms/comms.config.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/comms/comms.controller.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/comms/comms.factory.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/comms/comms.ladder.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/comms/comms.provider.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/comms/comms.recipients.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/comms/comms.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/comms/comms.service.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/comms/comms.smtp.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/comms/comms.templates.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/comms/comms.tokens.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/comms/comms.types.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/comms/comms.validation.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/contracts/contract.audit.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/contracts/contract.config.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/contracts/contract.masking.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/contracts/contract.validation.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/contracts/contracts.controller.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/contracts/contracts.engine.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/contracts/contracts.links.test.ts",
+      "group": "legacy",
+      "errorCount": 1,
+      "warningCount": 0,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "severity": 2,
+          "message": "'_drop' is assigned a value but never used.",
+          "line": 79,
+          "column": 19,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 79,
+          "endColumn": 24
+        }
+      ]
+    },
+    {
+      "file": "src/modules/contracts/contracts.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/contracts/contracts.types.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/experiences/experiences.controller.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/experiences/experiences.import.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/experiences/experiences.model.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/experiences/experiences.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/experiences/experiences.service.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/experiences/experiences.validation.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/delivery-history.test.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/delivery-history.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/delivery-recovery.test.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/delivery-recovery.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/delivery-runtime.test.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/delivery-runtime.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/encrypted-json.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/foundation-event.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/identity.test.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/identity.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/lease-renewal.test.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/managed-consumer.test.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/managed-consumer.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/outbox-record.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/outbox-runner.test.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/outbox-runner.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/outbox.test.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/outbox.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/persistence.test.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/persistence.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/projection.test.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/projection.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/foundation/transaction.test.ts",
+      "group": "foundation",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/negotiation/negotiation.audit.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/negotiation/negotiation.config.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/negotiation/negotiation.controller.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/negotiation/negotiation.decision.test.ts",
+      "group": "legacy",
+      "errorCount": 1,
+      "warningCount": 0,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-non-null-assertion",
+          "severity": 2,
+          "message": "Forbidden non-null assertion.",
+          "line": 110,
+          "column": 28,
+          "nodeType": "TSNonNullExpression",
+          "messageId": "noNonNull",
+          "endLine": 110,
+          "endColumn": 89,
+          "suggestions": [
+            {
+              "messageId": "suggestOptionalChain",
+              "fix": {
+                "range": [
+                  5169,
+                  5170
+                ],
+                "text": "?"
+              },
+              "desc": "Consider using the optional chain operator `?.` instead. This operator includes runtime checks, so it is safer than the compile-only non-null assertion operator."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "src/modules/negotiation/negotiation.engine.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/negotiation/negotiation.fixtures.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/negotiation/negotiation.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/negotiation/negotiation.service.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/negotiation/negotiation.store.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/negotiation/negotiation.types.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/negotiation/negotiation.validation.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/orders/counter.model.ts",
+      "group": "legacy",
+      "errorCount": 1,
+      "warningCount": 0,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-non-null-assertion",
+          "severity": 2,
+          "message": "Forbidden non-null assertion.",
+          "line": 41,
+          "column": 10,
+          "nodeType": "TSNonNullExpression",
+          "messageId": "noNonNull",
+          "endLine": 41,
+          "endColumn": 14,
+          "suggestions": [
+            {
+              "messageId": "suggestOptionalChain",
+              "fix": {
+                "range": [
+                  1420,
+                  1421
+                ],
+                "text": "?"
+              },
+              "desc": "Consider using the optional chain operator `?.` instead. This operator includes runtime checks, so it is safer than the compile-only non-null assertion operator."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "src/modules/orders/coupons.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/orders/order.controller.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/orders/order.model.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/orders/order.repository.ts",
+      "group": "legacy",
+      "errorCount": 3,
+      "warningCount": 1,
+      "messages": [
+        {
+          "ruleId": null,
+          "message": "'/* eslint-disable @typescript-eslint/no-explicit-any */' has no effect because you have 'noInlineConfig' setting in your config.",
+          "line": 55,
+          "column": 1,
+          "endLine": 55,
+          "endColumn": 56,
+          "severity": 1,
+          "nodeType": null
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 56,
+          "column": 24,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 56,
+          "endColumn": 27,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  2659,
+                  2662
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  2659,
+                  2662
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 56,
+          "column": 34,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 56,
+          "endColumn": 37,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  2669,
+                  2672
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  2669,
+                  2672
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 56,
+          "column": 40,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 56,
+          "endColumn": 43,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  2675,
+                  2678
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  2675,
+                  2678
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "src/modules/orders/order.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/orders/order.service.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/orders/order.types.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/orders/order.validation.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/partner/partner.controller.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/partner/partner.model.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/partner/partner.repository.ts",
+      "group": "legacy",
+      "errorCount": 3,
+      "warningCount": 1,
+      "messages": [
+        {
+          "ruleId": null,
+          "message": "'/* eslint-disable @typescript-eslint/no-explicit-any */' has no effect because you have 'noInlineConfig' setting in your config.",
+          "line": 46,
+          "column": 1,
+          "endLine": 46,
+          "endColumn": 56,
+          "severity": 1,
+          "nodeType": null
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 47,
+          "column": 24,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 47,
+          "endColumn": 27,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  1971,
+                  1974
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  1971,
+                  1974
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 47,
+          "column": 34,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 47,
+          "endColumn": 37,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  1981,
+                  1984
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  1981,
+                  1984
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 47,
+          "column": 40,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 47,
+          "endColumn": 43,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  1987,
+                  1990
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  1987,
+                  1990
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "src/modules/partner/partner.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/partner/partner.service.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/partner/partner.types.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/partner/partner.validation.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/pricing/pricing.controller.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/pricing/pricing.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/pricing/pricing.service.ts",
+      "group": "legacy",
+      "errorCount": 2,
+      "warningCount": 0,
+      "messages": [
+        {
+          "ruleId": "eqeqeq",
+          "severity": 2,
+          "message": "Expected '===' and instead saw '=='.",
+          "line": 71,
+          "column": 27,
+          "nodeType": "BinaryExpression",
+          "messageId": "unexpected",
+          "endLine": 71,
+          "endColumn": 29,
+          "suggestions": [
+            {
+              "messageId": "replaceOperator",
+              "data": {
+                "expectedOperator": "===",
+                "actualOperator": "=="
+              },
+              "fix": {
+                "range": [
+                  2220,
+                  2222
+                ],
+                "text": "==="
+              },
+              "desc": "Use '===' instead of '=='."
+            }
+          ]
+        },
+        {
+          "ruleId": "eqeqeq",
+          "severity": 2,
+          "message": "Expected '!==' and instead saw '!='.",
+          "line": 80,
+          "column": 23,
+          "nodeType": "BinaryExpression",
+          "messageId": "unexpected",
+          "endLine": 80,
+          "endColumn": 25,
+          "suggestions": [
+            {
+              "messageId": "replaceOperator",
+              "data": {
+                "expectedOperator": "!==",
+                "actualOperator": "!="
+              },
+              "fix": {
+                "range": [
+                  2643,
+                  2645
+                ],
+                "text": "!=="
+              },
+              "desc": "Use '!==' instead of '!='."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "src/modules/pricing/pricing.validation.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/push/push.model.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/push/push.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/push/push.sender.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/push/push.service.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/ratecard/ratecard.audit.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/ratecard/ratecard.config.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/ratecard/ratecard.controller.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/ratecard/ratecard.freshness.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/ratecard/ratecard.model.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/ratecard/ratecard.partner.test.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/ratecard/ratecard.pipeline.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/ratecard/ratecard.repository.mongo.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/ratecard/ratecard.repository.test.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/ratecard/ratecard.repository.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/ratecard/ratecard.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/ratecard/ratecard.service.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/ratecard/ratecard.sheets.ts",
+      "group": "legacy",
+      "errorCount": 1,
+      "warningCount": 1,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "severity": 2,
+          "message": "'_partner_id' is defined but never used.",
+          "line": 30,
+          "column": 19,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 30,
+          "endColumn": 30
+        },
+        {
+          "ruleId": null,
+          "message": "'// eslint-disable-next-line no-console' has no effect because you have 'noInlineConfig' setting in your config.",
+          "line": 41,
+          "column": 5,
+          "endLine": 41,
+          "endColumn": 43,
+          "severity": 1,
+          "nodeType": null
+        }
+      ]
+    },
+    {
+      "file": "src/modules/ratecard/ratecard.tolerance.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/ratecard/ratecard.types.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/ratecard/ratecard.validation.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/reviews/review.controller.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/reviews/review.model.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/reviews/review.repository.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/reviews/review.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/reviews/review.service.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/reviews/review.types.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/reviews/review.validation.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/rfqflow/rfqflow.config.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/rfqflow/rfqflow.format.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/rfqflow/rfqflow.service.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/rfqflow/rfqflow.test.ts",
+      "group": "legacy",
+      "errorCount": 3,
+      "warningCount": 0,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 506,
+          "column": 42,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 506,
+          "endColumn": 45,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  21642,
+                  21645
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  21642,
+                  21645
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 521,
+          "column": 91,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 521,
+          "endColumn": 94,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  22344,
+                  22347
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  22344,
+                  22347
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 533,
+          "column": 59,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 533,
+          "endColumn": 62,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  22786,
+                  22789
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  22786,
+                  22789
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "src/modules/rfqflow/rfqflow.types.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/supplier/supplier.audit.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/supplier/supplier.config.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/supplier/supplier.controller.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/supplier/supplier.model.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/supplier/supplier.provision.test.ts",
+      "group": "legacy",
+      "errorCount": 1,
+      "warningCount": 0,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-unused-vars",
+          "severity": 2,
+          "message": "'_query' is defined but never used.",
+          "line": 78,
+          "column": 24,
+          "nodeType": "Identifier",
+          "messageId": "unusedVar",
+          "endLine": 78,
+          "endColumn": 30
+        }
+      ]
+    },
+    {
+      "file": "src/modules/supplier/supplier.repository.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/supplier/supplier.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/supplier/supplier.rules.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/supplier/supplier.service.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/supplier/supplier.types.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/supplier/supplier.validation.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/support/support.controller.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/support/support.models.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/support/support.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/support/support.service.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/support/support.stream.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/support/support.types.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/support/support.validation.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/uploads/upload.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/uploads/upload.storage.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/users/user.controller.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/users/user.model.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/users/user.repository.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/users/user.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/users/user.service.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/users/user.types.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/users/user.validation.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/wedding/wedding.controller.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/wedding/wedding.model.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/wedding/wedding.repository.ts",
+      "group": "legacy",
+      "errorCount": 3,
+      "warningCount": 1,
+      "messages": [
+        {
+          "ruleId": null,
+          "message": "'/* eslint-disable @typescript-eslint/no-explicit-any */' has no effect because you have 'noInlineConfig' setting in your config.",
+          "line": 25,
+          "column": 1,
+          "endLine": 25,
+          "endColumn": 56,
+          "severity": 1,
+          "nodeType": null
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 26,
+          "column": 24,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 26,
+          "endColumn": 27,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  1080,
+                  1083
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  1080,
+                  1083
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 26,
+          "column": 34,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 26,
+          "endColumn": 37,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  1090,
+                  1093
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  1090,
+                  1093
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        },
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 26,
+          "column": 40,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 26,
+          "endColumn": 43,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  1096,
+                  1099
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  1096,
+                  1099
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "src/modules/wedding/wedding.routes.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/wedding/wedding.service.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/wedding/wedding.types.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/modules/wedding/wedding.validation.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/repositories/MongoCrudRepository.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/repositories/MongoReadRepository.ts",
+      "group": "legacy",
+      "errorCount": 1,
+      "warningCount": 0,
+      "messages": [
+        {
+          "ruleId": "@typescript-eslint/no-explicit-any",
+          "severity": 2,
+          "message": "Unexpected any. Specify a different type.",
+          "line": 14,
+          "column": 47,
+          "nodeType": "TSAnyKeyword",
+          "messageId": "unexpectedAny",
+          "endLine": 14,
+          "endColumn": 50,
+          "suggestions": [
+            {
+              "messageId": "suggestUnknown",
+              "fix": {
+                "range": [
+                  681,
+                  684
+                ],
+                "text": "unknown"
+              },
+              "desc": "Use `unknown` instead, this will force you to explicitly, and safely assert the type is correct."
+            },
+            {
+              "messageId": "suggestNever",
+              "fix": {
+                "range": [
+                  681,
+                  684
+                ],
+                "text": "never"
+              },
+              "desc": "Use `never` instead, this is useful when instantiating generic type parameters that you don't need to know the type of."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "src/routes/index.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/seed/data/activities.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/seed/data/activityCategories.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/seed/data/celebrationBundles.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/seed/data/celebrationCategories.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/seed/data/celebrations.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/seed/data/destinations.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/seed/data/experienceFacets.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/seed/data/hotelOptions.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/seed/data/hotels.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/seed/data/index.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/seed/data/packageCategories.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/seed/data/packageOptions.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/seed/data/packages.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/seed/data/products.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/seed/data/rooms.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/seed/data/supportTeam.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/seed/data/vehicles.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/seed/import-experiences.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/seed/seed.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    },
+    {
+      "file": "src/server.ts",
+      "group": "legacy",
+      "errorCount": 0,
+      "warningCount": 0,
+      "messages": []
+    }
+  ]
+}

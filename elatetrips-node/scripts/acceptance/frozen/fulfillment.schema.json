@@ -1,0 +1,222 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elatetrips.com/contracts/fulfillment.schema.json",
+  "title": "Fulfillment — booking progress & on-trip milestones (M8/M9, BR-9)",
+  "description": "Post-payment fulfillment state for a booking. Phase-1 = pre-trip components with due states; Phase-2 = on-trip milestones with photo evidence. Gate is a green/amber/red honesty signal. SLA/gate thresholds are functional config (BR-17), never encoded here.",
+  "type": "object",
+  "properties": {
+    "fulfillment_id": {
+      "$ref": "defs/common.schema.json#/$defs/id"
+    },
+    "booking_id": {
+      "$ref": "defs/common.schema.json#/$defs/id"
+    },
+    "quote_id": {
+      "$ref": "defs/common.schema.json#/$defs/id"
+    },
+    "rfq_id": {
+      "$ref": "defs/common.schema.json#/$defs/id"
+    },
+    "assignment_ref": {
+      "$ref": "defs/common.schema.json#/$defs/id",
+      "description": "Δ-003: links a pooled canonical booking to its assignment (M20); absent for custom/RFQ bookings."
+    },
+    "policy_snapshot": {
+      "type": "object",
+      "description": "Immutable copy of the effective policy frozen at payment capture (BR-18); refunds compute from this, never the live partner policy.",
+      "properties": {
+        "policy_id": {
+          "$ref": "defs/common.schema.json#/$defs/id"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "snapshotted_ts": {
+          "$ref": "defs/common.schema.json#/$defs/iso_datetime"
+        }
+      },
+      "required": [
+        "policy_id",
+        "version",
+        "snapshotted_ts"
+      ],
+      "additionalProperties": false
+    },
+    "phase1_components": {
+      "type": "array",
+      "description": "Pre-trip deliverables with due times; each maps 1:1 to an SLA config key.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "component_id": {
+            "$ref": "defs/common.schema.json#/$defs/id"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "voucher",
+              "occasion",
+              "activity",
+              "transfer"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "sla_key": {
+            "type": "string",
+            "description": "Config key into fulfillment.sla_matrix; the value (hours/offset) is data, not schema."
+          },
+          "due_ts": {
+            "$ref": "defs/common.schema.json#/$defs/iso_datetime"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "confirmed",
+              "delayed",
+              "failed"
+            ]
+          },
+          "evidence_ref": {
+            "type": "string"
+          },
+          "grace_note": {
+            "type": "string",
+            "description": "Customer-facing resolution plan shown when delayed/failed (FR8.7)."
+          }
+        },
+        "required": [
+          "component_id",
+          "type",
+          "title",
+          "sla_key",
+          "due_ts",
+          "state"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "phase2_milestones": {
+      "type": "array",
+      "description": "On-trip milestones; confirmed entries carry a photo + timestamp.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "milestone_id": {
+            "$ref": "defs/common.schema.json#/$defs/id"
+          },
+          "title": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "upcoming",
+              "confirmed"
+            ]
+          },
+          "photo_ref": {
+            "type": "string"
+          },
+          "confirmed_ts": {
+            "$ref": "defs/common.schema.json#/$defs/iso_datetime"
+          }
+        },
+        "required": [
+          "milestone_id",
+          "title",
+          "state"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "gate": {
+      "type": "object",
+      "description": "Honesty banner. tminus_days threshold is config (fulfillment.gate_tminus_days).",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "green",
+            "amber",
+            "red"
+          ]
+        },
+        "message": {
+          "type": "string"
+        },
+        "customer_informed_ts": {
+          "$ref": "defs/common.schema.json#/$defs/iso_datetime"
+        }
+      },
+      "required": [
+        "status",
+        "message"
+      ],
+      "additionalProperties": false
+    },
+    "follow_ups": {
+      "type": "array",
+      "description": "Follow-up timeline (M9, BR-9); mirrored app + email.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "step": {
+            "type": "string"
+          },
+          "channel": {
+            "type": "string",
+            "enum": [
+              "app",
+              "email"
+            ]
+          },
+          "scheduled_ts": {
+            "$ref": "defs/common.schema.json#/$defs/iso_datetime"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "scheduled",
+              "completed"
+            ]
+          },
+          "completed_ts": {
+            "$ref": "defs/common.schema.json#/$defs/iso_datetime"
+          }
+        },
+        "required": [
+          "step",
+          "channel",
+          "scheduled_ts",
+          "state"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "awaiting_reconfirm",
+        "confirmed",
+        "in_progress",
+        "completed",
+        "cancelled"
+      ]
+    }
+  },
+  "required": [
+    "fulfillment_id",
+    "booking_id",
+    "quote_id",
+    "rfq_id",
+    "policy_snapshot",
+    "phase1_components",
+    "gate",
+    "status"
+  ],
+  "additionalProperties": false
+}

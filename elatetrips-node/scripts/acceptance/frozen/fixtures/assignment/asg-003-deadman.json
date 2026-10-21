@@ -1,0 +1,55 @@
+{
+  "assignment_id": "asg_003",
+  "booking_id": "bkg_goa_003",
+  "canonical_id": "cp_goa_4d",
+  "eligibility": {
+    "pool_size": 3,
+    "freshness_ok": true,
+    "lead_days": 8,
+    "match_pct": 0.82,
+    "auto_confirm": true
+  },
+  "decision": {
+    "scores": [
+      {
+        "supplier_id": "sup_c",
+        "reliability": 0.7,
+        "capacity": 1,
+        "margin": 0.15,
+        "fairness_rotation": 0.4,
+        "total": 0.68,
+        "rule_id": "alloc_r3"
+      }
+    ],
+    "assigned": "sup_c",
+    "decided_by": "rules",
+    "ts": "2026-09-15T09:00:00Z"
+  },
+  "cascade": [
+    {
+      "supplier_id": "sup_c",
+      "offered_ts": "2026-09-15T09:00:00Z",
+      "accept_deadline_ts": "2026-09-15T13:00:00Z",
+      "outcome": "accepted"
+    }
+  ],
+  "sla": {
+    "voucher_due_ts": "2026-09-16T09:00:00Z",
+    "breach_ts": "2026-09-17T09:00:00Z",
+    "deadman_ts": "2026-09-18T09:00:00Z",
+    "alerts": {
+      "amber_ts": "2026-09-15T21:00:00Z",
+      "red_ts": "2026-09-16T09:00:00Z"
+    }
+  },
+  "recovery": {
+    "actions": [],
+    "customer_refund_button_visible_from": "2026-09-17T09:00:00Z"
+  },
+  "refund": {
+    "type": "service_failure",
+    "triggered_by": "deadman",
+    "amount": "full+fees+credit"
+  },
+  "status": "refunded"
+}

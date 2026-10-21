@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://elatetrips.com/contracts/agent.schema.json",
+  "title": "Recommendation agent session (M18, Δ-002)",
+  "description": "One slot-filling agent session across thin channel adapters. The LLM extracts and explains only; retrieval + ranking are deterministic. Tool-constrained presentation invariant (enforced by the serializer, not trusted): every package_id / price / availability string in an agent turn MUST originate from a tool result in the same session.",
+  "type": "object",
+  "properties": {
+    "session_id": {
+      "$ref": "defs/common.schema.json#/$defs/id"
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "web",
+        "app",
+        "whatsapp"
+      ]
+    },
+    "user_ref": {
+      "type": "string",
+      "description": "Opaque reference; never customer PII (BR-3)."
+    },
+    "draft_rfq_id": {
+      "$ref": "defs/common.schema.json#/$defs/id",
+      "description": "The SAME draft RFQ the form writes; agent writes ONLY via the update_draft_rfq tool."
+    },
+    "state": {
+      "type": "object",
+      "properties": {
+        "filled_slots": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "missing_critical": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "questions_asked": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "presented_package_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "defs/common.schema.json#/$defs/id"
+          },
+          "description": "Must be a subset of the last search_packages result — enforced."
+        },
+        "refinements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "cheaper",
+                  "more_privacy",
+                  "add_adventure",
+                  "other"
+                ]
+              },
+              "ts": {
+                "$ref": "defs/common.schema.json#/$defs/iso_datetime"
+              }
+            },
+            "required": [
+              "kind",
+              "ts"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "escalation": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "reason": {
+              "type": "string",
+              "enum": [
+                "wedding",
+                "frustration",
+                "loop",
+                "no_match"
+              ]
+            },
+            "ts": {
+              "$ref": "defs/common.schema.json#/$defs/iso_datetime"
+            }
+          },
+          "required": [
+            "reason",
+            "ts"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "filled_slots",
+        "missing_critical",
+        "questions_asked",
+        "presented_package_ids"
+      ],
+      "additionalProperties": false
+    },
+    "turns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "agent"
+            ]
+          },
+          "content": {
+            "type": "string"
+          },
+          "tool_calls": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "tool": {
+                  "type": "string",
+                  "enum": [
+                    "search_packages",
+                    "get_price",
+                    "update_draft_rfq",
+                    "handoff_ops"
+                  ]
+                },
+                "args_hash": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "tool",
+                "args_hash"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "ts": {
+            "$ref": "defs/common.schema.json#/$defs/iso_datetime"
+          }
+        },
+        "required": [
+          "role",
+          "content",
+          "ts"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "session_id",
+    "channel",
+    "state",
+    "turns"
+  ],
+  "additionalProperties": false
+}

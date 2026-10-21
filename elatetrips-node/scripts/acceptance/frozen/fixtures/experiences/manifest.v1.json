@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0.0",
+  "files": {
+    "catalog.v1.json": {
+      "sha256": "651222aad6a9f87dbb3810005e7ae06b1dee6b89328a32dbbb9eb0338793738e",
+      "bytes": 19419
+    },
+    "plans.v1.json": {
+      "sha256": "4c0121df914208ec92ae432afce61e2c22382e83edd5ffa8da4892703bc2ab63",
+      "bytes": 42996
+    }
+  },
+  "counts": {
+    "destinations": 14,
+    "routes": 6,
+    "festivals": 12,
+    "occasions": 14,
+    "occasionPlans": 26,
+    "vehicles": 4
+  }
+}

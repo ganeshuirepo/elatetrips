@@ -1,0 +1,63 @@
+{
+  "assignment_id": "asg_002",
+  "booking_id": "bkg_goa_002",
+  "canonical_id": "cp_goa_4d",
+  "eligibility": {
+    "pool_size": 4,
+    "freshness_ok": true,
+    "lead_days": 11,
+    "match_pct": 0.9,
+    "auto_confirm": true
+  },
+  "decision": {
+    "scores": [
+      {
+        "supplier_id": "sup_a",
+        "reliability": 0.9,
+        "capacity": 1,
+        "margin": 0.19,
+        "fairness_rotation": 0.1,
+        "total": 0.8,
+        "rule_id": "alloc_r3"
+      }
+    ],
+    "assigned": "sup_a",
+    "decided_by": "rules",
+    "ts": "2026-09-18T09:00:00Z"
+  },
+  "cascade": [
+    {
+      "supplier_id": "sup_a",
+      "offered_ts": "2026-09-18T09:00:00Z",
+      "accept_deadline_ts": "2026-09-18T13:00:00Z",
+      "outcome": "accepted"
+    }
+  ],
+  "sla": {
+    "voucher_due_ts": "2026-09-19T09:00:00Z",
+    "breach_ts": "2026-09-20T09:00:00Z",
+    "deadman_ts": "2026-09-21T09:00:00Z",
+    "alerts": {
+      "amber_ts": "2026-09-18T21:00:00Z",
+      "red_ts": "2026-09-19T09:00:00Z"
+    }
+  },
+  "recovery": {
+    "actions": [
+      {
+        "kind": "substitute_hotel",
+        "by": "sales",
+        "consent": {
+          "required": true,
+          "customer_accepted_ts": "2026-09-20T11:30:00Z"
+        },
+        "floor_check": "equal_or_better",
+        "delta_refund": 0,
+        "notes": "Novotel unavailable; substituted Lemon Tree (review 4.3 ≥ floor 4.0).",
+        "ts": "2026-09-20T11:00:00Z"
+      }
+    ],
+    "customer_refund_button_visible_from": "2026-09-20T09:00:00Z"
+  },
+  "status": "fulfilled"
+}

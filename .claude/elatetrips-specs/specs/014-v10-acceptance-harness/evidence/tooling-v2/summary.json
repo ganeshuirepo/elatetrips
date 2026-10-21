@@ -1,0 +1,71 @@
+{
+  "format": 1,
+  "mode": "tooling",
+  "commit": "1d1572d6239ebd29cc2b0b408cedd1e98fd2b28d",
+  "startedAt": "2026-10-21T15:36:04.211Z",
+  "node": "v24.14.1",
+  "checks": [
+    {
+      "name": "test:harness",
+      "command": [
+        "npm",
+        "run",
+        "test:harness"
+      ],
+      "startedAt": "2026-10-21T15:36:04.213Z",
+      "completedAt": "2026-10-21T15:36:16.211Z",
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "name": "test:contracts",
+      "command": [
+        "npm",
+        "run",
+        "test:contracts"
+      ],
+      "startedAt": "2026-10-21T15:36:16.216Z",
+      "completedAt": "2026-10-21T15:36:17.121Z",
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "name": "lint",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-21T15:36:17.124Z",
+      "completedAt": "2026-10-21T15:36:22.963Z",
+      "exitCode": 1,
+      "signal": null
+    },
+    {
+      "name": "typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-21T15:36:22.966Z",
+      "completedAt": "2026-10-21T15:36:36.365Z",
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-21T15:36:36.368Z",
+      "completedAt": "2026-10-21T15:36:48.947Z",
+      "exitCode": 0,
+      "signal": null
+    }
+  ],
+  "completedAt": "2026-10-21T15:36:48.948Z",
+  "passed": false
+}

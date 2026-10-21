@@ -1,0 +1,43 @@
+
+> elatetrips-node@1.0.0 test:harness
+> node --test scripts/acceptance/harness.test.mjs
+
+✔ all 15 frozen schemas compile and all 20 canonical fixtures replay (320.8721ms)
+✔ canonical digest ignores CRLF/format/key order, but preserves value changes (351.2522ms)
+✔ manifest rejects missing format (97.3075ms)
+✔ manifest rejects unknown fields (123.7752ms)
+✔ manifest rejects unknown format (96.9287ms)
+✔ manifest rejects invalid digest algorithm (102.2305ms)
+✔ manifest rejects invalid source commit (86.4355ms)
+✔ manifest rejects invented release adoption (94.0817ms)
+✔ manifest rejects invalid file checksum (87.688ms)
+✔ manifest rejects duplicate bundle entry (89.3175ms)
+✔ manifest rejects unsafe traversal path (85.8888ms)
+✔ manifest rejects absolute file path (93.408ms)
+✔ manifest rejects removed declared fixture (87.0053ms)
+✔ manifest rejects fixture without registered schema (216.6385ms)
+✔ unmanifested files fail closed (95.0137ms)
+✔ missing files fail closed (89.9723ms)
+✔ malformed manifest JSON fails (76.7251ms)
+✔ malformed schema JSON fails (105.43ms)
+✔ changed fixture fails its hash before schema validation (226.621ms)
+✔ manifest-rehashed invalid payload still fails schema validation (452.9604ms)
+✔ date formats are enforced rather than annotations (444.7542ms)
+✔ malformed schema keywords fail even after manifest rehash (248.8712ms)
+✔ unknown schema keywords fail rather than silently disabling checks (269.1992ms)
+✔ external missing reference fails offline (240.4696ms)
+✔ invalid local reference fails offline (256.9277ms)
+✔ schema identity cannot be silently substituted (290.9364ms)
+✔ deliberate TypeScript violations produce errors and clean declarations do not (1935.5806ms)
+✔ lint covers every backend TypeScript source/test/declaration file (4343.373ms)
+✔ combined checks include contract, full lint, typecheck, full test and build (0.363ms)
+✔ verification rejects traversal labels and direct unknown npm execution (1.0824ms)
+✔ verification strips secrets and runtime injection, fixes only fixture settings (0.6519ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11859.8361

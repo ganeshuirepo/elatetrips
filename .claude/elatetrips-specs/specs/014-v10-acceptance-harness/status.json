@@ -1,0 +1,84 @@
+{
+  "feature": "014-v10-acceptance-harness",
+  "backlog": "DEV-057 technical slice",
+  "status": "sequential-review-complete; whole-backend checks incomplete",
+  "foundationBase": "1d1572d6239ebd29cc2b0b408cedd1e98fd2b28d",
+  "sourceContractsCommit": "e8dc98fce0d84f5223a3615f50001f0eb4b29922",
+  "sourceContractsRelease": "not-uniformly-declared; no-adoption-inferred",
+  "schemas": 15,
+  "goldenFixtures": 20,
+  "harnessTests": 34,
+  "checks": {
+    "test:harness": "pass",
+    "test:contracts": "pass",
+    "lint": "fail-existing-diagnostics-visible",
+    "typecheck": "pass",
+    "build": "pass",
+    "test": "fail-one-existing-rfq-comparison"
+  },
+  "inheritedFullSuiteBaseline": {
+    "total": 609,
+    "pass": 608,
+    "fail": 1
+  },
+  "evidence": "evidence/integrated-review",
+  "productionWiring": false,
+  "sharedContractsModified": false,
+  "originalInstallationModified": false,
+  "fullBrdComplete": false,
+  "dev057Complete": false,
+  "integratedFoundationLintCommit": "1f6db641e29138b56f372a4eff3ee8f82ae8d9df",
+  "historicalLintBaseline": {
+    "files": 247,
+    "errors": 46,
+    "warnings": 6,
+    "foundationAndJwt": {
+      "files": 25,
+      "errors": 8,
+      "warnings": 0
+    },
+    "legacy": {
+      "files": 222,
+      "errors": 38,
+      "warnings": 6
+    }
+  },
+  "currentLint": {
+    "files": 247,
+    "errors": 38,
+    "warnings": 6,
+    "foundationAndJwt": {
+      "files": 25,
+      "errors": 0,
+      "warnings": 0
+    },
+    "legacy": {
+      "files": 222,
+      "errors": 38,
+      "warnings": 6
+    }
+  },
+  "checkExitCodes": {
+    "test:harness": 0,
+    "test:contracts": 0,
+    "lint": 1,
+    "typecheck": 0,
+    "test": 1,
+    "build": 0
+  },
+  "currentFullSuite": {
+    "total": 609,
+    "pass": 608,
+    "fail": 1,
+    "skipped": 0
+  },
+  "historicalImplementationEvidence": "evidence/tooling-complete",
+  "provenanceAudit": "evidence/review-audit.json",
+  "sequentialHandoffs": [
+    "feature-014 harness implementation",
+    "feature-013 isolated lint remediation and root integration",
+    "feature-014 independent tooling review and full verification"
+  ],
+  "reviewCodeFixes": 0,
+  "combinedExitCode": 1
+}

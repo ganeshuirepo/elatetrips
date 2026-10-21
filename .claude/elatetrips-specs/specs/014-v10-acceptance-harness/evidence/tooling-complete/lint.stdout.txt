@@ -1,0 +1,4 @@
+
+> elatetrips-node@1.0.0 lint
+> eslint "src/**/*.ts" --max-warnings 0 --format json --output-file D:\projects\elatetrips-experiences\.worktrees\v10-acceptance-harness\.claude\elatetrips-specs\specs\014-v10-acceptance-harness\evidence\tooling-complete\lint.json
+
