@@ -22,8 +22,7 @@ export class WeddingRepository implements IWeddingRepository {
   }
 }
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-function stripId(_doc: any, ret: any): any {
+function stripId<T extends { _id?: unknown }>(_doc: unknown, ret: T): T {
   delete ret._id;
   return ret;
 }
