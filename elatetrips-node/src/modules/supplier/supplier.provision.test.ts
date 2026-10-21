@@ -19,7 +19,7 @@ import { SupplierAuditStore } from './supplier.audit';
 import { loadSupplierConfig, type SupplierConfig } from './supplier.config';
 import type { ISupplierRepository } from './supplier.repository';
 import { SupplierService } from './supplier.service';
-import type { CandidateQuery, ProvisionPartnerInput, Supplier } from './supplier.types';
+import type { ProvisionPartnerInput, Supplier } from './supplier.types';
 
 /**
  * An in-memory stand-in for the Mongo repository, including the two behaviours
@@ -75,7 +75,7 @@ class FakeSupplierRepository implements ISupplierRepository {
     return 0;
   }
 
-  async findCandidates(_query: CandidateQuery): Promise<Supplier[]> {
+  async findCandidates(): Promise<Supplier[]> {
     return this.rows;
   }
 }

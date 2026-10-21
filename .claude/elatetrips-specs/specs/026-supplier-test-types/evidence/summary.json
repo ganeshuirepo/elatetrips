@@ -1,0 +1,40 @@
+{
+  "checks": [
+    {
+      "name": "scoped-lint",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "focused-tests",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "contracts",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "typecheck",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "build",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    }
+  ],
+  "wholeLint": {
+    "files": 247,
+    "errors": 3,
+    "warnings": 1
+  },
+  "wholeLintStatus": 1
+}

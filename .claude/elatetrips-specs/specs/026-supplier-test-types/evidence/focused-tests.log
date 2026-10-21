@@ -1,0 +1,27 @@
+▶ provisioning a partner for the first time
+  ✔ mints the supplier id — the caller does not get to choose one (5.6196ms)
+  ✔ carries the registration through to the record (1.3084ms)
+  ✔ starts invited, and unaccepted — provisioning is not activation (0.4247ms)
+  ✔ keeps the onboarding system’s own id, which is what makes it findable again (0.349ms)
+  ✔ gives each partner its own id (1.1311ms)
+✔ provisioning a partner for the first time (10.7308ms)
+▶ provisioning the same partner again
+  ✔ returns the same supplier and says it did not create one (0.5647ms)
+  ✔ does not overwrite what ops has since curated (0.7895ms)
+  ✔ survives two processes racing to create it (0.4105ms)
+  ✔ re-throws a failure that is not a lost race (0.8611ms)
+✔ provisioning the same partner again (3.131ms)
+▶ the turnaround a partner declares
+  ✔ is refused below the configured platform floor (0.6307ms)
+  ✔ is accepted at the floor exactly (0.276ms)
+  ✔ is unconstrained when no floor is configured — the module ships inert (BR-17) (0.1878ms)
+  ✔ leaves nothing behind when it is refused (0.2095ms)
+✔ the turnaround a partner declares (1.4938ms)
+ℹ tests 13
+ℹ suites 3
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 658.647
