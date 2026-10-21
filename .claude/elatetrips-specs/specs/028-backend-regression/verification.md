@@ -17,4 +17,4 @@ The runner passed syntax review. Its child environment uses a strict OS-variable
 
 This is backend regression evidence, not proof of complete BRD delivery, approved contract adoption, real adapters or external-service operation, frontend/live E2E, or human R1/R2 acceptance. Existing contract provenance is preserved in summary.json. No source, package, contract, lint rule, provider, deployment, push, or main-merge work was performed.
 
-After recording this report, commit only this exact ignored stage 028 folder locally and verify a clean status. No further testing or integration work is authorized in this handoff.
+The evidence was committed locally. The worktree is clean, and backend source is unchanged from the tested checkpoint. This completes the stage 028 handoff; the user's ongoing development authorization remains in effect.
