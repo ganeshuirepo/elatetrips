@@ -1,0 +1,39 @@
+{
+  "checks": [
+    {
+      "name": "focused-tests",
+      "applicable": false,
+      "reason": "No existing module-local test files; final cumulative application suite remains required."
+    },
+    {
+      "name": "scoped-lint",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "contracts",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "typecheck",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "build",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    }
+  ],
+  "wholeLint": {
+    "files": 247,
+    "errors": 16,
+    "warnings": 4
+  },
+  "wholeLintStatus": 1
+}
