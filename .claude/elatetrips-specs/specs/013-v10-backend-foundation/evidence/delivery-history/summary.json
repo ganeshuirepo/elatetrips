@@ -1,0 +1,11 @@
+{
+    "fullSuite":  "Deferred to sequential verifier",
+    "focusedExitCode":  0,
+    "capturedAt":  "2026-10-21T15:13:20.6250914Z",
+    "safety":  "Fixture keys, disabled production URI/provider env; disposable local Mongo only. Original .env not loaded.",
+    "databaseTests":  42,
+    "focusedCommand":  "node -r ./scripts/register-ts.js --test src/modules/foundation/delivery-history.test.ts",
+    "focusedTests":  42,
+    "buildExitCode":  0,
+    "typecheckExitCode":  0
+}

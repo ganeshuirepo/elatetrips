@@ -1,0 +1,12 @@
+{
+    "capturedAt":  "2026-10-21T15:05:40.5388766Z",
+    "focusedCommand":  "node -r ./scripts/register-ts.js --test src/modules/foundation/managed-consumer.test.ts",
+    "focusedExitCode":  0,
+    "focusedTests":  31,
+    "lifecycleTests":  26,
+    "databaseTests":  5,
+    "typecheckExitCode":  0,
+    "buildExitCode":  0,
+    "fullSuite":  "Deferred to sequential verifier",
+    "safety":  "Fixture keys, disabled production URI/provider env; disposable local Mongo only. Original .env not loaded."
+}

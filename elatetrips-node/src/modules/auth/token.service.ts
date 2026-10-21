@@ -20,8 +20,20 @@ export class JwtTokenService implements ITokenService {
 
   verify(token: string): TokenPayload {
     try {
-      const decoded = jwt.verify(token, env.jwtSecret) as TokenPayload;
-      if (!decoded?.phone) throw new Error('Malformed token');
+      // Match this adapter's signer and validate the runtime boundary. A type
+      // assertion cannot distinguish a user identifier from an object/array or
+      // a token explicitly issued for another adapter (console/card/etc.).
+      const decoded = jwt.verify(token, env.jwtSecret, { algorithms: ['HS256'] });
+      if (
+        typeof decoded !== 'object' ||
+        decoded === null ||
+        Array.isArray(decoded) ||
+        typeof decoded.phone !== 'string' ||
+        decoded.phone.trim().length === 0 ||
+        decoded.scope !== undefined
+      ) {
+        throw new Error('Malformed user token');
+      }
       return { phone: decoded.phone };
     } catch {
       throw new UnauthorizedError('Invalid or expired token');
