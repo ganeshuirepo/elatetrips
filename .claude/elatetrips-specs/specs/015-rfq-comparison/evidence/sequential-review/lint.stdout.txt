@@ -1,0 +1,4 @@
+
+> elatetrips-node@1.0.0 lint
+> eslint "src/**/*.ts" --max-warnings 0 --format json --output-file D:\projects\elatetrips-experiences\.worktrees\v10-rfq-comparison\.claude\elatetrips-specs\specs\015-rfq-comparison\evidence\sequential-review\lint.json
+

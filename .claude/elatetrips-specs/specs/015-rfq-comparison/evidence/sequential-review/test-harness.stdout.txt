@@ -1,0 +1,46 @@
+
+> elatetrips-node@1.0.0 test:harness
+> node --test scripts/acceptance/harness.test.mjs
+
+✔ all 15 frozen schemas compile and all 20 canonical fixtures replay (470.0829ms)
+✔ canonical digest ignores CRLF/format/key order, but preserves value changes (518.1796ms)
+✔ manifest rejects missing format (122.1858ms)
+✔ manifest rejects unknown fields (157.8988ms)
+✔ manifest rejects unknown format (151.2953ms)
+✔ manifest rejects invalid digest algorithm (153.8916ms)
+✔ manifest rejects invalid source commit (137.2524ms)
+✔ manifest rejects invented release adoption (148.2279ms)
+✔ manifest rejects invalid file checksum (162.7604ms)
+✔ manifest rejects duplicate bundle entry (179.8772ms)
+✔ manifest rejects unsafe traversal path (167.351ms)
+✔ manifest rejects absolute file path (173.8792ms)
+✔ manifest rejects removed declared fixture (171.2515ms)
+✔ manifest rejects fixture without registered schema (499.6774ms)
+✔ unmanifested files fail closed (176.1163ms)
+✔ missing files fail closed (172.6753ms)
+✔ malformed manifest JSON fails (132.1757ms)
+✔ malformed schema JSON fails (174.6133ms)
+✔ changed fixture fails its hash before schema validation (246.2874ms)
+✔ manifest-rehashed invalid payload still fails schema validation (486.948ms)
+✔ date formats are enforced rather than annotations (473.3279ms)
+✔ malformed schema keywords fail even after manifest rehash (280.9609ms)
+✔ unknown schema keywords fail rather than silently disabling checks (301.9733ms)
+✔ external missing reference fails offline (284.9756ms)
+✔ invalid local reference fails offline (278.2283ms)
+✔ schema identity cannot be silently substituted (246.7797ms)
+✔ deliberate TypeScript violations produce errors and clean declarations do not (1778.7789ms)
+✔ lint covers every backend TypeScript source/test/declaration file (4508.4243ms)
+✔ inline suppressions cannot hide an explicit any violation (8.1733ms)
+✔ the actual lint CLI exits nonzero for a violation and zero for clean TS (6230.7431ms)
+✔ combined checks include contract, full lint, typecheck, full test and build (0.3946ms)
+✔ verification rejects traversal labels and direct unknown npm execution (1.271ms)
+✔ verification strips secrets and runtime injection, fixes only fixture settings (0.4844ms)
+✔ lint evidence separates ownership counts and strips embedded source (0.9604ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19752.8188

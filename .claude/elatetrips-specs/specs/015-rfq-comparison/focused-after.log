@@ -1,0 +1,58 @@
+[info] [rfqflow] rfq-001 confirmed ? 1/4 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 confirmed ? 1/2 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 confirmed ? 2/3 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 confirmed ? 2/2 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 confirmed ? 1/1 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 confirmed ? 1/2 suppliers mailed, customer sent
+[error] [rfqflow] candidate lookup failed for Coorg: Error: mongo is having a moment
+[info] [rfqflow] rfq-001 confirmed ? 0/0 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 confirmed ? 1/3 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 confirmed ? 1/1 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 confirmed ? 0/0 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 confirmed ? 1/1 suppliers mailed, customer sent
+[info] [rfqflow] rfq-001 quote summary ? sent
+[info] [rfqflow] rfq-001 quote summary ? sent
+[info] [rfqflow] rfq-001 quote summary ? sent
+[info] [rfqflow] rfq-001 quote summary ? sent
+[info] [rfqflow] rfq-001 quote summary ? sent
+[info] [comms:smtp] sent "New RFQ" to inbox@example.com (diverted from real@dmc.example) [rfq rfq-001]
+[info] [comms:smtp] sent "New RFQ" to real@dmc.example [rfq rfq-001]
+[error] [comms:smtp] send to real@dmc.example failed: connection refused
+? sends nothing at all until the workflow is switched on (4.6317ms)
+? a server with none of the keys set is inert, and says so at boot (1.268ms)
+? the boot line names the risk when dispatch is on without a link base (0.7532ms)
+? never writes to a supplier who has not consented or must re-accept (44.5411ms)
+? a supplier we hold no address for is reported, not silently dropped (1.6803ms)
+? the wave cap takes M3 order as given and records who was held back (2.8464ms)
+? one wave mints the tokens, and each supplier gets their own link (2.9397ms)
+? with no link base configured the mail carries the bare token (1.6366ms)
+? one failed send neither stops the wave nor throws into the submit (3.3059ms)
+? a candidate lookup that blows up degrades to "no suppliers", not a 500 (3.2109ms)
+? the acknowledgement states the number actually mailed, not the number tried (1.9629ms)
+? the submit call can name the customer address, overriding the config fallback (2.2251ms)
+? an RFQ with no place and no region cannot match suppliers, and says so (1.5152ms)
+? the supplier brief carries trip shape and no traveller identity (BR-3) (1.4262ms)
+? the comparison resolves supplier ids to names and prices them correctly (7.8677ms)
+? the same comparison fixture stays live through validity and is withheld after it (2.8913ms)
+? an expired price is never quoted to a customer (1.1021ms)
+? a quote with no readable validity date is shown rather than hidden (0.6914ms)
+? no quotes means no mail (0.2986ms)
+? formatting reads the way a person would write it (1.6974ms)
+? supplier names are escaped before they reach an HTML mail (0.5072ms)
+? an M3 contact wins over the config map, and a broken map is ignored (0.4777ms)
+? a lookup that throws falls through to config instead of failing the send (0.2848ms)
+? a configured test inbox takes every mail, with the real address kept visible (14.4146ms)
+? with no test inbox the mail goes to the real address, unprefixed (1.9377ms)
+? a transport failure comes back as a result, never as a throw (1.658ms)
+? a recipient with no address is refused before a socket is opened (0.4246ms)
+? a partial SMTP config is a misconfiguration, not a degraded mode (0.3041ms)
+? the plain-text part keeps the link a phone at a trade desk needs (0.3197ms)
+? tests 29
+? suites 0
+? pass 29
+? fail 0
+? cancelled 0
+? skipped 0
+? todo 0
+? duration_ms 1348.3311
+Process exit: 0
