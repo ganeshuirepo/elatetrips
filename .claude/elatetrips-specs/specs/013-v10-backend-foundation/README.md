@@ -127,6 +127,11 @@ the experiences repository.
 
 ## Next dependencies
 
+Later [scoped strict-lint remediation](scoped-lint.md) preserves the historical
+aggregate evidence above. Its own commands/logs are retained separately in
+`evidence/scoped-lint/`; whole-backend lint and final integrated verification remain
+the acceptance harness's responsibility.
+
 1. Owner adoption of Δ-012 and accepted version/gate reconciliation in the experiences
    worktree; candidate contracts do not authorize mounting new APIs.
 2. Real account/membership adapters and server-loaded resource resolvers, per-request

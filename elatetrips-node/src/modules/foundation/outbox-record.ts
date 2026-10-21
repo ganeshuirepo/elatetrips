@@ -57,8 +57,22 @@ export const deliverySchema = z
   });
 export type OutboxDelivery = z.infer<typeof deliverySchema>;
 export type DeliverySnapshot = Omit<OutboxDelivery, 'leaseToken'>;
-export function deliverySnapshot({ leaseToken, ...row }: OutboxDelivery): DeliverySnapshot {
-  return row;
+export function deliverySnapshot(row: OutboxDelivery): DeliverySnapshot {
+  return {
+    _id: row._id,
+    eventId: row.eventId,
+    format: row.format,
+    state: row.state,
+    version: row.version,
+    attempts: row.attempts,
+    totalAttempts: row.totalAttempts,
+    recoveryCount: row.recoveryCount,
+    availableAt: row.availableAt,
+    leaseUntil: row.leaseUntil,
+    workerId: row.workerId,
+    lastError: row.lastError,
+    deliveredAt: row.deliveredAt,
+  };
 }
 
 /** Unreleased local queue format; no shared domain contract is adopted here. */

@@ -213,7 +213,11 @@ export async function openVersionedStore<T>(options: StoreOptions<T>) {
   const db = client.db(database);
   try {
     const hello = await db.admin().command({ hello: 1 });
-    if ((!hello.setName && hello.msg !== 'isdbgrid') || hello.logicalSessionTimeoutMinutes == null)
+    if (
+      (!hello.setName && hello.msg !== 'isdbgrid') ||
+      hello.logicalSessionTimeoutMinutes === null ||
+      hello.logicalSessionTimeoutMinutes === undefined
+    )
       fail('TRANSACTIONS_REQUIRED');
   } catch (error) {
     if (error instanceof FoundationStoreError) throw error;
@@ -669,7 +673,11 @@ export async function openRecordTransaction(options: RecordTransactionOptions) {
   }
   await guarded(async () => {
     const hello = await db.admin().command({ hello: 1 });
-    if ((!hello.setName && hello.msg !== 'isdbgrid') || hello.logicalSessionTimeoutMinutes == null)
+    if (
+      (!hello.setName && hello.msg !== 'isdbgrid') ||
+      hello.logicalSessionTimeoutMinutes === null ||
+      hello.logicalSessionTimeoutMinutes === undefined
+    )
       fail('TRANSACTIONS_REQUIRED');
     await receipts.createIndex({ policyId: 1, commandId: 1 }, { unique: true });
   });

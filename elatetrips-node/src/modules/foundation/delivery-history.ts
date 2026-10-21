@@ -373,7 +373,11 @@ export async function openDeliveryHistory(options: HistoryOptions) {
   }
   await guarded(async () => {
     const hello = await db.admin().command({ hello: 1 });
-    if ((!hello.setName && hello.msg !== 'isdbgrid') || hello.logicalSessionTimeoutMinutes == null)
+    if (
+      (!hello.setName && hello.msg !== 'isdbgrid') ||
+      hello.logicalSessionTimeoutMinutes === null ||
+      hello.logicalSessionTimeoutMinutes === undefined
+    )
       fail('TRANSACTIONS_REQUIRED');
   });
   async function authorize(

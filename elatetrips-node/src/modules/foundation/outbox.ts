@@ -157,7 +157,11 @@ export async function openOutboxWorker(options: OutboxOptions) {
   }
   await guarded(async () => {
     const hello = await db.admin().command({ hello: 1 });
-    if ((!hello.setName && hello.msg !== 'isdbgrid') || hello.logicalSessionTimeoutMinutes == null)
+    if (
+      (!hello.setName && hello.msg !== 'isdbgrid') ||
+      hello.logicalSessionTimeoutMinutes === null ||
+      hello.logicalSessionTimeoutMinutes === undefined
+    )
       fail('TRANSACTIONS_REQUIRED');
     await queue.createIndex({ state: 1, availableAt: 1, _id: 1 });
     await queue.createIndex({ state: 1, leaseUntil: 1, _id: 1 });

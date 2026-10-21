@@ -170,7 +170,11 @@ export async function openDeliveryRecovery(options: RecoveryOptions) {
   }
   await guarded(async () => {
     const hello = await db.admin().command({ hello: 1 });
-    if ((!hello.setName && hello.msg !== 'isdbgrid') || hello.logicalSessionTimeoutMinutes == null)
+    if (
+      (!hello.setName && hello.msg !== 'isdbgrid') ||
+      hello.logicalSessionTimeoutMinutes === null ||
+      hello.logicalSessionTimeoutMinutes === undefined
+    )
       fail('TRANSACTIONS_REQUIRED');
     await journal.createIndex({ eventId: 1, version: 1 }, { unique: true });
     await receipts.createIndex({ policyId: 1, commandId: 1 }, { unique: true });

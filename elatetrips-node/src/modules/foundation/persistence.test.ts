@@ -585,7 +585,14 @@ describe('DEV-006 real Mongo transaction foundation', () => {
       f.store.write(f.user, { ...f.command, expectedRevision: Number.MAX_SAFE_INTEGER }),
       code('INVALID_REQUEST'),
     );
-    const { createScope, ...withoutScope } = f.command;
+    const { id, commandId, correlationId, expectedRevision, payload: commandPayload } = f.command;
+    const withoutScope = {
+      id,
+      commandId,
+      correlationId,
+      expectedRevision,
+      payload: commandPayload,
+    };
     await assert.rejects(f.store.write(f.user, withoutScope), code('INVALID_REQUEST'));
     const badClock = await openVersionedStore({ ...f.options, clock: () => 'invalid' });
     await assert.rejects(badClock.write(f.user, f.command), code('INVALID_REQUEST'));

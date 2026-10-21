@@ -1,0 +1,32 @@
+{
+  "capturedAt": "2026-10-21T15:40:35.542Z",
+  "baselineCommit": "1d1572d6239ebd29cc2b0b408cedd1e98fd2b28d",
+  "scope": "Feature013 foundation and scoped credential files only; not a whole-backend lint result.",
+  "safety": "Fixture environment and disposable local Mongo only; provider keys cleared; original environment not loaded. Cached tooling binary, no runtime download.",
+  "checks": [
+    {
+      "name": "lint",
+      "command": "node D:/projects/elatetrips-experiences/.worktrees/v10-acceptance-harness/elatetrips-node/node_modules/eslint/bin/eslint.js --config D:/projects/elatetrips-experiences/.worktrees/v10-acceptance-harness/elatetrips-node/eslint.config.mjs \"src/modules/foundation/**/*.ts\" \"src/modules/auth/token.service*.ts\" --max-warnings 0",
+      "exitCode": 0,
+      "durationMs": 2880
+    },
+    {
+      "name": "typecheck",
+      "command": "npm.cmd run typecheck",
+      "exitCode": 0,
+      "durationMs": 13328
+    },
+    {
+      "name": "focused",
+      "command": "node -r ./scripts/register-ts.js --test src/modules/auth/token.service.test.ts \"src/modules/foundation/*.test.ts\"",
+      "exitCode": 0,
+      "durationMs": 55733
+    },
+    {
+      "name": "build",
+      "command": "npm.cmd run build",
+      "exitCode": 0,
+      "durationMs": 13848
+    }
+  ]
+}

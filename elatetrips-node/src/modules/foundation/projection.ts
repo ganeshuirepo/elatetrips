@@ -157,7 +157,11 @@ export async function openSnapshotProjection<T>(options: ProjectionOptions<T>) {
   }
   await guarded(async () => {
     const hello = await db.admin().command({ hello: 1 });
-    if ((!hello.setName && hello.msg !== 'isdbgrid') || hello.logicalSessionTimeoutMinutes == null)
+    if (
+      (!hello.setName && hello.msg !== 'isdbgrid') ||
+      hello.logicalSessionTimeoutMinutes === null ||
+      hello.logicalSessionTimeoutMinutes === undefined
+    )
       fail('TRANSACTIONS_REQUIRED');
     await records.createIndex({ projectionId: 1, aggregateId: 1 }, { unique: true });
     await receipts.createIndex({ projectionId: 1, eventId: 1 }, { unique: true });
