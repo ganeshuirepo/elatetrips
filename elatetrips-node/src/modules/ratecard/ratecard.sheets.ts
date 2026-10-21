@@ -30,6 +30,7 @@ export class ManualUploadSheetProvider implements ISheetProvider {
   async fetchRows(_partner_id: string): Promise<RawSheetRow[]> {
     // Manual upload posts rows directly to the ingest endpoint; there is no
     // sheet to pull from in this adapter.
+    void _partner_id;
     return [];
   }
 
@@ -38,7 +39,6 @@ export class ManualUploadSheetProvider implements ISheetProvider {
     // the cell references visible without a side channel.
     if (errors.length === 0) return;
     const refs = errors.map((e) => `${e.cell.sheet}!R${e.cell.row} ${e.field}: ${e.message}`);
-    // eslint-disable-next-line no-console
     console.warn(`[ratecard] invalid rows for partner ${partner_id}:\n  ${refs.join('\n  ')}`);
   }
 }

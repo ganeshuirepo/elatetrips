@@ -1,0 +1,89 @@
+▶ a partner that does not exist
+  ✔ cannot have rates ingested for it (3.5467ms)
+  ✔ is refused before any row is even looked at (0.8ms)
+  ✔ cannot be synced from a sheet (0.657ms)
+  ✔ has no freshness — rather than a plausible-looking "never submitted" (0.6317ms)
+  ✔ has no rows to list (0.7812ms)
+  ✔ has no rate to snapshot (0.6609ms)
+✔ a partner that does not exist (9.4801ms)
+▶ a partner that does exist
+  ✔ ingests, and the rows land (4.6547ms)
+  ✔ answers freshness before it has ever submitted (0.8747ms)
+  ✔ lists no rows for a SKU it has not priced (1.8787ms)
+  ✔ still 404s for a SKU with no applied rate, not for the partner (0.9304ms)
+✔ a partner that does exist (9.0744ms)
+▶ the refusal message
+  ✔ names the unknown partner, because the caller made a typo (0.4367ms)
+✔ the refusal message (0.5748ms)
+▶ in-memory rate rows
+  ▶ the applied ledger
+    ✔ round-trips a row, optional fields and all (6.3885ms)
+    ✔ leaves an absent end date absent rather than null (0.4097ms)
+    ✔ returns a frozen row — the ledger is append-only (0.3233ms)
+    ✔ has nothing to say about a row that was never appended (0.314ms)
+    ✔ orders a SKU chronologically by ingestion (12.9357ms)
+    ✔ takes the newest row as the live baseline (0.4548ms)
+    ✔ breaks a same-millisecond tie on insertion order (0.2839ms)
+    ✔ never bleeds one partner rows into another (0.2228ms)
+    ✔ keeps SKUs apart (0.2079ms)
+  ✔ the applied ledger (22.91ms)
+  ▶ the rate effective on a date — what a booking snapshots
+    ✔ picks the row whose window contains the date (0.4353ms)
+    ✔ treats an open-ended row as running forever (0.1967ms)
+    ✔ includes both edges of the window (0.2026ms)
+    ✔ excludes a date outside the window entirely (0.1465ms)
+    ✔ lets a later correction supersede an overlapping earlier row (0.1842ms)
+  ✔ the rate effective on a date — what a booking snapshots (1.3885ms)
+  ▶ freshness
+    ✔ reads the newest row across every SKU (0.2524ms)
+    ✔ reports nothing for a partner that has never submitted (0.1386ms)
+  ✔ freshness (0.4799ms)
+  ▶ the staged review queue
+    ✔ round-trips a proposal with its tolerance and drift intact (0.4523ms)
+    ✔ keeps a null band as null — "no baseline" is not "not written" (0.1485ms)
+    ✔ resolves a proposal without touching the others (0.1882ms)
+    ✔ filters by partner, sku and status (0.4752ms)
+    ✔ has nothing to say about a proposal that was never staged (0.1233ms)
+  ✔ the staged review queue (1.5507ms)
+✔ in-memory rate rows (27.0372ms)
+▶ mongo-backed rate rows
+  ▶ behaves like the contract says
+    ▶ the applied ledger
+      ✔ round-trips a row, optional fields and all (116.2182ms)
+      ✔ leaves an absent end date absent rather than null (68.7715ms)
+      ✔ returns a frozen row — the ledger is append-only (9.5392ms)
+      ✔ has nothing to say about a row that was never appended (11.6056ms)
+      ✔ orders a SKU chronologically by ingestion (35.4263ms)
+      ✔ takes the newest row as the live baseline (20.5218ms)
+      ✔ breaks a same-millisecond tie on insertion order (19.0923ms)
+      ✔ never bleeds one partner rows into another (16.0026ms)
+      ✔ keeps SKUs apart (12.6166ms)
+    ✔ the applied ledger (311.5267ms)
+    ▶ the rate effective on a date — what a booking snapshots
+      ✔ picks the row whose window contains the date (27.7858ms)
+      ✔ treats an open-ended row as running forever (12.7966ms)
+      ✔ includes both edges of the window (17.1373ms)
+      ✔ excludes a date outside the window entirely (18.5195ms)
+      ✔ lets a later correction supersede an overlapping earlier row (19.9857ms)
+    ✔ the rate effective on a date — what a booking snapshots (97.2649ms)
+    ▶ freshness
+      ✔ reads the newest row across every SKU (17.5902ms)
+      ✔ reports nothing for a partner that has never submitted (9.6059ms)
+    ✔ freshness (27.7146ms)
+    ▶ the staged review queue
+      ✔ round-trips a proposal with its tolerance and drift intact (40.128ms)
+      ✔ keeps a null band as null — "no baseline" is not "not written" (14.6724ms)
+      ✔ resolves a proposal without touching the others (45.3028ms)
+      ✔ filters by partner, sku and status (50.0304ms)
+      ✔ has nothing to say about a proposal that was never staged (8.0656ms)
+    ✔ the staged review queue (159.1832ms)
+  ✔ behaves like the contract says (596.5019ms)
+✔ mongo-backed rate rows (2282.7519ms)
+ℹ tests 53
+ℹ suites 14
+ℹ pass 53
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4013.9594
