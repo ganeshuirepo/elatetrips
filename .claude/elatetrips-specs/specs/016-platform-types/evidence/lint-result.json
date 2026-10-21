@@ -1,0 +1,15 @@
+{
+  "command": [
+    "C:/Program Files/nodejs/node.exe",
+    "node_modules/eslint/bin/eslint.js",
+    "src/container.ts",
+    "src/common/logger.ts",
+    "src/common/middleware/errorHandler.ts",
+    "src/repositories/MongoReadRepository.ts",
+    "--max-warnings",
+    "0",
+    "--format",
+    "json"
+  ],
+  "status": 0
+}

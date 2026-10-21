@@ -1,0 +1,46 @@
+[
+  {
+    "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-platform-types\\elatetrips-node\\src\\common\\logger.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-platform-types\\elatetrips-node\\src\\common\\middleware\\errorHandler.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-platform-types\\elatetrips-node\\src\\container.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "D:\\projects\\elatetrips-experiences\\.worktrees\\v10-platform-types\\elatetrips-node\\src\\repositories\\MongoReadRepository.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  }
+]

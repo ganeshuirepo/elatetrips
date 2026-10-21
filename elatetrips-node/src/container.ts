@@ -2,7 +2,15 @@ import type { RequestHandler } from 'express';
 import { env } from './config/env';
 import { logger } from './common/logger';
 
-import type { ExperienceFacet, PackageOption } from './modules/catalog/catalog.types';
+import type {
+  Celebration,
+  Destination,
+  ExperienceFacet,
+  PackageOption,
+  Product,
+  Room,
+  ShopCatalog,
+} from './modules/catalog/catalog.types';
 import { MongoReadRepository } from './repositories/MongoReadRepository';
 import {
   DestinationModel,
@@ -110,6 +118,10 @@ import { RuleSetStore } from './modules/negotiation/negotiation.store';
 import { NegotiationService } from './modules/negotiation/negotiation.service';
 import { NegotiationController } from './modules/negotiation/negotiation.controller';
 
+type CatalogRepositories = ConstructorParameters<typeof CatalogService>[0];
+type CatalogOption = Awaited<ReturnType<CatalogRepositories['options']['findAll']>>[number];
+type CatalogPackage = Awaited<ReturnType<CatalogRepositories['packages']['findAll']>>[number];
+
 /**
  * Composition root — the ONLY place that knows concrete classes. Everything else
  * depends on interfaces, so swapping an implementation (e.g. a Redis OTP store)
@@ -165,18 +177,18 @@ export interface Container {
  */
 export function createContainer(): Container {
   // Repositories (data layer)
-  const destinationsRepo = new MongoReadRepository<any>(DestinationModel);
-  const vehiclesRepo = new MongoReadRepository<any>(VehicleModel);
-  const roomsRepo = new MongoReadRepository<any>(RoomModel);
-  const optionsRepo = new MongoReadRepository<any>(OptionModel);
-  const celebrationsRepo = new MongoReadRepository<any>(CelebrationModel);
+  const destinationsRepo = new MongoReadRepository<Destination>(DestinationModel);
+  const vehiclesRepo = new MongoReadRepository<Vehicle>(VehicleModel);
+  const roomsRepo = new MongoReadRepository<Room>(RoomModel);
+  const optionsRepo = new MongoReadRepository<CatalogOption>(OptionModel);
+  const celebrationsRepo = new MongoReadRepository<Celebration>(CelebrationModel);
   const experienceFacetsRepo = new MongoReadRepository<ExperienceFacet>(ExperienceFacetModel);
   const packageOptionsRepo = new MongoReadRepository<PackageOption>(PackageOptionModel);
-  const packagesRepo = new MongoReadRepository<any>(PackageModel);
+  const packagesRepo = new MongoReadRepository<CatalogPackage>(PackageModel);
   const bundlesRepo = new MongoReadRepository<CelebrationBundle>(CelebrationBundleModel);
-  const activitiesRepo = new MongoReadRepository<any>(ActivityModel);
-  const productsRepo = new MongoReadRepository<any>(ProductModel);
-  const shopCatalogsRepo = new MongoReadRepository<any>(ShopCatalogModel);
+  const activitiesRepo = new MongoReadRepository<Activity>(ActivityModel);
+  const productsRepo = new MongoReadRepository<Product>(ProductModel);
+  const shopCatalogsRepo = new MongoReadRepository<ShopCatalog>(ShopCatalogModel);
   const hotelsRepo = new HotelRepository();
   const usersRepo = new UserRepository();
   const ordersRepo = new OrderRepository();
