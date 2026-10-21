@@ -219,7 +219,8 @@ export class AuthService {
         throw new ForbiddenError('Account not verified. Please verify your email or mobile number.');
       }
     }
-    const { passwordHash: _omit, ...user } = creds;
+    const { passwordHash, ...user } = creds;
+    void passwordHash;
     return this.session(user as User);
   }
 

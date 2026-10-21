@@ -77,7 +77,8 @@ class FakeUserRepository implements IUserRepository {
 
   private strip(u: UserWithSecret | undefined): User | null {
     if (!u) return null;
-    const { passwordHash: _omit, ...rest } = u;
+    const { passwordHash, ...rest } = u;
+    void passwordHash;
     return rest;
   }
 
