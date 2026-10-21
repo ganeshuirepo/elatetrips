@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { isDeepStrictEqual } from 'node:util';
 import type {
   EstimationConfig, Outcome, OwnedPolicy, Policy, PolicyContext, PolicySelection,
   PolicySnapshot, PolicySnapshotEvent, RefundEstimate, ResolutionConfig, SnapshotProposal,
@@ -142,5 +143,29 @@ export function estimateRefund(input: unknown): Outcome<RefundEstimate> {
         refund: { amount: Math.min(computed, captured.amount), currency: captured.currency }, capped: computed > captured.amount,
       },
     };
+  });
+}
+
+/** Validate a complete saved proposal without catalog resolution, proposal creation or clock access. */
+export function validatePolicyProposal(input: unknown): Outcome<SnapshotProposal> {
+  return guarded(() => {
+    const raw = record(input, 'proposal', ['kind', 'command_id', 'fingerprint', 'snapshot', 'event']);
+    if (raw.kind !== 'policy_snapshot_proposal') throw new InvalidPolicyInput('proposal: unsupported kind');
+    const accepted = snapshot(raw.snapshot);
+    const eventRaw = record(raw.event, 'event', ['event_id', 'type', 'actor', 'actor_id', 'role', 'ts', 'subject', 'before', 'after', 'payload']);
+    record(eventRaw.subject, 'event.subject', ['rfq_id', 'quote_id', 'booking_id']);
+    const after = record(eventRaw.after, 'event.after', ['policy_snapshot']);
+    snapshot(after.policy_snapshot);
+    record(eventRaw.payload, 'event.payload', ['booking_id', 'policy_id', 'version']);
+    const audit = auditInput({ command_id: raw.command_id, event_id: eventRaw.event_id, actor: eventRaw.actor, actor_id: eventRaw.actor_id, role: eventRaw.role, ts: eventRaw.ts });
+    const expected: PolicySnapshotEvent = {
+      event_id: audit.event_id, type: 'policy.snapshotted', actor: audit.actor, actor_id: audit.actor_id, role: audit.role, ts: audit.ts,
+      subject: { rfq_id: accepted.rfq_id, quote_id: accepted.quote_id, booking_id: accepted.booking_id }, before: null,
+      after: { policy_snapshot: accepted }, payload: { booking_id: accepted.booking_id, policy_id: accepted.policy.policy_id, version: accepted.policy.version },
+    };
+    if (!isDeepStrictEqual(raw.event, expected)) throw new InvalidPolicyInput('proposal: event differs from snapshot');
+    const fingerprint = createHash('sha256').update(canonical({ command_id: audit.command_id, snapshot: accepted, event: expected })).digest('hex');
+    if (raw.fingerprint !== fingerprint) throw new InvalidPolicyInput('proposal: invalid advisory fingerprint');
+    return { status: 'ok', value: { kind: 'policy_snapshot_proposal', command_id: audit.command_id, fingerprint, snapshot: accepted, event: expected } };
   });
 }
