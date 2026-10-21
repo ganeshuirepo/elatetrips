@@ -1,0 +1,21 @@
+{
+  "base": "4738d19e7f0ecf572818eccbd8a1a6a17e65fe7d",
+  "testedBase": "bc3abd064716430d53a2513de334552a03680b03",
+  "checkpoints": [
+    {
+      "commit": "440542e97a7e0a4f0b63a477bef115760e8f7b5b",
+      "spec": "031-policy-persistence",
+      "module": "foundation"
+    },
+    {
+      "commit": "d9c4099620db09f27b8e708b5d7234c4c0f00717",
+      "spec": "032-policy-binding",
+      "module": "policy"
+    },
+    {
+      "commit": "bc3abd064716430d53a2513de334552a03680b03",
+      "spec": "033-policy-persistence-review",
+      "module": "foundation"
+    }
+  ]
+}

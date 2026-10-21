@@ -1,0 +1,155 @@
+{
+  "checks": [
+    {
+      "name": "contracts",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "typecheck",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "application-tests",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "harness-tests",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "build",
+      "status": 0,
+      "signal": null,
+      "passed": true
+    },
+    {
+      "name": "whole-lint",
+      "status": 0,
+      "passed": true
+    }
+  ],
+  "wholeLint": {
+    "files": 256,
+    "errors": 0,
+    "warnings": 0
+  },
+  "wholeLintStatus": 0,
+  "finalRuns": 1,
+  "tests": {
+    "application": {
+      "tests": 754,
+      "suites": 46,
+      "pass": 754,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "harness": {
+      "tests": 34,
+      "suites": 0,
+      "pass": 34,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  },
+  "contracts": {
+    "schemas": 15,
+    "fixtures": 20,
+    "source": {
+      "repository": "elatetrips-experiences",
+      "commit": "e8dc98fce0d84f5223a3615f50001f0eb4b29922",
+      "directory": "contracts",
+      "releaseLabel": "not-uniformly-declared; no-adoption-inferred"
+    },
+    "digestAlgorithm": "sha256-canonical-json-sorted-keys-utf8-v1"
+  },
+  "testedSource": {
+    "checkpoint": "bc3abd064716430d53a2513de334552a03680b03",
+    "branch": "feature/034-policy-durability-acceptance",
+    "policyFiles": 7,
+    "policyLines": 1293,
+    "sourceDiff": {
+      "stat": ".../src/modules/policy/binding.integration.test.ts | 27 ++++++++++++++++++++++\n 1 file changed, 27 insertions(+)",
+      "sha256": "db3f572c9640a6d1e6f9051cb05daf5387e978fc9c98d52cfece5e2ed09abb85"
+    },
+    "hashes": [
+      {
+        "path": "elatetrips-node/src/modules/policy/binding.integration.test.ts",
+        "lines": 287,
+        "sha256": "8f0a4e7c2ce9e1576e14089e34a1c997c4d4c480a9a518879f0435306110e9c1"
+      },
+      {
+        "path": "elatetrips-node/src/modules/policy/binding.ts",
+        "lines": 139,
+        "sha256": "451d69d776455abe99efde0000b172c014a088b2487323e172817af884b8208e"
+      },
+      {
+        "path": "elatetrips-node/src/modules/policy/engine.ts",
+        "lines": 171,
+        "sha256": "943558d1305ba1611df34357b48882bfa654db8ea3da71ab0d10cd8a3d12a21b"
+      },
+      {
+        "path": "elatetrips-node/src/modules/policy/index.ts",
+        "lines": 8,
+        "sha256": "213ea41da618e0caf6952df91eb784c8f13531f374726ea222835744f756eaf5"
+      },
+      {
+        "path": "elatetrips-node/src/modules/policy/policy.test.ts",
+        "lines": 371,
+        "sha256": "18ca398c07db83590145995181b476d8295971e45298f5bbffa003cb0fc458ff"
+      },
+      {
+        "path": "elatetrips-node/src/modules/policy/types.ts",
+        "lines": 117,
+        "sha256": "62f21e3c5c0a3b45378ee495fa89e7785aee9178503664a2fefbb20e0a9354dd"
+      },
+      {
+        "path": "elatetrips-node/src/modules/policy/validation.ts",
+        "lines": 200,
+        "sha256": "d52bda5dbd1fd1eeeef6cf9a90378f361e55709f91554382c2dd93c8ccfc5313"
+      }
+    ],
+    "runtimeChanges": 0,
+    "addedIntegrationRegressions": 1
+  },
+  "ownership": {
+    "auditedPriorCommits": [
+      "440542e97a7e0a4f0b63a477bef115760e8f7b5b",
+      "d9c4099620db09f27b8e708b5d7234c4c0f00717",
+      "bc3abd064716430d53a2513de334552a03680b03"
+    ],
+    "violations": 0,
+    "evidence": "path-audit.json"
+  },
+  "integrationCapability": "Real policy producer and binding through configured foundation Mongo snapshot store, tested against a local Mongo replica set with fixture trusted ports; durable reopen/read/estimate and strict writer replay verified.",
+  "eventAccounting": {
+    "internalOutboxRowsPerCommit": 2,
+    "authoritativeDomainEvent": "Authenticated foundation audit kind policy-snapshot, after.request.event",
+    "nestedProducerEvent": "Validation proof only; not separately dispatched",
+    "publisherWired": false
+  },
+  "trustBoundaries": [
+    "Authoritative accepted-record loader and exact durable evidence verifier are required trusted ports; caller JSON is not consent.",
+    "Fresh token/account/membership/permission/configuration and booking scope/binding resolvers remain trusted adapter boundaries.",
+    "Foundation owns encryption, integrity, atomic snapshot/event reservations and receipts; producer SHA-256 is advisory proposal evidence.",
+    "Tenant and booking/context/quote/partner equality are validated; organization or brand eligibility belongs to authoritative identity and booking adapters."
+  ],
+  "remaining": [
+    "Production accepted cart/proposal/consent evidence adapter and commercial policy/configuration ownership.",
+    "Production identity/membership/permissions and booking scope resolver, database/key lifecycle and service/container/router wiring.",
+    "Domain-event dispatcher/publisher plus downstream idempotent consumers and delivery operation evidence.",
+    "Verified financial ledger/payment capture, checkout revalidation, provider cancellation, inventory release and refund settlement adapters.",
+    "Broader DEV-006/008/053/056 acceptance, commercial authorization, supported supplier certification and human Gates R1/R2."
+  ]
+}

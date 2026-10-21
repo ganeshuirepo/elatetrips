@@ -1,0 +1,161 @@
+{
+  "base": "4738d19e7f0ecf572818eccbd8a1a6a17e65fe7d",
+  "testedBase": "bc3abd064716430d53a2513de334552a03680b03",
+  "headBeforeAcceptanceCommit": "bc3abd064716430d53a2513de334552a03680b03",
+  "branch": "feature/034-policy-durability-acceptance",
+  "priorCommits": [
+    {
+      "commit": "440542e97a7e0a4f0b63a477bef115760e8f7b5b",
+      "spec": "031-policy-persistence",
+      "module": "foundation",
+      "paths": [
+        ".claude/elatetrips-specs/specs/031-policy-persistence/checks.mjs",
+        ".claude/elatetrips-specs/specs/031-policy-persistence/evidence/build.log",
+        ".claude/elatetrips-specs/specs/031-policy-persistence/evidence/contracts.log",
+        ".claude/elatetrips-specs/specs/031-policy-persistence/evidence/focused-tests.log",
+        ".claude/elatetrips-specs/specs/031-policy-persistence/evidence/initial-fixture-failure.log",
+        ".claude/elatetrips-specs/specs/031-policy-persistence/evidence/pre-clock-hardening-tests.log",
+        ".claude/elatetrips-specs/specs/031-policy-persistence/evidence/scoped-lint.log",
+        ".claude/elatetrips-specs/specs/031-policy-persistence/evidence/summary.json",
+        ".claude/elatetrips-specs/specs/031-policy-persistence/evidence/typecheck.log",
+        ".claude/elatetrips-specs/specs/031-policy-persistence/evidence/whole-lint.json",
+        ".claude/elatetrips-specs/specs/031-policy-persistence/inputs/ELate_Trips_Development_Backlog_v10.json",
+        ".claude/elatetrips-specs/specs/031-policy-persistence/spec.md",
+        ".claude/elatetrips-specs/specs/031-policy-persistence/verification.md",
+        "elatetrips-node/src/modules/foundation/persistence.ts",
+        "elatetrips-node/src/modules/foundation/policy-snapshot.test.ts",
+        "elatetrips-node/src/modules/foundation/policy-snapshot.ts"
+      ],
+      "violations": []
+    },
+    {
+      "commit": "d9c4099620db09f27b8e708b5d7234c4c0f00717",
+      "spec": "032-policy-binding",
+      "module": "policy",
+      "paths": [
+        ".claude/elatetrips-specs/specs/032-policy-binding/checks.mjs",
+        ".claude/elatetrips-specs/specs/032-policy-binding/evidence/build.log",
+        ".claude/elatetrips-specs/specs/032-policy-binding/evidence/contracts.log",
+        ".claude/elatetrips-specs/specs/032-policy-binding/evidence/focused-development.log",
+        ".claude/elatetrips-specs/specs/032-policy-binding/evidence/focused-tests.log",
+        ".claude/elatetrips-specs/specs/032-policy-binding/evidence/scoped-lint-final.log",
+        ".claude/elatetrips-specs/specs/032-policy-binding/evidence/scoped-lint.log",
+        ".claude/elatetrips-specs/specs/032-policy-binding/evidence/summary.json",
+        ".claude/elatetrips-specs/specs/032-policy-binding/evidence/typecheck-final.log",
+        ".claude/elatetrips-specs/specs/032-policy-binding/evidence/typecheck.log",
+        ".claude/elatetrips-specs/specs/032-policy-binding/evidence/whole-lint.json",
+        ".claude/elatetrips-specs/specs/032-policy-binding/focused.mjs",
+        ".claude/elatetrips-specs/specs/032-policy-binding/inputs/ELate_Trips_Development_Backlog_v10.json",
+        ".claude/elatetrips-specs/specs/032-policy-binding/inputs/foundation-public-api.md",
+        ".claude/elatetrips-specs/specs/032-policy-binding/spec.md",
+        ".claude/elatetrips-specs/specs/032-policy-binding/verification.md",
+        "elatetrips-node/src/modules/policy/binding.integration.test.ts",
+        "elatetrips-node/src/modules/policy/binding.ts",
+        "elatetrips-node/src/modules/policy/engine.ts",
+        "elatetrips-node/src/modules/policy/index.ts"
+      ],
+      "violations": []
+    },
+    {
+      "commit": "bc3abd064716430d53a2513de334552a03680b03",
+      "spec": "033-policy-persistence-review",
+      "module": "foundation",
+      "paths": [
+        ".claude/elatetrips-specs/specs/033-policy-persistence-review/checks.mjs",
+        ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/build.log",
+        ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/contracts.log",
+        ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/focused-tests.log",
+        ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/history-regression-red-summary.json",
+        ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/history-regression-red.log",
+        ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/initial-typecheck.log",
+        ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/path-audit.json",
+        ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/regressions-red.log",
+        ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/scoped-lint.log",
+        ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/summary.json",
+        ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/typecheck.log",
+        ".claude/elatetrips-specs/specs/033-policy-persistence-review/evidence/whole-lint.json",
+        ".claude/elatetrips-specs/specs/033-policy-persistence-review/inputs/ELate_Trips_Development_Backlog_v10.json",
+        ".claude/elatetrips-specs/specs/033-policy-persistence-review/review.md",
+        ".claude/elatetrips-specs/specs/033-policy-persistence-review/spec.md",
+        "elatetrips-node/src/modules/foundation/persistence.test.ts",
+        "elatetrips-node/src/modules/foundation/persistence.ts",
+        "elatetrips-node/src/modules/foundation/policy-snapshot.test.ts",
+        "elatetrips-node/src/modules/foundation/policy-snapshot.ts"
+      ],
+      "violations": []
+    }
+  ],
+  "currentPaths": [
+    ".claude/elatetrips-specs/specs/034-policy-durability-acceptance/audit.mjs",
+    ".claude/elatetrips-specs/specs/034-policy-durability-acceptance/checks.mjs",
+    ".claude/elatetrips-specs/specs/034-policy-durability-acceptance/evidence/application-tests.log",
+    ".claude/elatetrips-specs/specs/034-policy-durability-acceptance/evidence/build.log",
+    ".claude/elatetrips-specs/specs/034-policy-durability-acceptance/evidence/contracts.log",
+    ".claude/elatetrips-specs/specs/034-policy-durability-acceptance/evidence/harness-tests.log",
+    ".claude/elatetrips-specs/specs/034-policy-durability-acceptance/evidence/owned-source.patch",
+    ".claude/elatetrips-specs/specs/034-policy-durability-acceptance/evidence/path-audit.json",
+    ".claude/elatetrips-specs/specs/034-policy-durability-acceptance/evidence/summary.json",
+    ".claude/elatetrips-specs/specs/034-policy-durability-acceptance/evidence/typecheck.log",
+    ".claude/elatetrips-specs/specs/034-policy-durability-acceptance/evidence/whole-lint.json",
+    ".claude/elatetrips-specs/specs/034-policy-durability-acceptance/inputs/ELate_Trips_Development_Backlog_v10.json",
+    ".claude/elatetrips-specs/specs/034-policy-durability-acceptance/scopes.json",
+    ".claude/elatetrips-specs/specs/034-policy-durability-acceptance/spec.md",
+    ".claude/elatetrips-specs/specs/034-policy-durability-acceptance/summarize.mjs",
+    ".claude/elatetrips-specs/specs/034-policy-durability-acceptance/verification.md",
+    "elatetrips-node/src/modules/policy/binding.integration.test.ts"
+  ],
+  "currentViolations": [],
+  "sourceFileCount": 7,
+  "sourceLineCount": 1293,
+  "sourceFiles": [
+    {
+      "path": "elatetrips-node/src/modules/policy/binding.integration.test.ts",
+      "lines": 287,
+      "sha256": "8f0a4e7c2ce9e1576e14089e34a1c997c4d4c480a9a518879f0435306110e9c1"
+    },
+    {
+      "path": "elatetrips-node/src/modules/policy/binding.ts",
+      "lines": 139,
+      "sha256": "451d69d776455abe99efde0000b172c014a088b2487323e172817af884b8208e"
+    },
+    {
+      "path": "elatetrips-node/src/modules/policy/engine.ts",
+      "lines": 171,
+      "sha256": "943558d1305ba1611df34357b48882bfa654db8ea3da71ab0d10cd8a3d12a21b"
+    },
+    {
+      "path": "elatetrips-node/src/modules/policy/index.ts",
+      "lines": 8,
+      "sha256": "213ea41da618e0caf6952df91eb784c8f13531f374726ea222835744f756eaf5"
+    },
+    {
+      "path": "elatetrips-node/src/modules/policy/policy.test.ts",
+      "lines": 371,
+      "sha256": "18ca398c07db83590145995181b476d8295971e45298f5bbffa003cb0fc458ff"
+    },
+    {
+      "path": "elatetrips-node/src/modules/policy/types.ts",
+      "lines": 117,
+      "sha256": "62f21e3c5c0a3b45378ee495fa89e7785aee9178503664a2fefbb20e0a9354dd"
+    },
+    {
+      "path": "elatetrips-node/src/modules/policy/validation.ts",
+      "lines": 200,
+      "sha256": "d52bda5dbd1fd1eeeef6cf9a90378f361e55709f91554382c2dd93c8ccfc5313"
+    }
+  ],
+  "sourceDiff": {
+    "stat": ".../src/modules/policy/binding.integration.test.ts | 27 ++++++++++++++++++++++\n 1 file changed, 27 insertions(+)",
+    "sha256": "db3f572c9640a6d1e6f9051cb05daf5387e978fc9c98d52cfece5e2ed09abb85"
+  },
+  "sourceWhitespace": "",
+  "documentationFiles": [
+    "audit.mjs",
+    "checks.mjs",
+    "scopes.json",
+    "spec.md",
+    "summarize.mjs",
+    "verification.md"
+  ],
+  "whitespaceViolations": []
+}
