@@ -107,7 +107,9 @@ test('service.decide emits a negotiation.round with the engine amount only on co
   const report = service.dryRun(ILLUSTRATIVE_RULES);
   service.publish({ rules: ILLUSTRATIVE_RULES, published_by: 'ops', dry_run_id: report.dry_run_id });
 
-  const d = service.decide(HISTORICAL_CORPUS.find((c) => c.quote_id === 'h-overbudget')!.input);
+  const historicalCase = HISTORICAL_CORPUS.find((c) => c.quote_id === 'h-overbudget');
+  assert.ok(historicalCase, 'historical corpus includes h-overbudget');
+  const d = service.decide(historicalCase.input);
   assert.equal(d.action, 'counter');
   assert.equal(d.counter_amount?.amount, 105_000);
 
